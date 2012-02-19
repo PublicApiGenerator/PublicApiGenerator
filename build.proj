@@ -1,0 +1,12 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="Package">
+    <Message Text="$(MSBuildProjectDirectory)" Importance="High" />
+    <Message Text=" ===========Packaging code===========" Importance="High" />
+
+    <ItemGroup>
+      <Nuget Include="$(MSBuildProjectDirectory)\src\packages\NuGet.CommandLine.*\tools\NuGet.exe" />
+    </ItemGroup>
+    <Exec Command='"@(Nuget)" pack "$(MSBuildProjectDirectory)\src\ApiApprover\ApiApprover.nuspec"' />
+  </Target>
+</Project>

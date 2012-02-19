@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ApiApprover</id>
+    <version>1.0.0</version>
+    <title>Api Approver</title>
+    <authors>Jake Ginnivan</authors>
+    <owners>Jake Ginnivan</owners>
+    <projectUrl>http://jake.ginnivan.net/ApiApprover</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Simply add this package to add a test which generates a string of your public API, then sends it to Approval Tests to approve any public API changes.
+    
+Don't accidently miss a breaking API change and break semantic versioning again.
+    </description>
+    <copyright>Copyright Jake Ginnivan 2012</copyright>
+    <tags>semanticversioning versioning approve api</tags>
+    <dependencies>
+      <dependency id="ApprovalTests" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="PublicApiGenerator.cs" target="content" />
+    <file src="PublicApiApprovalTest.cs" target="content" />
+  </files>
+</package>
