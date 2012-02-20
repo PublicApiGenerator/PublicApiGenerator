@@ -8,7 +8,6 @@ deploy
 deploy/*
 *.suo
 *.cache
-packages/
 msbuild.log
 artifacts/log
 artifacts/
