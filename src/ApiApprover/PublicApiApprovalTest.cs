@@ -1,5 +1,6 @@
-﻿using ApprovalTests;
-using ApprovalTests.Namers;
+﻿using System;
+using ApiApprover;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 
 namespace ApiApprover
@@ -7,6 +8,7 @@ namespace ApiApprover
     public class PublicApiApprovalTest
     {
         [Test]
+        [UseReporter(typeof(DiffReporter))] 
         public void approve_public_api()
         {
             // arrange
@@ -16,9 +18,7 @@ namespace ApiApprover
             var publicApi = PublicApiGenerator.CreatePublicApiForAssembly(assembly);
 
             // assert
-            var unitTestFrameworkNamer = new UnitTestFrameworkNamer();
-            var diffReporter = new DiffReporter();
-            Approvals.Approve(new ApprovalTextWriter(publicApi), unitTestFrameworkNamer, diffReporter);
+            Approvals.Verify(publicApi);
         }
     }
 }

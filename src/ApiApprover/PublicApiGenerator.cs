@@ -8,11 +8,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 
+// ReSharper disable CheckNamespace
+// ReSharper disable BitwiseOperatorOnEnumWithoutFlags
+// ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace ApiApprover
 {
     public class PublicApiGenerator
     {
-        public static string CreatePublicApiForAssembly(Assembly cafeCore)
+        public static string CreatePublicApiForAssembly(Assembly assembly)
         {
             var publicApiBuilder = new StringBuilder();
             var cgo = new CodeGeneratorOptions
@@ -23,14 +26,14 @@ namespace ApiApprover
 
             using (var provider = new CSharpCodeProvider())
             {
-                var publicTypes = cafeCore.GetTypes()
+                var publicTypes = assembly.GetTypes()
                     .Where(t => t.IsPublic && t.Name != "GeneratedInternalTypeHelper") //GeneratedInternalTypeHelper seems to be a r# runner side effect
                     .OrderBy(t => t.FullName);
                 foreach (var publicType in publicTypes)
                 {
                     var writer = new StringWriter();
                     var genClass = CreateClassDeclaration(publicType);
-                    foreach (var memberInfo in publicType.GetMembers().OrderBy(m => m.Name))
+                    foreach (var memberInfo in publicType.GetMembers().Where(m => !IsDotNetTypeMember(m)).OrderBy(m => m.Name))
                     {
                         AddMemberToClassDefinition(genClass, memberInfo);
                     }
@@ -40,7 +43,14 @@ namespace ApiApprover
                 }
             }
             var publicApi = publicApiBuilder.ToString();
-            return publicApi;
+            return publicApi.Trim();
+        }
+
+        private static bool IsDotNetTypeMember(MemberInfo m)
+        {
+            if (m.DeclaringType == null || m.DeclaringType.FullName == null)
+                return false;
+            return m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft");
         }
 
         static void AddMemberToClassDefinition(CodeTypeDeclaration genClass, MemberInfo memberInfo)
@@ -103,6 +113,12 @@ namespace ApiApprover
                 Name = member.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
             };
+
+            foreach (var parameterInfo in member.GetParameters())
+            {
+                method.Parameters.Add(new CodeParameterDeclarationExpression(parameterInfo.ParameterType,
+                                                                             parameterInfo.Name));
+            }
             return method;
         }
 
@@ -134,6 +150,7 @@ namespace ApiApprover
             {
                 Name = member.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
+                // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
             };
             var methodTypeRef = new CodeTypeReference(member.ReturnType);
             method.ReturnType = methodTypeRef;
@@ -162,6 +179,8 @@ namespace ApiApprover
 
             return property;
         }
-        // ReSharper restore BitwiseOperatorOnEnumWihtoutFlags
     }
 }
+// ReSharper restore BitwiseOperatorOnEnumWithoutFlags
+// ReSharper restore BitwiseOperatorOnEnumWihtoutFlags
+// ReSharper restore CheckNamespace
