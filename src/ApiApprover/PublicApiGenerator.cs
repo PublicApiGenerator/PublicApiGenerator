@@ -10,7 +10,6 @@ using Mono.Cecil;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
-// ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace ApiApprover
 {
     public static class CecilEx
@@ -79,7 +78,7 @@ namespace ApiApprover
                 if (methodDefinition.IsConstructor)
                     AddCtorToClassDefinition(genClass, methodDefinition);
                 else
-                    genClass.Members.Add(GenerateMethod(methodDefinition));
+                    AddMethodToClassDefinition(genClass, methodDefinition);
             }
             else if (memberInfo is PropertyDefinition)
             {
@@ -143,16 +142,21 @@ namespace ApiApprover
         private static CodeAttributeDeclarationCollection CreateCustomAttributes(ICustomAttributeProvider type)
         {
             var attributes = new CodeAttributeDeclarationCollection();
+            PopulateCustomAttributes(type, attributes);
+            return attributes;
+        }
+
+        private static void PopulateCustomAttributes(ICustomAttributeProvider type,
+            CodeAttributeDeclarationCollection attributes)
+        {
             foreach (var customAttribute in type.CustomAttributes)
             {
                 // TODO: Attribute parameters
                 var attribute = new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType));
                 attributes.Add(attribute);
             }
-            return attributes;
         }
 
-        // ReSharper disable BitwiseOperatorOnEnumWihtoutFlags
         private static void AddCtorToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
         {
             if (member.IsAssembly || member.IsPrivate)
@@ -177,18 +181,34 @@ namespace ApiApprover
         static MemberAttributes GetMethodAttributes(MethodDefinition method)
         {
             MemberAttributes attributes = 0;
-            if (method.IsAbstract)
-                attributes |= MemberAttributes.Abstract;
+
             if (method.IsFamily)
                 attributes |= MemberAttributes.Family;
-            if (method.IsFinal)
-                attributes |= MemberAttributes.Final;
             if (method.IsPublic)
                 attributes |= MemberAttributes.Public;
             if (method.IsStatic)
                 attributes |= MemberAttributes.Static;
-            if (method.IsVirtual)
-                attributes |= MemberAttributes.Override;
+
+            if (method.IsAbstract)
+                attributes |= MemberAttributes.Abstract;
+
+            // I think this is right. Fingers crossed!
+            if (method.IsHideBySig)
+            {
+                if (method.IsFinal || (!method.IsNewSlot && !method.IsVirtual))
+                {
+                    attributes |= MemberAttributes.Final;
+                }
+                else if (method.IsVirtual && !method.IsNewSlot)
+                {
+                    attributes |= MemberAttributes.Override;
+                }
+                else if (!method.IsVirtual)
+                {
+                    attributes |= MemberAttributes.New;
+                }
+            }
+
             return attributes;
         }
 
@@ -227,26 +247,37 @@ namespace ApiApprover
             classDefinition.Members.Add(field);
         }
 
-        public static CodeMemberMethod GenerateMethod(MethodDefinition member)
+        public static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
         {
+            if (member.IsAssembly || member.IsPrivate)
+                return;
+
+            // TODO: Type parameters
             var method = new CodeMemberMethod
             {
                 Name = member.Name,
-                Attributes = MemberAttributes.Public | MemberAttributes.Final
-                // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
+                Attributes = GetMethodAttributes(member),
+                CustomAttributes = CreateCustomAttributes(member),
+                ReturnType = CreateCodeTypeReference(member.ReturnType),
             };
-            var methodTypeRef = CreateCodeTypeReference(member.ReturnType);
-            method.ReturnType = methodTypeRef;
+            PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
 
-            var methodParameters = member.Parameters.ToList();
             var parameterCollection = new CodeParameterDeclarationExpressionCollection();
-            foreach (var info in methodParameters)
+            foreach (var parameter in member.Parameters)
             {
-                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(info.ParameterType), info.Name);
+                FieldDirection direction = 0;
+                if (parameter.IsOut)
+                    direction |= FieldDirection.Out;
+                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType), parameter.Name)
+                {
+                    Direction = direction,
+                    CustomAttributes = CreateCustomAttributes(parameter)
+                };
                 parameterCollection.Add(expresion);
             }
             method.Parameters.AddRange(parameterCollection);
-            return method;
+
+            genClass.Members.Add(method);
         }
 
         private static CodeTypeReference CreateCodeTypeReference(TypeReference type)
@@ -282,6 +313,5 @@ namespace ApiApprover
         }
     }
 }
-// ReSharper restore BitwiseOperatorOnEnumWithoutFlags
 // ReSharper restore BitwiseOperatorOnEnumWihtoutFlags
 // ReSharper restore CheckNamespace
