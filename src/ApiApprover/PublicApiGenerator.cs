@@ -73,14 +73,13 @@ namespace ApiApprover
 
         static void AddMemberToClassDefinition(CodeTypeDeclaration genClass, IMemberDefinition memberInfo)
         {
-            if (memberInfo is MethodDefinition)
+            var methodDefinition = memberInfo as MethodDefinition;
+            if (methodDefinition != null)
             {
-                var method = (MethodDefinition)memberInfo;
-                if (method.IsSpecialName) return;
-                if (method.IsConstructor)
-                    genClass.Members.Add(GenerateCtor((MethodDefinition)memberInfo));
+                if (methodDefinition.IsConstructor)
+                    AddCtorToClassDefinition(genClass, methodDefinition);
                 else
-                    genClass.Members.Add(GenerateMethod((MethodDefinition)memberInfo));
+                    genClass.Members.Add(GenerateMethod(methodDefinition));
             }
             else if (memberInfo is PropertyDefinition)
             {
@@ -154,12 +153,16 @@ namespace ApiApprover
         }
 
         // ReSharper disable BitwiseOperatorOnEnumWihtoutFlags
-        public static CodeConstructor GenerateCtor(MethodDefinition member)
+        private static void AddCtorToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
         {
+            if (member.IsAssembly || member.IsPrivate)
+                return;
+
             var method = new CodeConstructor
             {
+                CustomAttributes = CreateCustomAttributes(member),
                 Name = member.Name,
-                Attributes = MemberAttributes.Public | MemberAttributes.Final
+                Attributes = GetMethodAttributes(member)
             };
 
             foreach (var parameterInfo in member.Parameters)
@@ -167,7 +170,26 @@ namespace ApiApprover
                 method.Parameters.Add(new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameterInfo.ParameterType),
                                                                              parameterInfo.Name));
             }
-            return method;
+
+            genClass.Members.Add(method);
+        }
+
+        static MemberAttributes GetMethodAttributes(MethodDefinition method)
+        {
+            MemberAttributes attributes = 0;
+            if (method.IsAbstract)
+                attributes |= MemberAttributes.Abstract;
+            if (method.IsFamily)
+                attributes |= MemberAttributes.Family;
+            if (method.IsFinal)
+                attributes |= MemberAttributes.Final;
+            if (method.IsPublic)
+                attributes |= MemberAttributes.Public;
+            if (method.IsStatic)
+                attributes |= MemberAttributes.Static;
+            if (method.IsVirtual)
+                attributes |= MemberAttributes.Override;
+            return attributes;
         }
 
         static CodeTypeMember GenerateEvent(EventDefinition memberInfo)
