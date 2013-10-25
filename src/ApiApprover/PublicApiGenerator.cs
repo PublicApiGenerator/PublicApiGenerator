@@ -45,7 +45,7 @@ namespace ApiApprover
                     var writer = new StringWriter();
                     var @namespace = new CodeNamespace(publicType.Namespace);
                     var genClass = CreateClassDeclaration(publicType);
-                    foreach (var memberInfo in publicType.GetMembers().Where(m => !IsDotNetTypeMember(m)).OrderBy(m => m.Name))
+                    foreach (var memberInfo in publicType.GetMembers().Where(ShouldIncludeMember).OrderBy(m => m.Name))
                     {
                         AddMemberToClassDefinition(genClass, memberInfo);
                     }
@@ -57,6 +57,11 @@ namespace ApiApprover
             }
             var publicApi = publicApiBuilder.ToString();
             return publicApi.Trim();
+        }
+
+        private static bool ShouldIncludeMember(IMemberDefinition m)
+        {
+            return !m.IsSpecialName && !m.IsRuntimeSpecialName && !IsDotNetTypeMember(m);
         }
 
         private static bool IsDotNetTypeMember(IMemberDefinition m)
@@ -87,7 +92,7 @@ namespace ApiApprover
             }
             else if (memberInfo is FieldDefinition)
             {
-                genClass.Members.Add(GenerateField((FieldDefinition)memberInfo));
+                AddFieldToClassDefinition(genClass, (FieldDefinition) memberInfo);
             }
         }
 
@@ -148,14 +153,34 @@ namespace ApiApprover
             return @event;
         }
 
-        static CodeTypeMember GenerateField(FieldDefinition memberInfo)
+        static void AddFieldToClassDefinition(CodeTypeDeclaration classDefinition, FieldDefinition memberInfo)
         {
+            if (memberInfo.IsPrivate || memberInfo.IsAssembly)
+                return;
+
+            MemberAttributes attributes = 0;
+            if (memberInfo.IsStatic)
+                attributes |= MemberAttributes.Static;
+            if (memberInfo.HasConstant)
+                attributes |= MemberAttributes.Const;
+            if (memberInfo.IsFamily)
+                attributes |= MemberAttributes.Family;
+
+            var customAttributes = new CodeAttributeDeclarationCollection();
+            foreach (var customAttribute in memberInfo.CustomAttributes)
+            {
+                // TODO: Get better attribute information - ctor, named params, etc
+                customAttributes.Add(new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType)));
+            }
+
+            // TODO: Costant value
             var field = new CodeMemberField(CreateCodeTypeReference(memberInfo.FieldType), memberInfo.Name)
             {
-                Attributes = MemberAttributes.Public | MemberAttributes.Final
+                Attributes = attributes,
+                CustomAttributes = customAttributes
             };
 
-            return field;
+            classDefinition.Members.Add(field);
         }
 
         public static CodeMemberMethod GenerateMethod(MethodDefinition member)
