@@ -115,13 +115,31 @@ namespace ApiApprover
 
         static CodeTypeDeclaration CreateClassDeclaration(TypeDefinition publicType)
         {
-            return new CodeTypeDeclaration(publicType.Name)
+            var declaration = new CodeTypeDeclaration(publicType.Name)
             {
+                CustomAttributes = CreateCustomAttributes(publicType),
                 IsClass = publicType.IsClass,
                 IsEnum = publicType.IsEnum,
                 IsInterface = publicType.IsInterface,
                 IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum
             };
+            if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")
+                declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
+            foreach (var @interface in publicType.Interfaces)
+                declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
+            return declaration;
+        }
+
+        private static CodeAttributeDeclarationCollection CreateCustomAttributes(ICustomAttributeProvider type)
+        {
+            var attributes = new CodeAttributeDeclarationCollection();
+            foreach (var customAttribute in type.CustomAttributes)
+            {
+                // TODO: Attribute parameters
+                var attribute = new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType));
+                attributes.Add(attribute);
+            }
+            return attributes;
         }
 
         // ReSharper disable BitwiseOperatorOnEnumWihtoutFlags
@@ -166,18 +184,11 @@ namespace ApiApprover
             if (memberInfo.IsFamily)
                 attributes |= MemberAttributes.Family;
 
-            var customAttributes = new CodeAttributeDeclarationCollection();
-            foreach (var customAttribute in memberInfo.CustomAttributes)
-            {
-                // TODO: Get better attribute information - ctor, named params, etc
-                customAttributes.Add(new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType)));
-            }
-
             // TODO: Costant value
             var field = new CodeMemberField(CreateCodeTypeReference(memberInfo.FieldType), memberInfo.Name)
             {
                 Attributes = attributes,
-                CustomAttributes = customAttributes
+                CustomAttributes = CreateCustomAttributes(memberInfo)
             };
 
             classDefinition.Members.Add(field);
