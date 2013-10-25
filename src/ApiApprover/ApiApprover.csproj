@@ -31,6 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ApprovalTests">
+      <HintPath>..\packages\ApprovalTests.3.0.2\lib\net40\ApprovalTests.dll</HintPath>
+    </Reference>
+    <Reference Include="ApprovalUtilities">
+      <HintPath>..\packages\ApprovalUtilities.3.0.2\lib\net35\ApprovalUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -38,10 +56,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="PublicApiApprovalTest.cs" />
+    <None Include="packages.config" />
+    <Compile Include="PublicApiApprovalTest.cs" />
     <Compile Include="PublicApiGenerator.cs" />
   </ItemGroup>
   <ItemGroup>

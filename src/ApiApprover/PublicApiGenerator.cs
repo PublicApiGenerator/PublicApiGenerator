@@ -1,21 +1,32 @@
-﻿using System;
-using System.CodeDom;
+﻿using System.CodeDom;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
+using Mono.Cecil;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace ApiApprover
 {
+    public static class CecilEx
+    {
+        public static IEnumerable<IMemberDefinition> GetMembers(this TypeDefinition type)
+        {
+            return type.Fields.Cast<IMemberDefinition>()
+                .Concat(type.Methods)
+                .Concat(type.Properties)
+                .Concat(type.Events);
+        }
+    }
     public class PublicApiGenerator
     {
-        public static string CreatePublicApiForAssembly(Assembly assembly)
+        // TODO: Interfaces + attributes. What about generics?
+        public static string CreatePublicApiForAssembly(AssemblyDefinition assembly)
         {
             var publicApiBuilder = new StringBuilder();
             var cgo = new CodeGeneratorOptions
@@ -26,7 +37,7 @@ namespace ApiApprover
 
             using (var provider = new CSharpCodeProvider())
             {
-                var publicTypes = assembly.GetTypes()
+                var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
                     .Where(t => t.IsPublic && t.Name != "GeneratedInternalTypeHelper") //GeneratedInternalTypeHelper seems to be a r# runner side effect
                     .OrderBy(t => t.FullName);
                 foreach (var publicType in publicTypes)
@@ -46,36 +57,35 @@ namespace ApiApprover
             return publicApi.Trim();
         }
 
-        private static bool IsDotNetTypeMember(MemberInfo m)
+        private static bool IsDotNetTypeMember(IMemberDefinition m)
         {
             if (m.DeclaringType == null || m.DeclaringType.FullName == null)
                 return false;
             return m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft");
         }
 
-        static void AddMemberToClassDefinition(CodeTypeDeclaration genClass, MemberInfo memberInfo)
+        static void AddMemberToClassDefinition(CodeTypeDeclaration genClass, IMemberDefinition memberInfo)
         {
-            if (memberInfo is MethodInfo)
+            if (memberInfo is MethodDefinition)
             {
-                var method = (MethodInfo)memberInfo;
+                var method = (MethodDefinition)memberInfo;
                 if (method.IsSpecialName) return;
-                genClass.Members.Add(GenerateMethod((MethodInfo)memberInfo));
+                if (method.IsConstructor)
+                    genClass.Members.Add(GenerateCtor((MethodDefinition)memberInfo));
+                else
+                    genClass.Members.Add(GenerateMethod((MethodDefinition)memberInfo));
             }
-            else if (memberInfo is PropertyInfo)
+            else if (memberInfo is PropertyDefinition)
             {
-                genClass.Members.Add(GenerateProperty((PropertyInfo)memberInfo));
+                genClass.Members.Add(GenerateProperty((PropertyDefinition)memberInfo));
             }
-            else if (memberInfo is ConstructorInfo)
+            else if (memberInfo is EventDefinition)
             {
-                genClass.Members.Add(GenerateCtor((ConstructorInfo)memberInfo));
+                genClass.Members.Add(GenerateEvent((EventDefinition)memberInfo));
             }
-            else if (memberInfo is EventInfo)
+            else if (memberInfo is FieldDefinition)
             {
-                genClass.Members.Add(GenerateEvent((EventInfo)memberInfo));
-            }
-            else if (memberInfo is FieldInfo)
-            {
-                genClass.Members.Add(GenerateField((FieldInfo)memberInfo));
+                genClass.Members.Add(GenerateField((FieldDefinition)memberInfo));
             }
         }
 
@@ -94,7 +104,7 @@ namespace ApiApprover
             return gennedClass;
         }
 
-        static CodeTypeDeclaration CreateClassDeclaration(Type publicType)
+        static CodeTypeDeclaration CreateClassDeclaration(TypeDefinition publicType)
         {
             return new CodeTypeDeclaration(publicType.Name)
             {
@@ -106,7 +116,7 @@ namespace ApiApprover
         }
 
         // ReSharper disable BitwiseOperatorOnEnumWihtoutFlags
-        public static CodeConstructor GenerateCtor(ConstructorInfo member)
+        public static CodeConstructor GenerateCtor(MethodDefinition member)
         {
             var method = new CodeConstructor
             {
@@ -114,29 +124,29 @@ namespace ApiApprover
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
             };
 
-            foreach (var parameterInfo in member.GetParameters())
+            foreach (var parameterInfo in member.Parameters)
             {
-                method.Parameters.Add(new CodeParameterDeclarationExpression(parameterInfo.ParameterType,
+                method.Parameters.Add(new CodeParameterDeclarationExpression(parameterInfo.ParameterType.FullName,
                                                                              parameterInfo.Name));
             }
             return method;
         }
 
-        static CodeTypeMember GenerateEvent(EventInfo memberInfo)
+        static CodeTypeMember GenerateEvent(EventDefinition memberInfo)
         {
             var @event = new CodeMemberEvent
             {
                 Name = memberInfo.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Type = new CodeTypeReference(memberInfo.EventHandlerType)
+                Type = new CodeTypeReference(memberInfo.EventType.FullName)
             };
 
             return @event;
         }
 
-        static CodeTypeMember GenerateField(FieldInfo memberInfo)
+        static CodeTypeMember GenerateField(FieldDefinition memberInfo)
         {
-            var field = new CodeMemberField(memberInfo.FieldType, memberInfo.Name)
+            var field = new CodeMemberField(memberInfo.FieldType.FullName, memberInfo.Name)
             {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
             };
@@ -144,7 +154,7 @@ namespace ApiApprover
             return field;
         }
 
-        public static CodeMemberMethod GenerateMethod(MethodInfo member)
+        public static CodeMemberMethod GenerateMethod(MethodDefinition member)
         {
             var method = new CodeMemberMethod
             {
@@ -152,29 +162,29 @@ namespace ApiApprover
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
                 // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
             };
-            var methodTypeRef = new CodeTypeReference(member.ReturnType);
+            var methodTypeRef = new CodeTypeReference(member.ReturnType.FullName);
             method.ReturnType = methodTypeRef;
 
-            var methodParameters = member.GetParameters().ToList();
+            var methodParameters = member.Parameters.ToList();
             var parameterCollection = new CodeParameterDeclarationExpressionCollection();
-            foreach (ParameterInfo info in methodParameters)
+            foreach (var info in methodParameters)
             {
-                var expresion = new CodeParameterDeclarationExpression(info.ParameterType, info.Name);
+                var expresion = new CodeParameterDeclarationExpression(info.ParameterType.FullName, info.Name);
                 parameterCollection.Add(expresion);
             }
             method.Parameters.AddRange(parameterCollection);
             return method;
         }
 
-        public static CodeMemberProperty GenerateProperty(PropertyInfo member)
+        public static CodeMemberProperty GenerateProperty(PropertyDefinition member)
         {
             var property = new CodeMemberProperty
             {
                 Name = member.Name,
-                Type = new CodeTypeReference(member.PropertyType),
+                Type = new CodeTypeReference(member.PropertyType.FullName),
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                HasGet = member.CanRead,
-                HasSet = member.CanWrite
+                HasGet = member.GetMethod != null,
+                HasSet = member.SetMethod != null
             };
 
             return property;
