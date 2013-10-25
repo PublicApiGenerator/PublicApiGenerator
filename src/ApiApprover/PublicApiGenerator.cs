@@ -126,7 +126,7 @@ namespace ApiApprover
 
             foreach (var parameterInfo in member.Parameters)
             {
-                method.Parameters.Add(new CodeParameterDeclarationExpression(parameterInfo.ParameterType.FullName,
+                method.Parameters.Add(new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameterInfo.ParameterType),
                                                                              parameterInfo.Name));
             }
             return method;
@@ -138,7 +138,7 @@ namespace ApiApprover
             {
                 Name = memberInfo.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Type = new CodeTypeReference(memberInfo.EventType.FullName)
+                Type = CreateCodeTypeReference(memberInfo.EventType)
             };
 
             return @event;
@@ -146,7 +146,7 @@ namespace ApiApprover
 
         static CodeTypeMember GenerateField(FieldDefinition memberInfo)
         {
-            var field = new CodeMemberField(memberInfo.FieldType.FullName, memberInfo.Name)
+            var field = new CodeMemberField(CreateCodeTypeReference(memberInfo.FieldType), memberInfo.Name)
             {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
             };
@@ -162,18 +162,36 @@ namespace ApiApprover
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
                 // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
             };
-            var methodTypeRef = new CodeTypeReference(member.ReturnType.FullName);
+            var methodTypeRef = CreateCodeTypeReference(member.ReturnType);
             method.ReturnType = methodTypeRef;
 
             var methodParameters = member.Parameters.ToList();
             var parameterCollection = new CodeParameterDeclarationExpressionCollection();
             foreach (var info in methodParameters)
             {
-                var expresion = new CodeParameterDeclarationExpression(info.ParameterType.FullName, info.Name);
+                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(info.ParameterType), info.Name);
                 parameterCollection.Add(expresion);
             }
             method.Parameters.AddRange(parameterCollection);
             return method;
+        }
+
+        private static CodeTypeReference CreateCodeTypeReference(TypeReference type)
+        {
+            return new CodeTypeReference(type.Namespace + "." + type.Name, CreateGenericArguments(type));
+        }
+
+        private static CodeTypeReference[] CreateGenericArguments(TypeReference type)
+        {
+            var genericInstance = type as IGenericInstance;
+            if (genericInstance == null) return null;
+
+            var genericArguments = new List<CodeTypeReference>();
+            foreach (var argument in genericInstance.GenericArguments)
+            {
+                genericArguments.Add(CreateCodeTypeReference(argument));
+            }
+            return genericArguments.ToArray();
         }
 
         public static CodeMemberProperty GenerateProperty(PropertyDefinition member)
@@ -181,7 +199,7 @@ namespace ApiApprover
             var property = new CodeMemberProperty
             {
                 Name = member.Name,
-                Type = new CodeTypeReference(member.PropertyType.FullName),
+                Type = CreateCodeTypeReference(member.PropertyType),
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
                 HasGet = member.GetMethod != null,
                 HasSet = member.SetMethod != null
