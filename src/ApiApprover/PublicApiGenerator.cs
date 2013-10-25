@@ -115,18 +115,29 @@ namespace ApiApprover
 
         static CodeTypeDeclaration CreateClassDeclaration(TypeDefinition publicType)
         {
+            MemberAttributes attributes = 0;
+            if (publicType.IsAbstract)
+                attributes |= MemberAttributes.Abstract;
+            if (publicType.IsPublic)
+                attributes |= MemberAttributes.Public;
+            if (publicType.IsSealed)
+                attributes |= MemberAttributes.Static;
+
             var declaration = new CodeTypeDeclaration(publicType.Name)
             {
+                Attributes = attributes,
                 CustomAttributes = CreateCustomAttributes(publicType),
                 IsClass = publicType.IsClass,
                 IsEnum = publicType.IsEnum,
                 IsInterface = publicType.IsInterface,
                 IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum
             };
+
             if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")
                 declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
             foreach (var @interface in publicType.Interfaces)
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
+
             return declaration;
         }
 
