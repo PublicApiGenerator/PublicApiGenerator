@@ -43,12 +43,14 @@ namespace ApiApprover
                 foreach (var publicType in publicTypes)
                 {
                     var writer = new StringWriter();
+                    var @namespace = new CodeNamespace(publicType.Namespace);
                     var genClass = CreateClassDeclaration(publicType);
                     foreach (var memberInfo in publicType.GetMembers().Where(m => !IsDotNetTypeMember(m)).OrderBy(m => m.Name))
                     {
                         AddMemberToClassDefinition(genClass, memberInfo);
                     }
-                    provider.GenerateCodeFromType(genClass, writer, cgo);
+                    @namespace.Types.Add(genClass);
+                    provider.GenerateCodeFromNamespace(@namespace, writer, cgo);
                     var gennedClass = GenerateClassCode(writer);
                     publicApiBuilder.AppendLine(gennedClass);
                 }
