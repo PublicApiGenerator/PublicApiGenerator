@@ -186,11 +186,7 @@ namespace ApiApprover
                 Attributes = GetMethodAttributes(member)
             };
 
-            foreach (var parameterInfo in member.Parameters)
-            {
-                method.Parameters.Add(new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameterInfo.ParameterType),
-                                                                             parameterInfo.Name));
-            }
+            AddParametersToMethodDefinition(member, method);
 
             genClass.Members.Add(method);
         }
@@ -210,13 +206,21 @@ namespace ApiApprover
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
 
+            AddParametersToMethodDefinition(member, method);
+
+            genClass.Members.Add(method);
+        }
+
+        private static void AddParametersToMethodDefinition(IMethodSignature member, CodeMemberMethod method)
+        {
             var parameterCollection = new CodeParameterDeclarationExpressionCollection();
             foreach (var parameter in member.Parameters)
             {
                 FieldDirection direction = 0;
                 if (parameter.IsOut)
                     direction |= FieldDirection.Out;
-                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType), parameter.Name)
+                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType),
+                    parameter.Name)
                 {
                     Direction = direction,
                     CustomAttributes = CreateCustomAttributes(parameter)
@@ -224,8 +228,6 @@ namespace ApiApprover
                 parameterCollection.Add(expresion);
             }
             method.Parameters.AddRange(parameterCollection);
-
-            genClass.Members.Add(method);
         }
 
         static MemberAttributes GetMethodAttributes(MethodDefinition method)
