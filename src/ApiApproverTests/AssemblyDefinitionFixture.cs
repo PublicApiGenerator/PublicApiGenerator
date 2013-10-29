@@ -1,4 +1,5 @@
-﻿using Mono.Cecil;
+﻿using System.Linq;
+using Mono.Cecil;
 using Xunit;
 
 namespace ApiApproverTests
@@ -19,15 +20,12 @@ namespace ApiApproverTests
 
         private AssemblyDefinition GetAssemblyDefinitionForType(string fullName)
         {
-            var typeDefinition = originalAssemblyDefinition.MainModule.GetType(fullName);
-            Assert.NotNull(typeDefinition);
-            typeDefinition.Module.Types.Remove(typeDefinition);
+            var assemblyDefinition = AssemblyDefinition.ReadAssembly(GetType().Assembly.Location);
+            var typeDefinitions = assemblyDefinition.MainModule.Types.Where(t => t.FullName != fullName).ToArray();
+            foreach (var typeDefinition in typeDefinitions)
+                assemblyDefinition.MainModule.Types.Remove(typeDefinition);
 
-            var newDefinition = AssemblyDefinition.CreateAssembly(originalAssemblyDefinition.Name,
-                originalAssemblyDefinition.MainModule.Name, originalAssemblyDefinition.MainModule.Kind);
-            newDefinition.MainModule.Types.Add(typeDefinition);
-
-            return newDefinition;
+            return assemblyDefinition;
         }
     }
 }

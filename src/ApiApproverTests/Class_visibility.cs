@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Public_class_is_visible()
         {
             AssertPublicApi<PublicClass>(
-                @"namespace ApiApproverTests.Examples
+@"namespace ApiApproverTests.Examples
 {
     public class PublicClass { }
 }");

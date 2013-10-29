@@ -1,12 +1,14 @@
 ﻿using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -176,7 +178,7 @@ namespace ApiApprover
 
         private static void AddCtorToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
         {
-            if (member.IsAssembly || member.IsPrivate)
+            if (member.IsAssembly || member.IsPrivate || IsEmptyDefaultConstructor(member))
                 return;
 
             var method = new CodeConstructor
@@ -189,6 +191,20 @@ namespace ApiApprover
             AddParametersToMethodDefinition(member, method);
 
             genClass.Members.Add(method);
+        }
+
+        private static bool IsEmptyDefaultConstructor(MethodDefinition member)
+        {
+            if (member.Parameters.Count == 0 && member.Body.Instructions.Count == 3 &&
+                member.Body.Instructions[0].OpCode == OpCodes.Ldarg_0 &&
+                member.Body.Instructions[1].OpCode == OpCodes.Call &&
+                member.Body.Instructions[1].Operand is MethodReference &&
+                ((MethodReference)member.Body.Instructions[1].Operand).Name == ".ctor" &&
+                member.Body.Instructions[2].OpCode == OpCodes.Ret)
+            {
+                return true;
+            }
+            return false;
         }
 
         private static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
@@ -302,6 +318,8 @@ namespace ApiApprover
                 attributes |= MemberAttributes.Const;
             if (memberInfo.IsFamily)
                 attributes |= MemberAttributes.Family;
+            if (memberInfo.IsPublic)
+                attributes |= MemberAttributes.Public;
 
             // TODO: Costant value
             var field = new CodeMemberField(CreateCodeTypeReference(memberInfo.FieldType), memberInfo.Name)
