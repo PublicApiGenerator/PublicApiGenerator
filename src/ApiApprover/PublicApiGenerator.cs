@@ -312,17 +312,25 @@ namespace ApiApprover
                 return;
 
             MemberAttributes attributes = 0;
-            if (memberInfo.IsStatic)
-                attributes |= MemberAttributes.Static;
             if (memberInfo.HasConstant)
                 attributes |= MemberAttributes.Const;
             if (memberInfo.IsFamily)
                 attributes |= MemberAttributes.Family;
             if (memberInfo.IsPublic)
                 attributes |= MemberAttributes.Public;
+            if (memberInfo.IsStatic)
+                attributes |= MemberAttributes.Static;
 
             // TODO: Costant value
-            var field = new CodeMemberField(CreateCodeTypeReference(memberInfo.FieldType), memberInfo.Name)
+            var codeTypeReference = CreateCodeTypeReference(memberInfo.FieldType);
+            if (memberInfo.IsInitOnly)
+            {
+                using (var provider = new CSharpCodeProvider())
+                {
+                    codeTypeReference = new CodeTypeReference("readonly " + provider.GetTypeOutput(codeTypeReference));
+                }
+            }
+            var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
             {
                 Attributes = attributes,
                 CustomAttributes = CreateCustomAttributes(memberInfo)
