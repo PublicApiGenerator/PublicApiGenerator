@@ -67,7 +67,7 @@ namespace ApiApprover
 
         private static bool ShouldIncludeMember(IMemberDefinition m)
         {
-            return !m.IsSpecialName && !m.IsRuntimeSpecialName && !IsDotNetTypeMember(m);
+            return !IsDotNetTypeMember(m);
         }
 
         private static bool IsDotNetTypeMember(IMemberDefinition m)
@@ -303,7 +303,18 @@ namespace ApiApprover
 
         private static CodeTypeReference CreateCodeTypeReference(TypeReference type)
         {
-            return new CodeTypeReference(type.Namespace + "." + type.Name, CreateGenericArguments(type));
+            var typeName = GetTypeName(type);
+            return new CodeTypeReference(typeName, CreateGenericArguments(type));
+        }
+
+        private static string GetTypeName(TypeReference type)
+        {
+            if (!type.IsNested)
+            {
+                return (!string.IsNullOrEmpty(type.Namespace) ? (type.Namespace + ".") : "") + type.Name;
+            }
+
+            return GetTypeName(type.DeclaringType) + "." + type.Name;
         }
 
         private static CodeTypeReference[] CreateGenericArguments(TypeReference type)
