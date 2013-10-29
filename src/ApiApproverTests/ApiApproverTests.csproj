@@ -61,6 +61,7 @@
     <Compile Include="AssemblyDefinitionFixture.cs" />
     <Compile Include="Class_visibility.cs" />
     <Compile Include="Field_flags.cs" />
+    <Compile Include="Field_order.cs" />
     <Compile Include="Field_types.cs" />
     <Compile Include="Field_visibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
