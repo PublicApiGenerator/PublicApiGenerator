@@ -24,7 +24,14 @@ namespace ApiApprover
     }
     public class PublicApiGenerator
     {
-        // TODO: Interfaces + attributes. What about generics?
+        // TODO: Assembly attributes
+        // TODO: Assembly references?
+        // TODO: Better handle namespaces - using statements?
+        // TODO: Constant values for fields
+        // TODO: Default values for parameters
+        // TODO: Constructor parameters for attributes
+        // TODO: Generic methods
+        // TODO: Ref parameters?
         public static string CreatePublicApiForAssembly(AssemblyDefinition assembly)
         {
             var publicApiBuilder = new StringBuilder();
@@ -178,6 +185,39 @@ namespace ApiApprover
             genClass.Members.Add(method);
         }
 
+        public static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
+        {
+            if (member.IsAssembly || member.IsPrivate)
+                return;
+
+            // TODO: Type parameters
+            var method = new CodeMemberMethod
+            {
+                Name = member.Name,
+                Attributes = GetMethodAttributes(member),
+                CustomAttributes = CreateCustomAttributes(member),
+                ReturnType = CreateCodeTypeReference(member.ReturnType),
+            };
+            PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
+
+            var parameterCollection = new CodeParameterDeclarationExpressionCollection();
+            foreach (var parameter in member.Parameters)
+            {
+                FieldDirection direction = 0;
+                if (parameter.IsOut)
+                    direction |= FieldDirection.Out;
+                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType), parameter.Name)
+                {
+                    Direction = direction,
+                    CustomAttributes = CreateCustomAttributes(parameter)
+                };
+                parameterCollection.Add(expresion);
+            }
+            method.Parameters.AddRange(parameterCollection);
+
+            genClass.Members.Add(method);
+        }
+
         static MemberAttributes GetMethodAttributes(MethodDefinition method)
         {
             MemberAttributes attributes = 0;
@@ -210,6 +250,20 @@ namespace ApiApprover
             }
 
             return attributes;
+        }
+
+        public static CodeMemberProperty GenerateProperty(PropertyDefinition member)
+        {
+            var property = new CodeMemberProperty
+            {
+                Name = member.Name,
+                Type = CreateCodeTypeReference(member.PropertyType),
+                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                HasGet = member.GetMethod != null,
+                HasSet = member.SetMethod != null
+            };
+
+            return property;
         }
 
         static CodeTypeMember GenerateEvent(EventDefinition memberInfo)
@@ -247,39 +301,6 @@ namespace ApiApprover
             classDefinition.Members.Add(field);
         }
 
-        public static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
-        {
-            if (member.IsAssembly || member.IsPrivate)
-                return;
-
-            // TODO: Type parameters
-            var method = new CodeMemberMethod
-            {
-                Name = member.Name,
-                Attributes = GetMethodAttributes(member),
-                CustomAttributes = CreateCustomAttributes(member),
-                ReturnType = CreateCodeTypeReference(member.ReturnType),
-            };
-            PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
-
-            var parameterCollection = new CodeParameterDeclarationExpressionCollection();
-            foreach (var parameter in member.Parameters)
-            {
-                FieldDirection direction = 0;
-                if (parameter.IsOut)
-                    direction |= FieldDirection.Out;
-                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType), parameter.Name)
-                {
-                    Direction = direction,
-                    CustomAttributes = CreateCustomAttributes(parameter)
-                };
-                parameterCollection.Add(expresion);
-            }
-            method.Parameters.AddRange(parameterCollection);
-
-            genClass.Members.Add(method);
-        }
-
         private static CodeTypeReference CreateCodeTypeReference(TypeReference type)
         {
             return new CodeTypeReference(type.Namespace + "." + type.Name, CreateGenericArguments(type));
@@ -296,20 +317,6 @@ namespace ApiApprover
                 genericArguments.Add(CreateCodeTypeReference(argument));
             }
             return genericArguments.ToArray();
-        }
-
-        public static CodeMemberProperty GenerateProperty(PropertyDefinition member)
-        {
-            var property = new CodeMemberProperty
-            {
-                Name = member.Name,
-                Type = CreateCodeTypeReference(member.PropertyType),
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                HasGet = member.GetMethod != null,
-                HasSet = member.SetMethod != null
-            };
-
-            return property;
         }
     }
 }
