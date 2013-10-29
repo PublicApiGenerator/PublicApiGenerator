@@ -197,8 +197,9 @@ namespace ApiApprover
             if (member.Parameters.Count == 0 && member.Body.Instructions.Count == 3 &&
                 member.Body.Instructions[0].OpCode == OpCodes.Ldarg_0 &&
                 member.Body.Instructions[1].OpCode == OpCodes.Call &&
-                member.Body.Instructions[1].Operand is MethodReference &&
-                ((MethodReference)member.Body.Instructions[1].Operand).Name == ".ctor" &&
+                (member.Body.Instructions[1].Operand == null || 
+                (member.Body.Instructions[1].Operand is MethodReference &&
+                 ((MethodReference)member.Body.Instructions[1].Operand).Name == ".ctor")) &&
                 member.Body.Instructions[2].OpCode == OpCodes.Ret)
             {
                 return true;
