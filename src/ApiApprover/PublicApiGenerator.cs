@@ -44,7 +44,7 @@ namespace ApiApprover
             using (var provider = new CSharpCodeProvider())
             {
                 var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
-                    .Where(t => t.IsPublic && t.Name != "GeneratedInternalTypeHelper") //GeneratedInternalTypeHelper seems to be a r# runner side effect
+                    .Where(ShouldIncludeType)
                     .OrderBy(t => t.FullName);
                 foreach (var publicType in publicTypes)
                 {
@@ -65,9 +65,19 @@ namespace ApiApprover
             return publicApi.Trim();
         }
 
+        private static bool ShouldIncludeType(TypeDefinition t)
+        {
+            return t.IsPublic && !IsCompilerGenerated(t);
+        }
+
         private static bool ShouldIncludeMember(IMemberDefinition m)
         {
-            return !IsDotNetTypeMember(m);
+            return !IsCompilerGenerated(m) && !IsDotNetTypeMember(m);
+        }
+
+        private static bool IsCompilerGenerated(IMemberDefinition m)
+        {
+            return m.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute");
         }
 
         private static bool IsDotNetTypeMember(IMemberDefinition m)
@@ -185,7 +195,7 @@ namespace ApiApprover
             genClass.Members.Add(method);
         }
 
-        public static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
+        private static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
         {
             if (member.IsAssembly || member.IsPrivate)
                 return;
@@ -252,7 +262,7 @@ namespace ApiApprover
             return attributes;
         }
 
-        public static CodeMemberProperty GenerateProperty(PropertyDefinition member)
+        private static CodeMemberProperty GenerateProperty(PropertyDefinition member)
         {
             var property = new CodeMemberProperty
             {
