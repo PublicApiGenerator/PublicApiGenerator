@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using Xunit.Sdk;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -145,7 +144,11 @@ namespace ApiApprover
 
             // Static support is a hack. CodeDOM does support it, and this isn't
             // correct C#, but it's good enough for our API outline
-            var declaration = new CodeTypeDeclaration(@static ? "static " + publicType.Name : publicType.Name)
+            var name = publicType.Name;
+            var index = name.IndexOf('`');
+            if (index != -1)
+                name = name.Substring(0, index);
+            var declaration = new CodeTypeDeclaration(@static ? "static " + name : name)
             {
                 CustomAttributes = CreateCustomAttributes(publicType),
                 IsClass = publicType.IsClass,
@@ -154,6 +157,23 @@ namespace ApiApprover
                 IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum,
                 TypeAttributes = attributes
             };
+
+            foreach (var parameter in publicType.GenericParameters)
+            {
+                var typeParameter = new CodeTypeParameter(parameter.Name)
+                {
+                    HasConstructorConstraint = parameter.HasDefaultConstructorConstraint && !parameter.HasNotNullableValueTypeConstraint
+                };
+                if (parameter.HasNotNullableValueTypeConstraint)
+                    typeParameter.Constraints.Add(" struct");   // Extra space is a hack!
+                if (parameter.HasReferenceTypeConstraint)
+                    typeParameter.Constraints.Add(" class");
+                foreach (var constraint in parameter.Constraints.Where(t => t.FullName != "System.ValueType"))
+                {
+                    typeParameter.Constraints.Add(CreateCodeTypeReference(constraint.GetElementType()));
+                }
+                declaration.TypeParameters.Add(typeParameter);
+            }
 
             if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")
                 declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
