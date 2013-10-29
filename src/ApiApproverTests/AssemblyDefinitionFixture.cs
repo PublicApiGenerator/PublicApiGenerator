@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using Mono.Cecil;
 
 namespace ApiApproverTests
@@ -7,13 +9,13 @@ namespace ApiApproverTests
     {
         public AssemblyDefinition GetAssemblyDefinitionForType<T>()
         {
-            return GetAssemblyDefinitionForType(typeof (T).FullName);
+            return GetAssemblyDefinitionForTypes(typeof (T));
         }
-
-        private AssemblyDefinition GetAssemblyDefinitionForType(string fullName)
+        public AssemblyDefinition GetAssemblyDefinitionForTypes(params Type[] types)
         {
+            var names = types.Select(t => t.FullName).ToList();
             var assemblyDefinition = AssemblyDefinition.ReadAssembly(GetType().Assembly.Location);
-            var typeDefinitions = assemblyDefinition.MainModule.Types.Where(t => t.FullName != fullName).ToArray();
+            var typeDefinitions = assemblyDefinition.MainModule.Types.Where(t => !names.Contains(t.FullName)).ToArray();
             foreach (var typeDefinition in typeDefinitions)
                 assemblyDefinition.MainModule.Types.Remove(typeDefinition);
 
