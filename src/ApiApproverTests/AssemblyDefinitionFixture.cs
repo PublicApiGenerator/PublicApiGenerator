@@ -11,6 +11,7 @@ namespace ApiApproverTests
         {
             return GetAssemblyDefinitionForTypes(typeof (T));
         }
+
         public AssemblyDefinition GetAssemblyDefinitionForTypes(params Type[] types)
         {
             var names = types.Select(t => t.FullName).ToList();
