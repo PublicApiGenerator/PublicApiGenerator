@@ -18,7 +18,7 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "class abstract needs fixing")]
+        [Fact]
         public void Should_output_abstract_modifier()
         {
             AssertPublicApi<ClassWithAbstractMethod>(

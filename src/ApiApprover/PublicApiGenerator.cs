@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Xunit.Sdk;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -131,22 +132,27 @@ namespace ApiApprover
 
         static CodeTypeDeclaration CreateClassDeclaration(TypeDefinition publicType)
         {
-            MemberAttributes attributes = 0;
-            if (publicType.IsAbstract)
-                attributes |= MemberAttributes.Abstract;
+            bool @static = false;
+            System.Reflection.TypeAttributes attributes = 0;
             if (publicType.IsPublic)
-                attributes |= MemberAttributes.Public;
-            if (publicType.IsSealed)
-                attributes |= MemberAttributes.Static;
+                attributes |= System.Reflection.TypeAttributes.Public;
+            if (publicType.IsSealed && !publicType.IsAbstract)
+                attributes |= System.Reflection.TypeAttributes.Sealed;
+            else if (!publicType.IsSealed && publicType.IsAbstract)
+                attributes |= System.Reflection.TypeAttributes.Abstract;
+            else if (publicType.IsSealed && publicType.IsAbstract)
+                @static = true;
 
-            var declaration = new CodeTypeDeclaration(publicType.Name)
+            // Static support is a hack. CodeDOM does support it, and this isn't
+            // correct C#, but it's good enough for our API outline
+            var declaration = new CodeTypeDeclaration(@static ? "static " + publicType.Name : publicType.Name)
             {
-                Attributes = attributes,
                 CustomAttributes = CreateCustomAttributes(publicType),
                 IsClass = publicType.IsClass,
                 IsEnum = publicType.IsEnum,
                 IsInterface = publicType.IsInterface,
-                IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum
+                IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum,
+                TypeAttributes = attributes
             };
 
             if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")

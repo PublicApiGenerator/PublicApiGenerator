@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ApiGeneratorTestsBase.cs" />
     <Compile Include="AssemblyDefinitionFixture.cs" />
+    <Compile Include="Class_flags.cs" />
     <Compile Include="Class_order.cs" />
     <Compile Include="Class_visibility.cs" />
     <Compile Include="Field_flags.cs" />

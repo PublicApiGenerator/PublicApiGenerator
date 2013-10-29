@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using ApiApprover;
 using Mono.Cecil;
 using Xunit;
@@ -13,7 +14,12 @@ namespace ApiApproverTests
 
         protected void AssertPublicApi<T>(string expectedOutput)
         {
-            var assemblyDefinition = FixtureData.GetAssemblyDefinitionForType<T>();
+            AssertPublicApi(typeof(T), expectedOutput);
+        }
+
+        protected void AssertPublicApi(Type type, string expectedOutput)
+        {
+            var assemblyDefinition = FixtureData.GetAssemblyDefinitionForTypes(type);
             AssertPublicApi(assemblyDefinition, expectedOutput);
         }
 
