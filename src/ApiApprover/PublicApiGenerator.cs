@@ -157,7 +157,7 @@ namespace ApiApprover
 
             if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")
                 declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
-            foreach (var @interface in publicType.Interfaces)
+            foreach (var @interface in publicType.Interfaces.OrderBy(i => i.FullName))
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
 
             return declaration;
