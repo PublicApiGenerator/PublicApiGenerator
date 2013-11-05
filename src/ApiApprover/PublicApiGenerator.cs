@@ -270,7 +270,7 @@ namespace ApiApprover
                 if (parameter.IsOut)
                     direction |= FieldDirection.Out;
                 CodeTypeReference codeTypeReference = CreateCodeTypeReference(parameter.ParameterType);
-                if (!parameter.ParameterType.IsGenericInstance)
+                if (parameter.ParameterType.IsGenericParameter)
                     codeTypeReference = new CodeTypeReference(parameter.ParameterType.Name);
                 var expresion = new CodeParameterDeclarationExpression(codeTypeReference,
                     parameter.Name)
