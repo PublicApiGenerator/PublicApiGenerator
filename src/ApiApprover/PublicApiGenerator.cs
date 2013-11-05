@@ -23,6 +23,8 @@ namespace ApiApprover
                 .Concat(type.Events);
         }
     }
+
+
     public class PublicApiGenerator
     {
         // TODO: Assembly attributes
@@ -158,22 +160,7 @@ namespace ApiApprover
                 TypeAttributes = attributes
             };
 
-            foreach (var parameter in publicType.GenericParameters)
-            {
-                var typeParameter = new CodeTypeParameter(parameter.Name)
-                {
-                    HasConstructorConstraint = parameter.HasDefaultConstructorConstraint && !parameter.HasNotNullableValueTypeConstraint
-                };
-                if (parameter.HasNotNullableValueTypeConstraint)
-                    typeParameter.Constraints.Add(" struct");   // Extra space is a hack!
-                if (parameter.HasReferenceTypeConstraint)
-                    typeParameter.Constraints.Add(" class");
-                foreach (var constraint in parameter.Constraints.Where(t => t.FullName != "System.ValueType"))
-                {
-                    typeParameter.Constraints.Add(CreateCodeTypeReference(constraint.GetElementType()));
-                }
-                declaration.TypeParameters.Add(typeParameter);
-            }
+            PopulateGenericParameters(publicType, declaration.TypeParameters);
 
             if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")
                 declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
@@ -181,6 +168,27 @@ namespace ApiApprover
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
 
             return declaration;
+        }
+
+        private static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters)
+        {
+            foreach (var parameter in publicType.GenericParameters)
+            {
+                var typeParameter = new CodeTypeParameter(parameter.Name)
+                {
+                    HasConstructorConstraint =
+                        parameter.HasDefaultConstructorConstraint && !parameter.HasNotNullableValueTypeConstraint
+                };
+                if (parameter.HasNotNullableValueTypeConstraint)
+                    typeParameter.Constraints.Add(" struct"); // Extra space is a hack!
+                if (parameter.HasReferenceTypeConstraint)
+                    typeParameter.Constraints.Add(" class");
+                foreach (var constraint in parameter.Constraints.Where(t => t.FullName != "System.ValueType"))
+                {
+                    typeParameter.Constraints.Add(CreateCodeTypeReference(constraint.GetElementType()));
+                }
+                parameters.Add(typeParameter);
+            }
         }
 
         private static CodeAttributeDeclarationCollection CreateCustomAttributes(ICustomAttributeProvider type)
@@ -247,7 +255,7 @@ namespace ApiApprover
                 ReturnType = CreateCodeTypeReference(member.ReturnType),
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
-
+            PopulateGenericParameters(member, method.TypeParameters);
             AddParametersToMethodDefinition(member, method);
 
             genClass.Members.Add(method);
@@ -261,7 +269,10 @@ namespace ApiApprover
                 FieldDirection direction = 0;
                 if (parameter.IsOut)
                     direction |= FieldDirection.Out;
-                var expresion = new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType),
+                CodeTypeReference codeTypeReference = CreateCodeTypeReference(parameter.ParameterType);
+                if (!parameter.ParameterType.IsGenericInstance)
+                    codeTypeReference = new CodeTypeReference(parameter.ParameterType.Name);
+                var expresion = new CodeParameterDeclarationExpression(codeTypeReference,
                     parameter.Name)
                 {
                     Direction = direction,
