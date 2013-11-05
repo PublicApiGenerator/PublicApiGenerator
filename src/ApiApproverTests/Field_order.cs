@@ -22,6 +22,8 @@ namespace ApiApproverTests
     }
 
     // ReSharper disable InconsistentNaming
+    // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class FieldOrderExample
@@ -31,5 +33,7 @@ namespace ApiApproverTests
             public int AA_Field;
         }
     }
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore InconsistentNaming
 }

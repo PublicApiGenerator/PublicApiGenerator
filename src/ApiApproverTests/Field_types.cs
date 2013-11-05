@@ -13,7 +13,7 @@ namespace ApiApproverTests
 {
     public class FieldWithComplexType
     {
-        public ApiApproverTests.Examples.ComplexTypeForField Field;
+        public ApiApproverTests.Examples.ComplexType Field;
     }
 }");
         }
@@ -26,7 +26,7 @@ namespace ApiApproverTests
 {
     public class FieldWithGenericType
     {
-        public ApiApproverTests.Examples.GenericTypeForField<int> Field;
+        public ApiApproverTests.Examples.GenericType<int> Field;
     }
 }");
         }
@@ -39,7 +39,7 @@ namespace ApiApproverTests
 {
     public class FieldWithGenericComplexType
     {
-        public ApiApproverTests.Examples.GenericTypeForField<ApiApproverTests.Examples.ComplexTypeForField> Field;
+        public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> Field;
     }
 }");
         }
@@ -52,7 +52,7 @@ namespace ApiApproverTests
 {
     public class FieldWithGenericTypeParametersOfGenericTypeParameters
     {
-        public ApiApproverTests.Examples.GenericTypeForField<ApiApproverTests.Examples.GenericTypeForField<ApiApproverTests.Examples.ComplexTypeForField>> Field;
+        public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>> Field;
     }
 }");
         }
@@ -65,51 +65,41 @@ namespace ApiApproverTests
 {
     public class FieldWithMultipleGenericTypeParameters
     {
-        public ApiApproverTests.Examples.OtherGenericTypeForField<int, string, ApiApproverTests.Examples.ComplexTypeForField> Field;
+        public ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.ComplexType> Field;
     }
 }");
         }
     }
 
+    // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
-        #region helper types
-        public class ComplexTypeForField
-        {
-        }
-
-        public class GenericTypeForField<T>
-        {
-        }
-
-        public class OtherGenericTypeForField<T, T2, T3>
-        {
-        }
-        #endregion
-
         public class FieldWithComplexType
         {
-            public ComplexTypeForField Field;
+            public ComplexType Field;
         }
 
         public class FieldWithGenericType
         {
-            public GenericTypeForField<int> Field;
+            public GenericType<int> Field;
         }
 
         public class FieldWithGenericComplexType
         {
-            public GenericTypeForField<ComplexTypeForField> Field;
+            public GenericType<ComplexType> Field;
         }
 
         public class FieldWithGenericTypeParametersOfGenericTypeParameters
         {
-            public GenericTypeForField<GenericTypeForField<ComplexTypeForField>> Field;
+            public GenericType<GenericType<ComplexType>> Field;
         }
 
         public class FieldWithMultipleGenericTypeParameters
         {
-            public OtherGenericTypeForField<int, string, ComplexTypeForField> Field;
+            public GenericTypeExtra<int, string, ComplexType> Field;
         }
     }
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore ClassNeverInstantiated.Global
 }

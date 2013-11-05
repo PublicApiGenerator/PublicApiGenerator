@@ -6,7 +6,7 @@ namespace ApiApproverTests
     public class Field_visibility : ApiGeneratorTestsBase
     {
         [Fact]
-        public void Only_public_fields_visible()
+        public void Only_public_and_protected_fields_visible()
         {
             AssertPublicApi<ClassWithFields>(
 @"namespace ApiApproverTests.Examples
@@ -22,6 +22,8 @@ namespace ApiApproverTests
 
     // ReSharper disable InconsistentNaming
     // ReSharper disable UnusedField.Compiler
+    // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassWithFields
@@ -33,6 +35,8 @@ namespace ApiApproverTests
             public int publicFieldIsVisible;
         }
     }
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore InconsistentNaming
     // ReSharper restore UnusedField.Compiler
 }

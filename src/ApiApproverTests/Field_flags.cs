@@ -55,6 +55,8 @@ namespace ApiApproverTests
         }
     }
 
+    // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassWithStaticFields
@@ -75,4 +77,6 @@ namespace ApiApproverTests
             protected const string ReadonlyProtectedField = "hello world";
         }
     }
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore ClassNeverInstantiated.Global
 }

@@ -107,6 +107,7 @@ namespace ApiApproverTests
         }
     }
 
+    // ReSharper disable UnusedTypeParameter
     namespace Examples
     {
         public class ClassWithGenericType<T>
@@ -152,4 +153,5 @@ namespace ApiApproverTests
         {
         }
     }
+    // ReSharper restore UnusedTypeParameter
 }

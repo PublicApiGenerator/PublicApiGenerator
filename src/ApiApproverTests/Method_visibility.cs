@@ -52,6 +52,9 @@ namespace ApiApproverTests
         }
     }
 
+    // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Local
+    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassWithPublicMethod
@@ -82,4 +85,7 @@ namespace ApiApproverTests
             }
         }
     }
+    // ReSharper restore UnusedMember.Local
+    // ReSharper restore ClassNeverInstantiated.Global
+    // ReSharper restore UnusedMember.Global
 }

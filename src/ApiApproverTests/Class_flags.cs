@@ -36,6 +36,7 @@ namespace ApiApproverTests
         }
     }
 
+    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public abstract class AbstractClass
@@ -50,4 +51,5 @@ namespace ApiApproverTests
         {
         }
     }
+    // ReSharper restore ClassNeverInstantiated.Global
 }
