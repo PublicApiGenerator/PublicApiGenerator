@@ -71,6 +71,7 @@
     <Compile Include="HelperTypes.cs" />
     <Compile Include="Method_flags.cs" />
     <Compile Include="Method_generics.cs" />
+    <Compile Include="Method_order.cs" />
     <Compile Include="Method_return_types.cs" />
     <Compile Include="Method_visibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
