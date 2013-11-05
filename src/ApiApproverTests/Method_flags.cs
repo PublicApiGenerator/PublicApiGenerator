@@ -71,6 +71,11 @@ namespace ApiApproverTests
         }
     }
 
+    // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Global
+    // ReSharper disable UnusedMemberHiearchy.Global
+    // ReSharper disable MemberCanBeProtected.Global
+    // ReSharper disable RedundantOverridenMember
     namespace Examples
     {
         public class ClassWithStaticMethod
@@ -108,4 +113,9 @@ namespace ApiApproverTests
             }
         }
     }
+    // ReSharper restore RedundantOverridenMember
+    // ReSharper restore MemberCanBeProtected.Global
+    // ReSharper restore UnusedMemberHiearchy.Global
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore ClassNeverInstantiated.Global
 }
