@@ -70,6 +70,7 @@
     <Compile Include="Field_visibility.cs" />
     <Compile Include="HelperTypes.cs" />
     <Compile Include="Method_flags.cs" />
+    <Compile Include="Method_return_types.cs" />
     <Compile Include="Method_visibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -20,6 +20,8 @@ namespace ApiApproverTests
         }
     }
 
+#pragma warning disable 169, 649
+
     // ReSharper disable InconsistentNaming
     // ReSharper disable UnusedField.Compiler
     // ReSharper disable ClassNeverInstantiated.Global
@@ -39,4 +41,6 @@ namespace ApiApproverTests
     // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore InconsistentNaming
     // ReSharper restore UnusedField.Compiler
+
+#pragma warning restore 169, 649
 }
