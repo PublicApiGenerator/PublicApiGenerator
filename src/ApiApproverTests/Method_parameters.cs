@@ -135,6 +135,33 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_ref_parameters()
+        {
+            AssertPublicApi<MethodWithRefParameter>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodWithRefParameter
+    {
+        public void Method(ref string value) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_out_parameters()
+        {
+            AssertPublicApi<MethodWithOutParameter>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodWithOutParameter
+    {
+        public void Method(out string value) { }
+    }
+}");
+
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -202,6 +229,21 @@ namespace ApiApproverTests
         {
             public void Method(int value1 = 42, string value2 = "hello world")
             {
+            }
+        }
+
+        public class MethodWithRefParameter
+        {
+            public void Method(ref string value)
+            {
+            }
+        }
+
+        public class MethodWithOutParameter
+        {
+            public void Method(out string value)
+            {
+                value = null;
             }
         }
     }

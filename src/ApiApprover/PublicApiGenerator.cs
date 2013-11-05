@@ -269,11 +269,18 @@ namespace ApiApprover
                 FieldDirection direction = 0;
                 if (parameter.IsOut)
                     direction |= FieldDirection.Out;
-                CodeTypeReference codeTypeReference = CreateCodeTypeReference(parameter.ParameterType);
-                if (parameter.ParameterType.IsGenericParameter)
-                    codeTypeReference = new CodeTypeReference(parameter.ParameterType.Name);
-                var expresion = new CodeParameterDeclarationExpression(codeTypeReference,
-                    parameter.Name)
+                else if (parameter.ParameterType.IsByReference)
+                    direction |= FieldDirection.Ref;
+
+                var parameterType = parameter.ParameterType.IsByReference
+                    ? parameter.ParameterType.GetElementType()
+                    : parameter.ParameterType;
+
+                var type = parameter.ParameterType.IsGenericParameter
+                    ? new CodeTypeReference(parameter.ParameterType.Name)
+                    : CreateCodeTypeReference(parameterType);
+
+                var expresion = new CodeParameterDeclarationExpression(type, parameter.Name)
                 {
                     Direction = direction,
                     CustomAttributes = CreateCustomAttributes(parameter)
