@@ -9,14 +9,12 @@ namespace ApiApproverTests
         [Fact]
         public void Should_output_async_void_method()
         {
-            // TODO: Should we strip the AsyncStateMachineAttribute? And DebuggerStepThroughAttribute?
             AssertPublicApi<MethodAsyncVoid>(
 @"namespace ApiApproverTests.Examples
 {
     public class MethodAsyncVoid
     {
         [System.Diagnostics.DebuggerStepThroughAttribute()]
-        [System.Runtime.CompilerServices.AsyncStateMachineAttribute()]
         public async void AsyncMethod() { }
     }
 }");
@@ -25,14 +23,12 @@ namespace ApiApproverTests
         [Fact]
         public void Should_output_async_method_with_return_value()
         {
-            // TODO: Should we strip the AsyncStateMachineAttribute? And DebuggerStepThroughAttribute?
             AssertPublicApi<MethodAsyncReturnValue>(
 @"namespace ApiApproverTests.Examples
 {
     public class MethodAsyncReturnValue
     {
         [System.Diagnostics.DebuggerStepThroughAttribute()]
-        [System.Runtime.CompilerServices.AsyncStateMachineAttribute()]
         public async System.Threading.Tasks.Task<string> AsyncMethod() { }
     }
 }");

@@ -87,6 +87,13 @@ namespace ApiApproverTests.Examples
         {
         }
     }
+
+    public class AttributeWithTypeParameterAttribute : Attribute
+    {
+        public AttributeWithTypeParameterAttribute(Type type)
+        {
+        }
+    }
 }
 // ReSharper restore UnusedAutoPropertyAccessor.Global
 // ReSharper restore UnusedParameter.Local

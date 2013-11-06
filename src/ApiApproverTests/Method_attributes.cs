@@ -97,6 +97,24 @@ namespace ApiApproverTests
         }
 
         [Fact]
+        public void Should_handle_typeof_argument()
+        {
+            AssertPublicApi<MethodWithAttributeWithType>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodWithAttributeWithType
+    {
+        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
+        public void Method1() { }
+        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(ApiApproverTests.Examples.ComplexType))]
+        public void Method2() { }
+        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>))]
+        public void Method3() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<MethodWithMultipleAttributes>(
@@ -178,6 +196,16 @@ namespace ApiApproverTests
             public void Method()
             {
             }
+        }
+
+        public class MethodWithAttributeWithType
+        {
+            [AttributeWithTypeParameterAttribute(typeof(string))]
+            public void Method1() { }
+            [AttributeWithTypeParameterAttribute(typeof(ComplexType))]
+            public void Method2() { }
+            [AttributeWithTypeParameterAttribute(typeof(GenericType<ComplexType>))]
+            public void Method3() { }
         }
 
         public class MethodWithMultipleAttributes

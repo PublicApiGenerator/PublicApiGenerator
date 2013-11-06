@@ -59,18 +59,10 @@ namespace ApiApprover
                 foreach (var publicType in publicTypes)
                 {
                     var writer = new StringWriter();
+                    var typeDeclaration = CreateTypeDeclaration(publicType);
+
                     var @namespace = new CodeNamespace(publicType.Namespace);
-                    var genClass = CreateClassDeclaration(publicType);
-
-                    foreach (var memberInfo in publicType.GetMembers().Where(ShouldIncludeMember).OrderBy(m => m.Name))
-                        AddMemberToClassDefinition(genClass, memberInfo);
-
-                    // Fields should be in defined order for an enum
-                    var fields = !publicType.IsEnum ? publicType.Fields.OrderBy(f => f.Name) : (IEnumerable<FieldDefinition>)publicType.Fields;
-                    foreach (var field in fields)
-                        AddMemberToClassDefinition(genClass, field);
-
-                    @namespace.Types.Add(genClass);
+                    @namespace.Types.Add(typeDeclaration);
                     provider.GenerateCodeFromNamespace(@namespace, writer, cgo);
                     var gennedClass = GenerateClassCode(writer);
                     publicApiBuilder.AppendLine(gennedClass);
@@ -78,6 +70,11 @@ namespace ApiApprover
             }
             var publicApi = publicApiBuilder.ToString();
             return publicApi.Trim();
+        }
+
+        private static bool IsDelegate(TypeDefinition publicType)
+        {
+            return publicType.BaseType != null && publicType.BaseType.FullName == "System.MulticastDelegate";
         }
 
         private static bool ShouldIncludeType(TypeDefinition t)
@@ -143,8 +140,11 @@ namespace ApiApprover
             return gennedClass;
         }
 
-        static CodeTypeDeclaration CreateClassDeclaration(TypeDefinition publicType)
+        static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType)
         {
+            if (IsDelegate(publicType))
+                return CreateDelegateDeclaration(publicType);
+
             bool @static = false;
             System.Reflection.TypeAttributes attributes = 0;
             if (publicType.IsPublic)
@@ -159,6 +159,7 @@ namespace ApiApprover
             // Static support is a hack. CodeDOM does support it, and this isn't
             // correct C#, but it's good enough for our API outline
             var name = publicType.Name;
+
             var index = name.IndexOf('`');
             if (index != -1)
                 name = name.Substring(0, index);
@@ -187,6 +188,36 @@ namespace ApiApprover
             }
             foreach (var @interface in publicType.Interfaces.OrderBy(i => i.FullName))
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
+
+            foreach (var memberInfo in publicType.GetMembers().Where(ShouldIncludeMember).OrderBy(m => m.Name))
+                AddMemberToClassDefinition(declaration, memberInfo);
+
+            // Fields should be in defined order for an enum
+            var fields = !publicType.IsEnum
+                ? publicType.Fields.OrderBy(f => f.Name)
+                : (IEnumerable<FieldDefinition>)publicType.Fields;
+            foreach (var field in fields)
+                AddMemberToClassDefinition(declaration, field);
+
+            return declaration;
+        }
+
+        private static CodeTypeDeclaration CreateDelegateDeclaration(TypeDefinition publicType)
+        {
+            var invokeMethod = publicType.Methods.Single(m => m.Name == "Invoke");
+            var declaration = new CodeTypeDelegate(publicType.Name)
+            {
+                Attributes = MemberAttributes.Public,
+                CustomAttributes = CreateCustomAttributes(publicType),
+                ReturnType = CreateCodeTypeReference(invokeMethod.ReturnType),
+            };
+
+            foreach (var parameter in invokeMethod.Parameters)
+            {
+                declaration.Parameters.Add(
+                    new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType),
+                        parameter.Name));
+            }
 
             return declaration;
         }
@@ -227,7 +258,7 @@ namespace ApiApprover
         private static void PopulateCustomAttributes(ICustomAttributeProvider type,
             CodeAttributeDeclarationCollection attributes)
         {
-            foreach (var customAttribute in type.CustomAttributes.OrderBy(a => a.AttributeType.FullName))
+            foreach (var customAttribute in type.CustomAttributes.Where(ShouldIncludeAttribute).OrderBy(a => a.AttributeType.FullName))
             {
                 var attribute = new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType));
                 foreach (var arg in customAttribute.ConstructorArguments)
@@ -239,6 +270,11 @@ namespace ApiApprover
                 }
                 attributes.Add(attribute);
             }
+        }
+
+        private static bool ShouldIncludeAttribute(CustomAttribute attribute)
+        {
+            return attribute.AttributeType.FullName != "System.Runtime.CompilerServices.AsyncStateMachineAttribute";
         }
 
         private static CodeExpression CreateInitialiserExpression(TypeReference typeReference, object value)
@@ -264,6 +300,10 @@ namespace ApiApprover
                     where v == 0 || (originalValue & v) != 0
                     select typeReference.FullName + "." + f.Name;
                 return new CodeSnippetExpression(flags.Aggregate((current, next) => current + " | " + next));
+            }
+            if (typeReference.FullName == "System.Type" && value is TypeReference)
+            {
+                return new CodeTypeOfExpression(CreateCodeTypeReference((TypeReference)value));
             }
             return new CodePrimitiveExpression(value);
         }

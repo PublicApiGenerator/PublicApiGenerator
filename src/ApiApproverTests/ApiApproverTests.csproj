@@ -64,6 +64,8 @@
     <Compile Include="Class_hierarchy.cs" />
     <Compile Include="Class_order.cs" />
     <Compile Include="Class_visibility.cs" />
+    <Compile Include="Delegate_types.cs" />
+    <Compile Include="Delegate_visibility.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Field_flags.cs" />
     <Compile Include="Field_order.cs" />
