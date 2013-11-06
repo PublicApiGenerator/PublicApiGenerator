@@ -1,5 +1,4 @@
-﻿using System;
-using ApiApproverTests.Examples;
+﻿using ApiApproverTests.Examples;
 using Xunit;
 
 namespace ApiApproverTests

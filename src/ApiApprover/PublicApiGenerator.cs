@@ -2,7 +2,6 @@
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,7 +26,7 @@ namespace ApiApprover
     }
 
 
-    public class PublicApiGenerator
+    public static class PublicApiGenerator
     {
         // TODO: Assembly attributes
         // TODO: Assembly references?
@@ -228,7 +227,6 @@ namespace ApiApprover
             if (type.BaseType.FullName == "System.Enum"
                 && type.CustomAttributes.Any(a => a.AttributeType.FullName == "System.FlagsAttribute"))
             {
-                var typeExpression = new CodeTypeReferenceExpression(CreateCodeTypeReference(typeReference));
                 var originalValue = Convert.ToInt64(value);
 
                 //var allFlags = from f in type.Fields
