@@ -4,7 +4,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
@@ -175,7 +174,7 @@ namespace ApiApprover
 
             PopulateGenericParameters(publicType, declaration.TypeParameters);
 
-            if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")
+            if (publicType.BaseType != null && ShouldOutputBaseType(publicType))
             {
                 if (publicType.BaseType.FullName == "System.Enum")
                 {
@@ -190,6 +189,11 @@ namespace ApiApprover
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
 
             return declaration;
+        }
+
+        private static bool ShouldOutputBaseType(TypeDefinition publicType)
+        {
+            return publicType.BaseType.FullName != "System.Object" && publicType.BaseType.FullName != "System.ValueType";
         }
 
         private static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters)
