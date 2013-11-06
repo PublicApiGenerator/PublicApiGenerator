@@ -11,7 +11,7 @@ namespace ApiApproverTests
             AssertPublicApi<IPublicInterface>(
 @"namespace ApiApproverTests.Examples
 {
-    public class IPublicInterface { }
+    public interface IPublicInterface { }
 }");
         }
 
