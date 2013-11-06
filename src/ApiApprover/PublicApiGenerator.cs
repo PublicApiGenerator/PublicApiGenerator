@@ -11,6 +11,7 @@ using Microsoft.CSharp;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using TypeAttributes = System.Reflection.TypeAttributes;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -147,13 +148,13 @@ namespace ApiApprover
                 return CreateDelegateDeclaration(publicType);
 
             bool @static = false;
-            System.Reflection.TypeAttributes attributes = 0;
+            TypeAttributes attributes = 0;
             if (publicType.IsPublic)
-                attributes |= System.Reflection.TypeAttributes.Public;
+                attributes |= TypeAttributes.Public;
             if (publicType.IsSealed && !publicType.IsAbstract)
-                attributes |= System.Reflection.TypeAttributes.Sealed;
+                attributes |= TypeAttributes.Sealed;
             else if (!publicType.IsSealed && publicType.IsAbstract && !publicType.IsInterface)
-                attributes |= System.Reflection.TypeAttributes.Abstract;
+                attributes |= TypeAttributes.Abstract;
             else if (publicType.IsSealed && publicType.IsAbstract)
                 @static = true;
 
@@ -167,11 +168,12 @@ namespace ApiApprover
             var declaration = new CodeTypeDeclaration(@static ? "static " + name : name)
             {
                 CustomAttributes = CreateCustomAttributes(publicType),
+                // TypeAttributes must be specified before the IsXXX as they manipulate TypeAttributes!
+                TypeAttributes = attributes,
                 IsClass = publicType.IsClass,
                 IsEnum = publicType.IsEnum,
                 IsInterface = publicType.IsInterface,
                 IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum,
-                TypeAttributes = attributes
             };
 
             PopulateGenericParameters(publicType, declaration.TypeParameters);

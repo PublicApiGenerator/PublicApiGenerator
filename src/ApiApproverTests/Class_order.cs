@@ -8,14 +8,18 @@ namespace ApiApproverTests
         [Fact]
         public void Should_output_classes_in_alphabetical_order()
         {
-            AssertPublicApi(new[] { typeof(BB_Class), typeof(AA_Class) },
+            AssertPublicApi(new[] { typeof(MM_Class), typeof(ZZ_Class), typeof(AA_Class) },
 @"namespace ApiApproverTests.Examples
 {
     public class AA_Class { }
 }
 namespace ApiApproverTests.Examples
 {
-    public class BB_Class { }
+    public class MM_Class { }
+}
+namespace ApiApproverTests.Examples
+{
+    public class ZZ_Class { }
 }");
         }
     }
@@ -23,7 +27,11 @@ namespace ApiApproverTests.Examples
     // ReSharper disable InconsistentNaming
     namespace Examples
     {
-        public class BB_Class
+        public class MM_Class
+        {
+        }
+
+        public class ZZ_Class
         {
         }
 
