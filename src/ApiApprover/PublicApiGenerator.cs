@@ -246,19 +246,27 @@ namespace ApiApprover
             if (member.IsAssembly || member.IsPrivate)
                 return;
 
-            // TODO: Type parameters
+            var returnType = CreateCodeTypeReference(member.ReturnType);
+            if (IsAsync(member))
+                returnType = MakeAsync(returnType);
+
             var method = new CodeMemberMethod
             {
                 Name = member.Name,
                 Attributes = GetMethodAttributes(member),
                 CustomAttributes = CreateCustomAttributes(member),
-                ReturnType = CreateCodeTypeReference(member.ReturnType),
+                ReturnType = returnType,
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
             PopulateGenericParameters(member, method.TypeParameters);
             AddParametersToMethodDefinition(member, method);
 
             genClass.Members.Add(method);
+        }
+
+        private static bool IsAsync(MethodDefinition method)
+        {
+            return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.AsyncStateMachineAttribute");
         }
 
         private static void AddParametersToMethodDefinition(IMethodSignature member, CodeMemberMethod method)
@@ -368,12 +376,7 @@ namespace ApiApprover
             // TODO: Costant value
             var codeTypeReference = CreateCodeTypeReference(memberInfo.FieldType);
             if (memberInfo.IsInitOnly)
-            {
-                using (var provider = new CSharpCodeProvider())
-                {
-                    codeTypeReference = new CodeTypeReference("readonly " + provider.GetTypeOutput(codeTypeReference));
-                }
-            }
+                codeTypeReference = MakeReadonly(codeTypeReference);
             var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
             {
                 Attributes = attributes,
@@ -381,6 +384,22 @@ namespace ApiApprover
             };
 
             classDefinition.Members.Add(field);
+        }
+
+        private static CodeTypeReference MakeReadonly(CodeTypeReference typeReference)
+        {
+            return ModifyCodeTypeReference(typeReference, "readonly");
+        }
+
+        private static CodeTypeReference MakeAsync(CodeTypeReference typeReference)
+        {
+            return ModifyCodeTypeReference(typeReference, "async");   
+        }
+
+        private static CodeTypeReference ModifyCodeTypeReference(CodeTypeReference typeReference, string modifier)
+        {
+            using (var provider = new CSharpCodeProvider())
+                return new CodeTypeReference(modifier + " " + provider.GetTypeOutput(typeReference));
         }
 
         private static CodeTypeReference CreateCodeTypeReference(TypeReference type)

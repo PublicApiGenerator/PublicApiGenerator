@@ -69,6 +69,7 @@
     <Compile Include="Field_types.cs" />
     <Compile Include="Field_visibility.cs" />
     <Compile Include="HelperTypes.cs" />
+    <Compile Include="Method_async.cs" />
     <Compile Include="Method_flags.cs" />
     <Compile Include="Method_generics.cs" />
     <Compile Include="Method_explicit_interfaces.cs" />
