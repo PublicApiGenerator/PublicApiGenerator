@@ -47,6 +47,13 @@ namespace ApiApproverTests
 }");
         }
 
+        [Fact(Skip = "Not implemented")]
+        [Trait("TODO", "new modifier for interfaces")]
+        public void Should_output_new_modifier()
+        {
+            throw new NotImplementedException();
+        }
+
         [Fact]
         public void Should_output_methods_in_alphabetical_order()
         {
