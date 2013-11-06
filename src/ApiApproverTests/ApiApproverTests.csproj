@@ -76,6 +76,7 @@
     <Compile Include="Method_explicit_interfaces.cs" />
     <Compile Include="Method_order.cs" />
     <Compile Include="Method_parameters.cs" />
+    <Compile Include="Method_return_value_attributes.cs" />
     <Compile Include="Method_return_types.cs" />
     <Compile Include="Method_visibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
