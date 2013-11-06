@@ -1,6 +1,8 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,6 +39,11 @@ namespace ApiApprover
         // TODO: Ref parameters?
         public static string CreatePublicApiForAssembly(AssemblyDefinition assembly)
         {
+            return CreatePublicApiForAssembly(assembly, t => true);
+        }
+
+        public static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType)
+        {
             var publicApiBuilder = new StringBuilder();
             var cgo = new CodeGeneratorOptions
             {
@@ -47,7 +54,7 @@ namespace ApiApprover
             using (var provider = new CSharpCodeProvider())
             {
                 var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
-                    .Where(ShouldIncludeType)
+                    .Where(t => ShouldIncludeType(t) && shouldIncludeType(t))
                     .OrderBy(t => t.FullName);
                 foreach (var publicType in publicTypes)
                 {
@@ -201,12 +208,46 @@ namespace ApiApprover
         private static void PopulateCustomAttributes(ICustomAttributeProvider type,
             CodeAttributeDeclarationCollection attributes)
         {
-            foreach (var customAttribute in type.CustomAttributes)
+            foreach (var customAttribute in type.CustomAttributes.OrderBy(a => a.AttributeType.FullName))
             {
-                // TODO: Attribute parameters
                 var attribute = new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType));
+                foreach (var arg in customAttribute.ConstructorArguments)
+                    attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg.Type, arg.Value)));
+                foreach (var property in customAttribute.Properties.OrderBy(p => p.Name))
+                {
+                    attribute.Arguments.Add(new CodeAttributeArgument(property.Name,
+                        CreateInitialiserExpression(property.Argument.Type, property.Argument.Value)));
+                }
                 attributes.Add(attribute);
             }
+        }
+
+        private static CodeExpression CreateInitialiserExpression(TypeReference typeReference, object value)
+        {
+            var type = typeReference.Resolve();
+            if (type.BaseType.FullName == "System.Enum"
+                && type.CustomAttributes.Any(a => a.AttributeType.FullName == "System.FlagsAttribute"))
+            {
+                var typeExpression = new CodeTypeReferenceExpression(CreateCodeTypeReference(typeReference));
+                var originalValue = Convert.ToInt64(value);
+
+                //var allFlags = from f in type.Fields
+                //    where f.Constant != null
+                //    let v = Convert.ToInt64(f.Constant)
+                //    where v == 0 || (originalValue & v) != 0
+                //    select (CodeExpression)new CodeFieldReferenceExpression(typeExpression, f.Name);
+                //return allFlags.Aggregate((current, next) => new CodeBinaryOperatorExpression(current, CodeBinaryOperatorType.BitwiseOr, next));
+
+                // I'd rather use the above, as it's just using the CodeDOM, but it puts
+                // brackets around each CodeBinaryOperatorExpression
+                var flags = from f in type.Fields
+                    where f.Constant != null
+                    let v = Convert.ToInt64(f.Constant)
+                    where v == 0 || (originalValue & v) != 0
+                    select typeReference.FullName + "." + f.Name;
+                return new CodeSnippetExpression(flags.Aggregate((current, next) => current + " | " + next));
+            }
+            return new CodePrimitiveExpression(value);
         }
 
         private static void AddCtorToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)

@@ -8,8 +8,7 @@ namespace ApiApproverTests
         [Fact]
         public void Should_output_classes_in_alphabetical_order()
         {
-            var assemblyDefinition = FixtureData.GetAssemblyDefinitionForTypes(typeof(BB_Class), typeof(AA_Class));
-            AssertPublicApi(assemblyDefinition,
+            AssertPublicApi(new[] { typeof(BB_Class), typeof(AA_Class) },
 @"namespace ApiApproverTests.Examples
 {
     public class AA_Class { }

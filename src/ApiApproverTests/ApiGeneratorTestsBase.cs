@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using ApiApprover;
 using Mono.Cecil;
@@ -6,11 +8,9 @@ using Xunit;
 
 namespace ApiApproverTests
 {
-    public abstract class ApiGeneratorTestsBase : IUseFixture<AssemblyDefinitionFixture>
+    public abstract class ApiGeneratorTestsBase
     {
         private static readonly Regex StripEmptyLines = new Regex(@"^\s+$[\r\n]*", RegexOptions.Multiline | RegexOptions.Compiled);
-
-        protected AssemblyDefinitionFixture FixtureData;
 
         protected void AssertPublicApi<T>(string expectedOutput)
         {
@@ -19,20 +19,21 @@ namespace ApiApproverTests
 
         protected void AssertPublicApi(Type type, string expectedOutput)
         {
-            var assemblyDefinition = FixtureData.GetAssemblyDefinitionForTypes(type);
-            AssertPublicApi(assemblyDefinition, expectedOutput);
+            AssertPublicApi(new[] { type }, expectedOutput);
         }
 
-        protected void AssertPublicApi(AssemblyDefinition assemblyDefinition, string expectedOutput)
+        protected void AssertPublicApi(Type[] types, string expectedOutput)
         {
-            var output = PublicApiGenerator.CreatePublicApiForAssembly(assemblyDefinition);
-            output = StripEmptyLines.Replace(output, string.Empty);
-            Assert.Equal(expectedOutput, output);
+            var assemblyDefinition = AssemblyDefinition.ReadAssembly(GetType().Assembly.Location);
+            AssertPublicApi(assemblyDefinition, types, expectedOutput);
         }
 
-        public void SetFixture(AssemblyDefinitionFixture data)
+        private static void AssertPublicApi(AssemblyDefinition assemblyDefinition, Type[] types, string expectedOutput)
         {
-            FixtureData = data;
+            var typesNames = new HashSet<string>(types.Select(t => t.FullName));
+            var actualOutput = PublicApiGenerator.CreatePublicApiForAssembly(assemblyDefinition, t => typesNames.Contains(t.FullName));
+            actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
+            Assert.Equal(expectedOutput, actualOutput);
         }
     }
 }
