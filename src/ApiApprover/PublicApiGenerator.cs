@@ -4,11 +4,13 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -60,10 +62,15 @@ namespace ApiApprover
                     var writer = new StringWriter();
                     var @namespace = new CodeNamespace(publicType.Namespace);
                     var genClass = CreateClassDeclaration(publicType);
+
                     foreach (var memberInfo in publicType.GetMembers().Where(ShouldIncludeMember).OrderBy(m => m.Name))
-                    {
                         AddMemberToClassDefinition(genClass, memberInfo);
-                    }
+
+                    // Fields should be in defined order for an enum
+                    var fields = !publicType.IsEnum ? publicType.Fields.OrderBy(f => f.Name) : (IEnumerable<FieldDefinition>)publicType.Fields;
+                    foreach (var field in fields)
+                        AddMemberToClassDefinition(genClass, field);
+
                     @namespace.Types.Add(genClass);
                     provider.GenerateCodeFromNamespace(@namespace, writer, cgo);
                     var gennedClass = GenerateClassCode(writer);
@@ -81,7 +88,7 @@ namespace ApiApprover
 
         private static bool ShouldIncludeMember(IMemberDefinition m)
         {
-            return !IsCompilerGenerated(m) && !IsDotNetTypeMember(m);
+            return !IsCompilerGenerated(m) && !IsDotNetTypeMember(m) && !(m is FieldDefinition);
         }
 
         private static bool IsCompilerGenerated(IMemberDefinition m)
@@ -169,7 +176,16 @@ namespace ApiApprover
             PopulateGenericParameters(publicType, declaration.TypeParameters);
 
             if (publicType.BaseType != null && publicType.BaseType.FullName != "System.Object")
-                declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
+            {
+                if (publicType.BaseType.FullName == "System.Enum")
+                {
+                    var underlyingType = publicType.GetEnumUnderlyingType();
+                    if (underlyingType.FullName != "System.Int32")
+                        declaration.BaseTypes.Add(CreateCodeTypeReference(underlyingType));
+                }
+                else
+                    declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
+            }
             foreach (var @interface in publicType.Interfaces.OrderBy(i => i.FullName))
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
 
@@ -399,7 +415,7 @@ namespace ApiApprover
 
         static void AddFieldToClassDefinition(CodeTypeDeclaration classDefinition, FieldDefinition memberInfo)
         {
-            if (memberInfo.IsPrivate || memberInfo.IsAssembly)
+            if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsSpecialName)
                 return;
 
             MemberAttributes attributes = 0;
@@ -421,6 +437,9 @@ namespace ApiApprover
                 Attributes = attributes,
                 CustomAttributes = CreateCustomAttributes(memberInfo)
             };
+
+            if (memberInfo.HasConstant)
+                field.InitExpression = new CodePrimitiveExpression(memberInfo.Constant);
 
             classDefinition.Members.Add(field);
         }
