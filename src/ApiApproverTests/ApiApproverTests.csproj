@@ -73,6 +73,7 @@
     <Compile Include="Field_types.cs" />
     <Compile Include="Field_visibility.cs" />
     <Compile Include="HelperTypes.cs" />
+    <Compile Include="Interace_events.cs" />
     <Compile Include="Interface_methods.cs" />
     <Compile Include="Interface_order.cs" />
     <Compile Include="Interface_visibility.cs" />

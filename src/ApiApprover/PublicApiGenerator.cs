@@ -344,7 +344,7 @@ namespace ApiApprover
 
         private static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
         {
-            if (member.IsAssembly || member.IsPrivate)
+            if (member.IsAssembly || member.IsPrivate || member.IsSpecialName)
                 return;
 
             var returnType = CreateCodeTypeReference(member.ReturnType);
@@ -452,13 +452,13 @@ namespace ApiApprover
             return property;
         }
 
-        static CodeTypeMember GenerateEvent(EventDefinition memberInfo)
+        static CodeTypeMember GenerateEvent(EventDefinition eventDefinition)
         {
             var @event = new CodeMemberEvent
             {
-                Name = memberInfo.Name,
+                Name = eventDefinition.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Type = CreateCodeTypeReference(memberInfo.EventType)
+                Type = CreateCodeTypeReference(eventDefinition.EventType)
             };
 
             return @event;
