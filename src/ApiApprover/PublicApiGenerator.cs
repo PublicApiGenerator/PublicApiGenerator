@@ -152,7 +152,7 @@ namespace ApiApprover
                 attributes |= System.Reflection.TypeAttributes.Public;
             if (publicType.IsSealed && !publicType.IsAbstract)
                 attributes |= System.Reflection.TypeAttributes.Sealed;
-            else if (!publicType.IsSealed && publicType.IsAbstract)
+            else if (!publicType.IsSealed && publicType.IsAbstract && !publicType.IsInterface)
                 attributes |= System.Reflection.TypeAttributes.Abstract;
             else if (publicType.IsSealed && publicType.IsAbstract)
                 @static = true;
@@ -414,7 +414,6 @@ namespace ApiApprover
                 attributes |= MemberAttributes.Public;
             if (method.IsStatic)
                 attributes |= MemberAttributes.Static;
-
             if (method.IsAbstract)
                 attributes |= MemberAttributes.Abstract;
 
