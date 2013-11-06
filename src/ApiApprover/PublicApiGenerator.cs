@@ -4,6 +4,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
@@ -363,14 +364,13 @@ namespace ApiApprover
             genClass.Members.Add(method);
         }
 
-        private static bool IsAsync(MethodDefinition method)
+        private static bool IsAsync(ICustomAttributeProvider method)
         {
             return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.AsyncStateMachineAttribute");
         }
 
         private static void AddParametersToMethodDefinition(IMethodSignature member, CodeMemberMethod method)
         {
-            var parameterCollection = new CodeParameterDeclarationExpressionCollection();
             foreach (var parameter in member.Parameters)
             {
                 FieldDirection direction = 0;
@@ -387,14 +387,21 @@ namespace ApiApprover
                     ? new CodeTypeReference(parameter.ParameterType.Name)
                     : CreateCodeTypeReference(parameterType);
 
-                var expresion = new CodeParameterDeclarationExpression(type, parameter.Name)
+                var name = parameter.HasConstant
+                    ? string.Format("{0} = {1}", parameter.Name, FormatParameterConstant(parameter))
+                    : parameter.Name;
+                var expresion = new CodeParameterDeclarationExpression(type, name)
                 {
                     Direction = direction,
                     CustomAttributes = CreateCustomAttributes(parameter)
                 };
-                parameterCollection.Add(expresion);
+                method.Parameters.Add(expresion);
             }
-            method.Parameters.AddRange(parameterCollection);
+        }
+
+        private static object FormatParameterConstant(IConstantProvider parameter)
+        {
+            return parameter.Constant is string ? string.Format("\"{0}\"", parameter.Constant) : (parameter.Constant ?? "null");
         }
 
         static MemberAttributes GetMethodAttributes(MethodDefinition method)
