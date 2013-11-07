@@ -47,11 +47,17 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "Not implemented")]
-        [Trait("TODO", "new modifier for interfaces")]
+        [Fact]
         public void Should_output_new_modifier()
         {
-            throw new NotImplementedException();
+            AssertPublicApi<IMethodHiding>(
+@"namespace ApiApproverTests.Examples
+{
+    public interface IMethodHiding : ApiApproverTests.Examples.IVoidMethod
+    {
+        new void Method();
+    }
+}");
         }
 
         [Fact]
@@ -95,6 +101,11 @@ namespace ApiApproverTests
             void ZZ_Method();
             void MM_Method();
             void AA_Method();
+        }
+
+        public interface IMethodHiding : IVoidMethod
+        {
+            new void Method();
         }
     }
     // ReSharper restore UnusedMember.Global

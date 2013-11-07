@@ -69,6 +69,19 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_new_modifier()
+        {
+            AssertPublicApi<ClassWithMethodHiding>(
+@"namespace ApiApproverTests.Examples
+{
+    public class ClassWithMethodHiding : ApiApproverTests.Examples.ClassWithSimpleMethod
+    {
+        public new void Method() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -76,11 +89,26 @@ namespace ApiApproverTests
     // ReSharper disable UnusedMemberHiearchy.Global
     // ReSharper disable MemberCanBeProtected.Global
     // ReSharper disable RedundantOverridenMember
+    // ReSharper disable ClassWithVirtualMembersNeverInherited.Global
     namespace Examples
     {
         public class ClassWithStaticMethod
         {
             public static void DoSomething()
+            {
+            }
+        }
+
+        public class ClassWithSimpleMethod
+        {
+            public void Method()
+            {
+            }
+        }
+
+        public class ClassWithMethodHiding : ClassWithSimpleMethod
+        {
+            public new void Method()
             {
             }
         }
@@ -113,6 +141,7 @@ namespace ApiApproverTests
             }
         }
     }
+    // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
     // ReSharper restore RedundantOverridenMember
     // ReSharper restore MemberCanBeProtected.Global
     // ReSharper restore UnusedMemberHiearchy.Global

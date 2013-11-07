@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -416,27 +417,53 @@ namespace ApiApprover
                 attributes |= MemberAttributes.Public;
             if (method.IsStatic)
                 attributes |= MemberAttributes.Static;
+
+            if (method.IsFinal || !method.IsVirtual)
+                attributes |= MemberAttributes.Final;
             if (method.IsAbstract)
                 attributes |= MemberAttributes.Abstract;
+            if (method.IsVirtual && !method.IsNewSlot)
+                attributes |= MemberAttributes.Override;
 
-            // I think this is right. Fingers crossed!
-            if (method.IsHideBySig)
-            {
-                if (method.IsFinal || (!method.IsNewSlot && !method.IsVirtual))
-                {
-                    attributes |= MemberAttributes.Final;
-                }
-                else if (method.IsVirtual && !method.IsNewSlot)
-                {
-                    attributes |= MemberAttributes.Override;
-                }
-                else if (!method.IsVirtual)
-                {
-                    attributes |= MemberAttributes.New;
-                }
-            }
+            if (IsHidingMethod(method))
+                attributes |= MemberAttributes.New;
 
             return attributes;
+        }
+
+        private static bool IsHidingMethod(MethodDefinition method)
+        {
+            var typeDefinition = method.DeclaringType;
+
+            // If we're an interface, just try and find any method with the same signature
+            // in any of the interfaces that we implement
+            if (typeDefinition.IsInterface)
+            {
+                var interfaceMethods = from @interfaceReference in typeDefinition.Interfaces
+                    let interfaceDefinition = @interfaceReference.Resolve()
+                    where interfaceDefinition != null
+                    select interfaceDefinition.Methods;
+
+                return interfaceMethods.Any(ms => MetadataResolver.GetMethod(ms, method) != null);
+            }
+
+            // If we're not an interface, find a base method that isn't virtual
+            return !method.IsVirtual && GetBaseTypes(typeDefinition).Any(d => MetadataResolver.GetMethod(d.Methods, method) != null);
+        }
+
+        private static IEnumerable<TypeDefinition> GetBaseTypes(TypeDefinition type)
+        {
+            var baseType = type.BaseType;
+            while (baseType != null)
+            {
+                var definition = baseType.Resolve();
+                if (definition != null)
+                {
+                    yield return definition;
+
+                    baseType = baseType.DeclaringType;
+                }
+            }
         }
 
         private static CodeMemberProperty GenerateProperty(PropertyDefinition member)
