@@ -2,7 +2,6 @@
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -113,7 +112,7 @@ namespace ApiApprover
             }
             else if (memberInfo is PropertyDefinition)
             {
-                genClass.Members.Add(GenerateProperty((PropertyDefinition)memberInfo));
+                AddPropertyToTypeDefinition(genClass, (PropertyDefinition) memberInfo);
             }
             else if (memberInfo is EventDefinition)
             {
@@ -278,7 +277,8 @@ namespace ApiApprover
 
         private static bool ShouldIncludeAttribute(CustomAttribute attribute)
         {
-            return attribute.AttributeType.FullName != "System.Runtime.CompilerServices.AsyncStateMachineAttribute";
+            return attribute.AttributeType.FullName != "System.Runtime.CompilerServices.AsyncStateMachineAttribute"
+                && attribute.AttributeType.FullName != "System.Reflection.DefaultMemberAttribute";
         }
 
         private static CodeExpression CreateInitialiserExpression(TypeReference typeReference, object value)
@@ -466,7 +466,7 @@ namespace ApiApprover
             }
         }
 
-        private static CodeMemberProperty GenerateProperty(PropertyDefinition member)
+        private static void AddPropertyToTypeDefinition(CodeTypeDeclaration typeDeclaration, PropertyDefinition member)
         {
             var property = new CodeMemberProperty
             {
@@ -477,7 +477,14 @@ namespace ApiApprover
                 HasSet = member.SetMethod != null
             };
 
-            return property;
+            foreach (var parameter in member.Parameters)
+            {
+                property.Parameters.Add(
+                    new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType),
+                        parameter.Name));
+            }
+
+            typeDeclaration.Members.Add(property);
         }
 
         static CodeTypeMember GenerateEvent(EventDefinition eventDefinition)

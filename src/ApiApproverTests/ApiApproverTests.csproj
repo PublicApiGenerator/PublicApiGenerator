@@ -90,6 +90,7 @@
     <Compile Include="Method_return_types.cs" />
     <Compile Include="Method_visibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Property_methods.cs" />
     <Compile Include="Struct_order.cs" />
     <Compile Include="Struct_visibility.cs" />
   </ItemGroup>
