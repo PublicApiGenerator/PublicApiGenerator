@@ -78,6 +78,7 @@
     <Compile Include="Interface_methods.cs" />
     <Compile Include="Interface_method_generics.cs" />
     <Compile Include="Interface_order.cs" />
+    <Compile Include="Interface_properties.cs" />
     <Compile Include="Interface_visibility.cs" />
     <Compile Include="Method_async.cs" />
     <Compile Include="Method_attributes.cs" />
