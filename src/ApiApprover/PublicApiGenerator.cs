@@ -407,26 +407,33 @@ namespace ApiApprover
 
         static MemberAttributes GetMethodAttributes(MethodDefinition method)
         {
-            MemberAttributes attributes = 0;
-
+            MemberAttributes access = 0;
             if (method.IsFamily)
-                attributes |= MemberAttributes.Family;
+                access = MemberAttributes.Family;
             if (method.IsPublic)
-                attributes |= MemberAttributes.Public;
+                access = MemberAttributes.Public;
+            if (method.IsAssembly)
+                access = MemberAttributes.Assembly;
+            if (method.IsFamilyAndAssembly)
+                access = MemberAttributes.FamilyAndAssembly;
+            if (method.IsFamilyOrAssembly)
+                access = MemberAttributes.FamilyOrAssembly;
+
+            MemberAttributes scope = 0;
             if (method.IsStatic)
-                attributes |= MemberAttributes.Static;
-
+                scope |= MemberAttributes.Static;
             if (method.IsFinal || !method.IsVirtual)
-                attributes |= MemberAttributes.Final;
+                scope |= MemberAttributes.Final;
             if (method.IsAbstract)
-                attributes |= MemberAttributes.Abstract;
+                scope |= MemberAttributes.Abstract;
             if (method.IsVirtual && !method.IsNewSlot)
-                attributes |= MemberAttributes.Override;
+                scope |= MemberAttributes.Override;
 
+            MemberAttributes vtable = 0;
             if (IsHidingMethod(method))
-                attributes |= MemberAttributes.New;
+                vtable = MemberAttributes.New;
 
-            return attributes;
+            return access | scope | vtable;
         }
 
         private static bool IsHidingMethod(MethodDefinition method)
@@ -469,15 +476,18 @@ namespace ApiApprover
             var getterAttributes = member.GetMethod != null ? GetMethodAttributes(member.GetMethod) : 0;
             var setterAttributes = member.SetMethod != null ? GetMethodAttributes(member.SetMethod) : 0;
 
-            var propertyAttributes = getterAttributes | setterAttributes;
+            if (!HasVisiblePropertyMethod(getterAttributes) && !HasVisiblePropertyMethod(setterAttributes))
+                return;
+
+            var propertyAttributes = GetPropertyAttributes(getterAttributes, setterAttributes);
 
             var property = new CodeMemberProperty
             {
                 Name = member.Name,
                 Type = CreateCodeTypeReference(member.PropertyType),
                 Attributes = propertyAttributes,
-                HasGet = member.GetMethod != null,
-                HasSet = member.SetMethod != null
+                HasGet = member.GetMethod != null && HasVisiblePropertyMethod(getterAttributes),
+                HasSet = member.SetMethod != null && HasVisiblePropertyMethod(setterAttributes)
             };
 
             foreach (var parameter in member.Parameters)
@@ -487,7 +497,48 @@ namespace ApiApprover
                         parameter.Name));
             }
 
+            // TODO: CodeDOM has no support for different access modifiers for getters and setters
+            // TODO: CodeDOM has no support for attributes on setters or getters - promote to property?
+
             typeDeclaration.Members.Add(property);
+        }
+
+        private static MemberAttributes GetPropertyAttributes(MemberAttributes getterAttributes, MemberAttributes setterAttributes)
+        {
+            MemberAttributes access = 0;
+            var getterAccess = getterAttributes & MemberAttributes.AccessMask;
+            var setterAccess = setterAttributes & MemberAttributes.AccessMask;
+            if (getterAccess == MemberAttributes.Public || setterAccess == MemberAttributes.Public)
+                access = MemberAttributes.Public;
+            else if (getterAccess == MemberAttributes.Family || setterAccess == MemberAttributes.Family)
+                access = MemberAttributes.Family;
+            else if (getterAccess == MemberAttributes.FamilyAndAssembly || setterAccess == MemberAttributes.FamilyAndAssembly)
+                access = MemberAttributes.FamilyAndAssembly;
+            else if (getterAccess == MemberAttributes.FamilyOrAssembly || setterAccess == MemberAttributes.FamilyOrAssembly)
+                access = MemberAttributes.FamilyOrAssembly;
+            else if (getterAccess == MemberAttributes.Assembly || setterAccess == MemberAttributes.Assembly)
+                access = MemberAttributes.Assembly;
+            else if (getterAccess == MemberAttributes.Private || setterAccess == MemberAttributes.Private)
+                access = MemberAttributes.Private;
+
+            // Scope should be the same for getter and setter. If one isn't specified, it'll be 0
+            var getterScope = getterAttributes & MemberAttributes.ScopeMask;
+            var setterScope = setterAttributes & MemberAttributes.ScopeMask;
+            var scope = (MemberAttributes) Math.Max((int) getterScope, (int) setterScope);
+
+            // Vtable should be the same for getter and setter. If one isn't specified, it'll be 0
+            var getterVtable = getterAttributes & MemberAttributes.VTableMask;
+            var setterVtable = setterAttributes & MemberAttributes.VTableMask;
+            var vtable = (MemberAttributes) Math.Max((int) getterVtable, (int) setterVtable);
+
+            return access | scope | vtable;
+        }
+
+        private static bool HasVisiblePropertyMethod(MemberAttributes attributes)
+        {
+            var access = attributes & MemberAttributes.AccessMask;
+            return access == MemberAttributes.Public || access == MemberAttributes.Family ||
+                   access == MemberAttributes.FamilyOrAssembly;
         }
 
         static CodeTypeMember GenerateEvent(EventDefinition eventDefinition)
