@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ApiApproverTests
 {
-    public class Interace_events : ApiGeneratorTestsBase
+    public class Interface_events : ApiGeneratorTestsBase
     {
         [Fact]
         public void Should_output_event()

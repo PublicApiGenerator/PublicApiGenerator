@@ -3,7 +3,7 @@ using Xunit;
 
 namespace ApiApproverTests
 {
-    public class Field_flags : ApiGeneratorTestsBase
+    public class Field_modifiers : ApiGeneratorTestsBase
     {
         [Fact]
         public void Include_static_fields()

@@ -60,7 +60,7 @@
     <Compile Include="ApiGeneratorTestsBase.cs" />
     <Compile Include="Class_attributes.cs" />
     <Compile Include="Class_constructors.cs" />
-    <Compile Include="Class_flags.cs" />
+    <Compile Include="Class_modifiers.cs" />
     <Compile Include="Class_generics.cs" />
     <Compile Include="Class_hierarchy.cs" />
     <Compile Include="Class_order.cs" />
@@ -68,12 +68,12 @@
     <Compile Include="Delegate_types.cs" />
     <Compile Include="Delegate_visibility.cs" />
     <Compile Include="Enum.cs" />
-    <Compile Include="Field_flags.cs" />
+    <Compile Include="Field_modifiers.cs" />
     <Compile Include="Field_order.cs" />
     <Compile Include="Field_types.cs" />
     <Compile Include="Field_visibility.cs" />
     <Compile Include="HelperTypes.cs" />
-    <Compile Include="Interace_events.cs" />
+    <Compile Include="Interface_events.cs" />
     <Compile Include="Interface_generics.cs" />
     <Compile Include="Interface_methods.cs" />
     <Compile Include="Interface_method_generics.cs" />
@@ -81,7 +81,7 @@
     <Compile Include="Interface_visibility.cs" />
     <Compile Include="Method_async.cs" />
     <Compile Include="Method_attributes.cs" />
-    <Compile Include="Method_flags.cs" />
+    <Compile Include="Method_modifiers.cs" />
     <Compile Include="Method_generics.cs" />
     <Compile Include="Method_explicit_interfaces.cs" />
     <Compile Include="Method_order.cs" />
