@@ -466,11 +466,16 @@ namespace ApiApprover
 
         private static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member)
         {
+            var getterAttributes = member.GetMethod != null ? GetMethodAttributes(member.GetMethod) : 0;
+            var setterAttributes = member.SetMethod != null ? GetMethodAttributes(member.SetMethod) : 0;
+
+            var propertyAttributes = getterAttributes | setterAttributes;
+
             var property = new CodeMemberProperty
             {
                 Name = member.Name,
                 Type = CreateCodeTypeReference(member.PropertyType),
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                Attributes = propertyAttributes,
                 HasGet = member.GetMethod != null,
                 HasSet = member.SetMethod != null
             };
