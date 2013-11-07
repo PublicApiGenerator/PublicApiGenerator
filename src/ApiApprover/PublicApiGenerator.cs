@@ -37,7 +37,6 @@ namespace ApiApprover
         // TODO: Default values for parameters
         // TODO: Constructor parameters for attributes
         // TODO: Generic methods
-        // TODO: Ref parameters?
         public static string CreatePublicApiForAssembly(AssemblyDefinition assembly)
         {
             return CreatePublicApiForAssembly(assembly, t => true);
@@ -65,12 +64,11 @@ namespace ApiApprover
                     var @namespace = new CodeNamespace(publicType.Namespace);
                     @namespace.Types.Add(typeDeclaration);
                     provider.GenerateCodeFromNamespace(@namespace, writer, cgo);
-                    var gennedClass = GenerateClassCode(writer);
-                    publicApiBuilder.AppendLine(gennedClass);
+                    var typeDeclarationText = NormaliseGeneratedCode(writer);
+                    publicApiBuilder.AppendLine(typeDeclarationText);
                 }
             }
-            var publicApi = publicApiBuilder.ToString();
-            return publicApi.Trim();
+            return publicApiBuilder.ToString().Trim();
         }
 
         private static bool IsDelegate(TypeDefinition publicType)
@@ -100,31 +98,31 @@ namespace ApiApprover
             return m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft");
         }
 
-        static void AddMemberToClassDefinition(CodeTypeDeclaration genClass, IMemberDefinition memberInfo)
+        static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition memberInfo)
         {
             var methodDefinition = memberInfo as MethodDefinition;
             if (methodDefinition != null)
             {
                 if (methodDefinition.IsConstructor)
-                    AddCtorToClassDefinition(genClass, methodDefinition);
+                    AddCtorToTypeDeclaration(typeDeclaration, methodDefinition);
                 else
-                    AddMethodToClassDefinition(genClass, methodDefinition);
+                    AddMethodToTypeDeclaration(typeDeclaration, methodDefinition);
             }
             else if (memberInfo is PropertyDefinition)
             {
-                AddPropertyToTypeDefinition(genClass, (PropertyDefinition) memberInfo);
+                AddPropertyToTypeDeclaration(typeDeclaration, (PropertyDefinition) memberInfo);
             }
             else if (memberInfo is EventDefinition)
             {
-                genClass.Members.Add(GenerateEvent((EventDefinition)memberInfo));
+                typeDeclaration.Members.Add(GenerateEvent((EventDefinition)memberInfo));
             }
             else if (memberInfo is FieldDefinition)
             {
-                AddFieldToClassDefinition(genClass, (FieldDefinition) memberInfo);
+                AddFieldToTypeDeclaration(typeDeclaration, (FieldDefinition) memberInfo);
             }
         }
 
-        static string GenerateClassCode(StringWriter writer)
+        static string NormaliseGeneratedCode(StringWriter writer)
         {
             var gennedClass = writer.ToString();
             const string emptyGetSet = @"\s+{\s+get\s+{\s+}\s+set\s+{\s+}\s+}";
@@ -193,14 +191,14 @@ namespace ApiApprover
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
 
             foreach (var memberInfo in publicType.GetMembers().Where(ShouldIncludeMember).OrderBy(m => m.Name))
-                AddMemberToClassDefinition(declaration, memberInfo);
+                AddMemberToTypeDeclaration(declaration, memberInfo);
 
             // Fields should be in defined order for an enum
             var fields = !publicType.IsEnum
                 ? publicType.Fields.OrderBy(f => f.Name)
                 : (IEnumerable<FieldDefinition>)publicType.Fields;
             foreach (var field in fields)
-                AddMemberToClassDefinition(declaration, field);
+                AddMemberToTypeDeclaration(declaration, field);
 
             return declaration;
         }
@@ -312,7 +310,7 @@ namespace ApiApprover
             return new CodePrimitiveExpression(value);
         }
 
-        private static void AddCtorToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
+        private static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
         {
             if (member.IsAssembly || member.IsPrivate || IsEmptyDefaultConstructor(member))
                 return;
@@ -326,7 +324,7 @@ namespace ApiApprover
 
             AddParametersToMethodDefinition(member, method);
 
-            genClass.Members.Add(method);
+            typeDeclaration.Members.Add(method);
         }
 
         private static bool IsEmptyDefaultConstructor(MethodDefinition member)
@@ -344,7 +342,7 @@ namespace ApiApprover
             return false;
         }
 
-        private static void AddMethodToClassDefinition(CodeTypeDeclaration genClass, MethodDefinition member)
+        private static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
         {
             if (member.IsAssembly || member.IsPrivate || member.IsSpecialName)
                 return;
@@ -364,7 +362,7 @@ namespace ApiApprover
             PopulateGenericParameters(member, method.TypeParameters);
             AddParametersToMethodDefinition(member, method);
 
-            genClass.Members.Add(method);
+            typeDeclaration.Members.Add(method);
         }
 
         private static bool IsAsync(ICustomAttributeProvider method)
@@ -466,7 +464,7 @@ namespace ApiApprover
             }
         }
 
-        private static void AddPropertyToTypeDefinition(CodeTypeDeclaration typeDeclaration, PropertyDefinition member)
+        private static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member)
         {
             var property = new CodeMemberProperty
             {
@@ -499,7 +497,7 @@ namespace ApiApprover
             return @event;
         }
 
-        static void AddFieldToClassDefinition(CodeTypeDeclaration classDefinition, FieldDefinition memberInfo)
+        static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo)
         {
             if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsSpecialName)
                 return;
@@ -527,7 +525,7 @@ namespace ApiApprover
             if (memberInfo.HasConstant)
                 field.InitExpression = new CodePrimitiveExpression(memberInfo.Constant);
 
-            classDefinition.Members.Add(field);
+            typeDeclaration.Members.Add(field);
         }
 
         private static CodeTypeReference MakeReadonly(CodeTypeReference typeReference)
