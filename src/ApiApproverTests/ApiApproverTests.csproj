@@ -93,6 +93,7 @@
     <Compile Include="Property_automatic.cs" />
     <Compile Include="Property_methods.cs" />
     <Compile Include="Property_modifiers.cs" />
+    <Compile Include="Property_types.cs" />
     <Compile Include="Property_visibility.cs" />
     <Compile Include="Struct_order.cs" />
     <Compile Include="Struct_visibility.cs" />

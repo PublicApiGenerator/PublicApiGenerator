@@ -481,10 +481,14 @@ namespace ApiApprover
 
             var propertyAttributes = GetPropertyAttributes(getterAttributes, setterAttributes);
 
+            var propertyType = member.PropertyType.IsGenericParameter
+                ? new CodeTypeReference(member.PropertyType.Name)
+                : CreateCodeTypeReference(member.PropertyType);
+
             var property = new CodeMemberProperty
             {
                 Name = member.Name,
-                Type = CreateCodeTypeReference(member.PropertyType),
+                Type = propertyType,
                 Attributes = propertyAttributes,
                 HasGet = member.GetMethod != null && HasVisiblePropertyMethod(getterAttributes),
                 HasSet = member.SetMethod != null && HasVisiblePropertyMethod(setterAttributes)
