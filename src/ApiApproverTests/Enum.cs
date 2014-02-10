@@ -70,6 +70,9 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        // TODO: Enum with flags + undefined value
+        // Not supported by Cecil?
     }
 
     // ReSharper disable UnusedMember.Global

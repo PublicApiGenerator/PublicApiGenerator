@@ -60,7 +60,6 @@ namespace ApiApproverTests
         [Fact]
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
-            // TODO: Is order actually important? These are properties, after all
             AssertPublicApi<ClassWithAttributeWithMultipleNamedParameters>(
 @"namespace ApiApproverTests.Examples
 {

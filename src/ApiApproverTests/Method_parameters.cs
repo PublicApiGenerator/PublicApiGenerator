@@ -122,8 +122,7 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "Requires constant value support")]
-        [Trait("TODO", "Constant values")]
+        [Fact]
         public void Should_output_default_values()
         {
             AssertPublicApi<MethodWithDefaultValues>(
@@ -160,7 +159,19 @@ namespace ApiApproverTests
         public void Method(out string value) { }
     }
 }");
+        }
 
+        [Fact]
+        public void Should_output_params_keyword()
+        {
+            AssertPublicApi<MethodWithParams>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodWithParams
+    {
+        public void Method(string format, params object[] values) { }
+    }
+}");
         }
     }
 
@@ -244,6 +255,13 @@ namespace ApiApproverTests
             public void Method(out string value)
             {
                 value = null;
+            }
+        }
+
+        public class MethodWithParams
+        {
+            public void Method(string format, params object[] values)
+            {
             }
         }
     }

@@ -19,26 +19,23 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "Requires constants")]
-        [Trait("TODO", "Constant values")]
-        public void Include_readonly_fields()
+        [Fact]
+        public void Include_readonly_fields_without_constant_values()
         {
-            // Have to include the ctor - I can't figure out how to hide it
-            // when values are initialised
+            // TODO: Initialising values are set in the constructor. Very tricky to get
             AssertPublicApi<ClassWithReadonlyFields>(
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithReadonlyFields
     {
-        protected readonly string ReadonlyProtectedField = ""hello world"";
-        public readonly int ReadonlyPublicField = 42;
         public ClassWithReadonlyFields() { }
+        protected readonly string ReadonlyProtectedField;
+        public readonly int ReadonlyPublicField;
     }
 }");
         }
 
-        [Fact(Skip = "Requires constants")]
-        [Trait("TODO", "Constant values")]
+        [Fact]
         public void Include_const_fields()
         {
             // Have to include the ctor - I can't figure out how to hide it
@@ -48,8 +45,8 @@ namespace ApiApproverTests
 {
     public class ClassWithConstFields
     {
+        protected const string ConstProtectedField = ""hello world"";
         public const int ConstPublicField = 42;
-        protected const string ConstProtectedField  = ""hello world"";
     }
 }");
         }
@@ -74,7 +71,7 @@ namespace ApiApproverTests
         public class ClassWithConstFields
         {
             public const int ConstPublicField = 42;
-            protected const string ReadonlyProtectedField = "hello world";
+            protected const string ConstProtectedField = "hello world";
         }
     }
     // ReSharper restore UnusedMember.Global

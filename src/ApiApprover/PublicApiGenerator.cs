@@ -48,7 +48,8 @@ namespace ApiApprover
             var cgo = new CodeGeneratorOptions
             {
                 BracingStyle = "C",
-                BlankLinesBetweenMembers = false
+                BlankLinesBetweenMembers = false,
+                VerbatimOrder = true
             };
 
             using (var provider = new CSharpCodeProvider())
@@ -176,6 +177,18 @@ namespace ApiApprover
                 IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum,
             };
 
+            if (declaration.IsInterface && publicType.HasCustomAttributes)
+                throw new NotImplementedException("Attributes on an interface needs testing");
+            if (declaration.IsInterface && publicType.BaseType != null)
+                throw new NotImplementedException("Base types for interaces needs testing");
+
+            if (declaration.IsStruct && publicType.HasCustomAttributes)
+                throw new NotImplementedException("Attributes on a struct needs testing");
+            if (declaration.IsStruct && publicType.BaseType.FullName != "System.ValueType")
+                throw new NotImplementedException("Base type for structs needs testing");
+            if (declaration.IsStruct && publicType.HasInterfaces)
+                throw new NotImplementedException("Interfaces for structs needs testing");
+
             PopulateGenericParameters(publicType, declaration.TypeParameters);
 
             if (publicType.BaseType != null && ShouldOutputBaseType(publicType))
@@ -215,8 +228,14 @@ namespace ApiApprover
                 ReturnType = CreateCodeTypeReference(invokeMethod.ReturnType),
             };
 
+            if (publicType.HasCustomAttributes)
+                throw new NotImplementedException("Delegate attributes haven't been tested yet");
+
             foreach (var parameter in invokeMethod.Parameters)
             {
+                if (parameter.HasCustomAttributes)
+                    throw new NotImplementedException("Delegate parameter attributes haven't been tested yet");
+
                 declaration.Parameters.Add(
                     new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType),
                         parameter.Name));
@@ -234,6 +253,9 @@ namespace ApiApprover
         {
             foreach (var parameter in publicType.GenericParameters)
             {
+                if (parameter.HasCustomAttributes)
+                    throw new NotImplementedException("Attributes on type parameters is not supported");
+
                 var typeParameter = new CodeTypeParameter(parameter.Name)
                 {
                     HasConstructorConstraint =
@@ -496,6 +518,9 @@ namespace ApiApprover
                 HasSet = member.SetMethod != null && HasVisiblePropertyMethod(setterAttributes)
             };
 
+            if (member.HasCustomAttributes)
+                throw new NotImplementedException("Attributes on properties haven't been tested");
+
             foreach (var parameter in member.Parameters)
             {
                 property.Parameters.Add(
@@ -549,6 +574,9 @@ namespace ApiApprover
 
         static CodeTypeMember GenerateEvent(EventDefinition eventDefinition)
         {
+            if (eventDefinition.HasCustomAttributes)
+                throw new NotImplementedException("Events with attributes not supported");
+
             var @event = new CodeMemberEvent
             {
                 Name = eventDefinition.Name,
@@ -571,10 +599,10 @@ namespace ApiApprover
                 attributes |= MemberAttributes.Family;
             if (memberInfo.IsPublic)
                 attributes |= MemberAttributes.Public;
-            if (memberInfo.IsStatic)
+            if (memberInfo.IsStatic && !memberInfo.HasConstant)
                 attributes |= MemberAttributes.Static;
 
-            // TODO: Costant value
+            // TODO: Values for readonly fields are set in the ctor
             var codeTypeReference = CreateCodeTypeReference(memberInfo.FieldType);
             if (memberInfo.IsInitOnly)
                 codeTypeReference = MakeReadonly(codeTypeReference);
@@ -597,7 +625,7 @@ namespace ApiApprover
 
         private static CodeTypeReference MakeAsync(CodeTypeReference typeReference)
         {
-            return ModifyCodeTypeReference(typeReference, "async");   
+            return ModifyCodeTypeReference(typeReference, "async");
         }
 
         private static CodeTypeReference ModifyCodeTypeReference(CodeTypeReference typeReference, string modifier)

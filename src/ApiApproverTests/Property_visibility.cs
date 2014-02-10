@@ -103,7 +103,7 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "Not supported")]
+        [Fact(Skip = "Not supported by CodeDOM")]
         [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
         public void Should_output_protected_setter_for_public_property_with_correct_modifier()
         {
@@ -130,7 +130,7 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "Not supported")]
+        [Fact(Skip = "Not supported by CodeDOM")]
         [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
         public void Should_output_protected_internal_setter_for_public_property_with_correct_modifier()
         {
@@ -185,7 +185,7 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "Not supported")]
+        [Fact(Skip = "Not supported by CodeDOM")]
         [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
         public void Should_output_protected_getter_for_public_property_with_correct_modifier()
         {
@@ -214,7 +214,7 @@ namespace ApiApproverTests
 }");
         }
 
-        [Fact(Skip = "Not supported")]
+        [Fact(Skip = "Not supported by CodeDOM")]
         [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
         public void Should_output_protected_internal_getter_for_public_property_with_correct_modifier()
         {

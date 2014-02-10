@@ -1,5 +1,4 @@
-﻿using System;
-using ApiApproverTests.Examples;
+﻿using ApiApproverTests.Examples;
 using Xunit;
 
 namespace ApiApproverTests
@@ -57,7 +56,6 @@ namespace ApiApproverTests
         [Fact]
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
-            // TODO: Is order actually important? These are properties, after all
             AssertPublicApi<MethodReturnValueWithAttributeWithMultipleNamedParameters>(
 @"namespace ApiApproverTests.Examples
 {
@@ -114,7 +112,7 @@ namespace ApiApproverTests
         }
 
         [Fact]
-        public void Should_mix_return_and_method_attributes_correctly()
+        public void Should_order_return_and_method_attributes_correctly()
         {
             AssertPublicApi<MethodWithAttributesOnMethodAndReturnValue>(
 @"namespace ApiApproverTests.Examples
@@ -205,6 +203,7 @@ namespace ApiApproverTests
             {
             }
         }
+
         public class MethodWithAttributesOnMethodAndReturnValue
         {
             [SimpleAttribute]
@@ -213,7 +212,6 @@ namespace ApiApproverTests
             {
             }
         }
-
     }
     // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore UnusedMember.Global
