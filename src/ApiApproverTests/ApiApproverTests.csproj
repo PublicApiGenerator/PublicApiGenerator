@@ -108,6 +108,7 @@
     <Compile Include="Property_visibility.cs" />
     <Compile Include="Struct_attributes.cs" />
     <Compile Include="Struct_hierarchy.cs" />
+    <Compile Include="Struct_member_order.cs" />
     <Compile Include="Struct_order.cs" />
     <Compile Include="Struct_visibility.cs" />
   </ItemGroup>
