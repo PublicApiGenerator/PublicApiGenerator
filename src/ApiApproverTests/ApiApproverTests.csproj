@@ -80,6 +80,7 @@
     <Compile Include="HelperTypes.cs" />
     <Compile Include="Interface_events.cs" />
     <Compile Include="Interface_generics.cs" />
+    <Compile Include="Interface_member_order.cs" />
     <Compile Include="Interface_methods.cs" />
     <Compile Include="Interface_method_generics.cs" />
     <Compile Include="Interface_order.cs" />

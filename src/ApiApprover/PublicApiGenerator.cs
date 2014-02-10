@@ -89,7 +89,7 @@ namespace ApiApprover
 
         private static bool ShouldIncludeType(TypeDefinition t)
         {
-            return (t.IsPublic || t.IsNestedPublic) && !IsCompilerGenerated(t);
+            return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily) && !IsCompilerGenerated(t);
         }
 
         private static bool ShouldIncludeMember(IMemberDefinition m)
@@ -165,6 +165,8 @@ namespace ApiApprover
             TypeAttributes attributes = 0;
             if (publicType.IsPublic || publicType.IsNestedPublic)
                 attributes |= TypeAttributes.Public;
+            if (publicType.IsNestedFamily)
+                attributes |= TypeAttributes.NestedFamily;
             if (publicType.IsSealed && !publicType.IsAbstract)
                 attributes |= TypeAttributes.Sealed;
             else if (!publicType.IsSealed && publicType.IsAbstract && !publicType.IsInterface)

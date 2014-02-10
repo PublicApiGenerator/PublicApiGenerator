@@ -23,6 +23,36 @@ namespace ApiApproverTests
         }
 
         [Fact]
+        public void Should_ignore_private_nested_class()
+        {
+            AssertPublicApi<ClassWithPrivateNestedClass>(
+@"namespace ApiApproverTests.Examples
+{
+    public class ClassWithPrivateNestedClass
+    {
+        public void Method() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_nested_class()
+        {
+            AssertPublicApi<ClassWithProtectedNestedClass>(
+@"namespace ApiApproverTests.Examples
+{
+    public class ClassWithProtectedNestedClass
+    {
+        public void Method() { }
+        protected class NestedClass
+        {
+            public void Method() { }
+        }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_multiple_nested_classes()
         {
             AssertPublicApi<ClassWithDeeplyNestedClasses>(
@@ -88,11 +118,32 @@ namespace ApiApproverTests
 
     // ReSharper disable UnusedMember.Global
     // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Local
     namespace Examples
     {
         public class ClassWithNestedClass
         {
             public class NestedClass
+            {
+                public void Method() { }
+            }
+
+            public void Method() { }
+        }
+
+        public class ClassWithPrivateNestedClass
+        {
+            private class NestedClass
+            {
+                public void Method() { }
+            }
+
+            public void Method() { }
+        }
+
+        public class ClassWithProtectedNestedClass
+        {
+            protected class NestedClass
             {
                 public void Method() { }
             }
@@ -145,6 +196,7 @@ namespace ApiApproverTests
             public void Method() { }
         }
     }
+    // ReSharper restore UnusedMember.Local
     // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore UnusedMember.Global
 }
