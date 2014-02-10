@@ -58,6 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiGeneratorTestsBase.cs" />
+    <Compile Include="Assembly_attributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Class_attributes.cs" />
     <Compile Include="Class_constructors.cs" />
     <Compile Include="Class_modifiers.cs" />
