@@ -63,9 +63,11 @@
     </Compile>
     <Compile Include="Class_attributes.cs" />
     <Compile Include="Class_constructors.cs" />
+    <Compile Include="Class_member_order.cs" />
     <Compile Include="Class_modifiers.cs" />
     <Compile Include="Class_generics.cs" />
     <Compile Include="Class_hierarchy.cs" />
+    <Compile Include="Class_nested.cs" />
     <Compile Include="Class_order.cs" />
     <Compile Include="Class_visibility.cs" />
     <Compile Include="Delegate_types.cs" />
