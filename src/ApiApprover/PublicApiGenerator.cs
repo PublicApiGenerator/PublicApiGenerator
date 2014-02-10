@@ -30,13 +30,8 @@ namespace ApiApprover
 
     public static class PublicApiGenerator
     {
-        // TODO: Assembly attributes
         // TODO: Assembly references?
-        // TODO: Better handle namespaces - using statements?
-        // TODO: Constant values for fields
-        // TODO: Default values for parameters
-        // TODO: Constructor parameters for attributes
-        // TODO: Generic methods
+        // TODO: Better handle namespaces - using statements? - requires non-qualified type names
         public static string CreatePublicApiForAssembly(AssemblyDefinition assembly)
         {
             return CreatePublicApiForAssembly(assembly, t => true, true);
@@ -49,7 +44,7 @@ namespace ApiApprover
             {
                 BracingStyle = "C",
                 BlankLinesBetweenMembers = false,
-                VerbatimOrder = true
+                VerbatimOrder = false
             };
 
             using (var provider = new CSharpCodeProvider())
@@ -65,16 +60,15 @@ namespace ApiApprover
                     .OrderBy(t => t.FullName);
                 foreach (var publicType in publicTypes)
                 {
-                    var typeDeclaration = CreateTypeDeclaration(publicType);
-
-                    var @namespace =
-                        compileUnit.Namespaces.Cast<CodeNamespace>().FirstOrDefault(n => n.Name == publicType.Namespace);
+                    var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>()
+                        .FirstOrDefault(n => n.Name == publicType.Namespace);
                     if (@namespace == null)
                     {
                         @namespace = new CodeNamespace(publicType.Namespace);
                         compileUnit.Namespaces.Add(@namespace);
                     }
 
+                    var typeDeclaration = CreateTypeDeclaration(publicType);
                     @namespace.Types.Add(typeDeclaration);
                 }
 
