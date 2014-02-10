@@ -182,13 +182,6 @@ namespace ApiApprover
             if (declaration.IsInterface && publicType.BaseType != null)
                 throw new NotImplementedException("Base types for interaces needs testing");
 
-            if (declaration.IsStruct && publicType.HasCustomAttributes)
-                throw new NotImplementedException("Attributes on a struct needs testing");
-            if (declaration.IsStruct && publicType.BaseType.FullName != "System.ValueType")
-                throw new NotImplementedException("Base type for structs needs testing");
-            if (declaration.IsStruct && publicType.HasInterfaces)
-                throw new NotImplementedException("Interfaces for structs needs testing");
-
             PopulateGenericParameters(publicType, declaration.TypeParameters);
 
             if (publicType.BaseType != null && ShouldOutputBaseType(publicType))
