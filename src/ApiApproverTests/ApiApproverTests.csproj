@@ -94,6 +94,9 @@
     <Compile Include="Method_return_value_attributes.cs" />
     <Compile Include="Method_return_types.cs" />
     <Compile Include="Method_visibility.cs" />
+    <Compile Include="Namespaces.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Property_automatic.cs" />
     <Compile Include="Property_methods.cs" />

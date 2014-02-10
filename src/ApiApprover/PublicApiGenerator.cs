@@ -67,9 +67,15 @@ namespace ApiApprover
                 {
                     var typeDeclaration = CreateTypeDeclaration(publicType);
 
-                    var @namespace = new CodeNamespace(publicType.Namespace);
+                    var @namespace =
+                        compileUnit.Namespaces.Cast<CodeNamespace>().FirstOrDefault(n => n.Name == publicType.Namespace);
+                    if (@namespace == null)
+                    {
+                        @namespace = new CodeNamespace(publicType.Namespace);
+                        compileUnit.Namespaces.Add(@namespace);
+                    }
+
                     @namespace.Types.Add(typeDeclaration);
-                    compileUnit.Namespaces.Add(@namespace);
                 }
 
                 using (var writer = new StringWriter())

@@ -12,13 +12,7 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public struct AA_Struct { }
-}
-namespace ApiApproverTests.Examples
-{
     public struct MM_Struct { }
-}
-namespace ApiApproverTests.Examples
-{
     public struct ZZ_Struct { }
 }");
         }

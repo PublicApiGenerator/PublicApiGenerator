@@ -12,13 +12,7 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public interface AA_Interface { }
-}
-namespace ApiApproverTests.Examples
-{
     public interface MM_Interface { }
-}
-namespace ApiApproverTests.Examples
-{
     public interface ZZ_Interface { }
 }");
         }

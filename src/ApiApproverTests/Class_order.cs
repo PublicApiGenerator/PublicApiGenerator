@@ -12,13 +12,7 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class AA_Class { }
-}
-namespace ApiApproverTests.Examples
-{
     public class MM_Class { }
-}
-namespace ApiApproverTests.Examples
-{
     public class ZZ_Class { }
 }");
         }
