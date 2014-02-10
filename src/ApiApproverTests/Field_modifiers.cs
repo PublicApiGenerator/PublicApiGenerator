@@ -28,9 +28,9 @@ namespace ApiApproverTests
 {
     public class ClassWithReadonlyFields
     {
-        public ClassWithReadonlyFields() { }
         protected readonly string ReadonlyProtectedField;
         public readonly int ReadonlyPublicField;
+        public ClassWithReadonlyFields() { }
     }
 }");
         }

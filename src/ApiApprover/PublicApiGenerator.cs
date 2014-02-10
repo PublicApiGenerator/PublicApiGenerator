@@ -307,6 +307,7 @@ namespace ApiApprover
         {
             "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
             "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
+            "System.Runtime.CompilerServices.ExtensionAttribute",
             "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
@@ -317,7 +318,7 @@ namespace ApiApprover
             "System.Reflection.AssemblyFileVersionAttribute",
             "System.Reflection.AssemblyProductAttribute",
             "System.Reflection.AssemblyTitleAttribute",
-            "System.Reflection.AssemblyTrademarkAttribute",
+            "System.Reflection.AssemblyTrademarkAttribute"
         }; 
 
         private static bool ShouldIncludeAttribute(CustomAttribute attribute)
@@ -394,7 +395,7 @@ namespace ApiApprover
                 return;
 
             var returnType = CreateCodeTypeReference(member.ReturnType);
-            if (IsAsync(member))
+            if (IsAsyncMethod(member))
                 returnType = MakeAsync(returnType);
 
             var method = new CodeMemberMethod
@@ -406,17 +407,22 @@ namespace ApiApprover
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
             PopulateGenericParameters(member, method.TypeParameters);
-            AddParametersToMethodDefinition(member, method);
+            AddParametersToMethodDefinition(member, method, IsExtensionMethod(member));
 
             typeDeclaration.Members.Add(method);
         }
 
-        private static bool IsAsync(ICustomAttributeProvider method)
+        private static bool IsAsyncMethod(ICustomAttributeProvider method)
         {
             return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.AsyncStateMachineAttribute");
         }
 
-        private static void AddParametersToMethodDefinition(IMethodSignature member, CodeMemberMethod method)
+        private static bool IsExtensionMethod(ICustomAttributeProvider method)
+        {
+            return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute");
+        }
+
+        private static void AddParametersToMethodDefinition(IMethodSignature member, CodeMemberMethod method, bool isExtension = false)
         {
             foreach (var parameter in member.Parameters)
             {
@@ -433,6 +439,12 @@ namespace ApiApprover
                 var type = parameter.ParameterType.IsGenericParameter
                     ? new CodeTypeReference(parameter.ParameterType.Name)
                     : CreateCodeTypeReference(parameterType);
+
+                if (isExtension)
+                {
+                    type = ModifyCodeTypeReference(type, "this");
+                    isExtension = false;
+                }
 
                 var name = parameter.HasConstant
                     ? string.Format("{0} = {1}", parameter.Name, FormatParameterConstant(parameter))

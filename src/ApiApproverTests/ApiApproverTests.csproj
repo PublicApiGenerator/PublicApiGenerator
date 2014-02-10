@@ -85,6 +85,7 @@
     <Compile Include="Interface_visibility.cs" />
     <Compile Include="Method_async.cs" />
     <Compile Include="Method_attributes.cs" />
+    <Compile Include="Method_extensions.cs" />
     <Compile Include="Method_modifiers.cs" />
     <Compile Include="Method_generics.cs" />
     <Compile Include="Method_explicit_interfaces.cs" />
