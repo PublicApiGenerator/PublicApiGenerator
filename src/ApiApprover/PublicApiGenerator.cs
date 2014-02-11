@@ -192,8 +192,6 @@ namespace ApiApprover
                 IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum,
             };
 
-            if (declaration.IsInterface && publicType.HasCustomAttributes)
-                throw new NotImplementedException("Attributes on an interface needs testing");
             if (declaration.IsInterface && publicType.BaseType != null)
                 throw new NotImplementedException("Base types for interaces needs testing");
 
@@ -599,13 +597,13 @@ namespace ApiApprover
             {
                 var attributes = CreateCustomAttributes(member.GetMethod);
                 if (attributes.Count > 0)
-                    throw new NotImplementedException("Properties on property getters not supported");
+                    throw new NotImplementedException("Attributes on property getters not supported");
             }
             if (member.SetMethod != null && member.SetMethod.HasCustomAttributes)
             {
                 var attributes = CreateCustomAttributes(member.SetMethod);
                 if (attributes.Count > 0)
-                    throw new NotImplementedException("Properties on property setters not supported");
+                    throw new NotImplementedException("Attributes on property setters not supported");
             }
 
             foreach (var parameter in member.Parameters)
