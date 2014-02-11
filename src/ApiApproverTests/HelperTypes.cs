@@ -6,6 +6,7 @@
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 namespace ApiApproverTests.Examples
 {
     public class ComplexType
@@ -78,6 +79,12 @@ namespace ApiApproverTests.Examples
         public int IntValue { get; set; }
     }
 
+    public class AttributeWithNamedFieldAttribute : Attribute
+    {
+        public string StringValue;
+        public int IntValue;
+    }
+
     public class AttributeWithNamedAndPositionalParameterAttribute : Attribute
     {
         public AttributeWithNamedAndPositionalParameterAttribute(int value1, string value2)
@@ -86,6 +93,15 @@ namespace ApiApproverTests.Examples
 
         public int IntValue { get; set; }
         public string StringValue { get; set; }
+    }
+
+    public class AttributeWithNamedParameterAndFieldAttribute : Attribute
+    {
+        public int IntField;
+        public string StringField;
+
+        public int IntProperty { get; set; }
+        public string StringProperty { get; set; }
     }
 
     public class AttributeWithSimpleEnumAttribute : Attribute
@@ -130,6 +146,7 @@ namespace ApiApproverTests.Examples
         }
     }
 }
+// ReSharper restore UnusedMember.Global
 // ReSharper restore UnusedAutoPropertyAccessor.Global
 // ReSharper restore UnusedParameter.Local
 // ReSharper restore InconsistentNaming

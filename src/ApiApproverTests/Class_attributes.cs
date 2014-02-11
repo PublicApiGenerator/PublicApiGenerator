@@ -69,13 +69,53 @@ namespace ApiApproverTests
         }
 
         [Fact]
+        public void Should_add_attribute_with_named_fields()
+        {
+            AssertPublicApi<ClassWithIntNamedFieldAttribute>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42)]
+    public class ClassWithIntNamedFieldAttribute { }
+}");
+
+            AssertPublicApi<ClassWithStringNamedFieldAttribute>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(StringValue=""Hello"")]
+    public class ClassWithStringNamedFieldAttribute { }
+}");
+        }
+
+        [Fact]
+        public void Should_add_multiple_named_fields_in_alphabetical_order()
+        {
+            AssertPublicApi<ClassWithAttributeWithMultipleNamedFields>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42, StringValue=""Hello world"")]
+    public class ClassWithAttributeWithMultipleNamedFields { }
+}");
+        }
+
+        [Fact]
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<ClassWithAttributeWithBothNamedAndPositionalParameters>(
 @"namespace ApiApproverTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+    [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello"", IntValue=13, StringValue=""World"")]
     public class ClassWithAttributeWithBothNamedAndPositionalParameters { }
+}");
+        }
+
+        [Fact]
+        public void Should_add_attribute_with_both_named_fields_and_parameters()
+        {
+            AssertPublicApi<ClassWithAttributeWithBothNamedParametersAndFields>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithNamedParameterAndFieldAttribute(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
+    public class ClassWithAttributeWithBothNamedParametersAndFields { }
 }");
         }
 
@@ -181,8 +221,18 @@ namespace ApiApproverTests
         {
         }
 
+        [AttributeWithNamedField(IntValue = 42)]
+        public class ClassWithIntNamedFieldAttribute
+        {
+        }
+
         [AttributeWithNamedParameter(StringValue = "Hello")]
         public class ClassWithStringNamedParameterAttribute
+        {
+        }
+
+        [AttributeWithNamedField(StringValue = "Hello")]
+        public class ClassWithStringNamedFieldAttribute
         {
         }
 
@@ -191,8 +241,18 @@ namespace ApiApproverTests
         {
         }
 
-        [AttributeWithNamedAndPositionalParameter(42, "Hello world", StringValue = "Thingy", IntValue = 13)]
+        [AttributeWithNamedField(StringValue = "Hello world", IntValue = 42)]
+        public class ClassWithAttributeWithMultipleNamedFields
+        {
+        }
+
+        [AttributeWithNamedAndPositionalParameter(42, "Hello", StringValue = "World", IntValue = 13)]
         public class ClassWithAttributeWithBothNamedAndPositionalParameters
+        {
+        }
+
+        [AttributeWithNamedParameterAndFieldAttribute(IntField = 42, StringField = "Hello", StringProperty = "World", IntProperty = 13)]
+        public class ClassWithAttributeWithBothNamedParametersAndFields
         {
         }
 

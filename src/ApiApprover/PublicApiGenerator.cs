@@ -302,6 +302,11 @@ namespace ApiApprover
                 {
                     attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
                 }
+                foreach (var field in customAttribute.Fields.OrderBy(f => f.Name))
+                {
+                    attribute.Arguments.Add(new CodeAttributeArgument(field.Name,
+                        CreateInitialiserExpression(field.Argument)));
+                }
                 foreach (var property in customAttribute.Properties.OrderBy(p => p.Name))
                 {
                     attribute.Arguments.Add(new CodeAttributeArgument(property.Name,
