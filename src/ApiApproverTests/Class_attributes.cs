@@ -80,6 +80,17 @@ namespace ApiApproverTests
         }
 
         [Fact]
+        public void Should_output_enum_value()
+        {
+            AssertPublicApi<ClassWithAttributeWithSimpleEnum>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithSimpleEnumAttribute(ApiApproverTests.Examples.SimpleEnum.Blue)]
+    public class ClassWithAttributeWithSimpleEnum { }
+}");
+        }
+
+        [Fact]
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<ClassWithAttributeWithEnumFlags>(
@@ -145,6 +156,11 @@ namespace ApiApproverTests
 
         [AttributeWithNamedAndPositionalParameter(42, "Hello world", StringValue = "Thingy", IntValue = 13)]
         public class ClassWithAttributeWithBothNamedAndPositionalParameters
+        {
+        }
+
+        [AttributeWithSimpleEnum(SimpleEnum.Blue)]
+        public class ClassWithAttributeWithSimpleEnum
         {
         }
 

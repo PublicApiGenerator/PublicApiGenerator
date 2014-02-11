@@ -24,6 +24,13 @@ namespace ApiApproverTests.Examples
     {
     }
 
+    public enum SimpleEnum
+    {
+        Red,
+        Green,
+        Blue
+    }
+
     [Flags]
     public enum EnumWithFlags
     {
@@ -79,6 +86,13 @@ namespace ApiApproverTests.Examples
 
         public int IntValue { get; set; }
         public string StringValue { get; set; }
+    }
+
+    public class AttributeWithSimpleEnumAttribute : Attribute
+    {
+        public AttributeWithSimpleEnumAttribute(SimpleEnum value)
+        {
+        }
     }
 
     public class AttributeWithEnumFlagsAttribute : Attribute

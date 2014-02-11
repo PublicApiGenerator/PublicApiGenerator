@@ -337,26 +337,34 @@ namespace ApiApprover
         private static CodeExpression CreateInitialiserExpression(TypeReference typeReference, object value)
         {
             var type = typeReference.Resolve();
-            if (type.BaseType.FullName == "System.Enum"
-                && type.CustomAttributes.Any(a => a.AttributeType.FullName == "System.FlagsAttribute"))
+            if (type.BaseType.FullName == "System.Enum")
             {
                 var originalValue = Convert.ToInt64(value);
+                if (type.CustomAttributes.Any(a => a.AttributeType.FullName == "System.FlagsAttribute"))
+                {
+                    //var allFlags = from f in type.Fields
+                    //    where f.Constant != null
+                    //    let v = Convert.ToInt64(f.Constant)
+                    //    where v == 0 || (originalValue & v) != 0
+                    //    select (CodeExpression)new CodeFieldReferenceExpression(typeExpression, f.Name);
+                    //return allFlags.Aggregate((current, next) => new CodeBinaryOperatorExpression(current, CodeBinaryOperatorType.BitwiseOr, next));
 
-                //var allFlags = from f in type.Fields
-                //    where f.Constant != null
-                //    let v = Convert.ToInt64(f.Constant)
-                //    where v == 0 || (originalValue & v) != 0
-                //    select (CodeExpression)new CodeFieldReferenceExpression(typeExpression, f.Name);
-                //return allFlags.Aggregate((current, next) => new CodeBinaryOperatorExpression(current, CodeBinaryOperatorType.BitwiseOr, next));
+                    // I'd rather use the above, as it's just using the CodeDOM, but it puts
+                    // brackets around each CodeBinaryOperatorExpression
+                    var flags = from f in type.Fields
+                                where f.Constant != null
+                                let v = Convert.ToInt64(f.Constant)
+                                where v == 0 || (originalValue & v) != 0
+                                select typeReference.FullName + "." + f.Name;
+                    return new CodeSnippetExpression(flags.Aggregate((current, next) => current + " | " + next));
+                }
 
-                // I'd rather use the above, as it's just using the CodeDOM, but it puts
-                // brackets around each CodeBinaryOperatorExpression
-                var flags = from f in type.Fields
+                var allFlags = from f in type.Fields
                     where f.Constant != null
                     let v = Convert.ToInt64(f.Constant)
-                    where v == 0 || (originalValue & v) != 0
-                    select typeReference.FullName + "." + f.Name;
-                return new CodeSnippetExpression(flags.Aggregate((current, next) => current + " | " + next));
+                    where v == originalValue
+                    select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(CreateCodeTypeReference(typeReference)), f.Name);
+                return allFlags.FirstOrDefault();
             }
             if (typeReference.FullName == "System.Type" && value is TypeReference)
             {
@@ -384,7 +392,7 @@ namespace ApiApprover
 
         private static bool IsEmptyDefaultConstructor(MethodDefinition member)
         {
-            if (member.Parameters.Count == 0 && member.Body.Instructions.Count == 3 &&
+            if (member.Parameters.Count == 0 && member.Body != null && member.Body.Instructions.Count == 3 &&
                 member.Body.Instructions[0].OpCode == OpCodes.Ldarg_0 &&
                 member.Body.Instructions[1].OpCode == OpCodes.Call &&
                 (member.Body.Instructions[1].Operand == null || 
