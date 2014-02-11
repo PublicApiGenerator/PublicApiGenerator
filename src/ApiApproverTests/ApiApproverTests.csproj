@@ -88,6 +88,8 @@
     <Compile Include="Interface_hierarchy.cs" />
     <Compile Include="Interface_member_order.cs" />
     <Compile Include="Interface_methods.cs" />
+    <Compile Include="Interface_method_attributes.cs" />
+    <Compile Include="Interface_method_parameters.cs" />
     <Compile Include="Interface_method_generics.cs" />
     <Compile Include="Interface_order.cs" />
     <Compile Include="Interface_properties.cs" />
