@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ApiApproverTests.Examples;
 using Xunit;
 
@@ -157,6 +158,19 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_use_shortname_for_generic_type_parameter_in_generic_args()
+        {
+            AssertPublicApi(typeof(MethodWithGenericUseOfClassTypeParameter<>),
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodWithGenericUseOfClassTypeParameter<T>
+    {
+        public System.Collections.Generic.List<T> Method(System.Collections.Generic.List<T> item) { }
+    }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -246,6 +260,14 @@ namespace ApiApproverTests
         {
             public void Method(T item)
             {
+            }
+        }
+
+        public class MethodWithGenericUseOfClassTypeParameter<T>
+        {
+            public List<T> Method(List<T> item)
+            {
+                return null;
             }
         }
     }

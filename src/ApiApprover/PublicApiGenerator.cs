@@ -491,9 +491,7 @@ namespace ApiApprover
                     ? parameter.ParameterType.GetElementType()
                     : parameter.ParameterType;
 
-                var type = parameter.ParameterType.IsGenericParameter
-                    ? new CodeTypeReference(parameter.ParameterType.Name)
-                    : CreateCodeTypeReference(parameterType);
+                var type = CreateCodeTypeReference(parameterType);
 
                 if (isExtension)
                 {
@@ -738,6 +736,9 @@ namespace ApiApprover
 
         private static string GetTypeName(TypeReference type)
         {
+            if (type.IsGenericParameter)
+                return type.Name;
+
             if (!type.IsNested)
             {
                 return (!string.IsNullOrEmpty(type.Namespace) ? (type.Namespace + ".") : "") + type.Name;
