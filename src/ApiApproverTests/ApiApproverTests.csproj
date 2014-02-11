@@ -75,6 +75,7 @@
     <Compile Include="Delegate_types.cs" />
     <Compile Include="Delegate_visibility.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="Field_attributes.cs" />
     <Compile Include="Field_modifiers.cs" />
     <Compile Include="Field_order.cs" />
     <Compile Include="Field_types.cs" />

@@ -56,7 +56,7 @@ namespace ApiApprover
                 }
 
                 var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
-                    .Where(t => ShouldIncludeType(t) && shouldIncludeType(t))
+                    .Where(t => !t.IsNested && ShouldIncludeType(t) && shouldIncludeType(t))
                     .OrderBy(t => t.FullName);
                 foreach (var publicType in publicTypes)
                 {
@@ -334,6 +334,7 @@ namespace ApiApprover
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
             "System.Diagnostics.DebuggerNonUserCodeAttribute",
+            "System.Diagnostics.DebuggerStepThroughAttribute",
             "System.Reflection.AssemblyCompanyAttribute",
             "System.Reflection.AssemblyConfigurationAttribute",
             "System.Reflection.AssemblyCopyrightAttribute",
