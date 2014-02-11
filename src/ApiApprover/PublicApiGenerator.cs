@@ -577,12 +577,11 @@ namespace ApiApprover
             while (baseType != null)
             {
                 var definition = baseType.Resolve();
-                if (definition != null)
-                {
-                    yield return definition;
+                if (definition == null)
+                    yield break;
+                yield return definition;
 
-                    baseType = baseType.DeclaringType;
-                }
+                baseType = baseType.DeclaringType;
             }
         }
 
