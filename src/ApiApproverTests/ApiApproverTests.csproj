@@ -84,6 +84,7 @@
     <Compile Include="HelperTypes.cs" />
     <Compile Include="Interface_attributes.cs" />
     <Compile Include="Interface_events.cs" />
+    <Compile Include="Interface_event_attributes.cs" />
     <Compile Include="Interface_generics.cs" />
     <Compile Include="Interface_hierarchy.cs" />
     <Compile Include="Interface_member_order.cs" />
