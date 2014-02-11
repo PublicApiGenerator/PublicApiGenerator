@@ -67,7 +67,7 @@
     <Compile Include="PublicApiApprover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
-    <Compile Include="PublicApiApprovalTest.cs" />
+    <Compile Include="ExampleApiApprovalTest.cs" />
     <Compile Include="PublicApiGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
