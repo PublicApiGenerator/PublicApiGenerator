@@ -272,7 +272,13 @@ namespace ApiApprover
                 if (parameter.HasCustomAttributes)
                     throw new NotImplementedException("Attributes on type parameters is not supported. And weird");
 
-                var typeParameter = new CodeTypeParameter(parameter.Name)
+                var name = parameter.Name;
+                if (parameter.IsCovariant)
+                    name = "out " + name;
+                if (parameter.IsContravariant)
+                    name = "in " + name;
+
+                var typeParameter = new CodeTypeParameter(name)
                 {
                     HasConstructorConstraint =
                         parameter.HasDefaultConstructorConstraint && !parameter.HasNotNullableValueTypeConstraint
