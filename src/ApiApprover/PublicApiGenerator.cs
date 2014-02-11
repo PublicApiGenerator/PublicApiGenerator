@@ -266,7 +266,7 @@ namespace ApiApprover
             foreach (var parameter in publicType.GenericParameters)
             {
                 if (parameter.HasCustomAttributes)
-                    throw new NotImplementedException("Attributes on type parameters is not supported");
+                    throw new NotImplementedException("Attributes on type parameters is not supported. And weird");
 
                 var typeParameter = new CodeTypeParameter(parameter.Name)
                 {
@@ -295,9 +295,15 @@ namespace ApiApprover
         private static void PopulateCustomAttributes(ICustomAttributeProvider type,
             CodeAttributeDeclarationCollection attributes)
         {
+            PopulateCustomAttributes(type, attributes, ctr => ctr);
+        }
+
+        private static void PopulateCustomAttributes(ICustomAttributeProvider type,
+            CodeAttributeDeclarationCollection attributes, Func<CodeTypeReference, CodeTypeReference> codeTypeModifier)
+        {
             foreach (var customAttribute in type.CustomAttributes.Where(ShouldIncludeAttribute).OrderBy(a => a.AttributeType.FullName))
             {
-                var attribute = new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType));
+                var attribute = new CodeAttributeDeclaration(codeTypeModifier(CreateCodeTypeReference(customAttribute.AttributeType)));
                 foreach (var arg in customAttribute.ConstructorArguments)
                 {
                     attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
@@ -598,17 +604,15 @@ namespace ApiApprover
                 HasSet = member.SetMethod != null && HasVisiblePropertyMethod(setterAttributes)
             };
 
+            // Here's a nice hack, because hey, guess what, the CodeDOM doesn't support
+            // attributes on getters or setters
             if (member.GetMethod != null && member.GetMethod.HasCustomAttributes)
             {
-                var attributes = CreateCustomAttributes(member.GetMethod);
-                if (attributes.Count > 0)
-                    throw new NotImplementedException("Attributes on property getters not supported");
+                PopulateCustomAttributes(member.GetMethod, property.CustomAttributes, type => ModifyCodeTypeReference(type, "get:"));
             }
             if (member.SetMethod != null && member.SetMethod.HasCustomAttributes)
             {
-                var attributes = CreateCustomAttributes(member.SetMethod);
-                if (attributes.Count > 0)
-                    throw new NotImplementedException("Attributes on property setters not supported");
+                PopulateCustomAttributes(member.GetMethod, property.CustomAttributes, type => ModifyCodeTypeReference(type, "set:"));
             }
 
             foreach (var parameter in member.Parameters)

@@ -147,18 +147,21 @@ namespace ApiApproverTests
 }");
         }
 
-//        [Fact]
-//        public void Should_add_attributes_on_getters_and_setters()
-//        {
-//            AssertPublicApi<PropertyWithSimpleAttributeOnGetterAndSetter>(
-//@"namespace ApiApproverTests.Examples
-//{
-//    public class PropertyWithSimpleAttributeOnGetterAndSetter
-//    {
-//        public string Value { [return: SimpleAttribute] get; [return: SimpleAttribute] set; }
-//    }
-//}");
-//        }
+        [Fact]
+        public void Should_add_attributes_on_getters_and_setters()
+        {
+            // Yes, it's a hack, but the CodeDOM doesn't support it. Sigh
+            AssertPublicApi<PropertyWithSimpleAttributeOnGetterAndSetter>(
+@"namespace ApiApproverTests.Examples
+{
+    public class PropertyWithSimpleAttributeOnGetterAndSetter
+    {
+        [get: ApiApproverTests.Examples.SimpleAttribute()]
+        [set: ApiApproverTests.Examples.SimpleAttribute()]
+        public string Value { get; set; }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
