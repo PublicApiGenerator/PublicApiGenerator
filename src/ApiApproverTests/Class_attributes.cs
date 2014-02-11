@@ -113,6 +113,43 @@ namespace ApiApproverTests
     public class ClassWithMultipleAttributes { }
 }");
         }
+
+        [Fact]
+        public void Should_handle_attribute_with_object_initialiser()
+        {
+            AssertPublicApi<ClassWithAttributeWithObjectInitialiser>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithObjectInitialiser(""Hello world"")]
+    public class ClassWithAttributeWithObjectInitialiser { }
+}");
+        }
+
+        [Fact]
+        public void Should_handle_attribute_with_object_array_initialiser()
+        {
+            AssertPublicApi<ClassWithAttributeWithObjectArrayInitialiser>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithObjectArrayInitialiser(new object[] {
+            42,
+            ""Hello world""})]
+    public class ClassWithAttributeWithObjectArrayInitialiser { }
+}");
+        }
+
+        [Fact]
+        public void Should_handle_attribute_with_string_array_initialiser()
+        {
+            AssertPublicApi<ClassWithAttributeWithStringArrayInitialiser>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithStringArrayInitialiser(new string[] {
+            ""Hello"",
+            ""world""})]
+    public class ClassWithAttributeWithStringArrayInitialiser { }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -173,6 +210,21 @@ namespace ApiApproverTests
         [Attribute_MM]
         [Attribute_AA]
         public class ClassWithMultipleAttributes
+        {
+        }
+
+        [AttributeWithObjectInitialiser("Hello world")]
+        public class ClassWithAttributeWithObjectInitialiser
+        {
+        }
+
+        [AttributeWithObjectArrayInitialiser(42, "Hello world")]
+        public class ClassWithAttributeWithObjectArrayInitialiser
+        {
+        }
+
+        [AttributeWithStringArrayInitialiser("Hello", "world")]
+        public class ClassWithAttributeWithStringArrayInitialiser
         {
         }
     }

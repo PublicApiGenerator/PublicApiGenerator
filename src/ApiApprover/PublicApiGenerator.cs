@@ -4,6 +4,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
@@ -301,11 +302,13 @@ namespace ApiApprover
             {
                 var attribute = new CodeAttributeDeclaration(CreateCodeTypeReference(customAttribute.AttributeType));
                 foreach (var arg in customAttribute.ConstructorArguments)
-                    attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg.Type, arg.Value)));
+                {
+                    attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
+                }
                 foreach (var property in customAttribute.Properties.OrderBy(p => p.Name))
                 {
                     attribute.Arguments.Add(new CodeAttributeArgument(property.Name,
-                        CreateInitialiserExpression(property.Argument.Type, property.Argument.Value)));
+                        CreateInitialiserExpression(property.Argument)));
                 }
                 attributes.Add(attribute);
             }
@@ -314,6 +317,7 @@ namespace ApiApprover
         private static readonly HashSet<string> SkipAttributeNames = new HashSet<string>
         {
             "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
+            "System.Runtime.CompilerServices.CompilerGeneratedAttribute",
             "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
             "System.Runtime.CompilerServices.ExtensionAttribute",
             "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
@@ -327,17 +331,38 @@ namespace ApiApprover
             "System.Reflection.AssemblyProductAttribute",
             "System.Reflection.AssemblyTitleAttribute",
             "System.Reflection.AssemblyTrademarkAttribute"
-        }; 
+        };
 
         private static bool ShouldIncludeAttribute(CustomAttribute attribute)
         {
             return !SkipAttributeNames.Contains(attribute.AttributeType.FullName);
         }
 
-        private static CodeExpression CreateInitialiserExpression(TypeReference typeReference, object value)
+        private static object GetAttributeValue(object value)
         {
-            var type = typeReference.Resolve();
-            if (type.BaseType.FullName == "System.Enum")
+            if (value is CustomAttributeArgument)
+                return GetAttributeValue(((CustomAttributeArgument) value).Value);
+            if (value is CustomAttributeArgument[])
+                return (from p in (CustomAttributeArgument[]) value
+                    select GetAttributeValue(p)).ToArray();
+            return value;
+        }
+
+        private static CodeExpression CreateInitialiserExpression(CustomAttributeArgument attributeArgument)
+        {
+            var value = GetAttributeValue(attributeArgument.Value);
+
+            var type = attributeArgument.Type.Resolve();
+            if (attributeArgument.Type.IsArray)
+            {
+                if (!value.GetType().IsArray)
+                    throw new InvalidOperationException("Initialiser is array, but values aren't");
+                var initialisers = from v in (object[]) value
+                    select (CodeExpression) new CodePrimitiveExpression(v);
+                return new CodeArrayCreateExpression(CreateCodeTypeReference(type), initialisers.ToArray());
+            }
+
+            if (type.BaseType != null && type.BaseType.FullName == "System.Enum")
             {
                 var originalValue = Convert.ToInt64(value);
                 if (type.CustomAttributes.Any(a => a.AttributeType.FullName == "System.FlagsAttribute"))
@@ -355,7 +380,7 @@ namespace ApiApprover
                                 where f.Constant != null
                                 let v = Convert.ToInt64(f.Constant)
                                 where v == 0 || (originalValue & v) != 0
-                                select typeReference.FullName + "." + f.Name;
+                                select type.FullName + "." + f.Name;
                     return new CodeSnippetExpression(flags.Aggregate((current, next) => current + " | " + next));
                 }
 
@@ -363,13 +388,15 @@ namespace ApiApprover
                     where f.Constant != null
                     let v = Convert.ToInt64(f.Constant)
                     where v == originalValue
-                    select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(CreateCodeTypeReference(typeReference)), f.Name);
+                               select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(CreateCodeTypeReference(type)), f.Name);
                 return allFlags.FirstOrDefault();
             }
-            if (typeReference.FullName == "System.Type" && value is TypeReference)
+
+            if (type.FullName == "System.Type" && value is TypeReference)
             {
                 return new CodeTypeOfExpression(CreateCodeTypeReference((TypeReference)value));
             }
+
             return new CodePrimitiveExpression(value);
         }
 
@@ -564,12 +591,23 @@ namespace ApiApprover
                 Name = member.Name,
                 Type = propertyType,
                 Attributes = propertyAttributes,
+                CustomAttributes = CreateCustomAttributes(member),
                 HasGet = member.GetMethod != null && HasVisiblePropertyMethod(getterAttributes),
                 HasSet = member.SetMethod != null && HasVisiblePropertyMethod(setterAttributes)
             };
 
-            if (member.HasCustomAttributes)
-                throw new NotImplementedException("Attributes on properties haven't been tested");
+            if (member.GetMethod != null && member.GetMethod.HasCustomAttributes)
+            {
+                var attributes = CreateCustomAttributes(member.GetMethod);
+                if (attributes.Count > 0)
+                    throw new NotImplementedException("Properties on property getters not supported");
+            }
+            if (member.SetMethod != null && member.SetMethod.HasCustomAttributes)
+            {
+                var attributes = CreateCustomAttributes(member.SetMethod);
+                if (attributes.Count > 0)
+                    throw new NotImplementedException("Properties on property setters not supported");
+            }
 
             foreach (var parameter in member.Parameters)
             {

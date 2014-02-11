@@ -108,6 +108,27 @@ namespace ApiApproverTests.Examples
         {
         }
     }
+
+    public class AttributeWithObjectInitialiser : Attribute
+    {
+        public AttributeWithObjectInitialiser(object values)
+        {
+        }
+    }
+
+    public class AttributeWithObjectArrayInitialiser : Attribute
+    {
+        public AttributeWithObjectArrayInitialiser(params object[] values)
+        {
+        }
+    }
+
+    public class AttributeWithStringArrayInitialiser : Attribute
+    {
+        public AttributeWithStringArrayInitialiser(params string[] values)
+        {
+        }
+    }
 }
 // ReSharper restore UnusedAutoPropertyAccessor.Global
 // ReSharper restore UnusedParameter.Local
