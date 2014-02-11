@@ -4,7 +4,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
@@ -338,30 +337,22 @@ namespace ApiApprover
             return !SkipAttributeNames.Contains(attribute.AttributeType.FullName);
         }
 
-        private static object GetAttributeValue(object value)
-        {
-            if (value is CustomAttributeArgument)
-                return GetAttributeValue(((CustomAttributeArgument) value).Value);
-            if (value is CustomAttributeArgument[])
-                return (from p in (CustomAttributeArgument[]) value
-                    select GetAttributeValue(p)).ToArray();
-            return value;
-        }
-
         private static CodeExpression CreateInitialiserExpression(CustomAttributeArgument attributeArgument)
         {
-            var value = GetAttributeValue(attributeArgument.Value);
-
-            var type = attributeArgument.Type.Resolve();
-            if (attributeArgument.Type.IsArray)
+            if (attributeArgument.Value is CustomAttributeArgument)
             {
-                if (!value.GetType().IsArray)
-                    throw new InvalidOperationException("Initialiser is array, but values aren't");
-                var initialisers = from v in (object[]) value
-                    select (CodeExpression) new CodePrimitiveExpression(v);
-                return new CodeArrayCreateExpression(CreateCodeTypeReference(type), initialisers.ToArray());
+                return CreateInitialiserExpression((CustomAttributeArgument) attributeArgument.Value);
             }
 
+            if (attributeArgument.Value is CustomAttributeArgument[])
+            {
+                var initialisers = from argument in (CustomAttributeArgument[]) attributeArgument.Value
+                    select CreateInitialiserExpression(argument);
+                return new CodeArrayCreateExpression(CreateCodeTypeReference(attributeArgument.Type), initialisers.ToArray());
+            }
+
+            var type = attributeArgument.Type.Resolve();
+            var value = attributeArgument.Value;
             if (type.BaseType != null && type.BaseType.FullName == "System.Enum")
             {
                 var originalValue = Convert.ToInt64(value);
@@ -385,9 +376,9 @@ namespace ApiApprover
                 }
 
                 var allFlags = from f in type.Fields
-                    where f.Constant != null
-                    let v = Convert.ToInt64(f.Constant)
-                    where v == originalValue
+                               where f.Constant != null
+                               let v = Convert.ToInt64(f.Constant)
+                               where v == originalValue
                                select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(CreateCodeTypeReference(type)), f.Name);
                 return allFlags.FirstOrDefault();
             }
@@ -397,7 +388,7 @@ namespace ApiApprover
                 return new CodeTypeOfExpression(CreateCodeTypeReference((TypeReference)value));
             }
 
-            return new CodePrimitiveExpression(value);
+            return new CodePrimitiveExpression(attributeArgument.Value);
         }
 
         private static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
