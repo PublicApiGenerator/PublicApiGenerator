@@ -272,6 +272,8 @@ namespace ApiApprover
                 if (parameter.HasCustomAttributes)
                     throw new NotImplementedException("Attributes on type parameters is not supported. And weird");
 
+                // A little hacky. Means we get "in" and "out" prefixed on any constraints, but it's either that
+                // or add it as a custom attribute, which looks even weirder
                 var name = parameter.Name;
                 if (parameter.IsCovariant)
                     name = "out " + name;
