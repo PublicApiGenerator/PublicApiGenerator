@@ -14,7 +14,6 @@ namespace ApiApproverTests
 {
     public class MethodAsyncVoid
     {
-        [System.Diagnostics.DebuggerStepThroughAttribute()]
         public async void AsyncMethod() { }
     }
 }");
@@ -28,7 +27,6 @@ namespace ApiApproverTests
 {
     public class MethodAsyncReturnValue
     {
-        [System.Diagnostics.DebuggerStepThroughAttribute()]
         public async System.Threading.Tasks.Task<string> AsyncMethod() { }
     }
 }");

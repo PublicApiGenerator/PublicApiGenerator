@@ -244,7 +244,10 @@ namespace ApiApprover
                 ReturnType = CreateCodeTypeReference(invokeMethod.ReturnType),
             };
 
+            // CodeDOM. No support. Return type attributes.
+            PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => ModifyCodeTypeReference(type, "return:"));
             PopulateGenericParameters(publicType, declaration.TypeParameters);
+            PopulateMethodParameters(invokeMethod, declaration.Parameters);
 
             // Of course, CodeDOM doesn't support generic type parameters for delegates. Of course.
             if (declaration.TypeParameters.Count > 0)
@@ -252,19 +255,6 @@ namespace ApiApprover
                 var parameterNames = from parameterType in declaration.TypeParameters.Cast<CodeTypeParameter>()
                     select parameterType.Name;
                 declaration.Name = string.Format("{0}<{1}>", declaration.Name, string.Join(", ", parameterNames));
-            }
-
-            if (publicType.HasCustomAttributes)
-                throw new NotImplementedException("Delegate attributes haven't been tested yet");
-
-            foreach (var parameter in invokeMethod.Parameters)
-            {
-                if (parameter.HasCustomAttributes)
-                    throw new NotImplementedException("Delegate parameter attributes haven't been tested yet");
-
-                declaration.Parameters.Add(
-                    new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType),
-                        parameter.Name));
             }
 
             return declaration;
@@ -437,8 +427,7 @@ namespace ApiApprover
                 Name = member.Name,
                 Attributes = GetMethodAttributes(member)
             };
-
-            AddParametersToMethodDefinition(member, method);
+            PopulateMethodParameters(member, method.Parameters);
 
             typeDeclaration.Members.Add(method);
         }
@@ -476,7 +465,7 @@ namespace ApiApprover
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes);
             PopulateGenericParameters(member, method.TypeParameters);
-            AddParametersToMethodDefinition(member, method, IsExtensionMethod(member));
+            PopulateMethodParameters(member, method.Parameters, IsExtensionMethod(member));
 
             typeDeclaration.Members.Add(method);
         }
@@ -491,7 +480,8 @@ namespace ApiApprover
             return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute");
         }
 
-        private static void AddParametersToMethodDefinition(IMethodSignature member, CodeMemberMethod method, bool isExtension = false)
+        private static void PopulateMethodParameters(IMethodSignature member,
+            CodeParameterDeclarationExpressionCollection parameters, bool isExtension = false)
         {
             foreach (var parameter in member.Parameters)
             {
@@ -521,7 +511,7 @@ namespace ApiApprover
                     Direction = direction,
                     CustomAttributes = CreateCustomAttributes(parameter)
                 };
-                method.Parameters.Add(expresion);
+                parameters.Add(expresion);
             }
         }
 
