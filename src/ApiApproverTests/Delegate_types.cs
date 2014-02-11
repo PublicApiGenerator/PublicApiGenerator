@@ -38,10 +38,20 @@ namespace ApiApproverTests
         [Fact]
         public void Should_output_fully_qualified_names_for_generic_types()
         {
-            AssertPublicApi<DelegateWithGenericParameters>(
+            AssertPublicApi(typeof(DelegateWithClosedGenericParameters),
 @"namespace ApiApproverTests.Examples
 {
-    public delegate ApiApproverTests.Examples.GenericType<int> DelegateWithGenericParameters(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> value);
+    public delegate ApiApproverTests.Examples.GenericType<int> DelegateWithClosedGenericParameters(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> value);
+}");
+        }
+
+        [Fact]
+        public void Should_output_generic_type_parameters()
+        {
+            AssertPublicApi(typeof(DelegateWithGenericParameters<>),
+@"namespace ApiApproverTests.Examples
+{
+    public delegate ApiApproverTests.Examples.GenericType<T> DelegateWithGenericParameters<T>(ApiApproverTests.Examples.GenericType<T> value);
 }");
         }
     }
@@ -51,6 +61,7 @@ namespace ApiApproverTests
         public delegate void VoidDelegate();
         public delegate int DelegateWithPrimitveParameters(int v1, string v2);
         public delegate ComplexType DelegateWithComplexParameters(ComplexType v1);
-        public delegate GenericType<int> DelegateWithGenericParameters(GenericType<ComplexType> value);
+        public delegate GenericType<int> DelegateWithClosedGenericParameters(GenericType<ComplexType> value);
+        public delegate GenericType<T> DelegateWithGenericParameters<T>(GenericType<T> value);
     }
 }

@@ -233,12 +233,26 @@ namespace ApiApprover
         private static CodeTypeDeclaration CreateDelegateDeclaration(TypeDefinition publicType)
         {
             var invokeMethod = publicType.Methods.Single(m => m.Name == "Invoke");
-            var declaration = new CodeTypeDelegate(publicType.Name)
+            var name = publicType.Name;
+            var index = name.IndexOf('`');
+            if (index != -1)
+                name = name.Substring(0, index);
+            var declaration = new CodeTypeDelegate(name)
             {
                 Attributes = MemberAttributes.Public,
                 CustomAttributes = CreateCustomAttributes(publicType),
                 ReturnType = CreateCodeTypeReference(invokeMethod.ReturnType),
             };
+
+            PopulateGenericParameters(publicType, declaration.TypeParameters);
+
+            // Of course, CodeDOM doesn't support generic type parameters for delegates. Of course.
+            if (declaration.TypeParameters.Count > 0)
+            {
+                var parameterNames = from parameterType in declaration.TypeParameters.Cast<CodeTypeParameter>()
+                    select parameterType.Name;
+                declaration.Name = string.Format("{0}<{1}>", declaration.Name, string.Join(", ", parameterNames));
+            }
 
             if (publicType.HasCustomAttributes)
                 throw new NotImplementedException("Delegate attributes haven't been tested yet");
