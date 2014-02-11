@@ -63,6 +63,8 @@
     </Compile>
     <Compile Include="Class_attributes.cs" />
     <Compile Include="Class_constructors.cs" />
+    <Compile Include="Class_events.cs" />
+    <Compile Include="Class_event_attributes.cs" />
     <Compile Include="Class_member_order.cs" />
     <Compile Include="Class_modifiers.cs" />
     <Compile Include="Class_generics.cs" />

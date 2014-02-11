@@ -324,6 +324,8 @@ namespace ApiApprover
 
         private static readonly HashSet<string> SkipAttributeNames = new HashSet<string>
         {
+            "System.CodeDom.Compiler.GeneratedCodeAttribute",
+            "System.ComponentModel.EditorBrowsableAttribute",
             "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
             "System.Runtime.CompilerServices.CompilerGeneratedAttribute",
             "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
@@ -331,6 +333,7 @@ namespace ApiApprover
             "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
+            "System.Diagnostics.DebuggerNonUserCodeAttribute",
             "System.Reflection.AssemblyCompanyAttribute",
             "System.Reflection.AssemblyConfigurationAttribute",
             "System.Reflection.AssemblyCopyrightAttribute",
@@ -668,13 +671,11 @@ namespace ApiApprover
 
         static CodeTypeMember GenerateEvent(EventDefinition eventDefinition)
         {
-            if (eventDefinition.HasCustomAttributes)
-                throw new NotImplementedException("Events with attributes not supported");
-
             var @event = new CodeMemberEvent
             {
                 Name = eventDefinition.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                CustomAttributes = CreateCustomAttributes(eventDefinition),
                 Type = CreateCodeTypeReference(eventDefinition.EventType)
             };
 
