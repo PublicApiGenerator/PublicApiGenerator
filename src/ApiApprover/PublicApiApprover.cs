@@ -13,7 +13,14 @@ namespace ApiApprover
         {
             var sourcePath = Path.GetDirectoryName(new StackTrace(true).GetFrame(1).GetFileName()) ?? Path.GetTempPath();
             sourcePath = Path.IsPathRooted(resultsPath) ? resultsPath : Path.Combine(sourcePath, resultsPath);
-            var asm = AssemblyDefinition.ReadAssembly(assemblyPath);
+            var assemblyResolver = new DefaultAssemblyResolver();
+            assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyPath));
+            var readSymbols = File.Exists(Path.ChangeExtension(assemblyPath, ".pdb"));
+            var asm = AssemblyDefinition.ReadAssembly(assemblyPath, new ReaderParameters(ReadingMode.Deferred)
+            {
+                ReadSymbols = readSymbols,
+                AssemblyResolver = assemblyResolver,
+            });
             var publicApi = PublicApiGenerator.CreatePublicApiForAssembly(asm);
             ApprovalTests.Approvals.Verify(new ApprovalTextWriter(publicApi), new AssemblyPathNamer(assemblyPath, sourcePath), new DiffReporter());
         }
