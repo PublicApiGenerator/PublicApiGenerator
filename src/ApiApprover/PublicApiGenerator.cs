@@ -79,7 +79,12 @@ namespace ApiApprover
                     publicApiBuilder.AppendLine(typeDeclarationText);
                 }
             }
-            return publicApiBuilder.ToString().Trim();
+            return NormaliseLineEndings(publicApiBuilder.ToString().Trim());
+        }
+
+        private static string NormaliseLineEndings(string value)
+        {
+            return Regex.Replace(value, @"\r\n|\n\r|\r|\n", Environment.NewLine);
         }
 
         private static bool IsDelegate(TypeDefinition publicType)
