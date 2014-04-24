@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ApiApprover</id>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <title>Api Approver</title>
     <authors>Jake Ginnivan</authors>
     <owners>Jake Ginnivan</owners>
@@ -12,14 +12,20 @@
     
 Don't accidently miss a breaking API change and break semantic versioning again.
     </description>
+    <releaseNotes>Rewritten to use Mono.Cecil to read assembly metadata.
+    
+Updated to output assembly attributes, classes, nested classes, generics, delegates, interfaces, attributes, events, default values, constant values and co- and contra-variance.
+    </releaseNotes>
     <copyright>Copyright Jake Ginnivan 2012</copyright>
     <tags>semanticversioning versioning approve api</tags>
     <dependencies>
       <dependency id="ApprovalTests" />
+      <dependency id="Mono.Cecil" />
     </dependencies>
   </metadata>
   <files>
+    <file src="PublicApiApprover.cs" target="content" />
     <file src="PublicApiGenerator.cs" target="content" />
-    <file src="PublicApiApprovalTest.cs" target="content" />
+    <file src="ExampleApiApprovalTest.cs" target="content" />
   </files>
 </package>
