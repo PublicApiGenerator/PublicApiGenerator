@@ -17,3 +17,5 @@ deploy-to-ec2*
 
 src/packages
 src/ApiApprover/results
+
+*.nupkg
