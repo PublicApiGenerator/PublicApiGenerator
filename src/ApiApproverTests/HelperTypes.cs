@@ -132,6 +132,13 @@ namespace ApiApproverTests.Examples
         }
     }
 
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
+    public class AttributeWithMultipleUsagesSupport : Attribute
+    {
+        public string StringValue;
+        public int IntValue;
+    }
+
     public class AttributeWithObjectArrayInitialiser : Attribute
     {
         public AttributeWithObjectArrayInitialiser(params object[] values)
