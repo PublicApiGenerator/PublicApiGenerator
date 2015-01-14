@@ -155,6 +155,19 @@ namespace ApiApproverTests
         }
 
         [Fact]
+        public void Should_handle_attribute_with_multiple_usages_support()
+        {
+            AssertPublicApi<ClassWithAttributeWithMultipleUsagesSupport>(
+@"namespace ApiApproverTests.Examples
+{
+    [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=0, StringValue=""ZZZ"")]
+    [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=1, StringValue=""MMM"")]
+    [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=2, StringValue=""AAA"")]
+    public class ClassWithAttributeWithMultipleUsagesSupport { }
+}");
+        }
+
+        [Fact]
         public void Should_handle_attribute_with_object_initialiser()
         {
             AssertPublicApi<ClassWithAttributeWithObjectInitialiser>(
@@ -285,6 +298,13 @@ namespace ApiApproverTests
 
         [AttributeWithStringArrayInitialiser("Hello", "world")]
         public class ClassWithAttributeWithStringArrayInitialiser
+        {
+        }
+
+        [AttributeWithMultipleUsagesSupport(IntValue = 0, StringValue = "ZZZ")]
+        [AttributeWithMultipleUsagesSupport(IntValue = 1, StringValue = "MMM")]
+        [AttributeWithMultipleUsagesSupport(IntValue = 2, StringValue = "AAA")]
+        public class ClassWithAttributeWithMultipleUsagesSupport
         {
         }
     }

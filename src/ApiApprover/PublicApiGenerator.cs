@@ -318,24 +318,52 @@ namespace ApiApprover
         private static void PopulateCustomAttributes(ICustomAttributeProvider type,
             CodeAttributeDeclarationCollection attributes, Func<CodeTypeReference, CodeTypeReference> codeTypeModifier)
         {
-            foreach (var customAttribute in type.CustomAttributes.Where(ShouldIncludeAttribute).OrderBy(a => a.AttributeType.FullName))
+            foreach (var customAttribute in type.CustomAttributes.Where(ShouldIncludeAttribute).OrderBy(a => a.AttributeType.FullName).ThenBy(a => ConvertAttrbuteToCode(codeTypeModifier, a)))
             {
-                var attribute = new CodeAttributeDeclaration(codeTypeModifier(CreateCodeTypeReference(customAttribute.AttributeType)));
-                foreach (var arg in customAttribute.ConstructorArguments)
-                {
-                    attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
-                }
-                foreach (var field in customAttribute.Fields.OrderBy(f => f.Name))
-                {
-                    attribute.Arguments.Add(new CodeAttributeArgument(field.Name,
-                        CreateInitialiserExpression(field.Argument)));
-                }
-                foreach (var property in customAttribute.Properties.OrderBy(p => p.Name))
-                {
-                    attribute.Arguments.Add(new CodeAttributeArgument(property.Name,
-                        CreateInitialiserExpression(property.Argument)));
-                }
+                var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
                 attributes.Add(attribute);
+            }
+        }
+
+        private static CodeAttributeDeclaration GenerateCodeAttributeDeclaration(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
+        {
+            var attribute = new CodeAttributeDeclaration(codeTypeModifier(CreateCodeTypeReference(customAttribute.AttributeType)));
+            foreach (var arg in customAttribute.ConstructorArguments)
+            {
+                attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
+            }
+            foreach (var field in customAttribute.Fields.OrderBy(f => f.Name))
+            {
+                attribute.Arguments.Add(new CodeAttributeArgument(field.Name, CreateInitialiserExpression(field.Argument)));
+            }
+            foreach (var property in customAttribute.Properties.OrderBy(p => p.Name))
+            {
+                attribute.Arguments.Add(new CodeAttributeArgument(property.Name, CreateInitialiserExpression(property.Argument)));
+            }
+            return attribute;
+        }
+
+        // Litee: This method is used for additional sorting of custom attributes when multiple values are allowed
+        private static object ConvertAttrbuteToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
+        {
+            using (var provider = new CSharpCodeProvider())
+            {
+                var cgo = new CodeGeneratorOptions
+                {
+                    BracingStyle = "C",
+                    BlankLinesBetweenMembers = false,
+                    VerbatimOrder = false
+                };
+                var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
+                var declaration = new CodeTypeDeclaration("DummyClass")
+                {
+                    CustomAttributes = new CodeAttributeDeclarationCollection(new[] { attribute }),
+                };
+                using (var writer = new StringWriter())
+                {
+                    provider.GenerateCodeFromType(declaration, writer, cgo);
+                    return writer.ToString();
+                }
             }
         }
 
