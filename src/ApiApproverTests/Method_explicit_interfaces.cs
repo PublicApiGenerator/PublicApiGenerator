@@ -15,7 +15,10 @@ namespace ApiApproverTests
             AssertPublicApi<MethodWithExplicitImplementation>(
 @"namespace ApiApproverTests.Examples
 {
-    public class MethodWithExplicitImplementation : System.IDisposable { }
+    public class MethodWithExplicitImplementation : System.IDisposable
+    {
+        public MethodWithExplicitImplementation() { }
+    }
 }");
         }
     }

@@ -14,6 +14,7 @@ namespace ApiApproverTests
 {
     public class ClassWithEventWithAttribute
     {
+        public ClassWithEventWithAttribute() { }
         [ApiApproverTests.Examples.SimpleAttribute()]
         public event System.EventHandler OnClicked;
     }

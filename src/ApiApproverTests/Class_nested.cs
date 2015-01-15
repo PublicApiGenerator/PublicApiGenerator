@@ -13,9 +13,11 @@ namespace ApiApproverTests
 {
     public class ClassWithNestedClass
     {
+        public ClassWithNestedClass() { }
         public void Method() { }
         public class NestedClass
         {
+            public NestedClass() { }
             public void Method() { }
         }
     }
@@ -30,6 +32,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPrivateNestedClass
     {
+        public ClassWithPrivateNestedClass() { }
         public void Method() { }
     }
 }");
@@ -43,9 +46,11 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedNestedClass
     {
+        public ClassWithProtectedNestedClass() { }
         public void Method() { }
         protected class NestedClass
         {
+            public NestedClass() { }
             public void Method() { }
         }
     }
@@ -60,12 +65,15 @@ namespace ApiApproverTests
 {
     public class ClassWithDeeplyNestedClasses
     {
+        public ClassWithDeeplyNestedClasses() { }
         public void Method3() { }
         public class ClassWithOneNestedClass
         {
+            public ClassWithOneNestedClass() { }
             public void Method2() { }
             public class InnerNestedClass
             {
+                public InnerNestedClass() { }
                 public void Method1() { }
             }
         }
@@ -98,9 +106,11 @@ namespace ApiApproverTests
 {
     public class ClassWithDeeplyNestedStructs
     {
+        public ClassWithDeeplyNestedStructs() { }
         public void Method3() { }
         public class ClassNestedAlongsideStruct
         {
+            public ClassNestedAlongsideStruct() { }
             public void Method4() { }
         }
         public struct StructWithOneNestedStruct

@@ -14,6 +14,7 @@ namespace ApiApproverTests
     public class FieldWithComplexType
     {
         public ApiApproverTests.Examples.ComplexType Field;
+        public FieldWithComplexType() { }
     }
 }");
         }
@@ -27,6 +28,7 @@ namespace ApiApproverTests
     public class FieldWithGenericType
     {
         public ApiApproverTests.Examples.GenericType<int> Field;
+        public FieldWithGenericType() { }
     }
 }");
         }
@@ -40,6 +42,7 @@ namespace ApiApproverTests
     public class FieldWithGenericComplexType
     {
         public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> Field;
+        public FieldWithGenericComplexType() { }
     }
 }");
         }
@@ -53,6 +56,7 @@ namespace ApiApproverTests
     public class FieldWithGenericTypeParametersOfGenericTypeParameters
     {
         public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>> Field;
+        public FieldWithGenericTypeParametersOfGenericTypeParameters() { }
     }
 }");
         }
@@ -66,6 +70,7 @@ namespace ApiApproverTests
     public class FieldWithMultipleGenericTypeParameters
     {
         public ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.ComplexType> Field;
+        public FieldWithMultipleGenericTypeParameters() { }
     }
 }");
         }

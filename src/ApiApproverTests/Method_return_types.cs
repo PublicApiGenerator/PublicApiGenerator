@@ -15,6 +15,7 @@ namespace ApiApproverTests
 {
     public class VoidMethod
     {
+        public VoidMethod() { }
         public void Method() { }
     }
 }");
@@ -28,6 +29,7 @@ namespace ApiApproverTests
 {
     public class MethodWithPrimitiveReturnTypes
     {
+        public MethodWithPrimitiveReturnTypes() { }
         public int Method() { }
         public string Method2() { }
     }
@@ -42,6 +44,7 @@ namespace ApiApproverTests
 {
     public class MethodWithComplexReturnType
     {
+        public MethodWithComplexReturnType() { }
         public ApiApproverTests.Examples.ComplexType Method() { }
     }
 }");
@@ -55,6 +58,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericReturnType
     {
+        public MethodWithGenericReturnType() { }
         public ApiApproverTests.Examples.GenericType<int> Method() { }
     }
 }");
@@ -68,6 +72,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericComplexReturnType
     {
+        public MethodWithGenericComplexReturnType() { }
         public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> Method() { }
     }
 }");
@@ -81,6 +86,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericTypeParameterOfGenericType
     {
+        public MethodWithGenericTypeParameterOfGenericType() { }
         public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>> Method() { }
     }
 }");
@@ -94,6 +100,7 @@ namespace ApiApproverTests
 {
     public class MethodWithMultipleGenericTypeParameters
     {
+        public MethodWithMultipleGenericTypeParameters() { }
         public ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.ComplexType> Method() { }
     }
 }");

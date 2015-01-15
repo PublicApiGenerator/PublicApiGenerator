@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class MethodReturnValueWithSimpleAttribute
     {
+        public MethodReturnValueWithSimpleAttribute() { }
         [return: ApiApproverTests.Examples.SimpleAttribute()]
         public void Method() { }
     }
@@ -27,6 +28,7 @@ namespace ApiApproverTests
 {
     public class MethodReturnValuesWithAttributeWithPositionalParameters
     {
+        public MethodReturnValuesWithAttributeWithPositionalParameters() { }
         [return: ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
         public void Method1() { }
         [return: ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
@@ -45,6 +47,7 @@ namespace ApiApproverTests
 {
     public class MethodReturnValuesWithAttributeWithNamedParameters
     {
+        public MethodReturnValuesWithAttributeWithNamedParameters() { }
         [return: ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
         public void Method1() { }
         [return: ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
@@ -61,6 +64,7 @@ namespace ApiApproverTests
 {
     public class MethodReturnValueWithAttributeWithMultipleNamedParameters
     {
+        public MethodReturnValueWithAttributeWithMultipleNamedParameters() { }
         [return: ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
         public void Method() { }
     }
@@ -75,6 +79,7 @@ namespace ApiApproverTests
 {
     public class MethodReturnValueWithAttributeWithBothNamedAndPositionalParameters
     {
+        public MethodReturnValueWithAttributeWithBothNamedAndPositionalParameters() { }
         [return: ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         public void Method() { }
     }
@@ -89,6 +94,7 @@ namespace ApiApproverTests
 {
     public class MethodReturnValueWithAttributeWithEnumFlags
     {
+        public MethodReturnValueWithAttributeWithEnumFlags() { }
         [return: ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
         public void Method() { }
     }
@@ -103,6 +109,7 @@ namespace ApiApproverTests
 {
     public class MethodReturnValueWithMultipleAttributes
     {
+        public MethodReturnValueWithMultipleAttributes() { }
         [return: ApiApproverTests.Examples.Attribute_AA()]
         [return: ApiApproverTests.Examples.Attribute_MM()]
         [return: ApiApproverTests.Examples.Attribute_ZZ()]
@@ -119,6 +126,7 @@ namespace ApiApproverTests
 {
     public class MethodWithAttributesOnMethodAndReturnValue
     {
+        public MethodWithAttributesOnMethodAndReturnValue() { }
         [ApiApproverTests.Examples.SimpleAttribute()]
         [return: ApiApproverTests.Examples.SimpleAttribute()]
         public void Method() { }

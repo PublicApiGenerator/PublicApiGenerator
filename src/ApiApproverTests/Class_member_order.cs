@@ -17,6 +17,7 @@ namespace ApiApproverTests
     {
         public int Field1;
         public int Field2;
+        public ClassMemberOrder() { }
         public int Property1 { get; set; }
         public int Property2 { get; set; }
         public event System.EventHandler Event1;
@@ -40,6 +41,7 @@ namespace ApiApproverTests
     {
         public int Field1;
         public int Field2;
+        public ClassMemberOrderAndNestedClass() { }
         public int Property1 { get; set; }
         public int Property2 { get; set; }
         public event System.EventHandler Event1;
@@ -49,11 +51,13 @@ namespace ApiApproverTests
         public class AnotherNestedClass
         {
             public int Field;
+            public AnotherNestedClass() { }
         }
         public class ClassMemberOrderAsNestedClass
         {
             public int Field1;
             public int Field2;
+            public ClassMemberOrderAsNestedClass() { }
             public int Property1 { get; set; }
             public int Property2 { get; set; }
             public event System.EventHandler Event1;

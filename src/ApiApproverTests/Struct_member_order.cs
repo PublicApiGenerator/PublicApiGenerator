@@ -54,6 +54,7 @@ namespace ApiApproverTests
         {
             public int Field1;
             public int Field2;
+            public ClassMemberOrderAsNestedClass() { }
             public int Property1 { get; set; }
             public int Property2 { get; set; }
             public event System.EventHandler Event1;

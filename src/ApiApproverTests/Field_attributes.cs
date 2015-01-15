@@ -15,6 +15,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.SimpleAttribute()]
         public string Value;
+        public FieldWithSimpleAttribute() { }
     }
 }");
         }
@@ -29,6 +30,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
         public string Value;
+        public FieldWithAttributeWithStringPositionalParameters() { }
     }
 }");
             AssertPublicApi<FieldWithAttributeWithIntPositionalParameters>(
@@ -38,6 +40,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
         public string Value;
+        public FieldWithAttributeWithIntPositionalParameters() { }
     }
 }");
             AssertPublicApi<FieldWithAttributeWithMultiplePositionalParameters>(
@@ -47,6 +50,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
         public string Value;
+        public FieldWithAttributeWithMultiplePositionalParameters() { }
     }
 }");
         }
@@ -61,6 +65,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
         public string Value;
+        public FieldWithIntNamedParameterAttribute() { }
     }
 }");
 
@@ -71,6 +76,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
         public string Value;
+        public FieldWithStringNamedParameterAttribute() { }
     }
 }");
         }
@@ -85,6 +91,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
         public string Value;
+        public FieldWithAttributeWithMultipleNamedParameters() { }
     }
 }");
         }
@@ -99,6 +106,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         public string Value;
+        public FieldWithAttributeWithBothNamedAndPositionalParameters() { }
     }
 }");
         }
@@ -113,6 +121,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithSimpleEnumAttribute(ApiApproverTests.Examples.SimpleEnum.Blue)]
         public string Value;
+        public FieldWithAttributeWithSimpleEnum() { }
     }
 }");
         }
@@ -127,6 +136,7 @@ namespace ApiApproverTests
     {
         [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
         public string Value;
+        public FieldWithAttributeWithEnumFlags() { }
     }
 }");
         }
@@ -143,6 +153,7 @@ namespace ApiApproverTests
         [ApiApproverTests.Examples.Attribute_MM()]
         [ApiApproverTests.Examples.Attribute_ZZ()]
         public string Value;
+        public FieldWithMultipleAttributes() { }
     }
 }");
         }

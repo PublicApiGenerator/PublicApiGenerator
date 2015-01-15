@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public abstract class ClassWithAbstractProperty
     {
+        protected ClassWithAbstractProperty() { }
         public abstract string Value { get; set; }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class ClassWithStaticProperty
     {
+        public ClassWithStaticProperty() { }
         public static string Value { get; set; }
     }
 }");
@@ -39,6 +41,7 @@ namespace ApiApproverTests
 {
     public class ClassWithVirtualProperty
     {
+        public ClassWithVirtualProperty() { }
         public virtual string Value { get; set; }
     }
 }");
@@ -52,6 +55,7 @@ namespace ApiApproverTests
 {
     public class ClassWithOverriddenProperty : ApiApproverTests.Examples.ClassWithVirtualProperty
     {
+        public ClassWithOverriddenProperty() { }
         public override string Value { get; set; }
     }
 }");
@@ -65,6 +69,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPropertyHiding : ApiApproverTests.Examples.ClassWithProperty
     {
+        public ClassWithPropertyHiding() { }
         public new string Value { get; set; }
     }
 }");

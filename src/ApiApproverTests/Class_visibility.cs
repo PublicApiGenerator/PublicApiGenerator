@@ -11,7 +11,10 @@ namespace ApiApproverTests
             AssertPublicApi<PublicClass>(
 @"namespace ApiApproverTests.Examples
 {
-    public class PublicClass { }
+    public class PublicClass
+    {
+        public PublicClass() { }
+    }
 }");
         }
 

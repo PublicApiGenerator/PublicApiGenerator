@@ -15,6 +15,7 @@ namespace ApiApproverTests
     {
         protected int protectedFieldIsVisible;
         public int publicFieldIsVisible;
+        public ClassWithFields() { }
     }
 }");
         }

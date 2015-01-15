@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class PropertyWithPrimitiveType
     {
+        public PropertyWithPrimitiveType() { }
         public string Value { get; set; }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class PropertyWithComplexType
     {
+        public PropertyWithComplexType() { }
         public ApiApproverTests.Examples.ComplexType Value { get; set; }
     }
 }");
@@ -39,6 +41,7 @@ namespace ApiApproverTests
 {
     public class PropertyWithGenericType
     {
+        public PropertyWithGenericType() { }
         public ApiApproverTests.Examples.GenericType<int> Value { get; set; }
     }
 }");
@@ -52,6 +55,7 @@ namespace ApiApproverTests
 {
     public class PropertyWithCrazyGenericType
     {
+        public PropertyWithCrazyGenericType() { }
         public ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>> Value { get; set; }
     }
 }");
@@ -65,6 +69,7 @@ namespace ApiApproverTests
 {
     public class PropertyWithClassGeneric<T>
     {
+        public PropertyWithClassGeneric() { }
         public T Value { get; set; }
     }
 }");

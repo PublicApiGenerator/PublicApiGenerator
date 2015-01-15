@@ -12,7 +12,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.SimpleAttribute()]
-    public class ClassWithSimpleAttribute { }
+    public class ClassWithSimpleAttribute
+    {
+        public ClassWithSimpleAttribute() { }
+    }
 }");
         }
 
@@ -23,19 +26,28 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
-    public class ClassWithAttributeWithStringPositionalParameters { }
+    public class ClassWithAttributeWithStringPositionalParameters
+    {
+        public ClassWithAttributeWithStringPositionalParameters() { }
+    }
 }");
             AssertPublicApi<ClassWithAttributeWithIntPositionalParameters>(
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
-    public class ClassWithAttributeWithIntPositionalParameters { }
+    public class ClassWithAttributeWithIntPositionalParameters
+    {
+        public ClassWithAttributeWithIntPositionalParameters() { }
+    }
 }");
             AssertPublicApi<ClassWithAttributeWithMultiplePositionalParameters>(
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
-    public class ClassWithAttributeWithMultiplePositionalParameters { }
+    public class ClassWithAttributeWithMultiplePositionalParameters
+    {
+        public ClassWithAttributeWithMultiplePositionalParameters() { }
+    }
 }");
         }
 
@@ -46,14 +58,20 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
-    public class ClassWithIntNamedParameterAttribute { }
+    public class ClassWithIntNamedParameterAttribute
+    {
+        public ClassWithIntNamedParameterAttribute() { }
+    }
 }");
 
             AssertPublicApi<ClassWithStringNamedParameterAttribute>(
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
-    public class ClassWithStringNamedParameterAttribute { }
+    public class ClassWithStringNamedParameterAttribute
+    {
+        public ClassWithStringNamedParameterAttribute() { }
+    }
 }");
         }
 
@@ -64,7 +82,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
-    public class ClassWithAttributeWithMultipleNamedParameters { }
+    public class ClassWithAttributeWithMultipleNamedParameters
+    {
+        public ClassWithAttributeWithMultipleNamedParameters() { }
+    }
 }");
         }
 
@@ -75,14 +96,20 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42)]
-    public class ClassWithIntNamedFieldAttribute { }
+    public class ClassWithIntNamedFieldAttribute
+    {
+        public ClassWithIntNamedFieldAttribute() { }
+    }
 }");
 
             AssertPublicApi<ClassWithStringNamedFieldAttribute>(
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(StringValue=""Hello"")]
-    public class ClassWithStringNamedFieldAttribute { }
+    public class ClassWithStringNamedFieldAttribute
+    {
+        public ClassWithStringNamedFieldAttribute() { }
+    }
 }");
         }
 
@@ -93,7 +120,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42, StringValue=""Hello world"")]
-    public class ClassWithAttributeWithMultipleNamedFields { }
+    public class ClassWithAttributeWithMultipleNamedFields
+    {
+        public ClassWithAttributeWithMultipleNamedFields() { }
+    }
 }");
         }
 
@@ -104,7 +134,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello"", IntValue=13, StringValue=""World"")]
-    public class ClassWithAttributeWithBothNamedAndPositionalParameters { }
+    public class ClassWithAttributeWithBothNamedAndPositionalParameters
+    {
+        public ClassWithAttributeWithBothNamedAndPositionalParameters() { }
+    }
 }");
         }
 
@@ -115,7 +148,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithNamedParameterAndFieldAttribute(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
-    public class ClassWithAttributeWithBothNamedParametersAndFields { }
+    public class ClassWithAttributeWithBothNamedParametersAndFields
+    {
+        public ClassWithAttributeWithBothNamedParametersAndFields() { }
+    }
 }");
         }
 
@@ -126,7 +162,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithSimpleEnumAttribute(ApiApproverTests.Examples.SimpleEnum.Blue)]
-    public class ClassWithAttributeWithSimpleEnum { }
+    public class ClassWithAttributeWithSimpleEnum
+    {
+        public ClassWithAttributeWithSimpleEnum() { }
+    }
 }");
         }
 
@@ -137,7 +176,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
-    public class ClassWithAttributeWithEnumFlags { }
+    public class ClassWithAttributeWithEnumFlags
+    {
+        public ClassWithAttributeWithEnumFlags() { }
+    }
 }");
         }
 
@@ -150,7 +192,10 @@ namespace ApiApproverTests
     [ApiApproverTests.Examples.Attribute_AA()]
     [ApiApproverTests.Examples.Attribute_MM()]
     [ApiApproverTests.Examples.Attribute_ZZ()]
-    public class ClassWithMultipleAttributes { }
+    public class ClassWithMultipleAttributes
+    {
+        public ClassWithMultipleAttributes() { }
+    }
 }");
         }
 
@@ -161,7 +206,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     [ApiApproverTests.Examples.AttributeWithObjectInitialiser(""Hello world"")]
-    public class ClassWithAttributeWithObjectInitialiser { }
+    public class ClassWithAttributeWithObjectInitialiser
+    {
+        public ClassWithAttributeWithObjectInitialiser() { }
+    }
 }");
         }
 
@@ -174,7 +222,10 @@ namespace ApiApproverTests
     [ApiApproverTests.Examples.AttributeWithObjectArrayInitialiser(new object[] {
             42,
             ""Hello world""})]
-    public class ClassWithAttributeWithObjectArrayInitialiser { }
+    public class ClassWithAttributeWithObjectArrayInitialiser
+    {
+        public ClassWithAttributeWithObjectArrayInitialiser() { }
+    }
 }");
         }
 
@@ -187,7 +238,10 @@ namespace ApiApproverTests
     [ApiApproverTests.Examples.AttributeWithStringArrayInitialiser(new string[] {
             ""Hello"",
             ""world""})]
-    public class ClassWithAttributeWithStringArrayInitialiser { }
+    public class ClassWithAttributeWithStringArrayInitialiser
+    {
+        public ClassWithAttributeWithStringArrayInitialiser() { }
+    }
 }");
         }
     }

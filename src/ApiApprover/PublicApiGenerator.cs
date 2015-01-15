@@ -8,9 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
-using Mono.Collections.Generic;
 using TypeAttributes = System.Reflection.TypeAttributes;
 
 // ReSharper disable CheckNamespace
@@ -432,7 +430,7 @@ namespace ApiApprover
 
         private static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
         {
-            if (member.IsAssembly || member.IsPrivate || IsEmptyDefaultConstructor(member))
+            if (member.IsAssembly || member.IsPrivate)
                 return;
 
             var method = new CodeConstructor
@@ -444,29 +442,6 @@ namespace ApiApprover
             PopulateMethodParameters(member, method.Parameters);
 
             typeDeclaration.Members.Add(method);
-        }
-
-        private static bool IsEmptyDefaultConstructor(MethodDefinition member)
-        {
-            // TODO Maybe we should hide only default *public* constructors? IsAbstract check added for backward compatibility.
-            if (member.Parameters.Count == 0 && member.Body != null && (member.IsPublic || member.DeclaringType.IsAbstract))
-            {
-                // Skip NOPs to eliminate difference between Release and Debug compilation modes for empty constructor.
-                // Note that this code doesn't work as expected in NCrunch as tool injects its own opcodes into constructors - run standard NUnit runner to reproduce.
-                var instructionsWithoutNops = member.Body.Instructions.Where(x => x.OpCode != OpCodes.Nop).ToArray();
-                if (instructionsWithoutNops.Count() == 3 &&
-                    instructionsWithoutNops[0].OpCode == OpCodes.Ldarg_0 &&
-                    instructionsWithoutNops[1].OpCode == OpCodes.Call &&
-                    (instructionsWithoutNops[1].Operand == null ||
-                    (instructionsWithoutNops[1].Operand is MethodReference &&
-                    ((MethodReference)instructionsWithoutNops[1].Operand).Name == ".ctor")) &&
-                    instructionsWithoutNops[2].OpCode == OpCodes.Ret &&
-                    member.DeclaringType.GetConstructors().Count() == 1)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)

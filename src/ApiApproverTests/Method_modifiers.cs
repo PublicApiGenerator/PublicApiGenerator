@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class ClassWithStaticMethod
     {
+        public ClassWithStaticMethod() { }
         public static void DoSomething() { }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public abstract class ClassWithAbstractMethod
     {
+        protected ClassWithAbstractMethod() { }
         public abstract void DoSomething();
     }
 }");
@@ -39,6 +41,7 @@ namespace ApiApproverTests
 {
     public class ClassWithVirtualMethod
     {
+        public ClassWithVirtualMethod() { }
         public virtual void DoSomething() { }
     }
 }");
@@ -52,6 +55,7 @@ namespace ApiApproverTests
 {
     public class ClassWithOverridingMethod : ApiApproverTests.Examples.ClassWithVirtualMethod
     {
+        public ClassWithOverridingMethod() { }
         public override void DoSomething() { }
     }
 }");
@@ -65,6 +69,7 @@ namespace ApiApproverTests
 {
     public class ClassWithMethodOverridingObjectMethod
     {
+        public ClassWithMethodOverridingObjectMethod() { }
         public override string ToString() { }
     }
 }");
@@ -78,6 +83,7 @@ namespace ApiApproverTests
 {
     public class ClassWithMethodHiding : ApiApproverTests.Examples.ClassWithSimpleMethod
     {
+        public ClassWithMethodHiding() { }
         public new void Method() { }
     }
 }");
