@@ -18,10 +18,10 @@ namespace ApiApproverTests
         [Fact]
         public void Should_output_primitive_types()
         {
-            AssertPublicApi<DelegateWithPrimitveParameters>(
+            AssertPublicApi<DelegateWithPrimitiveParameters>(
 @"namespace ApiApproverTests.Examples
 {
-    public delegate int DelegateWithPrimitveParameters(int v1, string v2);
+    public delegate int DelegateWithPrimitiveParameters(int v1, string v2);
 }");
         }
 
@@ -59,7 +59,7 @@ namespace ApiApproverTests
     namespace Examples
     {
         public delegate void VoidDelegate();
-        public delegate int DelegateWithPrimitveParameters(int v1, string v2);
+        public delegate int DelegateWithPrimitiveParameters(int v1, string v2);
         public delegate ComplexType DelegateWithComplexParameters(ComplexType v1);
         public delegate GenericType<int> DelegateWithClosedGenericParameters(GenericType<ComplexType> value);
         public delegate GenericType<T> DelegateWithGenericParameters<T>(GenericType<T> value);

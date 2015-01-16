@@ -20,6 +20,7 @@ namespace ApiApproverTests
         }
     }
 
+    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public static class StringExtensions
@@ -30,4 +31,5 @@ namespace ApiApproverTests
             }
         }
     }
+    // ReSharper restore UnusedMember.Global
 }

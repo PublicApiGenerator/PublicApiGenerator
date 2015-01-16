@@ -22,12 +22,12 @@ namespace ApiApproverTests
         [Fact]
         public void Should_output_multiple_generic_type_parameters()
         {
-            AssertPublicApi(typeof(ClassWithMutlipleGenericTypes<,>),
+            AssertPublicApi(typeof(ClassWithMultipleGenericTypes<,>),
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithMutlipleGenericTypes<T1, T2>
+    public class ClassWithMultipleGenericTypes<T1, T2>
     {
-        public ClassWithMutlipleGenericTypes() { }
+        public ClassWithMultipleGenericTypes() { }
     }
 }");
         }
@@ -141,7 +141,7 @@ namespace ApiApproverTests
         {
         }
 
-        public class ClassWithMutlipleGenericTypes<T1, T2>
+        public class ClassWithMultipleGenericTypes<T1, T2>
         {
         }
 

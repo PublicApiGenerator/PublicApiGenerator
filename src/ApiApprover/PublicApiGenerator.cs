@@ -197,7 +197,7 @@ namespace ApiApprover
             };
 
             if (declaration.IsInterface && publicType.BaseType != null)
-                throw new NotImplementedException("Base types for interaces needs testing");
+                throw new NotImplementedException("Base types for interfaces needs testing");
 
             PopulateGenericParameters(publicType, declaration.TypeParameters);
 
@@ -503,12 +503,12 @@ namespace ApiApprover
                 var name = parameter.HasConstant
                     ? string.Format("{0} = {1}", parameter.Name, FormatParameterConstant(parameter))
                     : parameter.Name;
-                var expresion = new CodeParameterDeclarationExpression(type, name)
+                var expression = new CodeParameterDeclarationExpression(type, name)
                 {
                     Direction = direction,
                     CustomAttributes = CreateCustomAttributes(parameter)
                 };
-                parameters.Add(expresion);
+                parameters.Add(expression);
             }
         }
 
