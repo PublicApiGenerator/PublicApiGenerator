@@ -385,6 +385,7 @@ namespace ApiApprover
             "System.Reflection.AssemblyCopyrightAttribute",
             "System.Reflection.AssemblyDescriptionAttribute",
             "System.Reflection.AssemblyFileVersionAttribute",
+            "System.Reflection.AssemblyInformationalVersionAttribute",
             "System.Reflection.AssemblyProductAttribute",
             "System.Reflection.AssemblyTitleAttribute",
             "System.Reflection.AssemblyTrademarkAttribute"
