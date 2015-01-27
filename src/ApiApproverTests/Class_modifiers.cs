@@ -3,7 +3,7 @@ using Xunit;
 
 namespace ApiApproverTests
 {
-    public class Class_modifiers :ApiGeneratorTestsBase
+    public class Class_modifiers : ApiGeneratorTestsBase
     {
         [Fact]
         public void Should_output_abstract_modifier()

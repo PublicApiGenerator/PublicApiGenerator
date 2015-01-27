@@ -2,21 +2,23 @@
 <package >
   <metadata>
     <id>ApiApprover</id>
-    <version>1.2.0</version>
+    <version>2.0.0</version>
     <title>Api Approver</title>
     <authors>Jake Ginnivan</authors>
     <owners>Jake Ginnivan</owners>
     <projectUrl>http://jake.ginnivan.net/ApiApprover</projectUrl>
+    <licenseUrl>https://github.com/JakeGinnivan/ApiApprover/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simply add this package to add a test which generates a string of your public API, then sends it to Approval Tests to approve any public API changes.
-    
+
 Don't accidently miss a breaking API change and break semantic versioning again.
     </description>
-    <releaseNotes>Rewritten to use Mono.Cecil to read assembly metadata.
-    
-Updated to output assembly attributes, classes, nested classes, generics, delegates, interfaces, attributes, events, default values, constant values and co- and contra-variance.
+    <releaseNotes>
+      Breaking changes:
+      - Default constructor is now always shown
+      - resultsPath argument removed, use [UseApprovalSubdirectory("resultsPath")] instead
     </releaseNotes>
-    <copyright>Copyright Jake Ginnivan 2012</copyright>
+    <copyright>Copyright Jake Ginnivan 2015</copyright>
     <tags>semanticversioning versioning approve api</tags>
     <dependencies>
       <dependency id="ApprovalTests" />
