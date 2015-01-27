@@ -7,7 +7,7 @@
     <authors>Jake Ginnivan</authors>
     <owners>Jake Ginnivan</owners>
     <projectUrl>http://jake.ginnivan.net/ApiApprover</projectUrl>
-    <licenseUrl>https://github.com/JakeGinnivan/ApiApprover/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/JakeGinnivan/ApiApprover/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simply add this package to add a test which generates a string of your public API, then sends it to Approval Tests to approve any public API changes.
 
