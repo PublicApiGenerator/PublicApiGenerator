@@ -19,3 +19,4 @@ src/packages
 src/ApiApprover/results
 
 *.nupkg
+src/ApiApprover.sln.ide/
