@@ -208,7 +208,10 @@ namespace ApiApproverTests
     [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=0, StringValue=""ZZZ"")]
     [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=1, StringValue=""MMM"")]
     [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=2, StringValue=""AAA"")]
-    public class ClassWithAttributeWithMultipleUsagesSupport { }
+    public class ClassWithAttributeWithMultipleUsagesSupport
+    {
+        public ClassWithAttributeWithMultipleUsagesSupport() { }
+    }
 }");
         }
 
