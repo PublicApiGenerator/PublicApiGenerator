@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 
 // TODO: Example requires xunit + xunit.extensions to be installed
@@ -15,9 +16,10 @@ namespace ApiApprover
         [TheoryWithLimitedFailures(20)]
         [PropertyData("AssemblyPaths")]
         [UseReporter(typeof(DiffReporter))]
+        [UseApprovalSubdirectory("results")]
         public void approve_public_api(string assembly, string path)
         {
-            PublicApiApprover.ApprovePublicApi(Path.Combine(path, assembly), "results");
+            PublicApiApprover.ApprovePublicApi(Path.Combine(path, assembly));
         }
 
         public static IEnumerable<object[]> AssemblyPaths
