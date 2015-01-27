@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class MethodOrdering
     {
+        public MethodOrdering() { }
         public void Method_AA() { }
         public void Method_BB() { }
     }

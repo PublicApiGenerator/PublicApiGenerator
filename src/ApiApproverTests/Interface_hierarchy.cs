@@ -20,6 +20,7 @@ namespace ApiApproverTests
         }
     }
 
+    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public interface IInterfaceWithImplementedList : IDisposable, ICloneable
@@ -27,4 +28,5 @@ namespace ApiApproverTests
             void Method();
         }
     }
+    // ReSharper restore UnusedMember.Global
 }

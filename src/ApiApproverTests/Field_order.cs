@@ -16,6 +16,7 @@ namespace ApiApproverTests
         public int AA_Field;
         public string YY_Field;
         public int ZZ_Field;
+        public FieldOrderExample() { }
     }
 }");
         }

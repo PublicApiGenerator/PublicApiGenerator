@@ -15,6 +15,7 @@ namespace ApiApproverTests
     {
         protected int protectedFieldIsVisible;
         public int publicFieldIsVisible;
+        public ClassWithFields() { }
     }
 }");
         }
@@ -31,7 +32,7 @@ namespace ApiApproverTests
         public class ClassWithFields
         {
             private int privateFieldNotVisible;
-            internal int internalFieldNotVisile;
+            internal int internalFieldNotVisible;
 
             protected int protectedFieldIsVisible;
             public int publicFieldIsVisible;

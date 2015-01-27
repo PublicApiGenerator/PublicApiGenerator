@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicProperty
     {
+        public ClassWithPublicProperty() { }
         public string Value { get; set; }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedProperty
     {
+        public ClassWithProtectedProperty() { }
         protected string Value { get; set; }
     }
 }");
@@ -39,6 +41,7 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedInternalProperty
     {
+        public ClassWithProtectedInternalProperty() { }
         protected internal string Value { get; set; }
     }
 }");
@@ -50,7 +53,10 @@ namespace ApiApproverTests
             AssertPublicApi<ClassWithPrivateProperty>(
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithPrivateProperty { }
+    public class ClassWithPrivateProperty
+    {
+        public ClassWithPrivateProperty() { }
+    }
 }");
         }
 
@@ -60,7 +66,10 @@ namespace ApiApproverTests
             AssertPublicApi<ClassWithInternalProperty>(
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithInternalProperty { }
+    public class ClassWithInternalProperty
+    {
+        public ClassWithInternalProperty() { }
+    }
 }");
         }
 
@@ -72,6 +81,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicGetterPrivateSetter
     {
+        public ClassWithPublicGetterPrivateSetter() { }
         public string Value1 { get; }
     }
 }");
@@ -85,6 +95,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicGetterInternalSetter
     {
+        public ClassWithPublicGetterInternalSetter() { }
         public string Value1 { get; }
     }
 }");
@@ -98,6 +109,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicGetterProtectedSetter
     {
+        public ClassWithPublicGetterProtectedSetter() { }
         public string Value1 { get; set; }
     }
 }");
@@ -112,6 +124,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicGetterProtectedSetter
     {
+        public ClassWithPublicGetterProtectedSetter() { }
         public string Value1 { get; protected set; }
     }
 }");
@@ -125,6 +138,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicGetterProtectedInternalSetter
     {
+        public ClassWithPublicGetterProtectedInternalSetter() { }
         public string Value1 { get; set; }
     }
 }");
@@ -139,6 +153,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicGetterProtectedInternalSetter
     {
+        public ClassWithPublicGetterProtectedInternalSetter() { }
         public string Value1 { get; protected internal set; }
     }
 }");
@@ -152,6 +167,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPrivateGetterPublicSetter
     {
+        public ClassWithPrivateGetterPublicSetter() { }
         public string Value1 { set; }
     }
 }");
@@ -165,6 +181,7 @@ namespace ApiApproverTests
 {
     public class ClassWithInternalGetterPublicSetter
     {
+        public ClassWithInternalGetterPublicSetter() { }
         public string Value1 { set; }
     }
 }");
@@ -180,6 +197,7 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedGetterPublicSetter
     {
+        public ClassWithProtectedGetterPublicSetter() { }
         public string Value1 { get; set; }
     }
 }");
@@ -194,6 +212,7 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedGetterPublicSetter
     {
+        public ClassWithProtectedGetterPublicSetter() { }
         public string Value1 { protected get; set; }
     }
 }");
@@ -209,6 +228,7 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedInternalGetterPublicSetter
     {
+        public ClassWithProtectedInternalGetterPublicSetter() { }
         public string Value1 { get; set; }
     }
 }");
@@ -223,6 +243,7 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedInternalGetterPublicSetter
     {
+        public ClassWithProtectedInternalGetterPublicSetter() { }
         public string Value1 { protected internal get; set; }
     }
 }");

@@ -15,6 +15,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameter
     {
+        public MethodWithTypeParameter() { }
         public void Method<T>() { }
     }
 }");
@@ -28,6 +29,7 @@ namespace ApiApproverTests
 {
     public class MethodWithMultipleTypeParameters
     {
+        public MethodWithMultipleTypeParameters() { }
         public void Method<T1, T2>() { }
     }
 }");
@@ -42,6 +44,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameterWithReferenceTypeConstraint
     {
+        public MethodWithTypeParameterWithReferenceTypeConstraint() { }
         public void Method<T>()
             where T :  class { }
     }
@@ -57,6 +60,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameterWithValueTypeConstraint
     {
+        public MethodWithTypeParameterWithValueTypeConstraint() { }
         public void Method<T>()
             where T :  struct { }
     }
@@ -71,6 +75,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameterWithDefaultConstructorConstraint
     {
+        public MethodWithTypeParameterWithDefaultConstructorConstraint() { }
         public void Method<T>()
             where T : new() { }
     }
@@ -85,6 +90,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameterWithSpecificTypeConstraint
     {
+        public MethodWithTypeParameterWithSpecificTypeConstraint() { }
         public void Method<T>()
             where T : System.IDisposable { }
     }
@@ -99,6 +105,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameterWithSpecificTypeAndValueTypeConstraints
     {
+        public MethodWithTypeParameterWithSpecificTypeAndValueTypeConstraints() { }
         public void Method<T>()
             where T :  struct, System.IDisposable { }
     }
@@ -113,6 +120,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameterWithSpecificTypeAndReferenceTypeConstraints
     {
+        public MethodWithTypeParameterWithSpecificTypeAndReferenceTypeConstraints() { }
         public void Method<T>()
             where T :  class, System.IDisposable { }
     }
@@ -127,6 +135,7 @@ namespace ApiApproverTests
 {
     public class MethodWithTypeParameterWithSpecificTypeAndDefaultConstructorConstraints
     {
+        public MethodWithTypeParameterWithSpecificTypeAndDefaultConstructorConstraints() { }
         public void Method<T>()
             where T : System.IDisposable, new () { }
     }
@@ -141,6 +150,7 @@ namespace ApiApproverTests
 {
     public class MethodUsingGenericTypeParameter
     {
+        public MethodUsingGenericTypeParameter() { }
         public void Method<T>(T item) { }
     }
 }");
@@ -154,6 +164,7 @@ namespace ApiApproverTests
 {
     public class MethodUsingGenericTypeParameterFromClass<T>
     {
+        public MethodUsingGenericTypeParameterFromClass() { }
         public void Method(T item) { }
     }
 }");
@@ -167,6 +178,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericUseOfClassTypeParameter<T>
     {
+        public MethodWithGenericUseOfClassTypeParameter() { }
         public System.Collections.Generic.List<T> Method(System.Collections.Generic.List<T> item) { }
     }
 }");

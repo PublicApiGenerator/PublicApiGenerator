@@ -12,8 +12,14 @@ namespace ApiApproverTests
             AssertPublicApi(new[] {typeof(Simple1), typeof(Simple2)},
 @"namespace ApiApproverTests.Examples1
 {
-    public class Simple1 { }
-    public class Simple2 { }
+    public class Simple1
+    {
+        public Simple1() { }
+    }
+    public class Simple2
+    {
+        public Simple2() { }
+    }
 }");
         }
 
@@ -23,11 +29,17 @@ namespace ApiApproverTests
             AssertPublicApi(new[]{typeof(Simple1), typeof(OtherSimple1)},
 @"namespace ApiApproverTests.Examples1
 {
-    public class Simple1 { }
+    public class Simple1
+    {
+        public Simple1() { }
+    }
 }
 namespace ApiApproverTests.Examples2
 {
-    public class OtherSimple1 { }
+    public class OtherSimple1
+    {
+        public OtherSimple1() { }
+    }
 }");
         }
     }

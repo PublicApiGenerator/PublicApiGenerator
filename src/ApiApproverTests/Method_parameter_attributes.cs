@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class MethodParameterWithSimpleAttribute
     {
+        public MethodParameterWithSimpleAttribute() { }
         public void Method([ApiApproverTests.Examples.SimpleAttribute()] int value) { }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class MethodParameterWithAttributeWithPositionalParameters
     {
+        public MethodParameterWithAttributeWithPositionalParameters() { }
         public void Method1([ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")] int value) { }
         public void Method2([ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)] int value) { }
         public void Method3([ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")] int value) { }
@@ -41,6 +43,7 @@ namespace ApiApproverTests
 {
     public class MethodParameterWithAttributeWithNamedParameters
     {
+        public MethodParameterWithAttributeWithNamedParameters() { }
         public void Method1([ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")] int value) { }
         public void Method2([ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)] int value) { }
     }
@@ -55,6 +58,7 @@ namespace ApiApproverTests
 {
     public class MethodParameterWithAttributeWithMultipleNamedParameters
     {
+        public MethodParameterWithAttributeWithMultipleNamedParameters() { }
         public void Method([ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")] int value) { }
     }
 }");
@@ -68,6 +72,7 @@ namespace ApiApproverTests
 {
     public class MethodParameterWithAttributeWithBothNamedAndPositionalParameters
     {
+        public MethodParameterWithAttributeWithBothNamedAndPositionalParameters() { }
         public void Method([ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")] int value) { }
     }
 }");
@@ -81,6 +86,7 @@ namespace ApiApproverTests
 {
     public class MethodParameterWithAttributeWithEnumFlags
     {
+        public MethodParameterWithAttributeWithEnumFlags() { }
         public void Method([ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)] int value) { }
     }
 }");
@@ -94,6 +100,7 @@ namespace ApiApproverTests
 {
     public class MethodParameterWithMultipleAttributes
     {
+        public MethodParameterWithMultipleAttributes() { }
         public void Method([ApiApproverTests.Examples.Attribute_AA()] [ApiApproverTests.Examples.Attribute_MM()] [ApiApproverTests.Examples.Attribute_ZZ()] int value) { }
     }
 }");

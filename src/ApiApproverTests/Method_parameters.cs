@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class MethodWithNoParameters
     {
+        public MethodWithNoParameters() { }
         public void Method() { }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class MethodWithSingleParameter
     {
+        public MethodWithSingleParameter() { }
         public void Method(int value) { }
     }
 }");
@@ -39,6 +41,7 @@ namespace ApiApproverTests
 {
     public class MethodWithSingleParameter
     {
+        public MethodWithSingleParameter() { }
         public void Method(int value) { }
     }
 }");
@@ -52,6 +55,7 @@ namespace ApiApproverTests
 {
     public class MethodWithComplexTypeParameter
     {
+        public MethodWithComplexTypeParameter() { }
         public void Method(ApiApproverTests.Examples.ComplexType value) { }
     }
 }");
@@ -65,6 +69,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericTypeParameter
     {
+        public MethodWithGenericTypeParameter() { }
         public void Method(ApiApproverTests.Examples.GenericType<int> value) { }
     }
 }");
@@ -78,6 +83,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericTypeOfComplexTypeParameter
     {
+        public MethodWithGenericTypeOfComplexTypeParameter() { }
         public void Method(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> value) { }
     }
 }");
@@ -91,6 +97,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericTypeOfGenericTypeParameter
     {
+        public MethodWithGenericTypeOfGenericTypeParameter() { }
         public void Method(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.GenericType<int>> value) { }
     }
 }");
@@ -104,6 +111,7 @@ namespace ApiApproverTests
 {
     public class MethodWithGenericTypeWithMultipleTypeArgumentsParameter
     {
+        public MethodWithGenericTypeWithMultipleTypeArgumentsParameter() { }
         public void Method(ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.ComplexType> value) { }
     }
 }");
@@ -117,6 +125,7 @@ namespace ApiApproverTests
 {
     public class MethodWithMultipleParameters
     {
+        public MethodWithMultipleParameters() { }
         public void Method(int value1, string value2, ApiApproverTests.Examples.ComplexType value3) { }
     }
 }");
@@ -130,6 +139,7 @@ namespace ApiApproverTests
 {
     public class MethodWithDefaultValues
     {
+        public MethodWithDefaultValues() { }
         public void Method(int value1 = 42, string value2 = ""hello world"") { }
     }
 }");
@@ -143,6 +153,7 @@ namespace ApiApproverTests
 {
     public class MethodWithRefParameter
     {
+        public MethodWithRefParameter() { }
         public void Method(ref string value) { }
     }
 }");
@@ -156,6 +167,7 @@ namespace ApiApproverTests
 {
     public class MethodWithOutParameter
     {
+        public MethodWithOutParameter() { }
         public void Method(out string value) { }
     }
 }");
@@ -169,6 +181,7 @@ namespace ApiApproverTests
 {
     public class MethodWithParams
     {
+        public MethodWithParams() { }
         public void Method(string format, params object[] values) { }
     }
 }");

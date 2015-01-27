@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class PropertyReadWrite
     {
+        public PropertyReadWrite() { }
         public string Value { get; set; }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class PropertyReadOnly
     {
+        public PropertyReadOnly() { }
         public string Value { get; }
     }
 }");
@@ -39,6 +41,7 @@ namespace ApiApproverTests
 {
     public class PropertyWriteOnly
     {
+        public PropertyWriteOnly() { }
         public string Value { set; }
     }
 }");
@@ -52,6 +55,7 @@ namespace ApiApproverTests
 {
     public class PropertyIndexer
     {
+        public PropertyIndexer() { }
         public string this[int index] { get; set; }
     }
 }");
@@ -65,6 +69,7 @@ namespace ApiApproverTests
 {
     public class PropertyIndexerReadOnly
     {
+        public PropertyIndexerReadOnly() { }
         public string this[int index] { get; }
     }
 }");
@@ -78,6 +83,7 @@ namespace ApiApproverTests
 {
     public class PropertyIndexerWriteOnly
     {
+        public PropertyIndexerWriteOnly() { }
         public string this[int index] { set; }
     }
 }");
@@ -91,6 +97,7 @@ namespace ApiApproverTests
 {
     public class PropertyIndexerMultipleParameters
     {
+        public PropertyIndexerMultipleParameters() { }
         public string this[int index, int order] { get; set; }
     }
 }");

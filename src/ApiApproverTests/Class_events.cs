@@ -14,6 +14,7 @@ namespace ApiApproverTests
 {
     public class ClassWithEvent
     {
+        public ClassWithEvent() { }
         public event System.EventHandler<System.EventArgs> OnClicked;
     }
 }");

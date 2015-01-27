@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class ClassWithAutomaticProperty
     {
+        public ClassWithAutomaticProperty() { }
         public string Value { get; set; }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class ClassWithManualProperty
     {
+        public ClassWithManualProperty() { }
         public string Value { get; set; }
     }
 }");

@@ -7,6 +7,7 @@
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
+// ReSharper disable NotAccessedField.Global
 namespace ApiApproverTests.Examples
 {
     public class ComplexType
@@ -159,3 +160,4 @@ namespace ApiApproverTests.Examples
 // ReSharper restore InconsistentNaming
 // ReSharper restore UnusedTypeParameter
 // ReSharper restore ClassNeverInstantiated.Global
+// ReSharper restore NotAccessedField.Global

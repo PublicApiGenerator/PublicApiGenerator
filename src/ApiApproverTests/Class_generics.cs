@@ -12,17 +12,23 @@ namespace ApiApproverTests
             AssertPublicApi(typeof(ClassWithGenericType<>), 
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithGenericType<T> { }
+    public class ClassWithGenericType<T>
+    {
+        public ClassWithGenericType() { }
+    }
 }");
         }
 
         [Fact]
         public void Should_output_multiple_generic_type_parameters()
         {
-            AssertPublicApi(typeof(ClassWithMutlipleGenericTypes<,>),
+            AssertPublicApi(typeof(ClassWithMultipleGenericTypes<,>),
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithMutlipleGenericTypes<T1, T2> { }
+    public class ClassWithMultipleGenericTypes<T1, T2>
+    {
+        public ClassWithMultipleGenericTypes() { }
+    }
 }");
         }
 
@@ -34,7 +40,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithReferenceTypeConstraint<T>
-        where T :  class { }
+        where T :  class
+    {
+        public ClassWithReferenceTypeConstraint() { }
+    }
 }");
         }
 
@@ -46,7 +55,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithValueTypeConstraint<T>
-        where T :  struct { }
+        where T :  struct
+    {
+        public ClassWithValueTypeConstraint() { }
+    }
 }");
         }
 
@@ -58,7 +70,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithDefaultConstructorTypeConstraint<T>
-        where T : new() { }
+        where T : new()
+    {
+        public ClassWithDefaultConstructorTypeConstraint() { }
+    }
 }");
         }
 
@@ -69,7 +84,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithSpecificTypeConstraint<T>
-        where T : System.IDisposable { }
+        where T : System.IDisposable
+    {
+        public ClassWithSpecificTypeConstraint() { }
+    }
 }");
         }
 
@@ -80,7 +98,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithSpecificTypeAndValueTypeConstraint<T>
-        where T :  struct, System.IDisposable { }
+        where T :  struct, System.IDisposable
+    {
+        public ClassWithSpecificTypeAndValueTypeConstraint() { }
+    }
 }");
         }
 
@@ -91,7 +112,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithSpecificTypeAndReferenceTypeConstraint<T>
-        where T :  class, System.IDisposable { }
+        where T :  class, System.IDisposable
+    {
+        public ClassWithSpecificTypeAndReferenceTypeConstraint() { }
+    }
 }");
         }
 
@@ -102,7 +126,10 @@ namespace ApiApproverTests
 @"namespace ApiApproverTests.Examples
 {
     public class ClassWithSpecificTypeAndDefaultConstructorTypeConstraint<T>
-        where T : System.IDisposable, new () { }
+        where T : System.IDisposable, new ()
+    {
+        public ClassWithSpecificTypeAndDefaultConstructorTypeConstraint() { }
+    }
 }");
         }
     }
@@ -114,7 +141,7 @@ namespace ApiApproverTests
         {
         }
 
-        public class ClassWithMutlipleGenericTypes<T1, T2>
+        public class ClassWithMultipleGenericTypes<T1, T2>
         {
         }
 

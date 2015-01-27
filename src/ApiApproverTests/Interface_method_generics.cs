@@ -119,7 +119,7 @@ namespace ApiApproverTests
         }
 
         [Fact]
-        public void Should_output_specific_type_and_new_constriant()
+        public void Should_output_specific_type_and_new_constraint()
         {
             AssertPublicApi<IMethodWithTypeParameterWithSpecificTypeAndDefaultConstructorConstraints>(
 @"namespace ApiApproverTests.Examples

@@ -11,7 +11,10 @@ namespace ApiApproverTests
             AssertPublicApi<AbstractClass>(
 @"namespace ApiApproverTests.Examples
 {
-    public abstract class AbstractClass { }
+    public abstract class AbstractClass
+    {
+        protected AbstractClass() { }
+    }
 }");
         }
 
@@ -31,7 +34,10 @@ namespace ApiApproverTests
             AssertPublicApi<SealedClass>(
 @"namespace ApiApproverTests.Examples
 {
-    public sealed class SealedClass { }
+    public sealed class SealedClass
+    {
+        public SealedClass() { }
+    }
 }");
         }
     }

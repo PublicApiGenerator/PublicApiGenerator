@@ -12,7 +12,10 @@ namespace ApiApproverTests
             AssertPublicApi<DerivedClass>(
 @"namespace ApiApproverTests.Examples
 {
-    public class DerivedClass : ApiApproverTests.Examples.BaseClass { }
+    public class DerivedClass : ApiApproverTests.Examples.BaseClass
+    {
+        public DerivedClass() { }
+    }
 }");
         }
 
@@ -24,6 +27,7 @@ namespace ApiApproverTests
 {
     public class ClassWithInterfaces : System.ICloneable, System.IDisposable
     {
+        public ClassWithInterfaces() { }
         public object Clone() { }
         public void Dispose() { }
     }
@@ -38,6 +42,7 @@ namespace ApiApproverTests
 {
     public class ClassWithBaseAndInterfaces : ApiApproverTests.Examples.BaseClass, System.ICloneable, System.IDisposable
     {
+        public ClassWithBaseAndInterfaces() { }
         public object Clone() { }
         public void Dispose() { }
     }
@@ -50,7 +55,10 @@ namespace ApiApproverTests
             AssertPublicApi<DerivedFromClassWithInterfaces>(
 @"namespace ApiApproverTests.Examples
 {
-    public class DerivedFromClassWithInterfaces : ApiApproverTests.Examples.ClassWithInterfaces { }
+    public class DerivedFromClassWithInterfaces : ApiApproverTests.Examples.ClassWithInterfaces
+    {
+        public DerivedFromClassWithInterfaces() { }
+    }
 }");
         }
 
@@ -60,7 +68,10 @@ namespace ApiApproverTests
             AssertPublicApi<BaseClass>(
 @"namespace ApiApproverTests.Examples
 {
-    public class BaseClass { }
+    public class BaseClass
+    {
+        public BaseClass() { }
+    }
 }");
         }
     }

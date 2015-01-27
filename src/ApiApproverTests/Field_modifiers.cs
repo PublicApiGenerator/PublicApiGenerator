@@ -15,6 +15,7 @@ namespace ApiApproverTests
     {
         protected static string StaticProtectedField;
         public static int StaticPublicField;
+        public ClassWithStaticFields() { }
     }
 }");
         }
@@ -47,6 +48,7 @@ namespace ApiApproverTests
     {
         protected const string ConstProtectedField = ""hello world"";
         public const int ConstPublicField = 42;
+        public ClassWithConstFields() { }
     }
 }");
         }

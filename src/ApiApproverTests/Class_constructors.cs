@@ -7,12 +7,15 @@ namespace ApiApproverTests
     public class Class_constructors : ApiGeneratorTestsBase
     {
         [Fact]
-        public void Should_not_output_default_constructor()
+        public void Should_output_default_constructor()
         {
             AssertPublicApi<ClassWithDefaultConstructor>(
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithDefaultConstructor { }
+    public class ClassWithDefaultConstructor
+    {
+        public ClassWithDefaultConstructor() { }
+    }
 }");
         }
 

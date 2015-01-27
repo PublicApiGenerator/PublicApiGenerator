@@ -21,8 +21,14 @@ namespace ApiApproverTests
             },
 @"namespace ApiApproverTests.Examples
 {
-    public class AssemblyMember_Class1 { }
-    public class AssemblyMember_Class2 { }
+    public class AssemblyMember_Class1
+    {
+        public AssemblyMember_Class1() { }
+    }
+    public class AssemblyMember_Class2
+    {
+        public AssemblyMember_Class2() { }
+    }
     public delegate void AssemblyMember_Delegate1();
     public delegate void AssemblyMember_Delegate2();
     public interface IAssemblyMember_Interface1 { }
@@ -40,11 +46,17 @@ namespace ApiApproverTests
             },
 @"namespace ApiApproverTests.Examples_AA
 {
-    public class AssemblyOrdering_2 { }
+    public class AssemblyOrdering_2
+    {
+        public AssemblyOrdering_2() { }
+    }
 }
 namespace ApiApproverTests.Examples_ZZ
 {
-    public class AssemblyOrdering_1 { }
+    public class AssemblyOrdering_1
+    {
+        public AssemblyOrdering_1() { }
+    }
 }");
         }
     }

@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class ClassWithPublicMethod
     {
+        public ClassWithPublicMethod() { }
         public void DoSomething() { }
     }
 }");
@@ -26,6 +27,7 @@ namespace ApiApproverTests
 {
     public class ClassWithProtectedMethod
     {
+        public ClassWithProtectedMethod() { }
         protected void DoSomething() { }
     }
 }");
@@ -37,7 +39,10 @@ namespace ApiApproverTests
             AssertPublicApi<ClassWithInternalMethod>(
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithInternalMethod { }
+    public class ClassWithInternalMethod
+    {
+        public ClassWithInternalMethod() { }
+    }
 }");
         }
 
@@ -47,7 +52,10 @@ namespace ApiApproverTests
             AssertPublicApi<ClassWithPrivateMethod>(
 @"namespace ApiApproverTests.Examples
 {
-    public class ClassWithPrivateMethod { }
+    public class ClassWithPrivateMethod
+    {
+        public ClassWithPrivateMethod() { }
+    }
 }");
         }
     }

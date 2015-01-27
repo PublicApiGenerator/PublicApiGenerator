@@ -13,6 +13,7 @@ namespace ApiApproverTests
 {
     public class MethodWithSimpleAttribute
     {
+        public MethodWithSimpleAttribute() { }
         [ApiApproverTests.Examples.SimpleAttribute()]
         public void Method() { }
     }
@@ -27,6 +28,7 @@ namespace ApiApproverTests
 {
     public class MethodsWithAttributeWithPositionalParameters
     {
+        public MethodsWithAttributeWithPositionalParameters() { }
         [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
         public void Method1() { }
         [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
@@ -45,6 +47,7 @@ namespace ApiApproverTests
 {
     public class MethodsWithAttributeWithNamedParameters
     {
+        public MethodsWithAttributeWithNamedParameters() { }
         [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
         public void Method1() { }
         [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
@@ -61,6 +64,7 @@ namespace ApiApproverTests
 {
     public class MethodWithAttributeWithMultipleNamedParameters
     {
+        public MethodWithAttributeWithMultipleNamedParameters() { }
         [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
         public void Method() { }
     }
@@ -75,6 +79,7 @@ namespace ApiApproverTests
 {
     public class MethodWithAttributeWithBothNamedAndPositionalParameters
     {
+        public MethodWithAttributeWithBothNamedAndPositionalParameters() { }
         [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         public void Method() { }
     }
@@ -89,6 +94,7 @@ namespace ApiApproverTests
 {
     public class MethodWithAttributeWithEnumFlags
     {
+        public MethodWithAttributeWithEnumFlags() { }
         [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
         public void Method() { }
     }
@@ -103,6 +109,7 @@ namespace ApiApproverTests
 {
     public class MethodWithAttributeWithType
     {
+        public MethodWithAttributeWithType() { }
         [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
         public void Method1() { }
         [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(ApiApproverTests.Examples.ComplexType))]
@@ -121,6 +128,7 @@ namespace ApiApproverTests
 {
     public class MethodWithMultipleAttributes
     {
+        public MethodWithMultipleAttributes() { }
         [ApiApproverTests.Examples.Attribute_AA()]
         [ApiApproverTests.Examples.Attribute_MM()]
         [ApiApproverTests.Examples.Attribute_ZZ()]
