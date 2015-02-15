@@ -12,16 +12,11 @@ There are times though that changes to the public API is accidental. Api Approve
 
 ``` csharp
 [Fact]
+[UseReporter(typeof(DiffReporter))]
 public void my_assembly_has_no_public_api_changes()
 {
-    // arrange
-    var applicationAssembly = typeof(Application).Assembly;
-
-    // act
-    var publicApi = CodeGen.CreatePublicApiForAssembly(applicationAssembly);
-
-    // assert
-    var reporter = new DiffReporter();
-    Approvals.Approve(new ApprovalTextWriter(publicApi), new XUnitTestFrameworkNamer(), reporter);
+	PublicApiApprover.ApprovePublicApi(typeof(Application).Assembly.Location);
 }
 ```
+
+[See this example](https://github.com/JakeGinnivan/ApiApprover/blob/master/src/ApiApprover/ExampleApiApprovalTest.cs) of a more advanced test you can write using this library.
