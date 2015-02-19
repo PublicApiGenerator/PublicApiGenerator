@@ -7,6 +7,6 @@
     <ItemGroup>
       <Nuget Include="$(MSBuildProjectDirectory)\src\packages\NuGet.CommandLine.*\tools\NuGet.exe" />
     </ItemGroup>
-    <Exec Command='"@(Nuget)" pack "$(MSBuildProjectDirectory)\src\ApiApprover\ApiApprover.nuspec"' />
+    <Exec Command='"@(Nuget)" pack "$(MSBuildProjectDirectory)\src\ApiApprover\ApiApprover.nuspec" -Prop version=3.0.1' />
   </Target>
 </Project>
