@@ -14,9 +14,10 @@
 Don't accidently miss a breaking API change and break semantic versioning again.
     </description>
     <releaseNotes>
-      Breaking changes:
+      v3.0 Breaking changes:
       - Default constructor is now always shown
       - resultsPath argument removed, use [UseApprovalSubdirectory("resultsPath")] instead
+	  v3.0.1 - Moved file location to fit with http://nikcodes.com/2013/10/23/packaging-source-code-with-nuget
     </releaseNotes>
     <copyright>Copyright Jake Ginnivan 2015</copyright>
     <tags>semanticversioning versioning approve api</tags>
