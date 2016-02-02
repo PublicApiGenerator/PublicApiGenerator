@@ -1,11 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.20623.1 VSUPREVIEW
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiApprover", "ApiApprover\ApiApprover.csproj", "{75D25110-B0C7-4BCD-9B28-0679DD036C43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiApproverTests", "ApiApproverTests\ApiApproverTests.csproj", "{3D33D60B-860D-4706-ABA3-11F485FB0C6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicApiGenerator", "PublicApiGenerator\PublicApiGenerator.csproj", "{18D13F6D-7AFF-4E23-9905-6AF5F55F8852}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52361C5B-F247-42C5-8455-BD1DEDB5C903}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.cmd = ..\build.cmd
+		..\build.proj = ..\build.proj
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +30,10 @@ Global
 		{3D33D60B-860D-4706-ABA3-11F485FB0C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D33D60B-860D-4706-ABA3-11F485FB0C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D33D60B-860D-4706-ABA3-11F485FB0C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18D13F6D-7AFF-4E23-9905-6AF5F55F8852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18D13F6D-7AFF-4E23-9905-6AF5F55F8852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18D13F6D-7AFF-4E23-9905-6AF5F55F8852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18D13F6D-7AFF-4E23-9905-6AF5F55F8852}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>PublicApiGenerator</id>
+    <version>$version$</version>
+    <title>Public Api Generator</title>
+    <authors>Jake Ginnivan</authors>
+    <owners>Jake Ginnivan</owners>
+    <projectUrl>https://github.com/JakeGinnivan/ApiApprover</projectUrl>
+    <licenseUrl>https://github.com/JakeGinnivan/ApiApprover/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This library simply returns your public API as a string. You can use this in approval style tests or for documentation</description>
+    <copyright>Copyright Jake Ginnivan 2015</copyright>
+    <tags>semanticversioning versioning api</tags>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\Merged\PublicApiGenerator.dll" target="lib\net40\" />
+    <file src="bin\$configuration$\Merged\PublicApiGenerator.pdb" target="lib\net40\" />
+  </files>
+</package>

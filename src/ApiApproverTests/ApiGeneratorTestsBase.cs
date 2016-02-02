@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
-using ApiApprover;
-using Mono.Cecil;
 using Xunit;
 
 namespace ApiApproverTests
@@ -24,14 +21,12 @@ namespace ApiApproverTests
 
         protected void AssertPublicApi(Type[] types, string expectedOutput, bool includeAssemblyAttributes = false)
         {
-            var assemblyDefinition = AssemblyDefinition.ReadAssembly(GetType().Assembly.Location);
-            AssertPublicApi(assemblyDefinition, types, expectedOutput, includeAssemblyAttributes);
+            AssertPublicApi(GetType().Assembly, types, expectedOutput, includeAssemblyAttributes);
         }
 
-        private static void AssertPublicApi(AssemblyDefinition assemblyDefinition, Type[] types, string expectedOutput, bool includeAssemblyAttributes)
+        private static void AssertPublicApi(Assembly assembly, Type[] types, string expectedOutput, bool includeAssemblyAttributes)
         {
-            var typesNames = new HashSet<string>(types.Select(t => t.FullName));
-            var actualOutput = PublicApiGenerator.CreatePublicApiForAssembly(assemblyDefinition, t => typesNames.Contains(t.FullName), includeAssemblyAttributes);
+            var actualOutput = PublicApiGenerator.PublicApiGenerator.GetPublicApi(assembly, types, includeAssemblyAttributes);
             actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
             Assert.Equal(expectedOutput, actualOutput);
         }

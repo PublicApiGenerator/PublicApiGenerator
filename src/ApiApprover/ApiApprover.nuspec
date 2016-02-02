@@ -22,12 +22,11 @@ Don't accidently miss a breaking API change and break semantic versioning again.
     <copyright>Copyright Jake Ginnivan 2015</copyright>
     <tags>semanticversioning versioning approve api</tags>
     <dependencies>
-      <dependency id="ApprovalTests" />
-      <dependency id="Mono.Cecil" />
+      <dependency id="ApprovalTests" version="3.0.0" />
+      <dependency id="PublicApiGenerator" version="$version$" />
     </dependencies>
   </metadata>
   <files>
     <file src="PublicApiApprover.cs" target="content\App_Packages\ApiApprover.$version$\" />
-    <file src="PublicApiGenerator.cs" target="content\App_Packages\ApiApprover.$version$\" />
   </files>
 </package>

@@ -7,15 +7,33 @@ Whenever the public API changes the Api Approver test will fail. Running the tes
 
 There are times though that changes to the public API is accidental. Api Approver simply adds a step that all public API changes have to be reviewed by a developer and accepted, saving accidental breaking changes being shipped.
 
+## PublicApiGenerator
+
+I am moving away from ApiApprover and just publishing PublicAPiGenerator, this has no dependencies and you can choose your own approval library.
+
+Simply install `PublicApiGenerator`
+
+
 ## How do I use it
 > Install-package ApiApprover
 
+or
+
+> Install-package Shouldly
+
 ``` csharp
 [Fact]
-[UseReporter(typeof(DiffReporter))]
 public void my_assembly_has_no_public_api_changes()
 {
-	PublicApiApprover.ApprovePublicApi(typeof(Application).Assembly.Location);
+	var publicApi = PublicApiApprover.GeneratePublicApi(typeof(Application).Assembly);
+
+    // Use an approval framework like
+
+    //Shouldly
+    publicApi.ShouldMatchApproved();
+
+    //ApprovalTests
+    Approvals.Verify(publicApi);
 }
 ```
 
