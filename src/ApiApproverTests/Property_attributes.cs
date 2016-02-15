@@ -174,6 +174,20 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attributes()
+        {
+            AssertPublicApi<PropertyWithSimpleAttributeOnGetterAndSetter>(
+@"namespace ApiApproverTests.Examples
+{
+    public class PropertyWithSimpleAttributeOnGetterAndSetter
+    {
+        public PropertyWithSimpleAttributeOnGetterAndSetter() { }
+        public string Value { get; set; }
+    }
+}", excludedAttributes: new[] { "ApiApproverTests.Examples.SimpleAttribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -252,8 +266,10 @@ namespace ApiApproverTests
         {
             public string Value
             {
-                [SimpleAttribute] get; 
-                [SimpleAttribute] set;
+                [SimpleAttribute]
+                get;
+                [SimpleAttribute]
+                set;
             }
         }
     }

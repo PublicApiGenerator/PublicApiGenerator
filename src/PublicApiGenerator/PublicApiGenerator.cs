@@ -16,9 +16,11 @@ using TypeAttributes = System.Reflection.TypeAttributes;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace PublicApiGenerator
 {
-    public static class PublicApiGenerator
+    public class PublicApiGenerator
     {
-        public static string GetPublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
+
+        public static string GetPublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true,
+            string[] excludedAttributes = null)
         {
             var assemblyResolver = new DefaultAssemblyResolver();
             var assemblyPath = assemby.Location;
@@ -31,12 +33,43 @@ namespace PublicApiGenerator
                 AssemblyResolver = assemblyResolver,
             });
 
-            return CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
+            var generator = new PublicApiGenerator(excludedAttributes ?? new string[0]);
+            return generator.CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
+        }
+
+        readonly HashSet<string> SkipAttributeNames = new HashSet<string>
+        {
+            "System.CodeDom.Compiler.GeneratedCodeAttribute",
+            "System.ComponentModel.EditorBrowsableAttribute",
+            "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
+            "System.Runtime.CompilerServices.CompilerGeneratedAttribute",
+            "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
+            "System.Runtime.CompilerServices.ExtensionAttribute",
+            "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
+            "System.Reflection.DefaultMemberAttribute",
+            "System.Diagnostics.DebuggableAttribute",
+            "System.Diagnostics.DebuggerNonUserCodeAttribute",
+            "System.Diagnostics.DebuggerStepThroughAttribute",
+            "System.Reflection.AssemblyCompanyAttribute",
+            "System.Reflection.AssemblyConfigurationAttribute",
+            "System.Reflection.AssemblyCopyrightAttribute",
+            "System.Reflection.AssemblyDescriptionAttribute",
+            "System.Reflection.AssemblyFileVersionAttribute",
+            "System.Reflection.AssemblyInformationalVersionAttribute",
+            "System.Reflection.AssemblyProductAttribute",
+            "System.Reflection.AssemblyTitleAttribute",
+            "System.Reflection.AssemblyTrademarkAttribute"
+        };
+
+        PublicApiGenerator(string[] excludedAttributes)
+        {
+            foreach (var attribute in excludedAttributes)
+                SkipAttributeNames.Add(attribute);
         }
 
         // TODO: Assembly references?
         // TODO: Better handle namespaces - using statements? - requires non-qualified type names
-        static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes)
+        string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes)
         {
             var publicApiBuilder = new StringBuilder();
             var cgo = new CodeGeneratorOptions
@@ -113,7 +146,7 @@ namespace PublicApiGenerator
             return m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft");
         }
 
-        static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition memberInfo)
+        void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition memberInfo)
         {
             var methodDefinition = memberInfo as MethodDefinition;
             if (methodDefinition != null)
@@ -125,7 +158,7 @@ namespace PublicApiGenerator
             }
             else if (memberInfo is PropertyDefinition)
             {
-                AddPropertyToTypeDeclaration(typeDeclaration, (PropertyDefinition) memberInfo);
+                AddPropertyToTypeDeclaration(typeDeclaration, (PropertyDefinition)memberInfo);
             }
             else if (memberInfo is EventDefinition)
             {
@@ -133,7 +166,7 @@ namespace PublicApiGenerator
             }
             else if (memberInfo is FieldDefinition)
             {
-                AddFieldToTypeDeclaration(typeDeclaration, (FieldDefinition) memberInfo);
+                AddFieldToTypeDeclaration(typeDeclaration, (FieldDefinition)memberInfo);
             }
         }
 
@@ -160,7 +193,7 @@ namespace PublicApiGenerator
             return gennedClass;
         }
 
-        static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType)
+        CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType)
         {
             if (IsDelegate(publicType))
                 return CreateDelegateDeclaration(publicType);
@@ -234,7 +267,7 @@ namespace PublicApiGenerator
             return declaration;
         }
 
-        static CodeTypeDeclaration CreateDelegateDeclaration(TypeDefinition publicType)
+        CodeTypeDeclaration CreateDelegateDeclaration(TypeDefinition publicType)
         {
             var invokeMethod = publicType.Methods.Single(m => m.Name == "Invoke");
             var name = publicType.Name;
@@ -257,7 +290,7 @@ namespace PublicApiGenerator
             if (declaration.TypeParameters.Count > 0)
             {
                 var parameterNames = from parameterType in declaration.TypeParameters.Cast<CodeTypeParameter>()
-                    select parameterType.Name;
+                                     select parameterType.Name;
                 declaration.Name = string.Format("{0}<{1}>", declaration.Name, string.Join(", ", parameterNames));
             }
 
@@ -301,21 +334,21 @@ namespace PublicApiGenerator
             }
         }
 
-        static CodeAttributeDeclarationCollection CreateCustomAttributes(ICustomAttributeProvider type)
+        CodeAttributeDeclarationCollection CreateCustomAttributes(ICustomAttributeProvider type)
         {
             var attributes = new CodeAttributeDeclarationCollection();
             PopulateCustomAttributes(type, attributes);
             return attributes;
         }
 
-        static void PopulateCustomAttributes(ICustomAttributeProvider type,
+        void PopulateCustomAttributes(ICustomAttributeProvider type,
             CodeAttributeDeclarationCollection attributes)
         {
             PopulateCustomAttributes(type, attributes, ctr => ctr);
         }
 
-        static void PopulateCustomAttributes(ICustomAttributeProvider type,
-            CodeAttributeDeclarationCollection attributes, Func<CodeTypeReference, CodeTypeReference> codeTypeModifier)
+        void PopulateCustomAttributes(ICustomAttributeProvider type,
+           CodeAttributeDeclarationCollection attributes, Func<CodeTypeReference, CodeTypeReference> codeTypeModifier)
         {
             foreach (var customAttribute in type.CustomAttributes.Where(ShouldIncludeAttribute).OrderBy(a => a.AttributeType.FullName).ThenBy(a => ConvertAttrbuteToCode(codeTypeModifier, a)))
             {
@@ -366,31 +399,7 @@ namespace PublicApiGenerator
             }
         }
 
-        static readonly HashSet<string> SkipAttributeNames = new HashSet<string>
-        {
-            "System.CodeDom.Compiler.GeneratedCodeAttribute",
-            "System.ComponentModel.EditorBrowsableAttribute",
-            "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
-            "System.Runtime.CompilerServices.CompilerGeneratedAttribute",
-            "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
-            "System.Runtime.CompilerServices.ExtensionAttribute",
-            "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
-            "System.Reflection.DefaultMemberAttribute",
-            "System.Diagnostics.DebuggableAttribute",
-            "System.Diagnostics.DebuggerNonUserCodeAttribute",
-            "System.Diagnostics.DebuggerStepThroughAttribute",
-            "System.Reflection.AssemblyCompanyAttribute",
-            "System.Reflection.AssemblyConfigurationAttribute",
-            "System.Reflection.AssemblyCopyrightAttribute",
-            "System.Reflection.AssemblyDescriptionAttribute",
-            "System.Reflection.AssemblyFileVersionAttribute",
-            "System.Reflection.AssemblyInformationalVersionAttribute",
-            "System.Reflection.AssemblyProductAttribute",
-            "System.Reflection.AssemblyTitleAttribute",
-            "System.Reflection.AssemblyTrademarkAttribute"
-        };
-
-        static bool ShouldIncludeAttribute(CustomAttribute attribute)
+        bool ShouldIncludeAttribute(CustomAttribute attribute)
         {
             return !SkipAttributeNames.Contains(attribute.AttributeType.FullName);
         }
@@ -399,13 +408,13 @@ namespace PublicApiGenerator
         {
             if (attributeArgument.Value is CustomAttributeArgument)
             {
-                return CreateInitialiserExpression((CustomAttributeArgument) attributeArgument.Value);
+                return CreateInitialiserExpression((CustomAttributeArgument)attributeArgument.Value);
             }
 
             if (attributeArgument.Value is CustomAttributeArgument[])
             {
-                var initialisers = from argument in (CustomAttributeArgument[]) attributeArgument.Value
-                    select CreateInitialiserExpression(argument);
+                var initialisers = from argument in (CustomAttributeArgument[])attributeArgument.Value
+                                   select CreateInitialiserExpression(argument);
                 return new CodeArrayCreateExpression(CreateCodeTypeReference(attributeArgument.Type), initialisers.ToArray());
             }
 
@@ -457,7 +466,7 @@ namespace PublicApiGenerator
             return new CodePrimitiveExpression(value);
         }
 
-        static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
+        void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
         {
             if (member.IsAssembly || member.IsPrivate)
                 return;
@@ -473,7 +482,7 @@ namespace PublicApiGenerator
             typeDeclaration.Members.Add(method);
         }
 
-        static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
+        void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member)
         {
             if (member.IsAssembly || member.IsPrivate || member.IsSpecialName)
                 return;
@@ -506,7 +515,7 @@ namespace PublicApiGenerator
             return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute");
         }
 
-        static void PopulateMethodParameters(IMethodSignature member,
+        void PopulateMethodParameters(IMethodSignature member,
             CodeParameterDeclarationExpressionCollection parameters, bool isExtension = false)
         {
             foreach (var parameter in member.Parameters)
@@ -586,9 +595,9 @@ namespace PublicApiGenerator
             if (typeDefinition.IsInterface)
             {
                 var interfaceMethods = from @interfaceReference in typeDefinition.Interfaces
-                    let interfaceDefinition = @interfaceReference.Resolve()
-                    where interfaceDefinition != null
-                    select interfaceDefinition.Methods;
+                                       let interfaceDefinition = @interfaceReference.Resolve()
+                                       where interfaceDefinition != null
+                                       select interfaceDefinition.Methods;
 
                 return interfaceMethods.Any(ms => MetadataResolver.GetMethod(ms, method) != null);
             }
@@ -611,7 +620,7 @@ namespace PublicApiGenerator
             }
         }
 
-        static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member)
+        void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member)
         {
             var getterAttributes = member.GetMethod != null ? GetMethodAttributes(member.GetMethod) : 0;
             var setterAttributes = member.SetMethod != null ? GetMethodAttributes(member.SetMethod) : 0;
@@ -680,12 +689,12 @@ namespace PublicApiGenerator
             // Scope should be the same for getter and setter. If one isn't specified, it'll be 0
             var getterScope = getterAttributes & MemberAttributes.ScopeMask;
             var setterScope = setterAttributes & MemberAttributes.ScopeMask;
-            var scope = (MemberAttributes) Math.Max((int) getterScope, (int) setterScope);
+            var scope = (MemberAttributes)Math.Max((int)getterScope, (int)setterScope);
 
             // Vtable should be the same for getter and setter. If one isn't specified, it'll be 0
             var getterVtable = getterAttributes & MemberAttributes.VTableMask;
             var setterVtable = setterAttributes & MemberAttributes.VTableMask;
-            var vtable = (MemberAttributes) Math.Max((int) getterVtable, (int) setterVtable);
+            var vtable = (MemberAttributes)Math.Max((int)getterVtable, (int)setterVtable);
 
             return access | scope | vtable;
         }
@@ -697,7 +706,7 @@ namespace PublicApiGenerator
                    access == MemberAttributes.FamilyOrAssembly;
         }
 
-        static CodeTypeMember GenerateEvent(EventDefinition eventDefinition)
+        CodeTypeMember GenerateEvent(EventDefinition eventDefinition)
         {
             var @event = new CodeMemberEvent
             {
@@ -710,7 +719,7 @@ namespace PublicApiGenerator
             return @event;
         }
 
-        static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo)
+        void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo)
         {
             if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsSpecialName)
                 return;

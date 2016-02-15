@@ -71,6 +71,21 @@ namespace ApiApproverTests
 }");
         }
 
+        [Fact]
+        public void Should_skip_excluded_enum_attribute()
+        {
+            AssertPublicApi<EnumWithFlagsAttribute>(
+@"namespace ApiApproverTests.Examples
+{
+    public enum EnumWithFlagsAttribute
+    {
+        One = 1,
+        Two = 2,
+        Three = 3,
+    }
+}", excludedAttributes: new[] { "System.FlagsAttribute" });
+        }
+
         // TODO: Enum with flags + undefined value
         // Not supported by Cecil?
     }

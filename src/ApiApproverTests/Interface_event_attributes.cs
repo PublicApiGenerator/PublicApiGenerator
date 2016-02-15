@@ -19,6 +19,19 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<IInterfaceWithEventWithAttribute>(
+@"namespace ApiApproverTests.Examples
+{
+    public interface IInterfaceWithEventWithAttribute
+    {
+        public event System.EventHandler OnClicked;
+    }
+}", excludedAttributes: new[] { "ApiApproverTests.Examples.SimpleAttribute" });
+        }
     }
 
     // ReSharper disable EventNeverSubscribedTo.Global

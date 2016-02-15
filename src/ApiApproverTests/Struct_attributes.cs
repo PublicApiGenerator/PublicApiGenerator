@@ -102,6 +102,16 @@ namespace ApiApproverTests
     public struct StructWithMultipleAttributes { }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<StructWithSimpleAttribute>(
+@"namespace ApiApproverTests.Examples
+{
+    public struct StructWithSimpleAttribute { }
+}", excludedAttributes: new[] { "ApiApproverTests.Examples.SimpleAttribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global
