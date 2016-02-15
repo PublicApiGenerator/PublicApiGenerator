@@ -150,6 +150,16 @@ namespace ApiApproverTests
     public interface IInterfaceWithAttributeWithStringArrayInitialiser { }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<IInterfaceWithSimpleAttribute>(
+@"namespace ApiApproverTests.Examples
+{
+    public interface IInterfaceWithSimpleAttribute { }
+}", excludedAttributes: new[] { "ApiApproverTests.Examples.SimpleAttribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global

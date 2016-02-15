@@ -105,6 +105,22 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<MethodParameterWithAttributeWithPositionalParameters>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodParameterWithAttributeWithPositionalParameters
+    {
+        public MethodParameterWithAttributeWithPositionalParameters() { }
+        public void Method1([ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")] int value) { }
+        public void Method2(int value) { }
+        public void Method3([ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")] int value) { }
+    }
+}", excludedAttributes: new[] { "ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global

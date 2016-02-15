@@ -133,6 +133,20 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<MethodReturnValueWithAttributeWithMultipleNamedParameters>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodReturnValueWithAttributeWithMultipleNamedParameters
+    {
+        public MethodReturnValueWithAttributeWithMultipleNamedParameters() { }
+        public void Method() { }
+    }
+}", excludedAttributes: new[] { "ApiApproverTests.Examples.AttributeWithNamedParameterAttribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global

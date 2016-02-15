@@ -19,7 +19,8 @@ namespace PublicApiGenerator
     public class PublicApiGenerator
     {
 
-        public static string GetPublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
+        public static string GetPublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true,
+            string[] excludedAttributes = null)
         {
             var assemblyResolver = new DefaultAssemblyResolver();
             var assemblyPath = assemby.Location;
@@ -32,37 +33,38 @@ namespace PublicApiGenerator
                 AssemblyResolver = assemblyResolver,
             });
 
-            var generator = new PublicApiGenerator();
+            var generator = new PublicApiGenerator(excludedAttributes ?? new string[0]);
             return generator.CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
         }
 
-        readonly HashSet<string> SkipAttributeNames;
-
-        PublicApiGenerator()
+        readonly HashSet<string> SkipAttributeNames = new HashSet<string>
         {
-            SkipAttributeNames = new HashSet<string>
-            {
-                "System.CodeDom.Compiler.GeneratedCodeAttribute",
-                "System.ComponentModel.EditorBrowsableAttribute",
-                "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
-                "System.Runtime.CompilerServices.CompilerGeneratedAttribute",
-                "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
-                "System.Runtime.CompilerServices.ExtensionAttribute",
-                "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
-                "System.Reflection.DefaultMemberAttribute",
-                "System.Diagnostics.DebuggableAttribute",
-                "System.Diagnostics.DebuggerNonUserCodeAttribute",
-                "System.Diagnostics.DebuggerStepThroughAttribute",
-                "System.Reflection.AssemblyCompanyAttribute",
-                "System.Reflection.AssemblyConfigurationAttribute",
-                "System.Reflection.AssemblyCopyrightAttribute",
-                "System.Reflection.AssemblyDescriptionAttribute",
-                "System.Reflection.AssemblyFileVersionAttribute",
-                "System.Reflection.AssemblyInformationalVersionAttribute",
-                "System.Reflection.AssemblyProductAttribute",
-                "System.Reflection.AssemblyTitleAttribute",
-                "System.Reflection.AssemblyTrademarkAttribute"
-            };
+            "System.CodeDom.Compiler.GeneratedCodeAttribute",
+            "System.ComponentModel.EditorBrowsableAttribute",
+            "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
+            "System.Runtime.CompilerServices.CompilerGeneratedAttribute",
+            "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
+            "System.Runtime.CompilerServices.ExtensionAttribute",
+            "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
+            "System.Reflection.DefaultMemberAttribute",
+            "System.Diagnostics.DebuggableAttribute",
+            "System.Diagnostics.DebuggerNonUserCodeAttribute",
+            "System.Diagnostics.DebuggerStepThroughAttribute",
+            "System.Reflection.AssemblyCompanyAttribute",
+            "System.Reflection.AssemblyConfigurationAttribute",
+            "System.Reflection.AssemblyCopyrightAttribute",
+            "System.Reflection.AssemblyDescriptionAttribute",
+            "System.Reflection.AssemblyFileVersionAttribute",
+            "System.Reflection.AssemblyInformationalVersionAttribute",
+            "System.Reflection.AssemblyProductAttribute",
+            "System.Reflection.AssemblyTitleAttribute",
+            "System.Reflection.AssemblyTrademarkAttribute"
+        };
+
+        PublicApiGenerator(string[] excludedAttributes)
+        {
+            foreach (var attribute in excludedAttributes)
+                SkipAttributeNames.Add(attribute);
         }
 
         // TODO: Assembly references?
