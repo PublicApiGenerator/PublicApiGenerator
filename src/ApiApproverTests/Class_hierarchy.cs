@@ -74,6 +74,19 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_not_output_internal_interfaces_on_class()
+        {
+            AssertPublicApi<ClassWithInternalInterface>(
+@"namespace ApiApproverTests.Examples
+{
+    public class ClassWithInternalInterface
+    {
+        public ClassWithInternalInterface() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -112,6 +125,10 @@ namespace ApiApproverTests
         }
 
         public class DerivedFromClassWithInterfaces : ClassWithInterfaces
+        {
+        }
+
+        public class ClassWithInternalInterface : IInternalInterface
         {
         }
     }
