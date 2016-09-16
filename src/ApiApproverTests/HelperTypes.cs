@@ -153,6 +153,10 @@ namespace ApiApproverTests.Examples
         {
         }
     }
+
+    internal class AttributeWhichIsInternal : Attribute
+    {
+    }
 }
 // ReSharper restore UnusedMember.Global
 // ReSharper restore UnusedAutoPropertyAccessor.Global
