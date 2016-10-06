@@ -260,6 +260,19 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_not_output_internal_attributes()
+        {
+            AssertPublicApi<ClassWithInternalAttribute>(
+@"namespace ApiApproverTests.Examples
+{
+    public class ClassWithInternalAttribute
+    {
+        public ClassWithInternalAttribute() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -362,6 +375,11 @@ namespace ApiApproverTests
         [AttributeWithMultipleUsagesSupport(IntValue = 1, StringValue = "MMM")]
         [AttributeWithMultipleUsagesSupport(IntValue = 2, StringValue = "AAA")]
         public class ClassWithAttributeWithMultipleUsagesSupport
+        {
+        }
+
+        [AttributeWhichIsInternal]
+        public class ClassWithInternalAttribute
         {
         }
     }
