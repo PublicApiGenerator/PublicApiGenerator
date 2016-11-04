@@ -16,9 +16,9 @@ using TypeAttributes = System.Reflection.TypeAttributes;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace PublicApiGenerator
 {
-    public static class PublicApiGenerator
+    public static class ApiGenerator
     {
-        public static string GetPublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
+        public static string GeneratePublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
         {
             var assemblyResolver = new DefaultAssemblyResolver();
             var assemblyPath = assemby.Location;
@@ -791,6 +791,17 @@ namespace PublicApiGenerator
                 genericArguments.Add(CreateCodeTypeReference(argument));
             }
             return genericArguments.ToArray();
+        }
+    }
+
+    static class CecilEx
+    {
+        public static IEnumerable<IMemberDefinition> GetMembers(this TypeDefinition type)
+        {
+            return type.Fields.Cast<IMemberDefinition>()
+                .Concat(type.Methods)
+                .Concat(type.Properties)
+                .Concat(type.Events);
         }
     }
 }

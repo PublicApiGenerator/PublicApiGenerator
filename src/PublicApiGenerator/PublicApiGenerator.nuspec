@@ -12,9 +12,15 @@
     <description>This library simply returns your public API as a string. You can use this in approval style tests or for documentation</description>
     <copyright>Copyright Jake Ginnivan 2015</copyright>
     <tags>semanticversioning versioning api</tags>
+    <releaseNotes>
+      v5.0 Breaking changes:
+      - Converted to source only package
+    </releaseNotes>
+    <dependencies>
+      <dependency id="Mono.Cecil" version="0.9.6.4" />
+    </dependencies>
   </metadata>
   <files>
-    <file src="bin\$configuration$\Merged\PublicApiGenerator.dll" target="lib\net40\" />
-    <file src="bin\$configuration$\Merged\PublicApiGenerator.pdb" target="lib\net40\" />
+    <file src="ApiGenerator.cs" target="content\App_Packages\PublicApiGenerator.$version$\" />
   </files>
 </package>

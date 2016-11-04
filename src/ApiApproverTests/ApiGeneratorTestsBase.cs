@@ -26,7 +26,7 @@ namespace ApiApproverTests
 
         private static void AssertPublicApi(Assembly assembly, Type[] types, string expectedOutput, bool includeAssemblyAttributes)
         {
-            var actualOutput = PublicApiGenerator.PublicApiGenerator.GetPublicApi(assembly, types, includeAssemblyAttributes);
+            var actualOutput = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes);
             actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
             Assert.Equal(expectedOutput, actualOutput);
         }

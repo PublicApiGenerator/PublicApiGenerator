@@ -2,7 +2,6 @@
 using System.Reflection;
 using ApprovalTests;
 using ApprovalTests.Namers;
-using Mono.Cecil;
 
 namespace ApiApprover
 {
@@ -10,10 +9,10 @@ namespace ApiApprover
     {
         public static void ApprovePublicApi(Assembly assembly)
         {
-            var publicApi = PublicApiGenerator.PublicApiGenerator.GetPublicApi(assembly);
+            var publicApi = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly);
             var writer = new ApprovalTextWriter(publicApi, "cs");
             var approvalNamer = new AssemblyPathNamer(assembly.Location);
-            ApprovalTests.Approvals.Verify(writer, approvalNamer, ApprovalTests.Approvals.GetReporter());
+            Approvals.Verify(writer, approvalNamer, Approvals.GetReporter());
         }
 
         private class AssemblyPathNamer : UnitTestFrameworkNamer

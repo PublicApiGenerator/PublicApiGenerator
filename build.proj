@@ -5,13 +5,13 @@
     <Message Text=" ===========Packaging code===========" Importance="High" />
 
     <PropertyGroup>
-      <Version>4.2.0</Version>
+      <Version>5.0.0</Version>
     </PropertyGroup>
     <ItemGroup>
       <Nuget Include="$(MSBuildProjectDirectory)\src\packages\NuGet.CommandLine.*\tools\NuGet.exe" />
     </ItemGroup>
     <MSBuild Projects="$(MSBuildProjectDirectory)\src\ApiApprover.sln" />
     <Exec Command='"@(Nuget)" pack "$(MSBuildProjectDirectory)\src\ApiApprover\ApiApprover.nuspec" -Prop version=$(Version)' />
-    <Exec Command='"@(Nuget)" pack "$(MSBuildProjectDirectory)\src\PublicApiGenerator\PublicApiGenerator.nuspec" -Prop version=$(Version) -Prop Configuration=$(Configuration)' />
+    <Exec Command='"@(Nuget)" pack "$(MSBuildProjectDirectory)\src\PublicApiGenerator\PublicApiGenerator.nuspec" -Prop version=$(Version)' />
   </Target>
 </Project>
