@@ -18,10 +18,10 @@ namespace PublicApiGenerator
 {
     public static class PublicApiGenerator
     {
-        public static string GetPublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
+        public static string GetPublicApi(Assembly assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes = true)
         {
             var assemblyResolver = new DefaultAssemblyResolver();
-            var assemblyPath = assemby.Location;
+            var assemblyPath = assembly.Location;
             assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyPath));
 
             var readSymbols = File.Exists(Path.ChangeExtension(assemblyPath, ".pdb"));
@@ -31,7 +31,12 @@ namespace PublicApiGenerator
                 AssemblyResolver = assemblyResolver,
             });
 
-            return CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
+            return CreatePublicApiForAssembly(asm, shouldIncludeType, shouldIncludeAssemblyAttributes);
+        }
+
+        public static string GetPublicApi(Assembly assembly, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
+        {
+            return GetPublicApi(assembly, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
         }
 
         // TODO: Assembly references?
