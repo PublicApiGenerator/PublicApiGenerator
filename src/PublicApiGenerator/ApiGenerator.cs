@@ -647,7 +647,7 @@ namespace PublicApiGenerator
             }
             if (member.SetMethod != null && member.SetMethod.HasCustomAttributes)
             {
-                PopulateCustomAttributes(member.GetMethod, property.CustomAttributes, type => ModifyCodeTypeReference(type, "set:"));
+                PopulateCustomAttributes(member.SetMethod, property.CustomAttributes, type => ModifyCodeTypeReference(type, "set:"));
             }
 
             foreach (var parameter in member.Parameters)
