@@ -15,7 +15,7 @@ namespace ApiApproverTests
     public class MethodAsyncVoid
     {
         public MethodAsyncVoid() { }
-        public async void AsyncMethod() { }
+        public void AsyncMethod() { }
     }
 }");
         }
@@ -29,7 +29,7 @@ namespace ApiApproverTests
     public class MethodAsync
     {
         public MethodAsync() { }
-        public async System.Threading.Tasks.Task AsyncMethod() { }
+        public System.Threading.Tasks.Task AsyncMethod() { }
     }
 }");
         }
@@ -57,7 +57,7 @@ namespace ApiApproverTests
     public class MethodAsyncReturnValue
     {
         public MethodAsyncReturnValue() { }
-        public async System.Threading.Tasks.Task<string> AsyncMethod() { }
+        public System.Threading.Tasks.Task<string> AsyncMethod() { }
     }
 }");
         }
