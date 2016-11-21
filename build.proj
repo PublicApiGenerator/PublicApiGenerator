@@ -5,7 +5,7 @@
     <Message Text=" ===========Packaging code===========" Importance="High" />
 
     <PropertyGroup>
-      <Version>5.0.0</Version>
+      <Version>6.0.0</Version>
     </PropertyGroup>
     <ItemGroup>
       <Nuget Include="$(MSBuildProjectDirectory)\src\packages\NuGet.CommandLine.*\tools\NuGet.exe" />
