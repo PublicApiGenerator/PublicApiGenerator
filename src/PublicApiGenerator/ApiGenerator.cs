@@ -262,7 +262,7 @@ namespace PublicApiGenerator
             {
                 var parameterNames = from parameterType in declaration.TypeParameters.Cast<CodeTypeParameter>()
                     select parameterType.Name;
-                declaration.Name = string.Format("{0}<{1}>", declaration.Name, string.Join(", ", parameterNames));
+                declaration.Name = string.Format(CultureInfo.InvariantCulture, "{0}<{1}>", declaration.Name, string.Join(", ", parameterNames));
             }
 
             return declaration;
@@ -548,7 +548,7 @@ namespace PublicApiGenerator
 
         static object FormatParameterConstant(IConstantProvider parameter)
         {
-            return parameter.Constant is string ? string.Format("\"{0}\"", parameter.Constant) : (parameter.Constant ?? "null");
+            return parameter.Constant is string ? string.Format(CultureInfo.InvariantCulture, "\"{0}\"", parameter.Constant) : (parameter.Constant ?? "null");
         }
 
         static MemberAttributes GetMethodAttributes(MethodDefinition method)
