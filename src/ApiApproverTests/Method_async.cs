@@ -15,7 +15,35 @@ namespace ApiApproverTests
     public class MethodAsyncVoid
     {
         public MethodAsyncVoid() { }
-        public async void AsyncMethod() { }
+        public void AsyncMethod() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_async_method()
+        {
+            AssertPublicApi<MethodAsync>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodAsync
+    {
+        public MethodAsync() { }
+        public System.Threading.Tasks.Task AsyncMethod() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_async_method_without_keyword()
+        {
+            AssertPublicApi<MethodAsyncWithoutAsyncKeyword>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodAsyncWithoutAsyncKeyword
+    {
+        public MethodAsyncWithoutAsyncKeyword() { }
+        public System.Threading.Tasks.Task AsyncMethod() { }
     }
 }");
         }
@@ -29,7 +57,21 @@ namespace ApiApproverTests
     public class MethodAsyncReturnValue
     {
         public MethodAsyncReturnValue() { }
-        public async System.Threading.Tasks.Task<string> AsyncMethod() { }
+        public System.Threading.Tasks.Task<string> AsyncMethod() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_async_method_without_keyword_with_return_value()
+        {
+            AssertPublicApi<MethodAsyncReturnValueWithoutAsyncKeyword>(
+@"namespace ApiApproverTests.Examples
+{
+    public class MethodAsyncReturnValueWithoutAsyncKeyword
+    {
+        public MethodAsyncReturnValueWithoutAsyncKeyword() { }
+        public System.Threading.Tasks.Task<string> AsyncMethod() { }
     }
 }");
         }
@@ -48,11 +90,34 @@ namespace ApiApproverTests
             }
         }
 
+        public class MethodAsync
+        {
+            public async Task AsyncMethod()
+            {
+            }
+        }
+
+        public class MethodAsyncWithoutAsyncKeyword
+        {
+            public Task AsyncMethod()
+            {
+                return Task.FromResult(0);
+            }
+        }
+
         public class MethodAsyncReturnValue
         {
             public async Task<string> AsyncMethod()
             {
                 return await Task.FromResult("Hello world");
+            }
+        }
+
+        public class MethodAsyncReturnValueWithoutAsyncKeyword
+        {
+            public Task<string> AsyncMethod()
+            {
+                return Task.FromResult("Hello world");
             }
         }
     }
