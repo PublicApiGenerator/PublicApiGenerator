@@ -21,18 +21,21 @@ namespace PublicApiGenerator
     {
         public static string GeneratePublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
         {
-            var assemblyResolver = new DefaultAssemblyResolver();
-            var assemblyPath = assemby.Location;
-            assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyPath));
-
-            var readSymbols = File.Exists(Path.ChangeExtension(assemblyPath, ".pdb"));
-            var asm = AssemblyDefinition.ReadAssembly(assemblyPath, new ReaderParameters(ReadingMode.Deferred)
+            using (var assemblyResolver = new DefaultAssemblyResolver())
             {
-                ReadSymbols = readSymbols,
-                AssemblyResolver = assemblyResolver,
-            });
+                var assemblyPath = assemby.Location;
+                assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyPath));
 
-            return CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
+                var readSymbols = File.Exists(Path.ChangeExtension(assemblyPath, ".pdb"));
+                using (var asm = AssemblyDefinition.ReadAssembly(assemblyPath, new ReaderParameters(ReadingMode.Deferred)
+                {
+                    ReadSymbols = readSymbols,
+                    AssemblyResolver = assemblyResolver,
+                }))
+                {
+                    return CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
+                }
+            }
         }
 
         // TODO: Assembly references?
@@ -213,11 +216,11 @@ namespace PublicApiGenerator
                 else
                     declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
             }
-            foreach(var @interface in publicType.Interfaces.OrderBy(i => i.FullName)
-                .Select(t => new { Reference = t, Definition = t.Resolve() })
+            foreach(var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName)
+                .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
                 .Where(t => ShouldIncludeType(t.Definition))
                 .Select(t => t.Reference))
-                declaration.BaseTypes.Add(CreateCodeTypeReference(@interface));
+                declaration.BaseTypes.Add(CreateCodeTypeReference(@interface.InterfaceType));
 
             foreach (var memberInfo in publicType.GetMembers().Where(ShouldIncludeMember).OrderBy(m => m.Name))
                 AddMemberToTypeDeclaration(declaration, memberInfo);
@@ -584,7 +587,7 @@ namespace PublicApiGenerator
             if (typeDefinition.IsInterface)
             {
                 var interfaceMethods = from @interfaceReference in typeDefinition.Interfaces
-                    let interfaceDefinition = @interfaceReference.Resolve()
+                    let interfaceDefinition = @interfaceReference.InterfaceType.Resolve()
                     where interfaceDefinition != null
                     select interfaceDefinition.Methods;
 
