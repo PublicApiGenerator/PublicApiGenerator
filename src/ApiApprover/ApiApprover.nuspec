@@ -17,7 +17,7 @@ Don't accidently miss a breaking API change and break semantic versioning again.
       v3.0 Breaking changes:
       - Default constructor is now always shown
       - resultsPath argument removed, use [UseApprovalSubdirectory("resultsPath")] instead
-	  v3.0.1 - Moved file location to fit with http://nikcodes.com/2013/10/23/packaging-source-code-with-nuget
+      v3.0.1 - Moved file location to fit with http://nikcodes.com/2013/10/23/packaging-source-code-with-nuget
     </releaseNotes>
     <copyright>Copyright Jake Ginnivan 2015</copyright>
     <tags>semanticversioning versioning approve api</tags>
@@ -28,5 +28,6 @@ Don't accidently miss a breaking API change and break semantic versioning again.
   </metadata>
   <files>
     <file src="PublicApiApprover.cs" target="content\App_Packages\ApiApprover.$version$\" />
+    <file src="PublicApiApprover.cs" target="contentFiles\cs\any\ApiApprover\" />
   </files>
 </package>

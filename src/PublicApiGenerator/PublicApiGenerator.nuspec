@@ -26,5 +26,6 @@
   </metadata>
   <files>
     <file src="ApiGenerator.cs" target="content\App_Packages\PublicApiGenerator.$version$\" />
+    <file src="ApiGenerator.cs" target="contentFiles\cs\any\PublicApiGenerator\" />
   </files>
 </package>
