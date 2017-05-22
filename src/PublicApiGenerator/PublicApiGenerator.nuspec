@@ -13,6 +13,9 @@
     <copyright>Copyright Jake Ginnivan 2015</copyright>
     <tags>semanticversioning versioning api</tags>
     <releaseNotes>
+      v6.1 Changes:    
+      - Support for content files in nuspec
+      - Bump of Mono.Cecil dependency
       v6.0 Breaking changes:
       - The async keyword doesn't influence the public API and therefore is no longer treated as part of the public API.
       v5.0 Breaking changes:
