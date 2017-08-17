@@ -9,6 +9,7 @@
     <Description>This library simply returns your public API as a string. You can use this in approval style tests or for documentation.</Description>
     <IsPackable>true</IsPackable>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

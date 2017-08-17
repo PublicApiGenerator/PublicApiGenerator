@@ -18,6 +18,7 @@
 Don't accidently miss a breaking API change and break semantic versioning again.</Description>
     <IsPackable>true</IsPackable>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
