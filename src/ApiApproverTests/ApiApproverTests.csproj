@@ -8,6 +8,10 @@
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta5*" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\PublicApiGenerator\PublicApiGenerator.csproj" />
     <ProjectReference Include="..\ApiApprover\ApiApprover.csproj" />
