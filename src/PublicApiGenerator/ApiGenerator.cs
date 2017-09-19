@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -27,7 +27,8 @@ namespace PublicApiGenerator
             {
                 var assemblyPath = assemby.Location;
                 assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyPath));
-
+                assemblyResolver.AddSearchDirectory(AppDomain.CurrentDomain.BaseDirectory);
+                
                 var readSymbols = File.Exists(Path.ChangeExtension(assemblyPath, ".pdb"));
                 using (var asm = AssemblyDefinition.ReadAssembly(assemblyPath, new ReaderParameters(ReadingMode.Deferred)
                 {
