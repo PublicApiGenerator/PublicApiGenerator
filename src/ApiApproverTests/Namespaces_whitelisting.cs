@@ -19,7 +19,7 @@ namespace ApiApproverTests
     {
         public Simple2() { }
     }
-}");
+}", whitelistedNamespacePrefixes: new[] { "Microsoft.Whitelisted" });
         }
     }
 }
