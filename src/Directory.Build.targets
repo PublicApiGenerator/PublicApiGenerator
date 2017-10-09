@@ -1,0 +1,13 @@
+<Project>
+
+  <PropertyGroup>
+    <authors>Jake Ginnivan</authors>
+    <owners>Jake Ginnivan</owners>
+    <projectUrl>https://github.com/JakeGinnivan/ApiApprover</projectUrl>
+    <licenseUrl>https://github.com/JakeGinnivan/ApiApprover/blob/master/LICENSE</licenseUrl>
+    <Copyright>Copyright Jake Ginnivan 2010-$([System.DateTime]::UtcNow.ToString(yyyy)). All rights reserved</Copyright>
+    <PackageTags>semanticversioning versioning api</PackageTags>
+    <PackageOutputPath>..\..\nugets</PackageOutputPath>
+  </PropertyGroup>
+
+</Project>
