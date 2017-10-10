@@ -4,7 +4,7 @@
     <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-	  <PackageReference Include="xunit" Version="1.9.2" />
+	  <PackageReference Include="xunit" Version="2.3" />
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta5*" />
   </ItemGroup>
 

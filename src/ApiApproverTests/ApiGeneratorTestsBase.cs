@@ -28,7 +28,8 @@ namespace ApiApproverTests
         {
             var actualOutput = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes, whitelistedNamespacePrefixes);
             actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
-            Assert.Equal(expectedOutput, actualOutput);
+            Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
+                ignoreWhiteSpaceDifferences: true);
         }
     }
 }
