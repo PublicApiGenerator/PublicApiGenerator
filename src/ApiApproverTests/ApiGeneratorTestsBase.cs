@@ -19,14 +19,14 @@ namespace ApiApproverTests
             AssertPublicApi(new[] { type }, expectedOutput, includeAssemblyAttributes);
         }
 
-        protected void AssertPublicApi(Type[] types, string expectedOutput, bool includeAssemblyAttributes = false)
+        protected void AssertPublicApi(Type[] types, string expectedOutput, bool includeAssemblyAttributes = false, string[] whitelistedNamespacePrefixes = default(string[]))
         {
-            AssertPublicApi(GetType().Assembly, types, expectedOutput, includeAssemblyAttributes);
+            AssertPublicApi(GetType().Assembly, types, expectedOutput, includeAssemblyAttributes, whitelistedNamespacePrefixes);
         }
 
-        private static void AssertPublicApi(Assembly assembly, Type[] types, string expectedOutput, bool includeAssemblyAttributes)
+        private static void AssertPublicApi(Assembly assembly, Type[] types, string expectedOutput, bool includeAssemblyAttributes, string[] whitelistedNamespacePrefixes)
         {
-            var actualOutput = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes);
+            var actualOutput = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes, whitelistedNamespacePrefixes);
             actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
             Assert.Equal(expectedOutput, actualOutput);
         }

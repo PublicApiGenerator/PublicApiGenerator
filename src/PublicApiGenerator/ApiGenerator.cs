@@ -19,7 +19,9 @@ namespace PublicApiGenerator
 {
     public static class ApiGenerator
     {
-        public static string GeneratePublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true)
+        static readonly string[] defaultWhitelistedNamespacePrefixes = new string[0];
+
+        public static string GeneratePublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[] whitelistedNamespacePrefixes = null)
         {
             using (var assemblyResolver = new DefaultAssemblyResolver())
             {
@@ -33,14 +35,15 @@ namespace PublicApiGenerator
                     AssemblyResolver = assemblyResolver,
                 }))
                 {
-                    return CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), shouldIncludeAssemblyAttributes);
+                    return CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), 
+                        shouldIncludeAssemblyAttributes, whitelistedNamespacePrefixes ?? defaultWhitelistedNamespacePrefixes);
                 }
             }
         }
 
         // TODO: Assembly references?
         // TODO: Better handle namespaces - using statements? - requires non-qualified type names
-        static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes)
+        static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] whitelistedNamespacePrefixes)
         {
             var publicApiBuilder = new StringBuilder();
             var cgo = new CodeGeneratorOptions
@@ -71,7 +74,7 @@ namespace PublicApiGenerator
                         compileUnit.Namespaces.Add(@namespace);
                     }
 
-                    var typeDeclaration = CreateTypeDeclaration(publicType);
+                    var typeDeclaration = CreateTypeDeclaration(publicType, whitelistedNamespacePrefixes);
                     @namespace.Types.Add(typeDeclaration);
                 }
 
@@ -100,9 +103,9 @@ namespace PublicApiGenerator
             return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily) && !IsCompilerGenerated(t);
         }
 
-        static bool ShouldIncludeMember(IMemberDefinition m)
+        static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
         {
-            return !IsCompilerGenerated(m) && !IsDotNetTypeMember(m) && !(m is FieldDefinition);
+            return !IsCompilerGenerated(m) && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
         }
 
         static bool IsCompilerGenerated(IMemberDefinition m)
@@ -110,11 +113,13 @@ namespace PublicApiGenerator
             return m.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute");
         }
 
-        static bool IsDotNetTypeMember(IMemberDefinition m)
+        static bool IsDotNetTypeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
         {
-            if (m.DeclaringType == null || m.DeclaringType.FullName == null)
+            if (m.DeclaringType?.FullName == null)
                 return false;
-            return m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft");
+
+            return m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft")
+                && !whitelistedNamespacePrefixes.Any(prefix => m.DeclaringType.FullName.StartsWith(prefix));
         }
 
         static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition memberInfo)
@@ -164,7 +169,7 @@ namespace PublicApiGenerator
             return gennedClass;
         }
 
-        static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType)
+        static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] whitelistedNamespacePrefixes)
         {
             if (IsDelegate(publicType))
                 return CreateDelegateDeclaration(publicType);
@@ -222,7 +227,7 @@ namespace PublicApiGenerator
                 .Select(t => t.Reference))
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface.InterfaceType));
 
-            foreach (var memberInfo in publicType.GetMembers().Where(ShouldIncludeMember).OrderBy(m => m.Name))
+            foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name))
                 AddMemberToTypeDeclaration(declaration, memberInfo);
 
             // Fields should be in defined order for an enum
@@ -234,7 +239,7 @@ namespace PublicApiGenerator
 
             foreach (var nestedType in publicType.NestedTypes.Where(ShouldIncludeType).OrderBy(t => t.FullName))
             {
-                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType);
+                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, whitelistedNamespacePrefixes);
                 declaration.Members.Add(nestedTypeDeclaration);
             }
 
