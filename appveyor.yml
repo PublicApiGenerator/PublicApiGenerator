@@ -12,5 +12,8 @@ branches:
   - master
 build:
   project: src/ApiApprover.sln
-test_script:
-- ps: nunit3-console (ls -r **\bin\Debug\**\*Tests.dll | % FullName | sort-object -Unique) --inprocess --result="myresults.xml;format=AppVeyor"
+test:
+  # only assemblies to test
+  assemblies:
+    only:
+      - '**\bin\**\ApiApproverTests.dll'
