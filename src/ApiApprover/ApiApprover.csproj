@@ -4,11 +4,8 @@
     <TargetFramework>net40</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="3.0.8" />
-    <PackageReference Include="ApprovalUtilities" Version="3.0.8" PrivateAssets="All" />
-	  <PackageReference Include="JetBrains.dotMemoryUnit" Version="2.1.20150828.125449" PrivateAssets="All" />
-	  <PackageReference Include="xunit" Version="1.9.2" PrivateAssets="All" />
-    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta5" />
+    <PackageReference Include="ApprovalTests" Version="3.*" />
+
   </ItemGroup>
 
   <PropertyGroup>
