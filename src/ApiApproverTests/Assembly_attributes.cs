@@ -9,6 +9,7 @@ using Xunit;
 [assembly: AttributeWithPositionalParameters2(42)]
 [assembly: AttributeWithMultiplePositionalParameters(42, "Hello")]
 [assembly: AttributeWithNamedParameterAttribute(StringValue = "Hello", IntValue = 42)]
+[assembly: ComVisibleAttribute(false)]
 
 namespace ApiApproverTests
 {
