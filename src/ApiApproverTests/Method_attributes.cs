@@ -1,4 +1,9 @@
-﻿using ApiApproverTests.Examples;
+﻿using System.CodeDom.Compiler;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using ApiApproverTests.Examples;
 using Xunit;
 
 namespace ApiApproverTests
@@ -136,6 +141,20 @@ namespace ApiApproverTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_ignore_compiler_attributes()
+        {
+            AssertPublicApi<MethodWithCompilerAttributes>(
+                @"namespace ApiApproverTests.Examples
+{
+    public class MethodWithCompilerAttributes
+    {
+        public MethodWithCompilerAttributes() { }
+        public void Method() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -224,6 +243,21 @@ namespace ApiApproverTests
             {
             }
         }
+
+        [DefaultMember("Method")]
+        public class MethodWithCompilerAttributes
+        {
+            [IteratorStateMachine(typeof(MethodWithCompilerAttributes))]
+            [AsyncStateMachine(typeof(MethodWithCompilerAttributes))]
+            [GeneratedCode("foo", "4.0")]
+            [EditorBrowsable(EditorBrowsableState.Never)]
+            [DebuggerNonUserCodeAttribute]
+            [DebuggerStepThroughAttribute]
+            public void Method()
+            {
+            }
+        }
+
     }
     // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore UnusedMember.Global

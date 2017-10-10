@@ -387,6 +387,7 @@ namespace PublicApiGenerator
             "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
             "System.Runtime.CompilerServices.ExtensionAttribute",
             "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
+            "System.Runtime.CompilerServices.IteratorStateMachineAttribute",
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
             "System.Diagnostics.DebuggerNonUserCodeAttribute",
