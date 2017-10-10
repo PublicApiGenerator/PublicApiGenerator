@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ApprovalTests" Version="3.*" />
-
   </ItemGroup>
 
   <PropertyGroup>
@@ -28,4 +27,15 @@ Don't accidently miss a breaking API change and break semantic versioning again.
   <ItemGroup>
 	  <ProjectReference Include="..\PublicApiGenerator\PublicApiGenerator.csproj" />
   </ItemGroup>    
+
+  <!-- Workaround for GitVersion 4.0 not creating GitVersionInformation by default -->
+  <PropertyGroup>
+    <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+  </PropertyGroup>
+  <!-- End Workaround -->
+
+  <Import Project="../GitVersionWorkaround.targets" />    
 </Project>

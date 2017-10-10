@@ -1,0 +1,1 @@
+msbuild.exe src\ApiApprover.sln /t:restore,build,pack /p:Configuration=Release

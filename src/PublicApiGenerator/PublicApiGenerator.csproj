@@ -23,4 +23,15 @@
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
   </ItemGroup>
 
+    <!-- Workaround for GitVersion 4.0 not creating GitVersionInformation by default -->
+  <PropertyGroup>
+    <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+  </PropertyGroup>
+  <!-- End Workaround -->
+
+  <Import Project="../GitVersionWorkaround.targets" />  
+
 </Project>
