@@ -50,7 +50,8 @@ namespace PublicApiGenerator
             {
                 BracingStyle = "C",
                 BlankLinesBetweenMembers = false,
-                VerbatimOrder = false
+                VerbatimOrder = false,
+                IndentString = "    "
             };
 
             using (var provider = new CSharpCodeProvider())
