@@ -1,0 +1,16 @@
+install:
+  - choco install gitversion.portable -pre -y
+assembly_info:
+  patch: false
+image: Visual Studio 2017
+before_build:
+- which msbuild.exe
+- nuget restore src/ApiApprover.sln
+- ps: gitversion /l console /output buildserver /updateAssemblyInfo
+branches:
+  only:
+  - master
+build:
+  project: src/ApiApprover.sln
+test_script:
+- ps: nunit3-console (ls -r *\bin\Debug\**.*Tests.dll | % FullName | sort-object -Unique) --inprocess --result="myresults.xml;format=AppVeyor"
