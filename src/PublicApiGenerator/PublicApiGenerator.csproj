@@ -11,12 +11,14 @@
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_PackageFiles Include="ApiGenerator.cs">
-      <BuildAction>Compile</BuildAction>
-      <PackagePath>content\App_Packages\PublicApiGenerator.$version$\;contentFiles\cs\any\PublicApiGenerator\</PackagePath>
-    </_PackageFiles>
-  </ItemGroup>
+  <Target Name="AddPackageContent" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <_PackageFiles Include="ApiGenerator.cs">
+        <BuildAction>Compile</BuildAction>
+        <PackagePath>content\App_Packages\PublicApiGenerator.$(PackageVersion)\;contentFiles\cs\any\PublicApiGenerator\</PackagePath>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
 
   <Import Project="../GitVersionWorkaround.targets" />
 

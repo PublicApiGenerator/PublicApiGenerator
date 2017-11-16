@@ -19,12 +19,14 @@
     <PackageReference Include="ApprovalTests" Version="3.0.13" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_PackageFiles Include="PublicApiApprover.cs">
-      <BuildAction>Compile</BuildAction>
-      <PackagePath>content\App_Packages\ApiApprover.$version$\;contentFiles\cs\any\ApiApprover\</PackagePath>
-    </_PackageFiles>
-  </ItemGroup>
+  <Target Name="AddPackageContent" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <_PackageFiles Include="PublicApiApprover.cs">
+        <BuildAction>Compile</BuildAction>
+        <PackagePath>content\App_Packages\ApiApprover.$(PackageVersion)\;contentFiles\cs\any\ApiApprover\</PackagePath>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
 
   <Import Project="../GitVersionWorkaround.targets" />
 
