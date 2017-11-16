@@ -20,22 +20,43 @@ namespace ApiApproverTests
         [Fact]
         public void Attributes()
         {
-            AssertPublicApi<NotImportant>(
-@"[assembly: ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
+#if NET452
+            var api = @"[assembly: ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
 [assembly: ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
 [assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
 [assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
 [assembly: ApiApproverTests.Examples.SimpleAttribute()]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.InteropServices.GuidAttribute(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5"", FrameworkDisplayName="".NET Framework 4.5"")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.2"", FrameworkDisplayName="".NET Framework 4.5.2"")]
 namespace ApiApproverTests.Examples
 {
     public class NotImportant
     {
         public NotImportant() { }
     }
-}", true);
+}";
+#endif
+
+#if NETCOREAPP2_0
+            var api = @"[assembly: ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
+[assembly: ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
+[assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+[assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+[assembly: ApiApproverTests.Examples.SimpleAttribute()]
+[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
+[assembly: System.Runtime.InteropServices.GuidAttribute(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETCoreApp,Version=v2.0"", FrameworkDisplayName="""")]
+namespace ApiApproverTests.Examples
+{
+    public class NotImportant
+    {
+        public NotImportant() { }
+    }
+}";
+#endif
+
+            AssertPublicApi<NotImportant>(api, true);
         }
     }
 
