@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Delegate_visibility : ApiGeneratorTestsBase
     {
@@ -15,7 +15,7 @@ namespace ApiApproverTests
         public void Should_output_public_delegate()
         {
             AssertPublicApi<PublicDelegate>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public delegate void PublicDelegate();
 }");

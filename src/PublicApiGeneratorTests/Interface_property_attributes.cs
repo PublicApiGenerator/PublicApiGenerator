@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_property_attributes : ApiGeneratorTestsBase
     {
@@ -9,11 +9,11 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_no_parameters()
         {
             AssertPublicApi<IPropertyWithSimpleAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithSimpleAttribute
     {
-        [ApiApproverTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
         string Value { get; set; }
     }
 }");
@@ -23,29 +23,29 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_positional_parameters()
         {
             AssertPublicApi<IPropertyWithAttributeWithStringPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithAttributeWithStringPositionalParameters
     {
-        [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
         string Value { get; set; }
     }
 }");
             AssertPublicApi<IPropertyWithAttributeWithIntPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithAttributeWithIntPositionalParameters
     {
-        [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
         string Value { get; set; }
     }
 }");
             AssertPublicApi<IPropertyWithAttributeWithMultiplePositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithAttributeWithMultiplePositionalParameters
     {
-        [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
         string Value { get; set; }
     }
 }");
@@ -55,21 +55,21 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_parameters()
         {
             AssertPublicApi<IPropertyWithIntNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithIntNamedParameterAttribute
     {
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
         string Value { get; set; }
     }
 }");
 
             AssertPublicApi<IPropertyWithStringNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithStringNamedParameterAttribute
     {
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
         string Value { get; set; }
     }
 }");
@@ -79,11 +79,11 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
             AssertPublicApi<IPropertyWithAttributeWithMultipleNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithAttributeWithMultipleNamedParameters
     {
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
         string Value { get; set; }
     }
 }");
@@ -93,11 +93,11 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<IPropertyWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithAttributeWithBothNamedAndPositionalParameters
     {
-        [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         string Value { get; set; }
     }
 }");
@@ -107,11 +107,11 @@ namespace ApiApproverTests
         public void Should_output_enum_value()
         {
             AssertPublicApi<IPropertyWithAttributeWithSimpleEnum>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithAttributeWithSimpleEnum
     {
-        [ApiApproverTests.Examples.AttributeWithSimpleEnumAttribute(ApiApproverTests.Examples.SimpleEnum.Blue)]
+        [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
         string Value { get; set; }
     }
 }");
@@ -121,11 +121,11 @@ namespace ApiApproverTests
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<IPropertyWithAttributeWithEnumFlags>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithAttributeWithEnumFlags
     {
-        [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
+        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
         string Value { get; set; }
     }
 }");
@@ -135,13 +135,13 @@ namespace ApiApproverTests
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<IPropertyWithMultipleAttributes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithMultipleAttributes
     {
-        [ApiApproverTests.Examples.Attribute_AA()]
-        [ApiApproverTests.Examples.Attribute_MM()]
-        [ApiApproverTests.Examples.Attribute_ZZ()]
+        [PublicApiGeneratorTests.Examples.Attribute_AA()]
+        [PublicApiGeneratorTests.Examples.Attribute_MM()]
+        [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
         string Value { get; set; }
     }
 }");
@@ -152,12 +152,12 @@ namespace ApiApproverTests
         {
             // Yes, it's a hack, but the CodeDOM doesn't support it. Sigh
             AssertPublicApi<IPropertyWithSimpleAttributeOnGetterAndSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithSimpleAttributeOnGetterAndSetter
     {
-        [get: ApiApproverTests.Examples.SimpleAttribute()]
-        [set: ApiApproverTests.Examples.SimpleAttribute()]
+        [get: PublicApiGeneratorTests.Examples.SimpleAttribute()]
+        [set: PublicApiGeneratorTests.Examples.SimpleAttribute()]
         string Value { get; set; }
     }
 }");

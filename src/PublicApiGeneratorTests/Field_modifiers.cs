@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Field_modifiers : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Include_static_fields()
         {
             AssertPublicApi<ClassWithStaticFields>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticFields
     {
@@ -25,7 +25,7 @@ namespace ApiApproverTests
         {
             // TODO: Initialising values are set in the constructor. Very tricky to get
             AssertPublicApi<ClassWithReadonlyFields>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithReadonlyFields
     {
@@ -42,7 +42,7 @@ namespace ApiApproverTests
             // Have to include the ctor - I can't figure out how to hide it
             // when values are initialised
             AssertPublicApi<ClassWithConstFields>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithConstFields
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_events : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_output_event()
         {
             AssertPublicApi<ClassWithEvent>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithEvent
     {

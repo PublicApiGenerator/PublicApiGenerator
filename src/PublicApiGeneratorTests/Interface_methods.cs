@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_methods : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_output_void_method()
         {
             AssertPublicApi<IVoidMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IVoidMethod
     {
@@ -23,13 +23,13 @@ namespace ApiApproverTests
         public void Should_output_method_parameters()
         {
             AssertPublicApi<IMethodsWithParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodsWithParameters
     {
         int Method1(int intValue, string stringValue);
-        ApiApproverTests.Examples.ComplexType Method2(ApiApproverTests.Examples.ComplexType value);
-        ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> Method3(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> value);
+        PublicApiGeneratorTests.Examples.ComplexType Method2(PublicApiGeneratorTests.Examples.ComplexType value);
+        PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> Method3(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> value);
     }
 }");
         }
@@ -38,7 +38,7 @@ namespace ApiApproverTests
         public void Should_output_methods_with_default_values()
         {
             AssertPublicApi<IMethodsWithDefaultParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodsWithDefaultParameters
     {
@@ -51,9 +51,9 @@ namespace ApiApproverTests
         public void Should_output_new_modifier()
         {
             AssertPublicApi<IMethodHiding>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public interface IMethodHiding : ApiApproverTests.Examples.IVoidMethod
+    public interface IMethodHiding : PublicApiGeneratorTests.Examples.IVoidMethod
     {
         new void Method();
     }
@@ -64,7 +64,7 @@ namespace ApiApproverTests
         public void Should_output_methods_in_alphabetical_order()
         {
             AssertPublicApi<IMultipleMethods>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMultipleMethods
     {

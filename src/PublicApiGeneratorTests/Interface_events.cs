@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_events : ApiGeneratorTestsBase
     {
@@ -13,7 +13,7 @@ namespace ApiApproverTests
             // This looks like a bug? That's what the implementation does, but it's
             // not valid C#...
             AssertPublicApi<ISimpleEvent>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface ISimpleEvent
     {
@@ -26,7 +26,7 @@ namespace ApiApproverTests
         public void Should_output_event_with_generics()
         {
             AssertPublicApi<IGenericEventHandler>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IGenericEventHandler
     {

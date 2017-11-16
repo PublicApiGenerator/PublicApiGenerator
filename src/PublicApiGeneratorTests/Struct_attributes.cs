@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Struct_attributes : ApiGeneratorTestsBase
     {
@@ -9,9 +9,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_no_parameters()
         {
             AssertPublicApi<StructWithSimpleAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.SimpleAttribute()]
+    [PublicApiGeneratorTests.Examples.SimpleAttribute()]
     public struct StructWithSimpleAttribute { }
 }");
         }
@@ -20,21 +20,21 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_positional_parameters()
         {
             AssertPublicApi<StructWithAttributeWithStringPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
     public struct StructWithAttributeWithStringPositionalParameters { }
 }");
             AssertPublicApi<StructWithAttributeWithIntPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
     public struct StructWithAttributeWithIntPositionalParameters { }
 }");
             AssertPublicApi<StructWithAttributeWithMultiplePositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
     public struct StructWithAttributeWithMultiplePositionalParameters { }
 }");
         }
@@ -43,16 +43,16 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_parameters()
         {
             AssertPublicApi<StructWithIntNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
     public struct StructWithIntNamedParameterAttribute { }
 }");
 
             AssertPublicApi<StructWithStringNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
     public struct StructWithStringNamedParameterAttribute { }
 }");
         }
@@ -61,9 +61,9 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
             AssertPublicApi<StructWithAttributeWithMultipleNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
     public struct StructWithAttributeWithMultipleNamedParameters { }
 }");
         }
@@ -72,9 +72,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<StructWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
     public struct StructWithAttributeWithBothNamedAndPositionalParameters { }
 }");
         }
@@ -83,9 +83,9 @@ namespace ApiApproverTests
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<StructWithAttributeWithEnumFlags>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public struct StructWithAttributeWithEnumFlags { }
 }");
         }
@@ -94,11 +94,11 @@ namespace ApiApproverTests
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<StructWithMultipleAttributes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.Attribute_AA()]
-    [ApiApproverTests.Examples.Attribute_MM()]
-    [ApiApproverTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA()]
+    [PublicApiGeneratorTests.Examples.Attribute_MM()]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
     public struct StructWithMultipleAttributes { }
 }");
         }

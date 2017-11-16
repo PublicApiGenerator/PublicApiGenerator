@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_extensions : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         {
             // Note the clas static reverse order hack
             AssertPublicApi(typeof(StringExtensions),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class static StringExtensions
     {

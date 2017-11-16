@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Struct_order : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_structs_in_alphabetical_order()
         {
             AssertPublicApi(new[] { typeof(ZZ_Struct), typeof(AA_Struct), typeof(MM_Struct) },
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public struct AA_Struct { }
     public struct MM_Struct { }

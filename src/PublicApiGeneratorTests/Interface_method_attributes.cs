@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_method_attributes : ApiGeneratorTestsBase
     {
@@ -9,11 +9,11 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_no_parameters()
         {
             AssertPublicApi<IMethodWithSimpleAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithSimpleAttribute
     {
-        [ApiApproverTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
         void Method();
     }
 }");
@@ -23,15 +23,15 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_positional_parameters()
         {
             AssertPublicApi<IMethodsWithAttributeWithPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodsWithAttributeWithPositionalParameters
     {
-        [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
         void Method1();
-        [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
         void Method2();
-        [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
         void Method3();
     }
 }");
@@ -41,13 +41,13 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_parameters()
         {
             AssertPublicApi<IMethodsWithAttributeWithNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodsWithAttributeWithNamedParameters
     {
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
         void Method1();
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
         void Method2();
     }
 }");
@@ -57,11 +57,11 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
             AssertPublicApi<IMethodWithAttributeWithMultipleNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithAttributeWithMultipleNamedParameters
     {
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
         void Method();
     }
 }");
@@ -71,11 +71,11 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<IMethodWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithAttributeWithBothNamedAndPositionalParameters
     {
-        [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         void Method();
     }
 }");
@@ -85,11 +85,11 @@ namespace ApiApproverTests
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<IMethodWithAttributeWithEnumFlags>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithAttributeWithEnumFlags
     {
-        [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
+        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
         void Method();
     }
 }");
@@ -99,15 +99,15 @@ namespace ApiApproverTests
         public void Should_handle_typeof_argument()
         {
             AssertPublicApi<IMethodWithAttributeWithType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithAttributeWithType
     {
-        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
         void Method1();
-        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(ApiApproverTests.Examples.ComplexType))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.ComplexType))]
         void Method2();
-        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>))]
         void Method3();
     }
 }");
@@ -117,13 +117,13 @@ namespace ApiApproverTests
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<IMethodWithMultipleAttributes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithMultipleAttributes
     {
-        [ApiApproverTests.Examples.Attribute_AA()]
-        [ApiApproverTests.Examples.Attribute_MM()]
-        [ApiApproverTests.Examples.Attribute_ZZ()]
+        [PublicApiGeneratorTests.Examples.Attribute_AA()]
+        [PublicApiGeneratorTests.Examples.Attribute_MM()]
+        [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
         void Method();
     }
 }");

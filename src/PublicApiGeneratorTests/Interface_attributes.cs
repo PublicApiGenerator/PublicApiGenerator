@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_attributes : ApiGeneratorTestsBase
     {
@@ -9,9 +9,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_no_parameters()
         {
             AssertPublicApi<IInterfaceWithSimpleAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.SimpleAttribute()]
+    [PublicApiGeneratorTests.Examples.SimpleAttribute()]
     public interface IInterfaceWithSimpleAttribute { }
 }");
         }
@@ -20,21 +20,21 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_positional_parameters()
         {
             AssertPublicApi<IInterfaceWithAttributeWithStringPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
     public interface IInterfaceWithAttributeWithStringPositionalParameters { }
 }");
             AssertPublicApi<IInterfaceWithAttributeWithIntPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
     public interface IInterfaceWithAttributeWithIntPositionalParameters { }
 }");
             AssertPublicApi<IInterfaceWithAttributeWithMultiplePositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
     public interface IInterfaceWithAttributeWithMultiplePositionalParameters { }
 }");
         }
@@ -43,16 +43,16 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_parameters()
         {
             AssertPublicApi<IInterfaceWithIntNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
     public interface IInterfaceWithIntNamedParameterAttribute { }
 }");
 
             AssertPublicApi<IInterfaceWithStringNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
     public interface IInterfaceWithStringNamedParameterAttribute { }
 }");
         }
@@ -61,9 +61,9 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
             AssertPublicApi<IInterfaceWithAttributeWithMultipleNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
     public interface IInterfaceWithAttributeWithMultipleNamedParameters { }
 }");
         }
@@ -72,9 +72,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<IInterfaceWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
     public interface IInterfaceWithAttributeWithBothNamedAndPositionalParameters { }
 }");
         }
@@ -83,9 +83,9 @@ namespace ApiApproverTests
         public void Should_output_enum_value()
         {
             AssertPublicApi<IInterfaceWithAttributeWithSimpleEnum>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithSimpleEnumAttribute(ApiApproverTests.Examples.SimpleEnum.Blue)]
+    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
     public interface IInterfaceWithAttributeWithSimpleEnum { }
 }");
         }
@@ -94,9 +94,9 @@ namespace ApiApproverTests
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<IInterfaceWithAttributeWithEnumFlags>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public interface IInterfaceWithAttributeWithEnumFlags { }
 }");
         }
@@ -105,11 +105,11 @@ namespace ApiApproverTests
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<IInterfaceWithMultipleAttributes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.Attribute_AA()]
-    [ApiApproverTests.Examples.Attribute_MM()]
-    [ApiApproverTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA()]
+    [PublicApiGeneratorTests.Examples.Attribute_MM()]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
     public interface IInterfaceWithMultipleAttributes { }
 }");
         }
@@ -118,9 +118,9 @@ namespace ApiApproverTests
         public void Should_handle_attribute_with_object_initialiser()
         {
             AssertPublicApi<IInterfaceWithAttributeWithObjectInitialiser>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithObjectInitialiser(""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithObjectInitialiser(""Hello world"")]
     public interface IInterfaceWithAttributeWithObjectInitialiser { }
 }");
         }
@@ -129,9 +129,9 @@ namespace ApiApproverTests
         public void Should_handle_attribute_with_object_array_initialiser()
         {
             AssertPublicApi<IInterfaceWithAttributeWithObjectArrayInitialiser>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithObjectArrayInitialiser(new object[] {
+    [PublicApiGeneratorTests.Examples.AttributeWithObjectArrayInitialiser(new object[] {
             42,
             ""Hello world""})]
     public interface IInterfaceWithAttributeWithObjectArrayInitialiser { }
@@ -142,9 +142,9 @@ namespace ApiApproverTests
         public void Should_handle_attribute_with_string_array_initialiser()
         {
             AssertPublicApi<IInterfaceWithAttributeWithStringArrayInitialiser>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithStringArrayInitialiser(new string[] {
+    [PublicApiGeneratorTests.Examples.AttributeWithStringArrayInitialiser(new string[] {
             ""Hello"",
             ""world""})]
     public interface IInterfaceWithAttributeWithStringArrayInitialiser { }

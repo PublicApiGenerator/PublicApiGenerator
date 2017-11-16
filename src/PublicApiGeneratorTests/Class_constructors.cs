@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_constructors : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_output_default_constructor()
         {
             AssertPublicApi<ClassWithDefaultConstructor>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithDefaultConstructor
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_not_output_internal_constructor()
         {
             AssertPublicApi<ClassWithInternalConstructor>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalConstructor { }
 }");
@@ -33,7 +33,7 @@ namespace ApiApproverTests
         public void Should_not_output_private_constructor()
         {
             AssertPublicApi<ClassWithPrivateConstructor>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateConstructor { }
 }");
@@ -43,7 +43,7 @@ namespace ApiApproverTests
         public void Should_output_public_constructor()
         {
             AssertPublicApi<ClassWithPublicConstructor>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicConstructor
     {
@@ -56,7 +56,7 @@ namespace ApiApproverTests
         public void Should_output_protected_constructor()
         {
             AssertPublicApi<ClassWithProtectedConstructor>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedConstructor
     {
@@ -69,11 +69,11 @@ namespace ApiApproverTests
         public void Should_output_constructor_parameters()
         {
             AssertPublicApi<ClassWithConstructorWithParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithConstructorWithParameters
     {
-        public ClassWithConstructorWithParameters(int intValue, string stringValue, ApiApproverTests.Examples.ComplexType complexType, ApiApproverTests.Examples.GenericType<int> genericType) { }
+        public ClassWithConstructorWithParameters(int intValue, string stringValue, PublicApiGeneratorTests.Examples.ComplexType complexType, PublicApiGeneratorTests.Examples.GenericType<int> genericType) { }
     }
 }");
         }
@@ -83,7 +83,7 @@ namespace ApiApproverTests
         {
             // TODO: Not sure about ordering here
             AssertPublicApi<ClassWithMultipleConstructors>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithMultipleConstructors
     {
@@ -97,7 +97,7 @@ namespace ApiApproverTests
         public void Should_output_constructor_default_parameter_values()
         {
             AssertPublicApi<ClassWithConstructorWithDefaultValues>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithConstructorWithDefaultValues
     {

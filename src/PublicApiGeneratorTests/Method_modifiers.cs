@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_modifiers : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_static_modifier()
         {
             AssertPublicApi<ClassWithStaticMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticMethod
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_output_abstract_modifier()
         {
             AssertPublicApi<ClassWithAbstractMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractMethod
     {
@@ -37,7 +37,7 @@ namespace ApiApproverTests
         public void Should_output_virtual_modifier()
         {
             AssertPublicApi<ClassWithVirtualMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithVirtualMethod
     {
@@ -51,9 +51,9 @@ namespace ApiApproverTests
         public void Should_output_override_modifier()
         {
          AssertPublicApi<ClassWithOverridingMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithOverridingMethod : ApiApproverTests.Examples.ClassWithVirtualMethod
+    public class ClassWithOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         public ClassWithOverridingMethod() { }
         public override void DoSomething() { }
@@ -65,7 +65,7 @@ namespace ApiApproverTests
         public void Should_allow_overriding_object_methods()
         {
             AssertPublicApi<ClassWithMethodOverridingObjectMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithMethodOverridingObjectMethod
     {
@@ -79,9 +79,9 @@ namespace ApiApproverTests
         public void Should_output_new_modifier()
         {
             AssertPublicApi<ClassWithMethodHiding>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithMethodHiding : ApiApproverTests.Examples.ClassWithSimpleMethod
+    public class ClassWithMethodHiding : PublicApiGeneratorTests.Examples.ClassWithSimpleMethod
     {
         public ClassWithMethodHiding() { }
         public new void Method() { }

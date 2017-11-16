@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Struct_member_order : ApiGeneratorTestsBase
     {
@@ -11,7 +11,7 @@ namespace ApiApproverTests
         {
             // Fields, properties, events, methods, nested type (inc. delegates)
             AssertPublicApi<StructMemberOrder>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public struct StructMemberOrder
     {
@@ -34,7 +34,7 @@ namespace ApiApproverTests
         {
             // Fields, properties, events, methods
             AssertPublicApi<StructMemberOrderAndNestedClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public struct StructMemberOrderAndNestedClass
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 [assembly: Guid("3B8D506A-5247-47FF-B053-D29A51A97C33")]
@@ -11,7 +11,7 @@ using Xunit;
 [assembly: AttributeWithNamedParameterAttribute(StringValue = "Hello", IntValue = 42)]
 [assembly: ComVisibleAttribute(false)]
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     using NotInTestAssembly = Object;
 
@@ -21,15 +21,15 @@ namespace ApiApproverTests
         public void Attributes()
         {
 #if NET452
-            var api = @"[assembly: ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
-[assembly: ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
-[assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
-[assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
-[assembly: ApiApproverTests.Examples.SimpleAttribute()]
+            var api = @"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+[assembly: PublicApiGeneratorTests.Examples.SimpleAttribute()]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.InteropServices.GuidAttribute(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETFramework,Version=v4.5.2"", FrameworkDisplayName="".NET Framework 4.5.2"")]
-namespace ApiApproverTests.Examples
+namespace PublicApiGeneratorTests.Examples
 {
     public class NotImportant
     {
@@ -39,15 +39,15 @@ namespace ApiApproverTests.Examples
 #endif
 
 #if NETCOREAPP2_0
-            var api = @"[assembly: ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
-[assembly: ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
-[assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
-[assembly: ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
-[assembly: ApiApproverTests.Examples.SimpleAttribute()]
+            var api = @"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+[assembly: PublicApiGeneratorTests.Examples.SimpleAttribute()]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.InteropServices.GuidAttribute(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETCoreApp,Version=v2.0"", FrameworkDisplayName="""")]
-namespace ApiApproverTests.Examples
+namespace PublicApiGeneratorTests.Examples
 {
     public class NotImportant
     {

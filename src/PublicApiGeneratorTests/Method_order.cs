@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_order : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_be_alphabetical_order()
         {
             AssertPublicApi<MethodOrdering>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodOrdering
     {

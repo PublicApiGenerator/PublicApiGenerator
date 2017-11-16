@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Property_methods : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_getter_and_setter()
         {
             AssertPublicApi<PropertyReadWrite>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyReadWrite
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_output_getter_only()
         {
             AssertPublicApi<PropertyReadOnly>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyReadOnly
     {
@@ -37,7 +37,7 @@ namespace ApiApproverTests
         public void Should_output_setter_only()
         {
             AssertPublicApi<PropertyWriteOnly>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyWriteOnly
     {
@@ -51,7 +51,7 @@ namespace ApiApproverTests
         public void Should_output_indexer_read_write()
         {
             AssertPublicApi<PropertyIndexer>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyIndexer
     {
@@ -65,7 +65,7 @@ namespace ApiApproverTests
         public void Should_output_indexer_read_only()
         {
             AssertPublicApi<PropertyIndexerReadOnly>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyIndexerReadOnly
     {
@@ -79,7 +79,7 @@ namespace ApiApproverTests
         public void Should_output_indexer_write_only()
         {
             AssertPublicApi<PropertyIndexerWriteOnly>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyIndexerWriteOnly
     {
@@ -93,7 +93,7 @@ namespace ApiApproverTests
         public void Should_output_indexer_multiple_parameters()
         {
             AssertPublicApi<PropertyIndexerMultipleParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyIndexerMultipleParameters
     {

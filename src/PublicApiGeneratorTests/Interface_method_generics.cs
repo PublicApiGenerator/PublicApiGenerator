@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_method_generics : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_output_generic_type_parameters()
         {
             AssertPublicApi<IMethodWithTypeParameter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameter
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_output_multiple_generic_type_parameters()
         {
             AssertPublicApi<IMethodWithMultipleTypeParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithMultipleTypeParameters
     {
@@ -37,7 +37,7 @@ namespace ApiApproverTests
         {
             // The extra space before "class" is a hack!
             AssertPublicApi<IMethodWithTypeParameterWithReferenceTypeConstraint>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameterWithReferenceTypeConstraint
     {
@@ -52,7 +52,7 @@ namespace ApiApproverTests
         {
             // The extra space before "struct" is a hack!
             AssertPublicApi<IMethodWithTypeParameterWithValueTypeConstraint>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameterWithValueTypeConstraint
     {
@@ -66,7 +66,7 @@ namespace ApiApproverTests
         public void Should_output_new_generic_type_constraint()
         {
             AssertPublicApi<IMethodWithTypeParameterWithDefaultConstructorConstraint>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameterWithDefaultConstructorConstraint
     {
@@ -80,7 +80,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_constraint()
         {
             AssertPublicApi<IMethodWithTypeParameterWithSpecificTypeConstraint>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameterWithSpecificTypeConstraint
     {
@@ -94,7 +94,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_and_value_type_constraint()
         {
             AssertPublicApi<IMethodWithTypeParameterWithSpecificTypeAndValueTypeConstraints>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameterWithSpecificTypeAndValueTypeConstraints
     {
@@ -108,7 +108,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_and_reference_type_constraint()
         {
             AssertPublicApi<IMethodWithTypeParameterWithSpecificTypeAndReferenceTypeConstraints>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameterWithSpecificTypeAndReferenceTypeConstraints
     {
@@ -122,7 +122,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_and_new_constraint()
         {
             AssertPublicApi<IMethodWithTypeParameterWithSpecificTypeAndDefaultConstructorConstraints>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithTypeParameterWithSpecificTypeAndDefaultConstructorConstraints
     {
@@ -136,7 +136,7 @@ namespace ApiApproverTests
         public void Should_use_generic_type_name_in_parameter()
         {
             AssertPublicApi<IMethodUsingGenericTypeParameter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodUsingGenericTypeParameter
     {
@@ -149,7 +149,7 @@ namespace ApiApproverTests
         public void Should_use_generic_type_from_class_in_parameters()
         {
             AssertPublicApi(typeof(IMethodUsingGenericTypeParameterFromClass<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodUsingGenericTypeParameterFromClass<T>
     {

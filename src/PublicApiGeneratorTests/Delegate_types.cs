@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Delegate_types : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_void_delegate()
         {
             AssertPublicApi<VoidDelegate>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public delegate void VoidDelegate();
 }");
@@ -19,7 +19,7 @@ namespace ApiApproverTests
         public void Should_output_primitive_types()
         {
             AssertPublicApi<DelegateWithPrimitiveParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public delegate int DelegateWithPrimitiveParameters(int v1, string v2);
 }");
@@ -29,9 +29,9 @@ namespace ApiApproverTests
         public void Should_output_fully_qualified_name_for_complex_types()
         {
             AssertPublicApi<DelegateWithComplexParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public delegate ApiApproverTests.Examples.ComplexType DelegateWithComplexParameters(ApiApproverTests.Examples.ComplexType v1);
+    public delegate PublicApiGeneratorTests.Examples.ComplexType DelegateWithComplexParameters(PublicApiGeneratorTests.Examples.ComplexType v1);
 }");
         }
 
@@ -39,9 +39,9 @@ namespace ApiApproverTests
         public void Should_output_fully_qualified_names_for_generic_types()
         {
             AssertPublicApi(typeof(DelegateWithClosedGenericParameters),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public delegate ApiApproverTests.Examples.GenericType<int> DelegateWithClosedGenericParameters(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> value);
+    public delegate PublicApiGeneratorTests.Examples.GenericType<int> DelegateWithClosedGenericParameters(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> value);
 }");
         }
 
@@ -49,9 +49,9 @@ namespace ApiApproverTests
         public void Should_output_generic_type_parameters()
         {
             AssertPublicApi(typeof(DelegateWithGenericParameters<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public delegate ApiApproverTests.Examples.GenericType<T> DelegateWithGenericParameters<T>(ApiApproverTests.Examples.GenericType<T> value);
+    public delegate PublicApiGeneratorTests.Examples.GenericType<T> DelegateWithGenericParameters<T>(PublicApiGeneratorTests.Examples.GenericType<T> value);
 }");
         }
     }

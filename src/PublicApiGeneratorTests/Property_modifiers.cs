@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Property_modifiers : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_abstract_modifier()
         {
             AssertPublicApi<ClassWithAbstractProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractProperty
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_output_static_modifier()
         {
             AssertPublicApi<ClassWithStaticProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticProperty
     {
@@ -37,7 +37,7 @@ namespace ApiApproverTests
         public void Should_output_virtual_modifier()
         {
             AssertPublicApi<ClassWithVirtualProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithVirtualProperty
     {
@@ -51,9 +51,9 @@ namespace ApiApproverTests
         public void Should_output_override_modifier()
         {
             AssertPublicApi<ClassWithOverriddenProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithOverriddenProperty : ApiApproverTests.Examples.ClassWithVirtualProperty
+    public class ClassWithOverriddenProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
     {
         public ClassWithOverriddenProperty() { }
         public override string Value { get; set; }
@@ -65,9 +65,9 @@ namespace ApiApproverTests
         public void Should_output_new_modifier()
         {
             AssertPublicApi<ClassWithPropertyHiding>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithPropertyHiding : ApiApproverTests.Examples.ClassWithProperty
+    public class ClassWithPropertyHiding : PublicApiGeneratorTests.Examples.ClassWithProperty
     {
         public ClassWithPropertyHiding() { }
         public new string Value { get; set; }

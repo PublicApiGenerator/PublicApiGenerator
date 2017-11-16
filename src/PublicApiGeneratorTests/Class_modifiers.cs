@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_modifiers : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_abstract_modifier()
         {
             AssertPublicApi<AbstractClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public abstract class AbstractClass
     {
@@ -22,7 +22,7 @@ namespace ApiApproverTests
         public void Should_output_static_modifier()
         {
             AssertPublicApi(typeof(StaticClass),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class static StaticClass { }
 }");
@@ -32,7 +32,7 @@ namespace ApiApproverTests
         public void Should_output_sealed_modifier()
         {
             AssertPublicApi<SealedClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public sealed class SealedClass
     {

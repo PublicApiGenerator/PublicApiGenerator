@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Enum : ApiGeneratorTestsBase
     {
@@ -16,7 +16,7 @@ namespace ApiApproverTests
         public void Should_output_enum_names_in_defined_order()
         {
             AssertPublicApi<PublicEnum>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public enum PublicEnum
     {
@@ -31,7 +31,7 @@ namespace ApiApproverTests
         public void Should_output_enum_values()
         {
             AssertPublicApi<EnumWithValues>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public enum EnumWithValues
     {
@@ -46,7 +46,7 @@ namespace ApiApproverTests
         public void Should_output_enum_base_type()
         {
             AssertPublicApi<EnumWithBaseType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public enum EnumWithBaseType : short
     {
@@ -59,7 +59,7 @@ namespace ApiApproverTests
         public void Should_output_enum_attributes()
         {
             AssertPublicApi<EnumWithFlagsAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     [System.FlagsAttribute()]
     public enum EnumWithFlagsAttribute

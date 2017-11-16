@@ -1,7 +1,7 @@
 ﻿using Microsoft.Whitelisted;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Namespaces_whitelisting : ApiGeneratorTestsBase
     {

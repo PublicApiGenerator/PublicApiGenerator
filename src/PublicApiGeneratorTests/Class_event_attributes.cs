@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_event_attributes : ApiGeneratorTestsBase
     {
@@ -10,12 +10,12 @@ namespace ApiApproverTests
         public void Should_add_attribute_to_event()
         {
             AssertPublicApi<ClassWithEventWithAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithEventWithAttribute
     {
         public ClassWithEventWithAttribute() { }
-        [ApiApproverTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
         public event System.EventHandler OnClicked;
     }
 }");

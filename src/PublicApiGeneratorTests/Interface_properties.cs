@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_properties : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_primitive_property()
         {
             AssertPublicApi<IPropertyWithPrimitiveType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithPrimitiveType
     {
@@ -22,7 +22,7 @@ namespace ApiApproverTests
         public void Should_output_read_only_property()
         {
             AssertPublicApi<IPropertyWithReadOnlyType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithReadOnlyType
     {
@@ -35,7 +35,7 @@ namespace ApiApproverTests
         public void Should_output_write_only_property()
         {
             AssertPublicApi<IPropertyWithWriteOnlyType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithWriteOnlyType
     {
@@ -48,11 +48,11 @@ namespace ApiApproverTests
         public void Should_output_property_with_complex_type()
         {
             AssertPublicApi<IPropertyWithComplexType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithComplexType
     {
-        ApiApproverTests.Examples.ComplexType Value { get; set; }
+        PublicApiGeneratorTests.Examples.ComplexType Value { get; set; }
     }
 }");
         }
@@ -61,11 +61,11 @@ namespace ApiApproverTests
         public void Should_output_property_with_generic_type()
         {
             AssertPublicApi<IPropertyWithGenericType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithGenericType
     {
-        ApiApproverTests.Examples.GenericType<int> Value { get; set; }
+        PublicApiGeneratorTests.Examples.GenericType<int> Value { get; set; }
     }
 }");
         }
@@ -74,11 +74,11 @@ namespace ApiApproverTests
         public void Should_output_property_with_complex_generic_type()
         {
             AssertPublicApi<IPropertyWithComplexGenericType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithComplexGenericType
     {
-        ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.ComplexType> Value { get; set; }
+        PublicApiGeneratorTests.Examples.GenericTypeExtra<int, string, PublicApiGeneratorTests.Examples.ComplexType> Value { get; set; }
     }
 }");
         }
@@ -87,7 +87,7 @@ namespace ApiApproverTests
         public void Should_use_interface_generic_type()
         {
             AssertPublicApi(typeof (IPropertyWithInterfaceGeneric<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithInterfaceGeneric<T>
     {
@@ -100,9 +100,9 @@ namespace ApiApproverTests
         public void Should_output_new_modifier()
         {
             AssertPublicApi<IPropertyHiding>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public interface IPropertyHiding : ApiApproverTests.Examples.IPropertyWithPrimitiveType
+    public interface IPropertyHiding : PublicApiGeneratorTests.Examples.IPropertyWithPrimitiveType
     {
         new string Value { get; set; }
     }

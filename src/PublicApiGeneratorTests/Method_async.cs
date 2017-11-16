@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_async : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_output_async_void_method()
         {
             AssertPublicApi<MethodAsyncVoid>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncVoid
     {
@@ -24,7 +24,7 @@ namespace ApiApproverTests
         public void Should_output_async_method()
         {
             AssertPublicApi<MethodAsync>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsync
     {
@@ -38,7 +38,7 @@ namespace ApiApproverTests
         public void Should_output_async_method_without_keyword()
         {
             AssertPublicApi<MethodAsyncWithoutAsyncKeyword>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncWithoutAsyncKeyword
     {
@@ -52,7 +52,7 @@ namespace ApiApproverTests
         public void Should_output_async_method_with_return_value()
         {
             AssertPublicApi<MethodAsyncReturnValue>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncReturnValue
     {
@@ -66,7 +66,7 @@ namespace ApiApproverTests
         public void Should_output_async_method_without_keyword_with_return_value()
         {
             AssertPublicApi<MethodAsyncReturnValueWithoutAsyncKeyword>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncReturnValueWithoutAsyncKeyword
     {

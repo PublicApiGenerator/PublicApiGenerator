@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_attributes : ApiGeneratorTestsBase
     {
@@ -9,9 +9,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_no_parameters()
         {
             AssertPublicApi<ClassWithSimpleAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.SimpleAttribute()]
+    [PublicApiGeneratorTests.Examples.SimpleAttribute()]
     public class ClassWithSimpleAttribute
     {
         public ClassWithSimpleAttribute() { }
@@ -23,27 +23,27 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_positional_parameters()
         {
             AssertPublicApi<ClassWithAttributeWithStringPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
     public class ClassWithAttributeWithStringPositionalParameters
     {
         public ClassWithAttributeWithStringPositionalParameters() { }
     }
 }");
             AssertPublicApi<ClassWithAttributeWithIntPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
     public class ClassWithAttributeWithIntPositionalParameters
     {
         public ClassWithAttributeWithIntPositionalParameters() { }
     }
 }");
             AssertPublicApi<ClassWithAttributeWithMultiplePositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
     public class ClassWithAttributeWithMultiplePositionalParameters
     {
         public ClassWithAttributeWithMultiplePositionalParameters() { }
@@ -55,9 +55,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_parameters()
         {
             AssertPublicApi<ClassWithIntNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
     public class ClassWithIntNamedParameterAttribute
     {
         public ClassWithIntNamedParameterAttribute() { }
@@ -65,9 +65,9 @@ namespace ApiApproverTests
 }");
 
             AssertPublicApi<ClassWithStringNamedParameterAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
     public class ClassWithStringNamedParameterAttribute
     {
         public ClassWithStringNamedParameterAttribute() { }
@@ -79,9 +79,9 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
             AssertPublicApi<ClassWithAttributeWithMultipleNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
     public class ClassWithAttributeWithMultipleNamedParameters
     {
         public ClassWithAttributeWithMultipleNamedParameters() { }
@@ -93,9 +93,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_fields()
         {
             AssertPublicApi<ClassWithIntNamedFieldAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42)]
     public class ClassWithIntNamedFieldAttribute
     {
         public ClassWithIntNamedFieldAttribute() { }
@@ -103,9 +103,9 @@ namespace ApiApproverTests
 }");
 
             AssertPublicApi<ClassWithStringNamedFieldAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(StringValue=""Hello"")]
     public class ClassWithStringNamedFieldAttribute
     {
         public ClassWithStringNamedFieldAttribute() { }
@@ -117,9 +117,9 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_fields_in_alphabetical_order()
         {
             AssertPublicApi<ClassWithAttributeWithMultipleNamedFields>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42, StringValue=""Hello world"")]
     public class ClassWithAttributeWithMultipleNamedFields
     {
         public ClassWithAttributeWithMultipleNamedFields() { }
@@ -131,9 +131,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<ClassWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello"", IntValue=13, StringValue=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello"", IntValue=13, StringValue=""World"")]
     public class ClassWithAttributeWithBothNamedAndPositionalParameters
     {
         public ClassWithAttributeWithBothNamedAndPositionalParameters() { }
@@ -145,9 +145,9 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_fields_and_parameters()
         {
             AssertPublicApi<ClassWithAttributeWithBothNamedParametersAndFields>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithNamedParameterAndFieldAttribute(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAndFieldAttribute(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
     public class ClassWithAttributeWithBothNamedParametersAndFields
     {
         public ClassWithAttributeWithBothNamedParametersAndFields() { }
@@ -159,9 +159,9 @@ namespace ApiApproverTests
         public void Should_output_enum_value()
         {
             AssertPublicApi<ClassWithAttributeWithSimpleEnum>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithSimpleEnumAttribute(ApiApproverTests.Examples.SimpleEnum.Blue)]
+    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
     public class ClassWithAttributeWithSimpleEnum
     {
         public ClassWithAttributeWithSimpleEnum() { }
@@ -173,9 +173,9 @@ namespace ApiApproverTests
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<ClassWithAttributeWithEnumFlags>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public class ClassWithAttributeWithEnumFlags
     {
         public ClassWithAttributeWithEnumFlags() { }
@@ -187,11 +187,11 @@ namespace ApiApproverTests
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<ClassWithMultipleAttributes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.Attribute_AA()]
-    [ApiApproverTests.Examples.Attribute_MM()]
-    [ApiApproverTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA()]
+    [PublicApiGeneratorTests.Examples.Attribute_MM()]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
     public class ClassWithMultipleAttributes
     {
         public ClassWithMultipleAttributes() { }
@@ -203,11 +203,11 @@ namespace ApiApproverTests
         public void Should_handle_attribute_with_multiple_usages_support()
         {
             AssertPublicApi<ClassWithAttributeWithMultipleUsagesSupport>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=0, StringValue=""ZZZ"")]
-    [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=1, StringValue=""MMM"")]
-    [ApiApproverTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=2, StringValue=""AAA"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=0, StringValue=""ZZZ"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=1, StringValue=""MMM"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=2, StringValue=""AAA"")]
     public class ClassWithAttributeWithMultipleUsagesSupport
     {
         public ClassWithAttributeWithMultipleUsagesSupport() { }
@@ -219,9 +219,9 @@ namespace ApiApproverTests
         public void Should_handle_attribute_with_object_initialiser()
         {
             AssertPublicApi<ClassWithAttributeWithObjectInitialiser>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithObjectInitialiser(""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithObjectInitialiser(""Hello world"")]
     public class ClassWithAttributeWithObjectInitialiser
     {
         public ClassWithAttributeWithObjectInitialiser() { }
@@ -233,9 +233,9 @@ namespace ApiApproverTests
         public void Should_handle_attribute_with_object_array_initialiser()
         {
             AssertPublicApi<ClassWithAttributeWithObjectArrayInitialiser>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithObjectArrayInitialiser(new object[] {
+    [PublicApiGeneratorTests.Examples.AttributeWithObjectArrayInitialiser(new object[] {
             42,
             ""Hello world""})]
     public class ClassWithAttributeWithObjectArrayInitialiser
@@ -249,9 +249,9 @@ namespace ApiApproverTests
         public void Should_handle_attribute_with_string_array_initialiser()
         {
             AssertPublicApi<ClassWithAttributeWithStringArrayInitialiser>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    [ApiApproverTests.Examples.AttributeWithStringArrayInitialiser(new string[] {
+    [PublicApiGeneratorTests.Examples.AttributeWithStringArrayInitialiser(new string[] {
             ""Hello"",
             ""world""})]
     public class ClassWithAttributeWithStringArrayInitialiser
@@ -265,7 +265,7 @@ namespace ApiApproverTests
         public void Should_not_output_internal_attributes()
         {
             AssertPublicApi<ClassWithInternalAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalAttribute
     {

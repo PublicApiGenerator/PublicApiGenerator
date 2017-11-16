@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_hierarchy : ApiGeneratorTestsBase
     {
@@ -10,9 +10,9 @@ namespace ApiApproverTests
         public void Should_output_base_class()
         {
             AssertPublicApi<DerivedClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public class DerivedClass : ApiApproverTests.Examples.BaseClass
+    public class DerivedClass : PublicApiGeneratorTests.Examples.BaseClass
     {
         public DerivedClass() { }
     }
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_output_implementing_interfaces_in_alphabetical_order()
         {
             AssertPublicApi<ClassWithInterfaces>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInterfaces : System.ICloneable, System.IDisposable
     {
@@ -38,9 +38,9 @@ namespace ApiApproverTests
         public void Should_output_base_class_and_interfaces()
         {
             AssertPublicApi<ClassWithBaseAndInterfaces>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithBaseAndInterfaces : ApiApproverTests.Examples.BaseClass, System.ICloneable, System.IDisposable
+    public class ClassWithBaseAndInterfaces : PublicApiGeneratorTests.Examples.BaseClass, System.ICloneable, System.IDisposable
     {
         public ClassWithBaseAndInterfaces() { }
         public object Clone() { }
@@ -53,9 +53,9 @@ namespace ApiApproverTests
         public void Should_not_output_interfaces_implemented_on_base_classes()
         {
             AssertPublicApi<DerivedFromClassWithInterfaces>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
-    public class DerivedFromClassWithInterfaces : ApiApproverTests.Examples.ClassWithInterfaces
+    public class DerivedFromClassWithInterfaces : PublicApiGeneratorTests.Examples.ClassWithInterfaces
     {
         public DerivedFromClassWithInterfaces() { }
     }
@@ -66,7 +66,7 @@ namespace ApiApproverTests
         public void Should_not_output_base_class_of_object()
         {
             AssertPublicApi<BaseClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class BaseClass
     {
@@ -79,7 +79,7 @@ namespace ApiApproverTests
         public void Should_not_output_internal_interfaces_on_class()
         {
             AssertPublicApi<ClassWithInternalInterface>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalInterface
     {

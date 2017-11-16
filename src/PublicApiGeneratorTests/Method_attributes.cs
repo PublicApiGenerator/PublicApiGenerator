@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_attributes : ApiGeneratorTestsBase
     {
@@ -14,12 +14,12 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_no_parameters()
         {
             AssertPublicApi<MethodWithSimpleAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithSimpleAttribute
     {
         public MethodWithSimpleAttribute() { }
-        [ApiApproverTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
         public void Method() { }
     }
 }");
@@ -29,16 +29,16 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_positional_parameters()
         {
             AssertPublicApi<MethodsWithAttributeWithPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodsWithAttributeWithPositionalParameters
     {
         public MethodsWithAttributeWithPositionalParameters() { }
-        [ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
         public void Method1() { }
-        [ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
         public void Method2() { }
-        [ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
         public void Method3() { }
     }
 }");
@@ -48,14 +48,14 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_parameters()
         {
             AssertPublicApi<MethodsWithAttributeWithNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodsWithAttributeWithNamedParameters
     {
         public MethodsWithAttributeWithNamedParameters() { }
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
         public void Method1() { }
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
         public void Method2() { }
     }
 }");
@@ -65,12 +65,12 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
             AssertPublicApi<MethodWithAttributeWithMultipleNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithAttributeWithMultipleNamedParameters
     {
         public MethodWithAttributeWithMultipleNamedParameters() { }
-        [ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
         public void Method() { }
     }
 }");
@@ -80,12 +80,12 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<MethodWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithAttributeWithBothNamedAndPositionalParameters
     {
         public MethodWithAttributeWithBothNamedAndPositionalParameters() { }
-        [ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         public void Method() { }
     }
 }");
@@ -95,12 +95,12 @@ namespace ApiApproverTests
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<MethodWithAttributeWithEnumFlags>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithAttributeWithEnumFlags
     {
         public MethodWithAttributeWithEnumFlags() { }
-        [ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)]
+        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
         public void Method() { }
     }
 }");
@@ -110,16 +110,16 @@ namespace ApiApproverTests
         public void Should_handle_typeof_argument()
         {
             AssertPublicApi<MethodWithAttributeWithType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithAttributeWithType
     {
         public MethodWithAttributeWithType() { }
-        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
         public void Method1() { }
-        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(ApiApproverTests.Examples.ComplexType))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.ComplexType))]
         public void Method2() { }
-        [ApiApproverTests.Examples.AttributeWithTypeParameterAttribute(typeof(ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>))]
         public void Method3() { }
     }
 }");
@@ -129,14 +129,14 @@ namespace ApiApproverTests
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<MethodWithMultipleAttributes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithMultipleAttributes
     {
         public MethodWithMultipleAttributes() { }
-        [ApiApproverTests.Examples.Attribute_AA()]
-        [ApiApproverTests.Examples.Attribute_MM()]
-        [ApiApproverTests.Examples.Attribute_ZZ()]
+        [PublicApiGeneratorTests.Examples.Attribute_AA()]
+        [PublicApiGeneratorTests.Examples.Attribute_MM()]
+        [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
         public void Method() { }
     }
 }");
@@ -146,7 +146,7 @@ namespace ApiApproverTests
         public void Should_ignore_compiler_attributes()
         {
             AssertPublicApi<MethodWithCompilerAttributes>(
-                @"namespace ApiApproverTests.Examples
+                @"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithCompilerAttributes
     {

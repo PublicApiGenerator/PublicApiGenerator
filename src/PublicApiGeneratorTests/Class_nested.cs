@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_nested : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_nested_classes()
         {
             AssertPublicApi<ClassWithNestedClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithNestedClass
     {
@@ -28,7 +28,7 @@ namespace ApiApproverTests
         public void Should_ignore_private_nested_class()
         {
             AssertPublicApi<ClassWithPrivateNestedClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateNestedClass
     {
@@ -42,7 +42,7 @@ namespace ApiApproverTests
         public void Should_output_protected_nested_class()
         {
             AssertPublicApi<ClassWithProtectedNestedClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedNestedClass
     {
@@ -61,7 +61,7 @@ namespace ApiApproverTests
         public void Should_output_multiple_nested_classes()
         {
             AssertPublicApi<ClassWithDeeplyNestedClasses>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithDeeplyNestedClasses
     {
@@ -85,7 +85,7 @@ namespace ApiApproverTests
         public void Should_output_nested_structs()
         {
             AssertPublicApi<StructWithNestedStruct>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public struct StructWithNestedStruct
     {
@@ -102,7 +102,7 @@ namespace ApiApproverTests
         public void Should_output_multiple_nested_classes_and_structs()
         {
             AssertPublicApi<ClassWithDeeplyNestedStructs>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithDeeplyNestedStructs
     {

@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Field_types : ApiGeneratorTestsBase
     {
@@ -9,11 +9,11 @@ namespace ApiApproverTests
         public void Should_use_fully_qualified_type_name()
         {
             AssertPublicApi<FieldWithComplexType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithComplexType
     {
-        public ApiApproverTests.Examples.ComplexType Field;
+        public PublicApiGeneratorTests.Examples.ComplexType Field;
         public FieldWithComplexType() { }
     }
 }");
@@ -23,11 +23,11 @@ namespace ApiApproverTests
         public void Should_output_generic_parameters()
         {
             AssertPublicApi<FieldWithGenericType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithGenericType
     {
-        public ApiApproverTests.Examples.GenericType<int> Field;
+        public PublicApiGeneratorTests.Examples.GenericType<int> Field;
         public FieldWithGenericType() { }
     }
 }");
@@ -37,11 +37,11 @@ namespace ApiApproverTests
         public void Should_use_fully_qualified_type_name_for_generic_parameters()
         {
             AssertPublicApi<FieldWithGenericComplexType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithGenericComplexType
     {
-        public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> Field;
+        public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> Field;
         public FieldWithGenericComplexType() { }
     }
 }");
@@ -51,11 +51,11 @@ namespace ApiApproverTests
         public void Should_output_generic_parameters_with_generic_parameters()
         {
             AssertPublicApi<FieldWithGenericTypeParametersOfGenericTypeParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithGenericTypeParametersOfGenericTypeParameters
     {
-        public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>> Field;
+        public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>> Field;
         public FieldWithGenericTypeParametersOfGenericTypeParameters() { }
     }
 }");
@@ -65,11 +65,11 @@ namespace ApiApproverTests
         public void Should_output_multiple_generic_parameters()
         {
             AssertPublicApi<FieldWithMultipleGenericTypeParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithMultipleGenericTypeParameters
     {
-        public ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.ComplexType> Field;
+        public PublicApiGeneratorTests.Examples.GenericTypeExtra<int, string, PublicApiGeneratorTests.Examples.ComplexType> Field;
         public FieldWithMultipleGenericTypeParameters() { }
     }
 }");

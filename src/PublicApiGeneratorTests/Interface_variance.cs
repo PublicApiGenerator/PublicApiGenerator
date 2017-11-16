@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_variance : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_contravariance()
         {
             AssertPublicApi(typeof(IInterfaceWithContravariance<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IInterfaceWithContravariance<in T>
     {
@@ -22,7 +22,7 @@ namespace ApiApproverTests
         public void Should_output_covariance()
         {
             AssertPublicApi(typeof(IInterfaceWithCovariance<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IInterfaceWithCovariance<out T>
     {

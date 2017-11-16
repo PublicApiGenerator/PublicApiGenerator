@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Property_automatic : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_automatic_property()
         {
             AssertPublicApi<ClassWithAutomaticProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithAutomaticProperty
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_output_manually_implemented_property()
         {
             AssertPublicApi<ClassWithManualProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithManualProperty
     {

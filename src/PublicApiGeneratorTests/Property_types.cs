@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Property_types : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_primitive_type()
         {
             AssertPublicApi<PropertyWithPrimitiveType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyWithPrimitiveType
     {
@@ -23,12 +23,12 @@ namespace ApiApproverTests
         public void Should_output_fully_qualified_name_of_complex_type()
         {
             AssertPublicApi<PropertyWithComplexType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyWithComplexType
     {
         public PropertyWithComplexType() { }
-        public ApiApproverTests.Examples.ComplexType Value { get; set; }
+        public PublicApiGeneratorTests.Examples.ComplexType Value { get; set; }
     }
 }");
         }
@@ -37,12 +37,12 @@ namespace ApiApproverTests
         public void Should_output_generic_type()
         {
             AssertPublicApi<PropertyWithGenericType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyWithGenericType
     {
         public PropertyWithGenericType() { }
-        public ApiApproverTests.Examples.GenericType<int> Value { get; set; }
+        public PublicApiGeneratorTests.Examples.GenericType<int> Value { get; set; }
     }
 }");
         }
@@ -51,12 +51,12 @@ namespace ApiApproverTests
         public void Should_output_generic_of_generic_of_complex_type()
         {
             AssertPublicApi<PropertyWithCrazyGenericType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyWithCrazyGenericType
     {
         public PropertyWithCrazyGenericType() { }
-        public ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>> Value { get; set; }
+        public PublicApiGeneratorTests.Examples.GenericTypeExtra<int, string, PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>> Value { get; set; }
     }
 }");
         }
@@ -65,7 +65,7 @@ namespace ApiApproverTests
         public void Should_use_class_generic_type()
         {
             AssertPublicApi(typeof(PropertyWithClassGeneric<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class PropertyWithClassGeneric<T>
     {

@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_return_types : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_handle_void_methods()
         {
             AssertPublicApi<VoidMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class VoidMethod
     {
@@ -24,7 +24,7 @@ namespace ApiApproverTests
         public void Should_output_primitive_types()
         {
             AssertPublicApi<MethodWithPrimitiveReturnTypes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithPrimitiveReturnTypes
     {
@@ -39,12 +39,12 @@ namespace ApiApproverTests
         public void Should_use_fully_qualified_type_name()
         {
             AssertPublicApi<MethodWithComplexReturnType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithComplexReturnType
     {
         public MethodWithComplexReturnType() { }
-        public ApiApproverTests.Examples.ComplexType Method() { }
+        public PublicApiGeneratorTests.Examples.ComplexType Method() { }
     }
 }");
         }
@@ -53,12 +53,12 @@ namespace ApiApproverTests
         public void Should_output_generic_parameters()
         {
             AssertPublicApi<MethodWithGenericReturnType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithGenericReturnType
     {
         public MethodWithGenericReturnType() { }
-        public ApiApproverTests.Examples.GenericType<int> Method() { }
+        public PublicApiGeneratorTests.Examples.GenericType<int> Method() { }
     }
 }");
         }
@@ -67,12 +67,12 @@ namespace ApiApproverTests
         public void Should_use_fully_qualified_type_name_for_generic_parameters()
         {
             AssertPublicApi<MethodWithGenericComplexReturnType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithGenericComplexReturnType
     {
         public MethodWithGenericComplexReturnType() { }
-        public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType> Method() { }
+        public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> Method() { }
     }
 }");
         }
@@ -81,12 +81,12 @@ namespace ApiApproverTests
         public void Should_output_generic_parameters_with_generic_parameters()
         {
             AssertPublicApi<MethodWithGenericTypeParameterOfGenericType>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithGenericTypeParameterOfGenericType
     {
         public MethodWithGenericTypeParameterOfGenericType() { }
-        public ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.GenericType<ApiApproverTests.Examples.ComplexType>> Method() { }
+        public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>> Method() { }
     }
 }");
         }
@@ -95,12 +95,12 @@ namespace ApiApproverTests
         public void Should_output_multiple_generic_parameters()
         {
             AssertPublicApi<MethodWithMultipleGenericTypeParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithMultipleGenericTypeParameters
     {
         public MethodWithMultipleGenericTypeParameters() { }
-        public ApiApproverTests.Examples.GenericTypeExtra<int, string, ApiApproverTests.Examples.ComplexType> Method() { }
+        public PublicApiGeneratorTests.Examples.GenericTypeExtra<int, string, PublicApiGeneratorTests.Examples.ComplexType> Method() { }
     }
 }");
         }

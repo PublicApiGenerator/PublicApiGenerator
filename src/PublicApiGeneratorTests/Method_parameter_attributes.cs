@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_parameter_attributes : ApiGeneratorTestsBase
     {
@@ -9,12 +9,12 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_no_parameter()
         {
             AssertPublicApi<MethodParameterWithSimpleAttribute>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodParameterWithSimpleAttribute
     {
         public MethodParameterWithSimpleAttribute() { }
-        public void Method([ApiApproverTests.Examples.SimpleAttribute()] int value) { }
+        public void Method([PublicApiGeneratorTests.Examples.SimpleAttribute()] int value) { }
     }
 }");
         }
@@ -23,14 +23,14 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_positional_parameters()
         {
             AssertPublicApi<MethodParameterWithAttributeWithPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodParameterWithAttributeWithPositionalParameters
     {
         public MethodParameterWithAttributeWithPositionalParameters() { }
-        public void Method1([ApiApproverTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")] int value) { }
-        public void Method2([ApiApproverTests.Examples.AttributeWithPositionalParameters2Attribute(42)] int value) { }
-        public void Method3([ApiApproverTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")] int value) { }
+        public void Method1([PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")] int value) { }
+        public void Method2([PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)] int value) { }
+        public void Method3([PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")] int value) { }
     }
 }");
         }
@@ -39,13 +39,13 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_named_parameters()
         {
             AssertPublicApi<MethodParameterWithAttributeWithNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodParameterWithAttributeWithNamedParameters
     {
         public MethodParameterWithAttributeWithNamedParameters() { }
-        public void Method1([ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")] int value) { }
-        public void Method2([ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)] int value) { }
+        public void Method1([PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")] int value) { }
+        public void Method2([PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)] int value) { }
     }
 }");
         }
@@ -54,12 +54,12 @@ namespace ApiApproverTests
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
             AssertPublicApi<MethodParameterWithAttributeWithMultipleNamedParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodParameterWithAttributeWithMultipleNamedParameters
     {
         public MethodParameterWithAttributeWithMultipleNamedParameters() { }
-        public void Method([ApiApproverTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")] int value) { }
+        public void Method([PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")] int value) { }
     }
 }");
         }
@@ -68,12 +68,12 @@ namespace ApiApproverTests
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
             AssertPublicApi<MethodParameterWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodParameterWithAttributeWithBothNamedAndPositionalParameters
     {
         public MethodParameterWithAttributeWithBothNamedAndPositionalParameters() { }
-        public void Method([ApiApproverTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")] int value) { }
+        public void Method([PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")] int value) { }
     }
 }");
         }
@@ -82,12 +82,12 @@ namespace ApiApproverTests
         public void Should_expand_enum_flags()
         {
             AssertPublicApi<MethodParameterWithAttributeWithEnumFlags>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodParameterWithAttributeWithEnumFlags
     {
         public MethodParameterWithAttributeWithEnumFlags() { }
-        public void Method([ApiApproverTests.Examples.AttributeWithEnumFlagsAttribute(ApiApproverTests.Examples.EnumWithFlags.One | ApiApproverTests.Examples.EnumWithFlags.Two | ApiApproverTests.Examples.EnumWithFlags.Three)] int value) { }
+        public void Method([PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)] int value) { }
     }
 }");
         }
@@ -96,12 +96,12 @@ namespace ApiApproverTests
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<MethodParameterWithMultipleAttributes>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class MethodParameterWithMultipleAttributes
     {
         public MethodParameterWithMultipleAttributes() { }
-        public void Method([ApiApproverTests.Examples.Attribute_AA()] [ApiApproverTests.Examples.Attribute_MM()] [ApiApproverTests.Examples.Attribute_ZZ()] int value) { }
+        public void Method([PublicApiGeneratorTests.Examples.Attribute_AA()] [PublicApiGeneratorTests.Examples.Attribute_MM()] [PublicApiGeneratorTests.Examples.Attribute_ZZ()] int value) { }
     }
 }");
         }

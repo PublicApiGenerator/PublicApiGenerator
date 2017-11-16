@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Class_member_order : ApiGeneratorTestsBase
     {
@@ -11,7 +11,7 @@ namespace ApiApproverTests
         {
             // Fields, properties, events, methods, nested type (inc. delegates)
             AssertPublicApi<ClassMemberOrder>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassMemberOrder
     {
@@ -35,7 +35,7 @@ namespace ApiApproverTests
         {
             // Fields, properties, events, methods
             AssertPublicApi<ClassMemberOrderAndNestedClass>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassMemberOrderAndNestedClass
     {

@@ -1,8 +1,8 @@
-﻿using ApiApproverTests.Examples1;
-using ApiApproverTests.Examples2;
+﻿using PublicApiGeneratorTests.Examples1;
+using PublicApiGeneratorTests.Examples2;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Namespaces : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_declare_one_namespace_for_multiple_classes()
         {
             AssertPublicApi(new[] {typeof(Simple1), typeof(Simple2)},
-@"namespace ApiApproverTests.Examples1
+@"namespace PublicApiGeneratorTests.Examples1
 {
     public class Simple1
     {
@@ -27,14 +27,14 @@ namespace ApiApproverTests
         public void Should_declare_new_namespace_for_classes_in_different_namespaces()
         {
             AssertPublicApi(new[]{typeof(Simple1), typeof(OtherSimple1)},
-@"namespace ApiApproverTests.Examples1
+@"namespace PublicApiGeneratorTests.Examples1
 {
     public class Simple1
     {
         public Simple1() { }
     }
 }
-namespace ApiApproverTests.Examples2
+namespace PublicApiGeneratorTests.Examples2
 {
     public class OtherSimple1
     {

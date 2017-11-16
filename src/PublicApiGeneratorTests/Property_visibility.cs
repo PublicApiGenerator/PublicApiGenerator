@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Property_visibility :  ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_output_public_property()
         {
             AssertPublicApi<ClassWithPublicProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicProperty
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_output_protected_property()
         {
             AssertPublicApi<ClassWithProtectedProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedProperty
     {
@@ -37,7 +37,7 @@ namespace ApiApproverTests
         public void Should_output_protected_internal_property()
         {
             AssertPublicApi<ClassWithProtectedInternalProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalProperty
     {
@@ -51,7 +51,7 @@ namespace ApiApproverTests
         public void Should_not_output_private_property()
         {
             AssertPublicApi<ClassWithPrivateProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateProperty
     {
@@ -64,7 +64,7 @@ namespace ApiApproverTests
         public void Should_not_output_internal_property()
         {
             AssertPublicApi<ClassWithInternalProperty>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalProperty
     {
@@ -77,7 +77,7 @@ namespace ApiApproverTests
         public void Should_not_output_private_setter_for_public_property()
         {
             AssertPublicApi<ClassWithPublicGetterPrivateSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterPrivateSetter
     {
@@ -91,7 +91,7 @@ namespace ApiApproverTests
         public void Should_not_output_internal_setter_for_public_property()
         {
             AssertPublicApi<ClassWithPublicGetterInternalSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterInternalSetter
     {
@@ -105,7 +105,7 @@ namespace ApiApproverTests
         public void Should_output_protected_setter_for_public_property()
         {
             AssertPublicApi<ClassWithPublicGetterProtectedSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedSetter
     {
@@ -120,7 +120,7 @@ namespace ApiApproverTests
         public void Should_output_protected_setter_for_public_property_with_correct_modifier()
         {
             AssertPublicApi<ClassWithPublicGetterProtectedSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedSetter
     {
@@ -134,7 +134,7 @@ namespace ApiApproverTests
         public void Should_output_protected_internal_setter_for_public_property()
         {
             AssertPublicApi<ClassWithPublicGetterProtectedInternalSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedInternalSetter
     {
@@ -149,7 +149,7 @@ namespace ApiApproverTests
         public void Should_output_protected_internal_setter_for_public_property_with_correct_modifier()
         {
             AssertPublicApi<ClassWithPublicGetterProtectedInternalSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedInternalSetter
     {
@@ -163,7 +163,7 @@ namespace ApiApproverTests
         public void Should_not_output_private_getter_for_public_property()
         {
             AssertPublicApi<ClassWithPrivateGetterPublicSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateGetterPublicSetter
     {
@@ -177,7 +177,7 @@ namespace ApiApproverTests
         public void Should_not_output_internal_getter_for_public_property()
         {
             AssertPublicApi<ClassWithInternalGetterPublicSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalGetterPublicSetter
     {
@@ -193,7 +193,7 @@ namespace ApiApproverTests
             // TODO: CodeDOM doesn't support access modifiers on setters or getters
             // Doesn't really matter for diffing APIs, though
             AssertPublicApi<ClassWithProtectedGetterPublicSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedGetterPublicSetter
     {
@@ -208,7 +208,7 @@ namespace ApiApproverTests
         public void Should_output_protected_getter_for_public_property_with_correct_modifier()
         {
             AssertPublicApi<ClassWithProtectedGetterPublicSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedGetterPublicSetter
     {
@@ -224,7 +224,7 @@ namespace ApiApproverTests
             // TODO: CodeDOM doesn't support access modifiers on setters or getters
             // Doesn't really matter for diffing APIs, though
             AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalGetterPublicSetter
     {
@@ -239,7 +239,7 @@ namespace ApiApproverTests
         public void Should_output_protected_internal_getter_for_public_property_with_correct_modifier()
         {
             AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalGetterPublicSetter
     {

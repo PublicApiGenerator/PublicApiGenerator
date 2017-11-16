@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_generics : ApiGeneratorTestsBase
     {
@@ -10,7 +10,7 @@ namespace ApiApproverTests
         public void Should_output_generic_type_parameters()
         {
             AssertPublicApi(typeof(IWithGenericType<>), 
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithGenericType<T> { }
 }");
@@ -20,7 +20,7 @@ namespace ApiApproverTests
         public void Should_output_multiple_generic_type_parameters()
         {
             AssertPublicApi(typeof(IWithMultipleGenericTypes<,>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithMultipleGenericTypes<T1, T2> { }
 }");
@@ -31,7 +31,7 @@ namespace ApiApproverTests
         {
             // The extra space before "class" is a hack!
             AssertPublicApi(typeof(IWithReferenceTypeConstraint<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithReferenceTypeConstraint<T>
         where T :  class { }
@@ -43,7 +43,7 @@ namespace ApiApproverTests
         {
             // The extra space before "struct" is a hack!
             AssertPublicApi(typeof(IWithValueTypeConstraint<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithValueTypeConstraint<T>
         where T :  struct { }
@@ -55,7 +55,7 @@ namespace ApiApproverTests
         public void Should_output_new_generic_type_constraint()
         {
             AssertPublicApi(typeof(IWithDefaultConstructorTypeConstraint<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithDefaultConstructorTypeConstraint<T>
         where T : new() { }
@@ -66,7 +66,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_constraint()
         {
             AssertPublicApi(typeof(IWithSpecificTypeConstraint<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithSpecificTypeConstraint<T>
         where T : System.IDisposable { }
@@ -77,7 +77,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_and_value_type_constraint()
         {
             AssertPublicApi(typeof(IWithSpecificTypeAndValueTypeConstraint<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithSpecificTypeAndValueTypeConstraint<T>
         where T :  struct, System.IDisposable { }
@@ -88,7 +88,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_and_reference_type_constraint()
         {
             AssertPublicApi(typeof(IWithSpecificTypeAndReferenceTypeConstraint<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithSpecificTypeAndReferenceTypeConstraint<T>
         where T :  class, System.IDisposable { }
@@ -99,7 +99,7 @@ namespace ApiApproverTests
         public void Should_output_specific_type_and_default_constructor_type_constraint()
         {
             AssertPublicApi(typeof(IWithSpecificTypeAndDefaultConstructorTypeConstraint<>),
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithSpecificTypeAndDefaultConstructorTypeConstraint<T>
         where T : System.IDisposable, new () { }

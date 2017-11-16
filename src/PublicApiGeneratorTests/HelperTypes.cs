@@ -8,7 +8,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable NotAccessedField.Global
-namespace ApiApproverTests.Examples
+namespace PublicApiGeneratorTests.Examples
 {
     public class ComplexType
     {

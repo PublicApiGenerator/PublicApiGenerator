@@ -1,7 +1,7 @@
-﻿using ApiApproverTests.Examples;
+﻿using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Method_visibility : ApiGeneratorTestsBase
     {
@@ -9,7 +9,7 @@ namespace ApiApproverTests
         public void Should_show_public_methods()
         {
             AssertPublicApi<ClassWithPublicMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicMethod
     {
@@ -23,7 +23,7 @@ namespace ApiApproverTests
         public void Should_show_protected_methods()
         {
             AssertPublicApi<ClassWithProtectedMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedMethod
     {
@@ -37,7 +37,7 @@ namespace ApiApproverTests
         public void Should_not_show_internal_methods()
         {
             AssertPublicApi<ClassWithInternalMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalMethod
     {
@@ -50,7 +50,7 @@ namespace ApiApproverTests
         public void Should_not_show_private_methods()
         {
             AssertPublicApi<ClassWithPrivateMethod>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateMethod
     {

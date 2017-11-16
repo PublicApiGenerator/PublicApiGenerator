@@ -1,9 +1,9 @@
-﻿using ApiApproverTests.Examples;
-using ApiApproverTests.Examples_AA;
-using ApiApproverTests.Examples_ZZ;
+﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples_AA;
+using PublicApiGeneratorTests.Examples_ZZ;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Assembly_member_ordering : ApiGeneratorTestsBase
     {
@@ -19,7 +19,7 @@ namespace ApiApproverTests
                 typeof(AssemblyMember_Class1),
                 typeof(AssemblyMember_Delegate1)
             },
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class AssemblyMember_Class1
     {
@@ -44,14 +44,14 @@ namespace ApiApproverTests
                 typeof(AssemblyOrdering_1),
                 typeof(AssemblyOrdering_2)
             },
-@"namespace ApiApproverTests.Examples_AA
+@"namespace PublicApiGeneratorTests.Examples_AA
 {
     public class AssemblyOrdering_2
     {
         public AssemblyOrdering_2() { }
     }
 }
-namespace ApiApproverTests.Examples_ZZ
+namespace PublicApiGeneratorTests.Examples_ZZ
 {
     public class AssemblyOrdering_1
     {

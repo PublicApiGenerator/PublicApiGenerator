@@ -1,8 +1,8 @@
 ﻿using System;
-using ApiApproverTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
-namespace ApiApproverTests
+namespace PublicApiGeneratorTests
 {
     public class Interface_member_order : ApiGeneratorTestsBase
     {
@@ -11,7 +11,7 @@ namespace ApiApproverTests
         {
             // Yes, CodeDOM inserts public for events...
             AssertPublicApi<IInterfaceMemberOrder>(
-@"namespace ApiApproverTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public interface IInterfaceMemberOrder
     {
