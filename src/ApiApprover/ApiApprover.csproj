@@ -1,21 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net40</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="3.*" />
-  </ItemGroup>
+    <Description>
+      Simply add this package to add a test which generates a string of your public API, then sends it to Approval Tests to approve any public API changes.
 
-  <PropertyGroup>
-    <PackageId>ApiApprover</PackageId>
-    <Description>Simply add this package to add a test which generates a string of your public API, then sends it to Approval Tests to approve any public API changes.
-
-Don't accidently miss a breaking API change and break semantic versioning again.</Description>
-    <IsPackable>true</IsPackable>
+      Don't accidently miss a breaking API change and break semantic versioning again.
+    </Description>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PublicApiGenerator\PublicApiGenerator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ApprovalTests" Version="3.0.13" />
+  </ItemGroup>
 
   <ItemGroup>
     <_PackageFiles Include="PublicApiApprover.cs">
@@ -24,18 +26,6 @@ Don't accidently miss a breaking API change and break semantic versioning again.
     </_PackageFiles>
   </ItemGroup>
 
-  <ItemGroup>
-	  <ProjectReference Include="..\PublicApiGenerator\PublicApiGenerator.csproj" />
-  </ItemGroup>    
+  <Import Project="../GitVersionWorkaround.targets" />
 
-  <!-- Workaround for GitVersion 4.0 not creating GitVersionInformation by default -->
-  <PropertyGroup>
-    <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-  </PropertyGroup>
-  <!-- End Workaround -->
-
-  <Import Project="../GitVersionWorkaround.targets" />    
 </Project>

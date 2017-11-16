@@ -1,16 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net40</TargetFramework>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>PublicApiGenerator</PackageId>
+    <TargetFramework>net40</TargetFramework>
     <Description>This library simply returns your public API as a string. You can use this in approval style tests or for documentation.</Description>
-    <IsPackable>true</IsPackable>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
+  </ItemGroup>
 
   <ItemGroup>
     <_PackageFiles Include="ApiGenerator.cs">
@@ -19,19 +18,6 @@
     </_PackageFiles>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
-  </ItemGroup>
-
-    <!-- Workaround for GitVersion 4.0 not creating GitVersionInformation by default -->
-  <PropertyGroup>
-    <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-  </PropertyGroup>
-  <!-- End Workaround -->
-
-  <Import Project="../GitVersionWorkaround.targets" />  
+  <Import Project="../GitVersionWorkaround.targets" />
 
 </Project>
