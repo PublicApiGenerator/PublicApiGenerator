@@ -1,7 +1,16 @@
 <Project>
 
+  <PropertyGroup>
+    <Authors>Jake Ginnivan</Authors>
+    <PackageProjectUrl>https://github.com/JakeGinnivan/ApiApprover</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/JakeGinnivan/ApiApprover/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright Jake Ginnivan 2010-$([System.DateTime]::UtcNow.ToString(yyyy)). All rights reserved.</Copyright>
+    <PackageTags>semanticversioning versioning api</PackageTags>
+    <PackageOutputPath>..\..\nugets</PackageOutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Terrajobst.PlatformCompat.Analyzers" Version="0.0.95-alpha" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.1.2-alpha" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,202 @@
+﻿using PublicApiGeneratorTests.Examples;
+using Xunit;
+
+namespace PublicApiGeneratorTests
+{
+    public class Interface_method_attributes : ApiGeneratorTestsBase
+    {
+        [Fact]
+        public void Should_add_attribute_with_no_parameters()
+        {
+            AssertPublicApi<IMethodWithSimpleAttribute>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodWithSimpleAttribute
+    {
+        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+        void Method();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_add_attribute_with_positional_parameters()
+        {
+            AssertPublicApi<IMethodsWithAttributeWithPositionalParameters>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodsWithAttributeWithPositionalParameters
+    {
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+        void Method1();
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+        void Method2();
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+        void Method3();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_add_attribute_with_named_parameters()
+        {
+            AssertPublicApi<IMethodsWithAttributeWithNamedParameters>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodsWithAttributeWithNamedParameters
+    {
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+        void Method1();
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+        void Method2();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_add_multiple_named_parameters_in_alphabetical_order()
+        {
+            AssertPublicApi<IMethodWithAttributeWithMultipleNamedParameters>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodWithAttributeWithMultipleNamedParameters
+    {
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+        void Method();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_add_attribute_with_both_named_and_positional_parameters()
+        {
+            AssertPublicApi<IMethodWithAttributeWithBothNamedAndPositionalParameters>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodWithAttributeWithBothNamedAndPositionalParameters
+    {
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        void Method();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_expand_enum_flags()
+        {
+            AssertPublicApi<IMethodWithAttributeWithEnumFlags>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodWithAttributeWithEnumFlags
+    {
+        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+        void Method();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_handle_typeof_argument()
+        {
+            AssertPublicApi<IMethodWithAttributeWithType>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodWithAttributeWithType
+    {
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
+        void Method1();
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.ComplexType))]
+        void Method2();
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>))]
+        void Method3();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_add_multiple_attributes_in_alphabetical_order()
+        {
+            AssertPublicApi<IMethodWithMultipleAttributes>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodWithMultipleAttributes
+    {
+        [PublicApiGeneratorTests.Examples.Attribute_AA()]
+        [PublicApiGeneratorTests.Examples.Attribute_MM()]
+        [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+        void Method();
+    }
+}");
+        }
+    }
+
+    // ReSharper disable UnusedMember.Global
+    // ReSharper disable ClassNeverInstantiated.Global
+    namespace Examples
+    {
+        public interface IMethodWithSimpleAttribute
+        {
+            [SimpleAttribute]
+            void Method();
+        }
+
+        public interface IMethodsWithAttributeWithPositionalParameters
+        {
+            [AttributeWithPositionalParameters1("Hello")]
+            void Method1();
+
+            [AttributeWithPositionalParameters2(42)]
+            void Method2();
+
+            [AttributeWithMultiplePositionalParameters(42, "Hello world")]
+            void Method3();
+        }
+
+        public interface IMethodsWithAttributeWithNamedParameters
+        {
+            [AttributeWithNamedParameter(StringValue = "Hello")]
+            void Method1();
+
+            [AttributeWithNamedParameter(IntValue = 42)]
+            void Method2();
+        }
+
+        public interface IMethodWithAttributeWithMultipleNamedParameters
+        {
+            [AttributeWithNamedParameter(StringValue = "Hello world", IntValue = 42)]
+            void Method();
+        }
+
+        public interface IMethodWithAttributeWithBothNamedAndPositionalParameters
+        {
+            [AttributeWithNamedAndPositionalParameter(42, "Hello world", StringValue = "Thingy", IntValue = 13)]
+            void Method();
+        }
+
+        public interface IMethodWithAttributeWithEnumFlags
+        {
+            [AttributeWithEnumFlags(EnumWithFlags.One | EnumWithFlags.Two | EnumWithFlags.Three)]
+            void Method();
+        }
+
+        public interface IMethodWithAttributeWithType
+        {
+            [AttributeWithTypeParameterAttribute(typeof(string))]
+            void Method1();
+            [AttributeWithTypeParameterAttribute(typeof(ComplexType))]
+            void Method2();
+            [AttributeWithTypeParameterAttribute(typeof(GenericType<ComplexType>))]
+            void Method3();
+        }
+
+        public interface IMethodWithMultipleAttributes
+        {
+            [Attribute_ZZ]
+            [Attribute_MM]
+            [Attribute_AA]
+            void Method();
+        }
+    }
+    // ReSharper restore ClassNeverInstantiated.Global
+    // ReSharper restore UnusedMember.Global
+}

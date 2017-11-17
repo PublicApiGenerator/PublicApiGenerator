@@ -1,0 +1,110 @@
+﻿using PublicApiGeneratorTests.Examples;
+using Xunit;
+
+namespace PublicApiGeneratorTests
+{
+    public class Field_types : ApiGeneratorTestsBase
+    {
+        [Fact]
+        public void Should_use_fully_qualified_type_name()
+        {
+            AssertPublicApi<FieldWithComplexType>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithComplexType
+    {
+        public PublicApiGeneratorTests.Examples.ComplexType Field;
+        public FieldWithComplexType() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_generic_parameters()
+        {
+            AssertPublicApi<FieldWithGenericType>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithGenericType
+    {
+        public PublicApiGeneratorTests.Examples.GenericType<int> Field;
+        public FieldWithGenericType() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_use_fully_qualified_type_name_for_generic_parameters()
+        {
+            AssertPublicApi<FieldWithGenericComplexType>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithGenericComplexType
+    {
+        public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> Field;
+        public FieldWithGenericComplexType() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_generic_parameters_with_generic_parameters()
+        {
+            AssertPublicApi<FieldWithGenericTypeParametersOfGenericTypeParameters>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithGenericTypeParametersOfGenericTypeParameters
+    {
+        public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>> Field;
+        public FieldWithGenericTypeParametersOfGenericTypeParameters() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_multiple_generic_parameters()
+        {
+            AssertPublicApi<FieldWithMultipleGenericTypeParameters>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithMultipleGenericTypeParameters
+    {
+        public PublicApiGeneratorTests.Examples.GenericTypeExtra<int, string, PublicApiGeneratorTests.Examples.ComplexType> Field;
+        public FieldWithMultipleGenericTypeParameters() { }
+    }
+}");
+        }
+    }
+
+    // ReSharper disable ClassNeverInstantiated.Global
+    // ReSharper disable UnusedMember.Global
+    namespace Examples
+    {
+        public class FieldWithComplexType
+        {
+            public ComplexType Field;
+        }
+
+        public class FieldWithGenericType
+        {
+            public GenericType<int> Field;
+        }
+
+        public class FieldWithGenericComplexType
+        {
+            public GenericType<ComplexType> Field;
+        }
+
+        public class FieldWithGenericTypeParametersOfGenericTypeParameters
+        {
+            public GenericType<GenericType<ComplexType>> Field;
+        }
+
+        public class FieldWithMultipleGenericTypeParameters
+        {
+            public GenericTypeExtra<int, string, ComplexType> Field;
+        }
+    }
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore ClassNeverInstantiated.Global
+}
