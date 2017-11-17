@@ -1,19 +1,14 @@
-install:
-  - choco install gitversion.portable -pre -y
-assembly_info:
-  patch: false
 image: Visual Studio 2017
-before_build:
-- which msbuild.exe
-- nuget restore src/ApiApprover.sln
-- ps: gitversion /l console /output buildserver /updateAssemblyInfo
+
 branches:
   only:
   - master
-build:
-  project: src/ApiApprover.sln
-test:
-  # only assemblies to test
-  assemblies:
-    only:
-      - '**\bin\**\ApiApproverTests.dll'
+
+build_script:
+  - msbuild.exe src\ApiApprover.sln /t:restore,build /p:Configuration=Release
+
+test_script:
+  - dotnet test src\PublicApiGeneratorTests -c Release --no-restore --no-build
+
+artifacts:
+  - path: '**\*.nupkg'
