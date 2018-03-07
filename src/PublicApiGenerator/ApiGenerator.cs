@@ -407,7 +407,7 @@ namespace PublicApiGenerator
         static bool ShouldIncludeAttribute(CustomAttribute attribute)
         {
             var attributeTypeDefinition = attribute.AttributeType.Resolve();
-            return !SkipAttributeNames.Contains(attribute.AttributeType.FullName) && attributeTypeDefinition.IsPublic;
+            return attributeTypeDefinition != null && !SkipAttributeNames.Contains(attribute.AttributeType.FullName) && attributeTypeDefinition.IsPublic;
         }
 
         static CodeExpression CreateInitialiserExpression(CustomAttributeArgument attributeArgument)
