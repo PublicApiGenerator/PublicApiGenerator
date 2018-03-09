@@ -125,6 +125,19 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<IMethodReturnValueWithAttributeWithMultipleNamedParameters>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodReturnValueWithAttributeWithMultipleNamedParameters
+    {
+        void Method();
+    }
+}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global
