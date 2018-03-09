@@ -40,10 +40,21 @@ namespace PublicApiGenerator
                     AssemblyResolver = assemblyResolver,
                 }))
                 {
-                    return CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), 
+                    var publicApiForAssembly = CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), 
                         shouldIncludeAssemblyAttributes, whitelistedNamespacePrefixes ?? defaultWhitelistedNamespacePrefixes, attributesToExclude);
+                    return RemoveUnnecessaryWhiteSpace(publicApiForAssembly);
                 }
             }
+        }
+
+        static string RemoveUnnecessaryWhiteSpace(string publicApi)
+        {
+            return string.Join(Environment.NewLine, publicApi.Split(new[]
+                {
+                    Environment.NewLine
+                }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(l => !string.IsNullOrWhiteSpace(l))
+            );
         }
 
         // TODO: Assembly references?
