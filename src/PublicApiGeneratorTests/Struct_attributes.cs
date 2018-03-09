@@ -102,6 +102,16 @@ namespace PublicApiGeneratorTests
     public struct StructWithMultipleAttributes { }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<StructWithSimpleAttribute>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public struct StructWithSimpleAttribute { }
+}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global

@@ -157,6 +157,21 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attributes()
+        {
+            AssertPublicApi<FieldWithMultipleAttributes>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithMultipleAttributes
+    {
+        [PublicApiGeneratorTests.Examples.Attribute_AA()]
+        public string Value;
+        public FieldWithMultipleAttributes() { }
+    }
+}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.Attribute_MM", "PublicApiGeneratorTests.Examples.Attribute_ZZ" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global

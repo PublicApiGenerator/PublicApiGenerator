@@ -21,7 +21,7 @@ namespace PublicApiGenerator
     {
         static readonly string[] defaultWhitelistedNamespacePrefixes = new string[0];
 
-        public static string GeneratePublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[] whitelistedNamespacePrefixes = null)
+        public static string GeneratePublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[] whitelistedNamespacePrefixes = null, string[] excludeAttributes = null)
         {
             using (var assemblyResolver = new DefaultAssemblyResolver())
             {

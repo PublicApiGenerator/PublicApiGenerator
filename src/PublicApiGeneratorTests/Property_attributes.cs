@@ -174,6 +174,20 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attributes()
+        {
+            AssertPublicApi<PropertyWithSimpleAttributeOnGetterAndSetter>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class PropertyWithSimpleAttributeOnGetterAndSetter
+    {
+        public PropertyWithSimpleAttributeOnGetterAndSetter() { }
+        public string Value { get; set; }
+    }
+}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+        }
     }
 
     // ReSharper disable UnusedMember.Global

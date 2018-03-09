@@ -211,6 +211,18 @@ namespace PublicApiGeneratorTests
     public delegate string DelegateWithAttributeOnParameter([PublicApiGeneratorTests.Examples.SimpleAttribute()] int value);
 }");
         }
+
+        [Fact]
+        public void Should_skip_excluded_attribute()
+        {
+            AssertPublicApi<DelegateWithMultipleAttributes>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    [PublicApiGeneratorTests.Examples.Attribute_AA()]
+    [PublicApiGeneratorTests.Examples.Attribute_MM()]
+    public delegate void DelegateWithMultipleAttributes();
+}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.Attribute_ZZ" });
+        }
     }
 
     namespace Examples
