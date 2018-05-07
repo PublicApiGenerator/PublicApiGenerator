@@ -135,7 +135,7 @@ namespace PublicApiGenerator
             if (m.DeclaringType?.FullName == null)
                 return false;
 
-            return m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft")
+            return (m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft"))
                 && !whitelistedNamespacePrefixes.Any(prefix => m.DeclaringType.FullName.StartsWith(prefix));
         }
 
