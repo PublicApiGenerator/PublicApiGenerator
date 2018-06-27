@@ -512,7 +512,8 @@ namespace PublicApiGenerator
 
         static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, HashSet<string> excludeAttributes)
         {
-            if (member.IsAssembly || member.IsPrivate || member.IsSpecialName)
+            var isOperator = member.Name.StartsWith("op_");
+            if (member.IsAssembly || member.IsPrivate || (member.IsSpecialName && !isOperator))
                 return;
 
             var returnType = CreateCodeTypeReference(member.ReturnType);
