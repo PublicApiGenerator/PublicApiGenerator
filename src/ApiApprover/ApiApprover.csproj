@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="ApprovalTests" Version="3.0.13" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" PrivateAssets="All" />
   </ItemGroup>
 
   <Target Name="AddPackageContent" BeforeTargets="GenerateNuspec">
@@ -27,7 +28,5 @@
       </_PackageFiles>
     </ItemGroup>
   </Target>
-
-  <Import Project="../GitVersionWorkaround.targets" />
 
 </Project>
