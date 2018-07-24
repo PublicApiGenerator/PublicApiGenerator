@@ -510,16 +510,50 @@ namespace PublicApiGenerator
             typeDeclaration.Members.Add(method);
         }
 
+        static readonly IDictionary<string, string> OperatorNameMap = new Dictionary<string, string>
+        {
+            { "op_Addition", "+" },
+            { "op_UnaryPlus", "+" },
+            { "op_Subtraction", "-" },
+            { "op_UnaryNegation", "-" },
+            { "op_Multiply", "*" },
+            { "op_Division", "/" },
+            { "op_Modulus", "%" },
+            { "op_Increment", "++" },
+            { "op_Decrement", "--" },
+            { "op_OnesComplement", "~" },
+            { "op_LogicalNot", "!" },
+            { "op_BitwiseAnd", "&" },
+            { "op_BitwiseOr", "|" },
+            { "op_ExclusiveOr", "^" },
+            { "op_LeftShift", "<<" },
+            { "op_RightShift", ">>" },
+            { "op_Equality", "==" },
+            { "op_Inequality", "!=" },
+            { "op_GreaterThan", ">" },
+            { "op_GreaterThanOrEqual", ">=" },
+            { "op_LessThan", "<" },
+            { "op_LessThanOrEqual", "<=" }
+        };
+
         static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, HashSet<string> excludeAttributes)
         {
-            if (member.IsAssembly || member.IsPrivate || member.IsSpecialName)
-                return;
+            if (member.IsAssembly || member.IsPrivate) return;
+
+            var isOperator = member.Name.StartsWith("op_");
+            if (member.IsSpecialName && !isOperator) return;
+
+            var memberName = member.Name;
+            if (isOperator && OperatorNameMap.ContainsKey(memberName))
+            {
+                memberName = OperatorNameMap[memberName];
+            }
 
             var returnType = CreateCodeTypeReference(member.ReturnType);
 
             var method = new CodeMemberMethod
             {
-                Name = member.Name,
+                Name = memberName,
                 Attributes = GetMethodAttributes(member),
                 CustomAttributes = CreateCustomAttributes(member, excludeAttributes),
                 ReturnType = returnType,

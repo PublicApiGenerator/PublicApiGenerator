@@ -1,0 +1,110 @@
+﻿using PublicApiGeneratorTests.Examples;
+using Xunit;
+
+namespace PublicApiGeneratorTests
+{
+    public class Operator_order : ApiGeneratorTestsBase
+    {
+        [Fact]
+        public void Should_sort_unary_operators()
+        {
+            AssertPublicApi<ClassWithUnaryOperators>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithUnaryOperators
+    {
+        public ClassWithUnaryOperators() { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators --(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static bool op_False(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators ++(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators !(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators ~(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static bool op_True(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators -(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators +(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_sort_binary_operators()
+        {
+            AssertPublicApi<ClassWithBinaryOperators>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithBinaryOperators
+    {
+        public ClassWithBinaryOperators() { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators +(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators &(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators |(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators /(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators ^(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators <<(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, int second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators %(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators *(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators >>(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, int second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators -(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_sort_comparison_operators()
+        {
+            AssertPublicApi<ClassWithComparisonOperators>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithComparisonOperators
+    {
+        public ClassWithComparisonOperators() { }
+        public static bool ==(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool >(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool >=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool !=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool <(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool <=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+    }
+}");
+        }
+    }
+
+    namespace Examples
+    {
+        public class ClassWithUnaryOperators
+        {
+            public static ClassWithUnaryOperators operator +(ClassWithUnaryOperators first) => first;
+            public static ClassWithUnaryOperators operator -(ClassWithUnaryOperators first) => first;
+            public static ClassWithUnaryOperators operator !(ClassWithUnaryOperators first) => first;
+            public static ClassWithUnaryOperators operator ~(ClassWithUnaryOperators first) => first;
+            public static ClassWithUnaryOperators operator ++(ClassWithUnaryOperators first) => first;
+            public static ClassWithUnaryOperators operator --(ClassWithUnaryOperators first) => first;
+            public static bool operator true(ClassWithUnaryOperators first) => true;
+            public static bool operator false(ClassWithUnaryOperators first) => false;
+        }
+
+        public class ClassWithBinaryOperators
+        {
+            public static ClassWithBinaryOperators operator +(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator -(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator /(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator *(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator %(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator &(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator |(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator ^(ClassWithBinaryOperators first, ClassWithBinaryOperators second) => first;
+            public static ClassWithBinaryOperators operator <<(ClassWithBinaryOperators first, int second) => first;
+            public static ClassWithBinaryOperators operator >>(ClassWithBinaryOperators first, int second) => first;
+        }
+
+        public class ClassWithComparisonOperators
+        {
+            public static bool operator ==(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
+            public static bool operator !=(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
+            public static bool operator <(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
+            public static bool operator >(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
+            public static bool operator <=(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
+            public static bool operator >=(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
+        }
+    }
+}
