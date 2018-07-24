@@ -97,7 +97,9 @@ namespace PublicApiGeneratorTests
             public static ClassWithBinaryOperators operator >>(ClassWithBinaryOperators first, int second) => first;
         }
 
+#pragma warning disable 660,661
         public class ClassWithComparisonOperators
+#pragma warning restore 660,661
         {
             public static bool operator ==(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
             public static bool operator !=(ClassWithComparisonOperators first, ClassWithComparisonOperators second) => true;
