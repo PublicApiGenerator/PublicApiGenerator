@@ -540,13 +540,14 @@ namespace PublicApiGenerator
         {
             if (member.IsAssembly || member.IsPrivate) return;
 
-            var isOperator = member.Name.StartsWith("op_");
-            if (member.IsSpecialName && !isOperator) return;
+            if (member.IsSpecialName && !member.Name.StartsWith("op_")) return;
 
             var memberName = member.Name;
-            if (isOperator && OperatorNameMap.ContainsKey(memberName))
+            // ReSharper disable once InlineOutVariableDeclaration
+            string mappedMemberName;
+            if (OperatorNameMap.TryGetValue(memberName, out mappedMemberName))
             {
-                memberName = OperatorNameMap[memberName];
+                memberName = mappedMemberName;
             }
 
             var returnType = CreateCodeTypeReference(member.ReturnType);
