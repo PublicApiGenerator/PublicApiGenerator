@@ -38,5 +38,3 @@ public void my_assembly_has_no_public_api_changes()
     Approvals.Verify(publicApi);
 }
 ```
-
-[See this example](https://github.com/JakeGinnivan/ApiApprover/blob/master/src/ApiApprover/ExampleApiApprovalTest.cs) of a more advanced test you can write using this library.
