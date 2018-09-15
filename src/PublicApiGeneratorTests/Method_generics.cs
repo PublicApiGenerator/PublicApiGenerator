@@ -128,7 +128,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        public void Should_output_specific_type_and_new_constriant()
+        public void Should_output_specific_type_and_new_constraint()
         {
             AssertPublicApi<MethodWithTypeParameterWithSpecificTypeAndDefaultConstructorConstraints>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -171,7 +171,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        public void Should_use_shortname_for_generic_type_parameter_in_generic_args()
+        public void Should_use_short_name_for_generic_type_parameter_in_generic_args()
         {
             AssertPublicApi(typeof(MethodWithGenericUseOfClassTypeParameter<>),
 @"namespace PublicApiGeneratorTests.Examples

@@ -21,26 +21,26 @@ namespace PublicApiGenerator
     {
         static readonly string[] defaultWhitelistedNamespacePrefixes = new string[0];
 
-        public static string GeneratePublicApi(Assembly assemby, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[] whitelistedNamespacePrefixes = null, string[] excludeAttributes = null)
+        public static string GeneratePublicApi(Assembly assembly, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[] whitelistedNamespacePrefixes = null, string[] excludeAttributes = null)
         {
-            var attributesToExclude = excludeAttributes == null 
-                ? SkipAttributeNames 
+            var attributesToExclude = excludeAttributes == null
+                ? SkipAttributeNames
                 : new HashSet<string>(excludeAttributes.Union(SkipAttributeNames));
 
             using (var assemblyResolver = new DefaultAssemblyResolver())
             {
-                var assemblyPath = assemby.Location;
+                var assemblyPath = assembly.Location;
                 assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyPath));
                 assemblyResolver.AddSearchDirectory(AppDomain.CurrentDomain.BaseDirectory);
-                
+
                 var readSymbols = File.Exists(Path.ChangeExtension(assemblyPath, ".pdb"));
                 using (var asm = AssemblyDefinition.ReadAssembly(assemblyPath, new ReaderParameters(ReadingMode.Deferred)
                 {
                     ReadSymbols = readSymbols,
-                    AssemblyResolver = assemblyResolver,
+                    AssemblyResolver = assemblyResolver
                 }))
                 {
-                    var publicApiForAssembly = CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName), 
+                    var publicApiForAssembly = CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName),
                         shouldIncludeAssemblyAttributes, whitelistedNamespacePrefixes ?? defaultWhitelistedNamespacePrefixes, attributesToExclude);
                     return RemoveUnnecessaryWhiteSpace(publicApiForAssembly);
                 }
@@ -139,29 +139,28 @@ namespace PublicApiGenerator
                 && !whitelistedNamespacePrefixes.Any(prefix => m.DeclaringType.FullName.StartsWith(prefix));
         }
 
-        static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration, 
-            IMemberDefinition memberInfo, 
+        static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration,
+            IMemberDefinition memberInfo,
             HashSet<string> excludeAttributes)
         {
-            var methodDefinition = memberInfo as MethodDefinition;
-            if (methodDefinition != null)
+            if (memberInfo is MethodDefinition methodDefinition)
             {
                 if (methodDefinition.IsConstructor)
                     AddCtorToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
                 else
                     AddMethodToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
             }
-            else if (memberInfo is PropertyDefinition)
+            else if (memberInfo is PropertyDefinition definition)
             {
-                AddPropertyToTypeDeclaration(typeDeclaration, (PropertyDefinition) memberInfo, excludeAttributes);
+                AddPropertyToTypeDeclaration(typeDeclaration, definition, excludeAttributes);
             }
-            else if (memberInfo is EventDefinition)
+            else if (memberInfo is EventDefinition eventDefinition)
             {
-                typeDeclaration.Members.Add(GenerateEvent((EventDefinition)memberInfo, excludeAttributes));
+                typeDeclaration.Members.Add(GenerateEvent(eventDefinition, excludeAttributes));
             }
-            else if (memberInfo is FieldDefinition)
+            else if (memberInfo is FieldDefinition fieldDefinition)
             {
-                AddFieldToTypeDeclaration(typeDeclaration, (FieldDefinition) memberInfo, excludeAttributes);
+                AddFieldToTypeDeclaration(typeDeclaration, fieldDefinition, excludeAttributes);
             }
         }
 
@@ -193,7 +192,7 @@ namespace PublicApiGenerator
             if (IsDelegate(publicType))
                 return CreateDelegateDeclaration(publicType, excludeAttributes);
 
-            bool @static = false;
+            var @static = false;
             TypeAttributes attributes = 0;
             if (publicType.IsPublic || publicType.IsNestedPublic)
                 attributes |= TypeAttributes.Public;
@@ -348,11 +347,11 @@ namespace PublicApiGenerator
         }
 
         static void PopulateCustomAttributes(ICustomAttributeProvider type,
-            CodeAttributeDeclarationCollection attributes, 
+            CodeAttributeDeclarationCollection attributes,
             Func<CodeTypeReference, CodeTypeReference> codeTypeModifier,
             HashSet<string> excludeAttributes)
         {
-            foreach (var customAttribute in type.CustomAttributes.Where(t => ShouldIncludeAttribute(t, excludeAttributes)).OrderBy(a => a.AttributeType.FullName).ThenBy(a => ConvertAttrbuteToCode(codeTypeModifier, a)))
+            foreach (var customAttribute in type.CustomAttributes.Where(t => ShouldIncludeAttribute(t, excludeAttributes)).OrderBy(a => a.AttributeType.FullName).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a)))
             {
                 var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
                 attributes.Add(attribute);
@@ -378,7 +377,7 @@ namespace PublicApiGenerator
         }
 
         // Litee: This method is used for additional sorting of custom attributes when multiple values are allowed
-        static object ConvertAttrbuteToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
+        static object ConvertAttributeToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
         {
             using (var provider = new CSharpCodeProvider())
             {
@@ -434,14 +433,14 @@ namespace PublicApiGenerator
 
         static CodeExpression CreateInitialiserExpression(CustomAttributeArgument attributeArgument)
         {
-            if (attributeArgument.Value is CustomAttributeArgument)
+            if (attributeArgument.Value is CustomAttributeArgument customAttributeArgument)
             {
-                return CreateInitialiserExpression((CustomAttributeArgument) attributeArgument.Value);
+                return CreateInitialiserExpression(customAttributeArgument);
             }
 
-            if (attributeArgument.Value is CustomAttributeArgument[])
+            if (attributeArgument.Value is CustomAttributeArgument[] arguments)
             {
-                var initialisers = from argument in (CustomAttributeArgument[]) attributeArgument.Value
+                var initialisers = from argument in arguments
                     select CreateInitialiserExpression(argument);
                 return new CodeArrayCreateExpression(CreateCodeTypeReference(attributeArgument.Type), initialisers.ToArray());
             }
@@ -478,9 +477,9 @@ namespace PublicApiGenerator
                 return allFlags.FirstOrDefault();
             }
 
-            if (type.FullName == "System.Type" && value is TypeReference)
+            if (type.FullName == "System.Type" && value is TypeReference reference)
             {
-                return new CodeTypeOfExpression(CreateCodeTypeReference((TypeReference)value));
+                return new CodeTypeOfExpression(CreateCodeTypeReference(reference));
             }
 
             if (value is string)
@@ -840,8 +839,7 @@ namespace PublicApiGenerator
 
         static CodeTypeReference[] CreateGenericArguments(TypeReference type)
         {
-            var genericInstance = type as IGenericInstance;
-            if (genericInstance == null) return null;
+            if (!(type is IGenericInstance genericInstance)) return null;
 
             var genericArguments = new List<CodeTypeReference>();
             foreach (var argument in genericInstance.GenericArguments)

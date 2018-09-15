@@ -9,7 +9,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_generic_type_parameters()
         {
-            AssertPublicApi(typeof(ClassWithGenericType<>), 
+            AssertPublicApi(typeof(ClassWithGenericType<>),
 @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithGenericType<T>
