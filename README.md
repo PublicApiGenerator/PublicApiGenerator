@@ -27,7 +27,7 @@ or
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
-	var publicApi = PublicApiApprover.GeneratePublicApi(typeof(Application).Assembly);
+    var publicApi = PublicApiApprover.GeneratePublicApi(typeof(Application).Assembly);
 
     // Use an approval framework like
 
