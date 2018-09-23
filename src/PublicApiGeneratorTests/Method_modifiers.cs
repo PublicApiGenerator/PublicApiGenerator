@@ -92,7 +92,7 @@ namespace PublicApiGeneratorTests
 
     // ReSharper disable ClassNeverInstantiated.Global
     // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedMemberHiearchy.Global
+    // ReSharper disable UnusedMemberHierarchy.Global
     // ReSharper disable MemberCanBeProtected.Global
     // ReSharper disable RedundantOverridenMember
     // ReSharper disable ClassWithVirtualMembersNeverInherited.Global
@@ -150,7 +150,7 @@ namespace PublicApiGeneratorTests
     // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
     // ReSharper restore RedundantOverridenMember
     // ReSharper restore MemberCanBeProtected.Global
-    // ReSharper restore UnusedMemberHiearchy.Global
+    // ReSharper restore UnusedMemberHierarchy.Global
     // ReSharper restore UnusedMember.Global
     // ReSharper restore ClassNeverInstantiated.Global
 }

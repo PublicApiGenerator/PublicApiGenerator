@@ -8,7 +8,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_extension_methods()
         {
-            // Note the clas static reverse order hack
+            // Note the class static reverse order hack
             AssertPublicApi(typeof(StringExtensions),
 @"namespace PublicApiGeneratorTests.Examples
 {
