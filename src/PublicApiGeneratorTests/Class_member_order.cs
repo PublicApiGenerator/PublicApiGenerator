@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples_Ordinal;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -72,6 +74,60 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_order_ordinal()
+        {
+            var currentCulture = CultureInfo.DefaultThreadCurrentCulture;
+
+            try
+            {
+                var apiWithCurrentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(ClassMemberOrdinal)
+                });
+
+                CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("tr-TR");
+                var apiWithDifferentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(ClassMemberOrdinal)
+                });
+
+                Assert.Equal(apiWithCurrentCulture, apiWithDifferentCulture, ignoreCase: false, ignoreLineEndingDifferences: true,
+                    ignoreWhiteSpaceDifferences: true);
+            }
+            finally
+            {
+                CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+            }
+        }
+
+        [Fact]
+        public void Should_order_ordinal_with_nested_class()
+        {
+            var currentCulture = CultureInfo.DefaultThreadCurrentCulture;
+
+            try
+            {
+                var apiWithCurrentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(ClassMemberOrdinalAndNestedClass)
+                });
+
+                CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("tr-TR");
+                var apiWithDifferentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(ClassMemberOrdinalAndNestedClass)
+                });
+
+                Assert.Equal(apiWithCurrentCulture, apiWithDifferentCulture, ignoreCase: false, ignoreLineEndingDifferences: true,
+                    ignoreWhiteSpaceDifferences: true);
+            }
+            finally
+            {
+                CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+            }
+        }
     }
 
     // ReSharper disable EventNeverInvoked
@@ -138,6 +194,69 @@ namespace PublicApiGeneratorTests
 
             public void Method2() { }
             public void Method1() { }
+        }
+    }
+    namespace Examples_Ordinal
+    {
+        public class ClassMemberOrdinal
+        {
+            public int IField;
+            public int iField;
+
+            public event EventHandler IEvent;
+            public event EventHandler iEvent;
+
+            public delegate EventHandler IDelegate();
+            public delegate EventHandler iDelegate();
+
+            public int IProperty { get; set; }
+            public int iProperty { get; set; }
+
+            public void IMethod() { }
+            public void iMethod() { }
+        }
+
+        public class ClassMemberOrdinalAndNestedClass
+        {
+            public int IField;
+            public int iField;
+
+            public event EventHandler IEvent;
+            public event EventHandler iEvent;
+
+            public delegate EventHandler IDelegate();
+
+            public class ClassMemberOrderAsNestedClass
+            {
+                public int IField;
+                public int iField;
+
+                public event EventHandler IEvent;
+                public event EventHandler iEvent;
+
+                public delegate EventHandler IDelegate1();
+                public delegate EventHandler iDelegate1();
+
+                public int IProperty { get; set; }
+                public int iProperty { get; set; }
+
+                public void IMethod() { }
+                public void iMethod() { }
+            }
+
+            public class AnotherNestedClass
+            {
+                public int IField;
+                public int iField;
+            }
+
+            public delegate EventHandler iDelegate();
+
+            public int IProperty { get; set; }
+            public int iProperty { get; set; }
+
+            public void iMethod() { }
+            public void IMethod() { }
         }
     }
     // ReSharper restore UnusedMember.Global

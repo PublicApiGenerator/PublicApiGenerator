@@ -24,12 +24,25 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(GetType().Assembly, types, expectedOutput, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
         }
 
+        protected string GeneratePublicApi(Type[] types, bool includeAssemblyAttributes = false, string[] whitelistedNamespacePrefixes = default(string[]), string[] excludeAttributes = null)
+        {
+            return GeneratePublicApi(GetType().Assembly, types, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
+        }
+
         private static void AssertPublicApi(Assembly assembly, Type[] types, string expectedOutput, bool includeAssemblyAttributes, string[] whitelistedNamespacePrefixes, string[] excludeAttributes)
         {
-            var actualOutput = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
-            actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
+            var actualOutput = GeneratePublicApi(assembly, types, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
             Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
                 ignoreWhiteSpaceDifferences: true);
+        }
+
+        private static string GeneratePublicApi(Assembly assembly, Type[] types, bool includeAssemblyAttributes,
+            string[] whitelistedNamespacePrefixes, string[] excludeAttributes)
+        {
+            var actualOutput = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes,
+                whitelistedNamespacePrefixes, excludeAttributes);
+            actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
+            return actualOutput;
         }
     }
 }

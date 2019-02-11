@@ -1,4 +1,6 @@
-﻿using PublicApiGeneratorTests.Examples;
+﻿using System.Globalization;
+using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples_Ordinal;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -25,6 +27,35 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_order_ordinal()
+        {
+            var currentCulture = CultureInfo.DefaultThreadCurrentCulture;
+
+            try
+            {
+                var apiWithCurrentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(I_Class),
+                    typeof(i_Class)
+                });
+
+                CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("tr-TR");
+                var apiWithDifferentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(I_Class),
+                    typeof(i_Class)
+                });
+
+                Assert.Equal(apiWithCurrentCulture, apiWithDifferentCulture, ignoreCase: false, ignoreLineEndingDifferences: true,
+                    ignoreWhiteSpaceDifferences: true);
+            }
+            finally
+            {
+                CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+            }
+        }
     }
 
     // ReSharper disable InconsistentNaming
@@ -39,6 +70,16 @@ namespace PublicApiGeneratorTests
         }
 
         public class AA_Class
+        {
+        }
+    }
+    namespace Examples_Ordinal
+    {
+        public class I_Class
+        {
+        }
+
+        public class i_Class
         {
         }
     }

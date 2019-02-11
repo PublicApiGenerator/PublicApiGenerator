@@ -1,5 +1,8 @@
-﻿using PublicApiGeneratorTests.Examples;
+﻿using System.Globalization;
+using System.Threading;
+using PublicApiGeneratorTests.Examples;
 using PublicApiGeneratorTests.Examples_AA;
+using PublicApiGeneratorTests.Examples_Ordinal;
 using PublicApiGeneratorTests.Examples_ZZ;
 using Xunit;
 
@@ -59,6 +62,35 @@ namespace PublicApiGeneratorTests.Examples_ZZ
     }
 }");
         }
+
+        [Fact]
+        public void Should_order_ordinal()
+        {
+            var currentCulture = CultureInfo.DefaultThreadCurrentCulture;
+
+            try
+            {
+                var apiWithCurrentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(I),
+                    typeof(i)
+                });
+
+                CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("tr-TR");
+                var apiWithDifferentCulture = GeneratePublicApi(new[]
+                {
+                    typeof(I),
+                    typeof(i)
+                });
+
+                Assert.Equal(apiWithCurrentCulture, apiWithDifferentCulture, ignoreCase: false, ignoreLineEndingDifferences: true,
+                    ignoreWhiteSpaceDifferences: true);
+            }
+            finally
+            {
+                CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+            }
+        }
     }
 
     // ReSharper disable InconsistentNaming
@@ -97,6 +129,12 @@ namespace PublicApiGeneratorTests.Examples_ZZ
         public class AssemblyOrdering_1
         {
         }
+    }
+
+    namespace Examples_Ordinal
+    {
+        public static class I { }
+        public static class i { }
     }
     // ReSharper restore UnusedMember.Global
     // ReSharper restore InconsistentNaming
