@@ -1,12 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using ApprovalTests;
 using ApprovalTests.Namers;
 
 namespace ApiApprover
 {
+    [Obsolete("PublicApiApprover will be removed in the next major version. Either use the `ApiGenerator` directly or copy https://github.com/JakeGinnivan/ApiApprover/blob/master/src/ApiApprover/PublicApiApprover.cs into your repository if you plan to continue to use ApprovalTests.", false)]
     public static class PublicApiApprover
     {
+        [Obsolete("PublicApiApprover will be removed in the next major version. Either use the `ApiGenerator` directly or copy https://github.com/JakeGinnivan/ApiApprover/blob/master/src/ApiApprover/PublicApiApprover.cs into your repository if you plan to continue to use ApprovalTests.", false)]
         public static void ApprovePublicApi(Assembly assembly)
         {
             var publicApi = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly);
