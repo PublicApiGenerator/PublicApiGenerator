@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net40</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>
       Simply add this package to add a test which generates a string of your public API, then sends it to Approval Tests to approve any public API changes.
 
       Don't accidently miss a breaking API change and break semantic versioning again.
     </Description>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\PublicApiGenerator.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -16,17 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="3.0.13" />
+    <PackageReference Include="ApprovalTests" Version="3.0.18" />
     <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="All" />
   </ItemGroup>
-
-  <Target Name="AddPackageContent" BeforeTargets="GenerateNuspec">
-    <ItemGroup>
-      <_PackageFiles Include="PublicApiApprover.cs">
-        <BuildAction>Compile</BuildAction>
-        <PackagePath>content\App_Packages\ApiApprover.$(PackageVersion)\;contentFiles\cs\any\ApiApprover\</PackagePath>
-      </_PackageFiles>
-    </ItemGroup>
-  </Target>
 
 </Project>
