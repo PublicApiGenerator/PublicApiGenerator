@@ -13,11 +13,17 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(new[]
             {
                 typeof(AssemblyMember_Delegate2),
+                typeof(AssemblyMember_IDelegate2),
+                typeof(AssemblyMember_ClassI),
+                typeof(AssemblyMember_Classi),
                 typeof(IAssemblyMember_Interface1),
+                typeof(IAssemblyMember_interface1),
                 typeof(AssemblyMember_Class2),
                 typeof(IAssemblyMember_Interface2),
+                typeof(IAssemblyMember_interface2),
                 typeof(AssemblyMember_Class1),
-                typeof(AssemblyMember_Delegate1)
+                typeof(AssemblyMember_Delegate1),
+                typeof(AssemblyMember_iDelegate1)
             },
 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -29,10 +35,22 @@ namespace PublicApiGeneratorTests
     {
         public AssemblyMember_Class2() { }
     }
+    public class AssemblyMember_ClassI
+    {
+        public AssemblyMember_ClassI() { }
+    }
+    public class AssemblyMember_Classi
+    {
+        public AssemblyMember_Classi() { }
+    }
     public delegate void AssemblyMember_Delegate1();
     public delegate void AssemblyMember_Delegate2();
+    public delegate void AssemblyMember_IDelegate2();
+    public delegate void AssemblyMember_iDelegate1();
     public interface IAssemblyMember_Interface1 { }
     public interface IAssemblyMember_Interface2 { }
+    public interface IAssemblyMember_interface1 { }
+    public interface IAssemblyMember_interface2 { }
 }");
         }
 
@@ -42,7 +60,9 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(new[]
             {
                 typeof(AssemblyOrdering_1),
-                typeof(AssemblyOrdering_2)
+                typeof(AssemblyOrdering_2),
+                typeof(Examples_I.AssemblyOrdering_2),
+                typeof(Examples_i.AssemblyOrdering_1),
             },
 @"namespace PublicApiGeneratorTests.Examples_AA
 {
@@ -51,7 +71,21 @@ namespace PublicApiGeneratorTests
         public AssemblyOrdering_2() { }
     }
 }
+namespace PublicApiGeneratorTests.Examples_I
+{
+    public class AssemblyOrdering_2
+    {
+        public AssemblyOrdering_2() { }
+    }
+}
 namespace PublicApiGeneratorTests.Examples_ZZ
+{
+    public class AssemblyOrdering_1
+    {
+        public AssemblyOrdering_1() { }
+    }
+}
+namespace PublicApiGeneratorTests.Examples_i
 {
     public class AssemblyOrdering_1
     {
@@ -73,7 +107,19 @@ namespace PublicApiGeneratorTests.Examples_ZZ
         {
         }
 
+        public class AssemblyMember_ClassI
+        {
+        }
+
+        public class AssemblyMember_Classi
+        {
+        }
+
         public interface IAssemblyMember_Interface2
+        {
+        }
+
+        public interface IAssemblyMember_interface2
         {
         }
 
@@ -81,8 +127,14 @@ namespace PublicApiGeneratorTests.Examples_ZZ
         {
         }
 
+        public interface IAssemblyMember_interface1
+        {
+        }
+
         public delegate void AssemblyMember_Delegate2();
         public delegate void AssemblyMember_Delegate1();
+        public delegate void AssemblyMember_IDelegate2();
+        public delegate void AssemblyMember_iDelegate1();
     }
 
     namespace Examples_AA
@@ -93,6 +145,20 @@ namespace PublicApiGeneratorTests.Examples_ZZ
     }
 
     namespace Examples_ZZ
+    {
+        public class AssemblyOrdering_1
+        {
+        }
+    }
+
+    namespace Examples_I
+    {
+        public class AssemblyOrdering_2
+        {
+        }
+    }
+
+    namespace Examples_i
     {
         public class AssemblyOrdering_1
         {

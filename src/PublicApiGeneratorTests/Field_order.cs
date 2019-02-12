@@ -14,8 +14,10 @@ namespace PublicApiGeneratorTests
     public class FieldOrderExample
     {
         public int AA_Field;
+        public int I_Field;
         public string YY_Field;
         public int ZZ_Field;
+        public int i_Field;
         public FieldOrderExample() { }
     }
 }");
@@ -32,6 +34,8 @@ namespace PublicApiGeneratorTests
             public int ZZ_Field;
             public string YY_Field;
             public int AA_Field;
+            public int i_Field;
+            public int I_Field;
         }
     }
     // ReSharper restore UnusedMember.Global

@@ -80,7 +80,7 @@ namespace PublicApiGenerator
 
                 var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
                     .Where(t => !t.IsNested && ShouldIncludeType(t) && shouldIncludeType(t))
-                    .OrderBy(t => t.FullName);
+                    .OrderBy(t => t.FullName, StringComparer.Ordinal);
                 foreach (var publicType in publicTypes)
                 {
                     var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>()
@@ -240,23 +240,23 @@ namespace PublicApiGenerator
                 else
                     declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
             }
-            foreach(var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName)
+            foreach(var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
                 .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
                 .Where(t => ShouldIncludeType(t.Definition))
                 .Select(t => t.Reference))
                 declaration.BaseTypes.Add(CreateCodeTypeReference(@interface.InterfaceType));
 
-            foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name))
+            foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name, StringComparer.Ordinal))
                 AddMemberToTypeDeclaration(declaration, memberInfo, excludeAttributes);
 
             // Fields should be in defined order for an enum
             var fields = !publicType.IsEnum
-                ? publicType.Fields.OrderBy(f => f.Name)
+                ? publicType.Fields.OrderBy(f => f.Name, StringComparer.Ordinal)
                 : (IEnumerable<FieldDefinition>)publicType.Fields;
             foreach (var field in fields)
                 AddMemberToTypeDeclaration(declaration, field, excludeAttributes);
 
-            foreach (var nestedType in publicType.NestedTypes.Where(ShouldIncludeType).OrderBy(t => t.FullName))
+            foreach (var nestedType in publicType.NestedTypes.Where(ShouldIncludeType).OrderBy(t => t.FullName, StringComparer.Ordinal))
             {
                 var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, whitelistedNamespacePrefixes, excludeAttributes);
                 declaration.Members.Add(nestedTypeDeclaration);
@@ -352,7 +352,7 @@ namespace PublicApiGenerator
             Func<CodeTypeReference, CodeTypeReference> codeTypeModifier,
             HashSet<string> excludeAttributes)
         {
-            foreach (var customAttribute in type.CustomAttributes.Where(t => ShouldIncludeAttribute(t, excludeAttributes)).OrderBy(a => a.AttributeType.FullName).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a)))
+            foreach (var customAttribute in type.CustomAttributes.Where(t => ShouldIncludeAttribute(t, excludeAttributes)).OrderBy(a => a.AttributeType.FullName, StringComparer.Ordinal).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a), StringComparer.Ordinal))
             {
                 var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
                 attributes.Add(attribute);
@@ -366,11 +366,11 @@ namespace PublicApiGenerator
             {
                 attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
             }
-            foreach (var field in customAttribute.Fields.OrderBy(f => f.Name))
+            foreach (var field in customAttribute.Fields.OrderBy(f => f.Name, StringComparer.Ordinal))
             {
                 attribute.Arguments.Add(new CodeAttributeArgument(field.Name, CreateInitialiserExpression(field.Argument)));
             }
-            foreach (var property in customAttribute.Properties.OrderBy(p => p.Name))
+            foreach (var property in customAttribute.Properties.OrderBy(p => p.Name, StringComparer.Ordinal))
             {
                 attribute.Arguments.Add(new CodeAttributeArgument(property.Name, CreateInitialiserExpression(property.Argument)));
             }
@@ -378,7 +378,7 @@ namespace PublicApiGenerator
         }
 
         // Litee: This method is used for additional sorting of custom attributes when multiple values are allowed
-        static object ConvertAttributeToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
+        static string ConvertAttributeToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
         {
             using (var provider = new CSharpCodeProvider())
             {
