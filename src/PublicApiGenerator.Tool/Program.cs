@@ -43,7 +43,7 @@ namespace PubliApiGenerator.Tool
 
             try
             {
-                AssertInputParameters(targetFrameworks, project, package, packageVersion, workingArea);
+                AssertInputParameters(targetFrameworks, project, package, packageVersion, workingArea, assembly);
 
                 var template = CreateProjectTemplate(targetFrameworks, project, package, packageVersion, generatorVersion);
 
@@ -75,9 +75,10 @@ namespace PubliApiGenerator.Tool
         private static void GeneratePublicApi(string assembly, string package, string workingArea, string framework, string outputDirectory, bool verbose)
         {
             var relativePath = Path.Combine(workingArea, "bin", "Release", framework);
-            relativePath = Path.Combine(relativePath, !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll");
+            var name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
+            relativePath = Path.Combine(relativePath, name);
             var fullPath = Path.GetFullPath(relativePath);
-            var outputPath = Path.Combine(Path.GetDirectoryName(relativePath), $"{package}.{framework}.received.txt");
+            var outputPath = Path.Combine(Path.GetDirectoryName(relativePath), $"{Path.GetFileNameWithoutExtension(name)}.{framework}.received.txt");
 
             try
             {
@@ -177,14 +178,14 @@ namespace PubliApiGenerator.Tool
         }
 
         private static void AssertInputParameters(string targetFrameworks, string project, string package,
-            string packageVersion, string workingArea)
+            string packageVersion, string workingArea, string assembly)
         {
             if (string.IsNullOrEmpty(targetFrameworks))
             {
                 throw new InvalidOperationException("Specify the target frameworks like 'netcoreapp2.1;net461' or 'netcoreapp2.1'.");
             }
 
-            if (!string.IsNullOrEmpty(package) && packageVersion == null)
+            if (!string.IsNullOrEmpty(package) && string.IsNullOrEmpty(packageVersion))
             {
                 throw new InvalidOperationException("When using the package name the packageVersion needs to be specified.");
             }
@@ -193,6 +194,12 @@ namespace PubliApiGenerator.Tool
             {
                 throw new InvalidOperationException(
                     "When using the package name the project switch cannot be used or vice versa.");
+            }
+
+            if (!string.IsNullOrEmpty(project) && string.IsNullOrEmpty(assembly))
+            {
+                throw new InvalidOperationException(
+                    "When using the project switch the output assembly name has to be specified with --assembly.");
             }
 
             if (File.Exists(workingArea) || Directory.Exists(workingArea))
@@ -209,14 +216,14 @@ namespace PubliApiGenerator.Tool
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include=""PublicApiGenerator"" Version=""{PublicApiGeneratorVersion}"" PrivateAssets=""All"" />{PackageReference}
+        <PackageReference Include=""PublicApiGenerator"" Version=""{PublicApiGeneratorVersion}"" />{PackageReference}
     </ItemGroup >
     {ProjectReference}
 </Project >";
 
         private static string PackageReferenceTemplate =
             @"
-        <PackageReference Include=""{PackageName}"" Version=""{PackageVersion}"" PrivateAssets=""All"" />";
+        <PackageReference Include=""{PackageName}"" Version=""{PackageVersion}"" />";
 
         private static string ProjectReferenceTemplate =
             @"<ItemGroup>
