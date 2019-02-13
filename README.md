@@ -16,18 +16,51 @@ There are times though that changes to the public API is accidental. Api Approve
 
 PublicApiGenerator has no dependencies and simply creates a string the represents the public API. Any approval library can be used to approve the generated public API.
 
-
-Simply install `PublicApiGenerator`
-
-
 ## How do I use it
+
 > Install-package PublicApiGenerator
 
-together with for example
+``` csharp
+var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);
+```
+
+### Manual
+
+``` csharp
+[Fact]
+public void my_assembly_has_no_public_api_changes()
+{
+    var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);
+
+    var approvedFilePath = "PublicApi.approved.txt";
+    if (!File.Exists(approvedFilePath))
+    {
+        // Create a file to write to.
+        using (var sw = File.CreateText(approvedFilePath)) { }
+    }
+
+    var approvedApi = File.ReadAllText(approvedFilePath);
+
+    Assert.Equal(approvedApi, publicApi);
+}
+```
+
+### Shoudly
 
 > Install-package Shouldly
 
-or
+``` csharp
+[Fact]
+public void my_assembly_has_no_public_api_changes()
+{
+    var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);
+
+    //Shouldly
+    publicApi.ShouldMatchApproved();
+}
+```
+
+### ApprovalTests
 
 > Install-package ApprovalTests
 
@@ -35,14 +68,24 @@ or
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
-    var publicApi = ApiGenerator.GeneratePublicApi(typeof(Application).Assembly);
+    var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);;
+    var writer = new ApprovalTextWriter(publicApi, "txt");
+    var approvalNamer = new AssemblyPathNamer(assembly.Location);
+    Approvals.Verify(writer, approvalNamer, Approvals.GetReporter());
+}
 
-    // Use an approval framework like
+private class AssemblyPathNamer : UnitTestFrameworkNamer
+{
+    private readonly string name;
 
-    //Shouldly
-    publicApi.ShouldMatchApproved();
+    public AssemblyPathNamer(string assemblyPath)
+    {
+        name = Path.GetFileNameWithoutExtension(assemblyPath);
+    }
 
-    //ApprovalTests
-    Approvals.Verify(publicApi);
+    public override string Name
+    {
+        get { return name; }
+    }
 }
 ```
