@@ -38,7 +38,7 @@ namespace PublicApiGeneratorTests.Examples
 }";
 #endif
 
-#if NETCOREAPP2_0
+#if NETCOREAPP2_1
             var api = @"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
@@ -46,7 +46,7 @@ namespace PublicApiGeneratorTests.Examples
 [assembly: PublicApiGeneratorTests.Examples.SimpleAttribute()]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.InteropServices.GuidAttribute(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETCoreApp,Version=v2.0"", FrameworkDisplayName="""")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETCoreApp,Version=v2.1"", FrameworkDisplayName="""")]
 namespace PublicApiGeneratorTests.Examples
 {
     public class NotImportant

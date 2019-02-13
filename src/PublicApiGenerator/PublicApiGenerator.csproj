@@ -3,26 +3,18 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
     <Description>This library simply returns your public API as a string. You can use this in approval style tests or for documentation.</Description>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\PublicApiGenerator.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="All" />
-    <PackageReference Include="Mono.Cecil" Version="0.10.1" />
+    <PackageReference Include="Mono.Cecil" Version="0.10.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>
-
-  <Target Name="AddPackageContent" BeforeTargets="GenerateNuspec">
-    <ItemGroup>
-      <_PackageFiles Include="ApiGenerator.cs">
-        <BuildAction>Compile</BuildAction>
-        <PackagePath>content\App_Packages\PublicApiGenerator.$(PackageVersion)\;contentFiles\cs\any\PublicApiGenerator\</PackagePath>
-      </_PackageFiles>
-    </ItemGroup>
-  </Target>
   
 </Project>
