@@ -6,7 +6,7 @@ using ApprovalTests.Namers;
 
 namespace ApiApprover
 {
-    [Obsolete("The package `ApiApprover` will be removed in the next major version. Install the package `PublicApiGenerator` and use the `ApiGenerator` directly or copy https://github.com/JakeGinnivan/ApiApprover/blob/master/src/ApiApprover/PublicApiApprover.cs into your repository if you plan to continue to use ApprovalTests in combination with the `ApiGenerator`.", false)]
+    [Obsolete("The `ApiApprover` package will be removed in the next major version. Install the `PublicApiGenerator` package and use the `ApiGenerator` class directly instead.", false)]
     public static class PublicApiApprover
     {
         [Obsolete("The package `ApiApprover` will be removed in the next major version. Install the package `PublicApiGenerator` and use the `ApiGenerator` directly or copy https://github.com/JakeGinnivan/ApiApprover/blob/master/src/ApiApprover/PublicApiApprover.cs into your repository if you plan to continue to use ApprovalTests in combination with the `ApiGenerator`.", false)]
