@@ -20,7 +20,7 @@ namespace PubliApiGenerator.Tool
         /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
         /// <param name="verbose"></param>
         /// <returns></returns>
-        static int Main(string targetFrameworks, string assembly = null, string project = null, string package = null, string packageVersion = null, string generatorVersion = null, string workingDirectory = null, string outputDirectory = null, bool verbose = false)
+        static int Main(string targetFrameworks, string assembly = null, string project = null, string package = null, string packageVersion = null, string generatorVersion = null, string workingDirectory = null, string outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
         {
             if (string.IsNullOrEmpty(outputDirectory))
             {
@@ -68,7 +68,10 @@ namespace PubliApiGenerator.Tool
             }
             finally
             {
-                Directory.Delete(workingArea, true);
+                if (Directory.Exists(workingArea) && !leaveArtifacts)
+                {
+                    Directory.Delete(workingArea, true);
+                }
             }
         }
 
