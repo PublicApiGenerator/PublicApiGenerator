@@ -1,10 +1,10 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using Process = System.Diagnostics.Process;
-
-namespace PubliApiGenerator.Tool
+namespace PublicApiGenerator.Tool
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using Process = System.Diagnostics.Process;
+
     /// <summary>
     /// Program for dotnet tool
     /// </summary>
