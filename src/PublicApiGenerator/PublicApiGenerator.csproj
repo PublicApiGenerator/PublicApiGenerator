@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="All" />
+    <PackageReference Include="MinVer" Version="1.0" PrivateAssets="All" />
     <PackageReference Include="Mono.Cecil" Version="0.10.3" />
   </ItemGroup>
 

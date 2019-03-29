@@ -29,7 +29,7 @@ namespace PublicApiGenerator.Tool
 
             if (string.IsNullOrEmpty(generatorVersion))
             {
-                generatorVersion = GitVersionInformation.NuGetVersionV2;
+                generatorVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
             }
 
             var workingArea = !string.IsNullOrEmpty(workingDirectory) ?
