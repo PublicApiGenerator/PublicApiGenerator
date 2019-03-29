@@ -3,6 +3,7 @@ namespace PublicApiGenerator.Tool
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Reflection;
     using Process = System.Diagnostics.Process;
 
     /// <summary>
@@ -12,15 +13,16 @@ namespace PublicApiGenerator.Tool
     {
         /// <param name="targetFrameworks">Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461</param>
         /// <param name="assembly">The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case in differs from the package name.</param>
-        /// <param name="project"></param>
+        /// <param name="project-path"></param>
         /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/></param>
         /// <param name="packageVersion">The version of the package defined in <paramref name="package"/> to be used.</param>
         /// <param name="generatorVersion">The version of the PublicApiGenerator package to use.</param>
         /// <param name="workingDirectory">The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.</param>
         /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
         /// <param name="verbose"></param>
+        /// <param name="leaveArtifacts"></param>
         /// <returns></returns>
-        static int Main(string targetFrameworks, string assembly = null, string project = null, string package = null, string packageVersion = null, string generatorVersion = null, string workingDirectory = null, string outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
+        static int Main(string targetFrameworks, string assembly = null, string projectPath = null, string package = null, string packageVersion = null, string generatorVersion = null, string workingDirectory = null, string outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
         {
             if (string.IsNullOrEmpty(outputDirectory))
             {
@@ -43,9 +45,9 @@ namespace PublicApiGenerator.Tool
 
             try
             {
-                AssertInputParameters(targetFrameworks, project, package, packageVersion, workingArea, assembly);
+                AssertInputParameters(targetFrameworks, projectPath, package, packageVersion, workingArea, assembly);
 
-                var template = CreateProjectTemplate(targetFrameworks, project, package, packageVersion, generatorVersion);
+                var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion);
 
                 SaveProjectTemplate(workingArea, template, verbose);
 
@@ -190,19 +192,19 @@ namespace PublicApiGenerator.Tool
 
             if (!string.IsNullOrEmpty(package) && string.IsNullOrEmpty(packageVersion))
             {
-                throw new InvalidOperationException("When using the package name the packageVersion needs to be specified.");
+                throw new InvalidOperationException("When using the package switch the package-version switch needs to be specified.");
             }
 
             if (!string.IsNullOrEmpty(package) && !string.IsNullOrEmpty(project))
             {
                 throw new InvalidOperationException(
-                    "When using the package name the project switch cannot be used or vice versa.");
+                    "When using the package name the project-path switch cannot be used or vice versa.");
             }
 
             if (!string.IsNullOrEmpty(project) && string.IsNullOrEmpty(assembly))
             {
                 throw new InvalidOperationException(
-                    "When using the project switch the output assembly name has to be specified with --assembly.");
+                    "When using the project-path switch the output assembly name has to be specified with --assembly.");
             }
 
             if (File.Exists(workingArea) || Directory.Exists(workingArea))
