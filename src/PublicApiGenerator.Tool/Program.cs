@@ -26,7 +26,7 @@ namespace PublicApiGenerator.Tool
         {
             if (string.IsNullOrEmpty(outputDirectory))
             {
-                outputDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                outputDirectory = Environment.CurrentDirectory;
             }
 
             if (string.IsNullOrEmpty(generatorVersion))
