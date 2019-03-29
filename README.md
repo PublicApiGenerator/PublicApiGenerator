@@ -127,7 +127,7 @@ generate-public-api --target-frameworks 'netcoreapp2.1;net461' --package FluentA
 Generate public API for NServiceBus 7.1.4 for runtime framework `netcoreapp2.2` and `net452`. Note NServiceBus package doesn't contain NServiceBus.dll and therefore it is required to specify the assembly that contains the public API.
 
 ```
-generate-public-api --target-frameworks 'netcoreapp2.2;net451' --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll
+generate-public-api --target-frameworks 'netcoreapp2.2;net452' --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll
 ```
 
 ### Command line arguments
