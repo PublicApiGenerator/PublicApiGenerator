@@ -13,7 +13,7 @@ namespace PublicApiGenerator.Tool
     {
         /// <param name="targetFrameworks">Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461</param>
         /// <param name="assembly">The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case in differs from the package name.</param>
-        /// <param name="project-path"></param>
+        /// <param name="projectPath">The path to the csproj that should be used to build the public API.</param>
         /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/></param>
         /// <param name="packageVersion">The version of the package defined in <paramref name="package"/> to be used.</param>
         /// <param name="generatorVersion">The version of the PublicApiGenerator package to use.</param>
