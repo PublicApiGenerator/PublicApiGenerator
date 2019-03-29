@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors>Jake Ginnivan</Authors>
     <PackageProjectUrl>https://github.com/JakeGinnivan/ApiApprover</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/JakeGinnivan/ApiApprover/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Copyright Jake Ginnivan 2010-$([System.DateTime]::UtcNow.ToString(yyyy)). All rights reserved.</Copyright>
     <PackageTags>semanticversioning versioning api</PackageTags>
     <PackageOutputPath>..\..\nugets</PackageOutputPath>
@@ -13,6 +13,10 @@
     <MinVerMinimumMajorMinor>9.0</MinVerMinimumMajorMinor>
     <NoWarn>NU5105</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" Visible="false" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha" PrivateAssets="All" />
