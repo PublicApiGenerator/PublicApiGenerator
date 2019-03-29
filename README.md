@@ -89,3 +89,127 @@ private class AssemblyPathNamer : UnitTestFrameworkNamer
     }
 }
 ```
+
+## PublicApi Generator Global Tool
+
+### Install
+
+```
+dotnet tool install -g generate-public-api
+```
+
+### Update
+
+```
+dotnet tool update -g generate-public-api
+```
+
+### Remove
+
+```
+dotnet tool uninstall -g generate-public-api
+```
+
+### Examples
+
+Generate public API for fluent assertions 5.6.0 for runtime framework `netcoreapp2.1` and `net461`
+
+```
+generate-public-api --target-frameworks 'netcoreapp2.1;net461' --package FluentAssertions --package-version 5.6.0
+```
+
+Generate public API for fluent assertions 5.* for runtime framework `net47`
+
+```
+generate-public-api --target-frameworks 'netcoreapp2.1;net461' --package FluentAssertions --package-version 5.*
+```
+
+Generate public API for NServiceBus 7.1.4 for runtime framework `netcoreapp2.2` and `net452`. Note NServiceBus package doesn't contain NServiceBus.dll and therefore it is required to specify the assembly that contains the public API.
+
+```
+generate-public-api --target-frameworks 'netcoreapp2.2;net451' --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll
+```
+
+### Command line arguments
+
+```
+--target-frameworks framework|'framework;framework'
+```
+
+The target framework in which the package will be restored. The target framework is also used as runtime to generate the public API. It is required to specify a valid runtime framework. For example
+
+- 'netcoreapp2.2;net451' to build a public API for `netcoreapp2.2` and `net452`
+- 'netcoreapp2.1;net461' to build a public API for `netcoreapp2.1` and `net461`
+- `net47` to build a public API for `net47`
+
+It is not possible to use `netstandard2.0` because it is not a valid runtime framework.
+
+```
+--package-name PackageName
+```
+
+A valid nuget package name. For example
+
+- FluentAssertions
+- NServiceBus
+
+When the `--package-name` switch is used the `--package-version` switch is mandatory.
+
+```
+--package-version Version
+```
+
+A nuget package version or floating versions as specified by https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files. For example
+
+- 8.1.1
+- 8.0
+- 8.0-*
+
+```
+--assembly Assembly.dll
+```
+
+The assembly name including the extension to generate a public API from in case in differs from the package name. For example
+
+- PublicApiGenerator.dll
+- NServiceBus.Core.dll
+
+```
+--project-path
+``` 
+
+A path to a csproj file that contains the public API that needs to be built. By default a release build will be generated. When the project-path switch is used it is required to specify the `--assembly` switch to point to the output assembly that contains the public API. For example
+
+- '..\PublicApiGenerator\PublicApiGenerator.csproj`'
+
+```
+--working-directory Path
+```
+
+The temporary working directory to be used to generate the work artifacts.
+
+```
+--output-directory Path
+```
+
+The output directory where public API text-files should be moved. The end with `*.received.txt`
+
+```
+--generator-version Version
+```
+
+By default the PubliApiGenerator package version of the release of the global tool is used. It is possible to override the PublicApiGenerator version by specifying the version to be used in this switch. For example
+
+- 8.1.0
+
+```
+--verbose
+```
+
+Detailed information about what's going on behind the scenes
+
+```
+leave-artifacts
+```
+
+For troubleshooting purposes it might be necessary to look into the temporary work artifacts. By specifying this switch the temporary csproj files and all the temp folders are not deleted after a run. Be aware this might significantly decrease the available disk space because all artifacts including the compile time artifacts are not deleted.

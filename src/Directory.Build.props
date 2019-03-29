@@ -9,6 +9,11 @@
     <PackageOutputPath>..\..\nugets</PackageOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <MinVerMinimumMajorMinor>9.0</MinVerMinimumMajorMinor>
+    <NoWarn>NU5105</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha" PrivateAssets="All" />
   </ItemGroup>
