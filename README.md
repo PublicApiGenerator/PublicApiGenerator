@@ -95,19 +95,19 @@ private class AssemblyPathNamer : UnitTestFrameworkNamer
 ### Install
 
 ```
-dotnet tool install -g generate-public-api
+dotnet tool install -g PublicApiGenerator.Tool
 ```
 
 ### Update
 
 ```
-dotnet tool update -g generate-public-api
+dotnet tool update -g PublicApiGenerator.Tool
 ```
 
 ### Remove
 
 ```
-dotnet tool uninstall -g generate-public-api
+dotnet tool uninstall -g PublicApiGenerator.Tool
 ```
 
 ### Examples
