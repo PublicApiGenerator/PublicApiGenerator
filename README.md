@@ -198,7 +198,7 @@ The output directory where public API text-files should be moved. The end with `
 --generator-version Version
 ```
 
-By default the PubliApiGenerator package version of the release of the global tool is used. It is possible to override the PublicApiGenerator version by specifying the version to be used in this switch. For example
+By default latest stable release version of PubliApiGenerator will be used in the global tool to generate the public API with in the major range of the global tool. It is possible to override the PublicApiGenerator version by specifying the version to be used in this switch. For example
 
 - 8.1.0
 

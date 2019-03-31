@@ -31,7 +31,7 @@ namespace PublicApiGenerator.Tool
 
             if (string.IsNullOrEmpty(generatorVersion))
             {
-                generatorVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                generatorVersion = $"{Assembly.GetEntryAssembly().GetName().Version.Major}.*";
             }
 
             var workingArea = !string.IsNullOrEmpty(workingDirectory) ?
