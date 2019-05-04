@@ -45,7 +45,7 @@ public void my_assembly_has_no_public_api_changes()
 }
 ```
 
-### Shoudly
+### Shouldly
 
 > Install-package Shouldly
 

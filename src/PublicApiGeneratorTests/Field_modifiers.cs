@@ -23,7 +23,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Include_readonly_fields_without_constant_values()
         {
-            // TODO: Initialising values are set in the constructor. Very tricky to get
+            // TODO: Initializing values are set in the constructor. Very tricky to get
             AssertPublicApi<ClassWithReadonlyFields>(
 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -40,7 +40,7 @@ namespace PublicApiGeneratorTests
         public void Include_const_fields()
         {
             // Have to include the ctor - I can't figure out how to hide it
-            // when values are initialised
+            // when values are initialized
             AssertPublicApi<ClassWithConstFields>(
 @"namespace PublicApiGeneratorTests.Examples
 {
