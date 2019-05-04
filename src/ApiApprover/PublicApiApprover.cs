@@ -27,10 +27,7 @@ namespace ApiApprover
                 name = Path.GetFileNameWithoutExtension(assemblyPath);
             }
 
-            public override string Name
-            {
-                get { return name; }
-            }
+            public override string Name => name;
         }
     }
 }

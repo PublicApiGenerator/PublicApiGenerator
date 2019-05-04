@@ -213,7 +213,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        static string ProjectTemplate = @"<Project Sdk=""Microsoft.NET.Sdk"">
+        private static readonly string ProjectTemplate = @"<Project Sdk=""Microsoft.NET.Sdk"">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>{TargetFrameworks}</TargetFrameworks>
@@ -226,16 +226,16 @@ namespace PublicApiGenerator.Tool
     {ProjectReference}
 </Project >";
 
-        private static string PackageReferenceTemplate =
+        private static readonly string PackageReferenceTemplate =
             @"
         <PackageReference Include=""{PackageName}"" Version=""{PackageVersion}"" />";
 
-        private static string ProjectReferenceTemplate =
+        private static readonly string ProjectReferenceTemplate =
             @"<ItemGroup>
         <ProjectReference Include=""{ProjectFile}"" />
     </ItemGroup >";
 
-        private static string ProgramMain = @"using System;
+        private static readonly string ProgramMain = @"using System;
 using System.Reflection;
 using System.IO;
 using PublicApiGenerator;
