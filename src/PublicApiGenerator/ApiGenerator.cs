@@ -143,25 +143,24 @@ namespace PublicApiGenerator
             IMemberDefinition memberInfo,
             HashSet<string> excludeAttributes)
         {
-            var methodDefinition = memberInfo as MethodDefinition;
-            if (methodDefinition != null)
+            if (memberInfo is MethodDefinition methodDefinition)
             {
                 if (methodDefinition.IsConstructor)
                     AddCtorToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
                 else
                     AddMethodToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
             }
-            else if (memberInfo is PropertyDefinition)
+            else if (memberInfo is PropertyDefinition propertyDefinition)
             {
-                AddPropertyToTypeDeclaration(typeDeclaration, (PropertyDefinition) memberInfo, excludeAttributes);
+                AddPropertyToTypeDeclaration(typeDeclaration, propertyDefinition, excludeAttributes);
             }
-            else if (memberInfo is EventDefinition)
+            else if (memberInfo is EventDefinition eventDefinition)
             {
-                typeDeclaration.Members.Add(GenerateEvent((EventDefinition)memberInfo, excludeAttributes));
+                typeDeclaration.Members.Add(GenerateEvent(eventDefinition, excludeAttributes));
             }
-            else if (memberInfo is FieldDefinition)
+            else if (memberInfo is FieldDefinition fieldDefinition)
             {
-                AddFieldToTypeDeclaration(typeDeclaration, (FieldDefinition) memberInfo, excludeAttributes);
+                AddFieldToTypeDeclaration(typeDeclaration, fieldDefinition, excludeAttributes);
             }
         }
 
@@ -434,15 +433,15 @@ namespace PublicApiGenerator
 
         static CodeExpression CreateInitialiserExpression(CustomAttributeArgument attributeArgument)
         {
-            if (attributeArgument.Value is CustomAttributeArgument)
+            if (attributeArgument.Value is CustomAttributeArgument customAttributeArgument)
             {
-                return CreateInitialiserExpression((CustomAttributeArgument) attributeArgument.Value);
+                return CreateInitialiserExpression(customAttributeArgument);
             }
 
-            if (attributeArgument.Value is CustomAttributeArgument[])
+            if (attributeArgument.Value is CustomAttributeArgument[] customAttributeArguments)
             {
-                var initialisers = from argument in (CustomAttributeArgument[]) attributeArgument.Value
-                    select CreateInitialiserExpression(argument);
+                var initialisers = from argument in customAttributeArguments
+                                   select CreateInitialiserExpression(argument);
                 return new CodeArrayCreateExpression(CreateCodeTypeReference(attributeArgument.Type), initialisers.ToArray());
             }
 
@@ -478,14 +477,14 @@ namespace PublicApiGenerator
                 return allFlags.FirstOrDefault();
             }
 
-            if (type.FullName == "System.Type" && value is TypeReference)
+            if (type.FullName == "System.Type" && value is TypeReference typeRef)
             {
-                return new CodeTypeOfExpression(CreateCodeTypeReference((TypeReference)value));
+                return new CodeTypeOfExpression(CreateCodeTypeReference(typeRef));
             }
 
             if (value is string)
             {
-                // CodeDOM outputs a verbatim string. Any string with \n is treated as such, so normalise
+                // CodeDOM outputs a verbatim string. Any string with \n is treated as such, so normalize
                 // it to make it easier for comparisons
                 value = Regex.Replace((string)value, @"\n", "\\n");
                 value = Regex.Replace((string)value, @"\r\n|\r\\n", "\\r\\n");
@@ -544,8 +543,7 @@ namespace PublicApiGenerator
 
             var memberName = member.Name;
             // ReSharper disable once InlineOutVariableDeclaration
-            string mappedMemberName;
-            if (OperatorNameMap.TryGetValue(memberName, out mappedMemberName))
+            if (OperatorNameMap.TryGetValue(memberName, out string mappedMemberName))
             {
                 memberName = mappedMemberName;
             }

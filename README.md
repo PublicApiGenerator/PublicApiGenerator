@@ -45,7 +45,7 @@ public void my_assembly_has_no_public_api_changes()
 }
 ```
 
-### Shoudly
+### Shouldly
 
 > Install-package Shouldly
 
@@ -138,7 +138,7 @@ generate-public-api --target-frameworks 'netcoreapp2.2;net452' --package NServic
 
 The target framework in which the package will be restored. The target framework is also used as runtime to generate the public API. It is required to specify a valid runtime framework. For example
 
-- 'netcoreapp2.2;net451' to build a public API for `netcoreapp2.2` and `net452`
+- 'netcoreapp2.2;net452' to build a public API for `netcoreapp2.2` and `net452`
 - 'netcoreapp2.1;net461' to build a public API for `netcoreapp2.1` and `net461`
 - `net47` to build a public API for `net47`
 
