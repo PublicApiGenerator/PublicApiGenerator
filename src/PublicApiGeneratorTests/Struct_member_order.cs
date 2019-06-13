@@ -36,7 +36,7 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}");
+}", excludeAttributes: new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" });
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}");
+}", excludeAttributes: new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" });
         }
     }
     // ReSharper disable EventNeverInvoked
