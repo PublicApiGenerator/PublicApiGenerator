@@ -180,7 +180,7 @@ The assembly name including the extension to generate a public API from in case 
 
 A path to a csproj file that contains the public API that needs to be built. By default a release build will be generated. When the project-path switch is used it is required to specify the `--assembly` switch to point to the output assembly that contains the public API. For example
 
-- '..\PublicApiGenerator\PublicApiGenerator.csproj`'
+- '..\PublicApiGenerator\PublicApiGenerator.csproj'
 
 ```
 --working-directory Path
