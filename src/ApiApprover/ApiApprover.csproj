@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="4.0.0" />
+    <PackageReference Include="ApprovalTests" Version="3.0.18" />
     <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="All" />
   </ItemGroup>
 
