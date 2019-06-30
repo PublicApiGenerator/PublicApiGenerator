@@ -20,6 +20,19 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_generic_type_parameter_attribute()
+        {
+            AssertPublicApi(typeof(ClassWithGenericTypeAttribute<>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithGenericTypeAttribute<[PublicApiGeneratorTests.Examples.MyTypeAttribute()] T>
+    {
+        public ClassWithGenericTypeAttribute() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_multiple_generic_type_parameters()
         {
             AssertPublicApi(typeof(ClassWithMultipleGenericTypes<,>),
@@ -138,6 +151,15 @@ namespace PublicApiGeneratorTests
     namespace Examples
     {
         public class ClassWithGenericType<T>
+        {
+        }
+
+        public class ClassWithGenericTypeAttribute<[MyType]T>
+        {
+        }
+
+        [AttributeUsage(AttributeTargets.GenericParameter)]
+        public sealed class MyTypeAttribute : Attribute
         {
         }
 
