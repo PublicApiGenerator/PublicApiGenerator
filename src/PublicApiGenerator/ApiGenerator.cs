@@ -620,16 +620,12 @@ namespace PublicApiGenerator
         static MemberAttributes GetMethodAttributes(MethodDefinition method)
         {
             MemberAttributes access = 0;
-            if (method.IsFamily)
+            if (method.IsFamily || method.IsFamilyOrAssembly)
                 access = MemberAttributes.Family;
             if (method.IsPublic)
                 access = MemberAttributes.Public;
             if (method.IsAssembly)
                 access = MemberAttributes.Assembly;
-            if (method.IsFamilyAndAssembly)
-                access = MemberAttributes.FamilyAndAssembly;
-            if (method.IsFamilyOrAssembly)
-                access = MemberAttributes.FamilyOrAssembly;
 
             MemberAttributes scope = 0;
             if (method.IsStatic)
@@ -764,7 +760,8 @@ namespace PublicApiGenerator
         static bool HasVisiblePropertyMethod(MemberAttributes attributes)
         {
             var access = attributes & MemberAttributes.AccessMask;
-            return access == MemberAttributes.Public || access == MemberAttributes.Family ||
+            return access == MemberAttributes.Public ||
+                   access == MemberAttributes.Family ||
                    access == MemberAttributes.FamilyOrAssembly;
         }
 
@@ -789,7 +786,7 @@ namespace PublicApiGenerator
             MemberAttributes attributes = 0;
             if (memberInfo.HasConstant)
                 attributes |= MemberAttributes.Const;
-            if (memberInfo.IsFamily)
+            if (memberInfo.IsFamily || memberInfo.IsFamilyOrAssembly)
                 attributes |= MemberAttributes.Family;
             if (memberInfo.IsPublic)
                 attributes |= MemberAttributes.Public;

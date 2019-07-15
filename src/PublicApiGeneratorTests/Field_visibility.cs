@@ -14,6 +14,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithFields
     {
         protected int protectedFieldIsVisible;
+        protected int protectedInternalFieldIsVisible;
         public int publicFieldIsVisible;
         public ClassWithFields() { }
     }
@@ -35,6 +36,7 @@ namespace PublicApiGeneratorTests
             internal int internalFieldNotVisible;
 
             protected int protectedFieldIsVisible;
+            protected internal int protectedInternalFieldIsVisible;
             public int publicFieldIsVisible;
         }
     }

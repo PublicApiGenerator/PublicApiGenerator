@@ -47,6 +47,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_show_protected_internal_methods()
+        {
+            AssertPublicApi<ClassWithProtectedInternalMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedInternalMethod
+    {
+        public ClassWithProtectedInternalMethod() { }
+        protected void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_not_show_private_methods()
         {
             AssertPublicApi<ClassWithPrivateMethod>(
@@ -86,9 +100,16 @@ namespace PublicApiGeneratorTests
             }
         }
 
+        public class ClassWithProtectedInternalMethod
+        {
+            protected internal void DoSomething()
+            {
+            }
+        }
+
         public class ClassWithPrivateMethod
         {
-            private void Method()
+            private void DoSomething()
             {
             }
         }
