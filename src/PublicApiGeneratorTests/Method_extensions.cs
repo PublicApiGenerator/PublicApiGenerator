@@ -1,4 +1,5 @@
 ﻿using PublicApiGeneratorTests.Examples;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -18,6 +19,24 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_generic_extension_methods()
+        {
+            AssertPublicApi(typeof(GenericExtensions),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class static GenericExtensions
+    {
+        public static PublicApiGeneratorTests.Examples.Configurator<T> Add<T>(this PublicApiGeneratorTests.Examples.Configurator<T> configurator)
+            where T :  class { }
+        public static PublicApiGeneratorTests.Examples.Configurator<T> Add<T, U>(this PublicApiGeneratorTests.Examples.Configurator<T> configurator)
+            where U :  class, System.Collections.Generic.IComparer<T>, System.Collections.Generic.IEnumerable<U> { }
+        public static void Add<T, U>(this string s)
+            where U :  class, System.Collections.Generic.IComparer<T>, System.Collections.Generic.IEnumerable<U> { }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -29,6 +48,17 @@ namespace PublicApiGeneratorTests
             {
                 return value.Length == length;
             }
+        }
+
+        public class Configurator<TConfig> { }
+
+        public static class GenericExtensions
+        {
+            public static Configurator<T> Add<T>(this Configurator<T> configurator) where T : class => configurator;
+
+            public static Configurator<T> Add<T, U>(this Configurator<T> configurator) where U : class, IComparer<T>, IEnumerable<U> => configurator;
+
+            public static void Add<T, U>(this string s) where U : class, IComparer<T>, IEnumerable<U> { }
         }
     }
     // ReSharper restore UnusedMember.Global
