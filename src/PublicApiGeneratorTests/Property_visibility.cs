@@ -42,7 +42,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithProtectedInternalProperty
     {
         public ClassWithProtectedInternalProperty() { }
-        protected internal string Value { get; set; }
+        protected string Value { get; set; }
     }
 }");
         }
@@ -244,7 +244,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithProtectedInternalGetterPublicSetter
     {
         public ClassWithProtectedInternalGetterPublicSetter() { }
-        public string Value1 { protected internal get; set; }
+        public string Value1 { protected get; set; }
     }
 }");
         }
