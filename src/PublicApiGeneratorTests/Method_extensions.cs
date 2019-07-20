@@ -40,6 +40,7 @@ namespace PublicApiGeneratorTests
     }
 
     // ReSharper disable UnusedMember.Global
+    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public static class StringExtensions
@@ -49,6 +50,7 @@ namespace PublicApiGeneratorTests
                 return value.Length == length;
             }
         }
+
 
         public class Configurator<TConfig> { }
 
@@ -61,5 +63,6 @@ namespace PublicApiGeneratorTests
             public static void Add<T, U>(this string s) where U : class, IComparer<T>, IEnumerable<U> { }
         }
     }
+    // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore UnusedMember.Global
 }

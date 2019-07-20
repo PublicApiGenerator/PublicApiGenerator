@@ -157,6 +157,21 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_complex_type_constraints()
+        {
+            AssertPublicApi<MethodComplexTypeParameterConstraint>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodComplexTypeParameterConstraint
+    {
+        public MethodComplexTypeParameterConstraint() { }
+        public void Add<T, U>(string s)
+            where U : class, System.Collections.Generic.IComparer<T>, System.Collections.Generic.IEnumerable<U> { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_use_generic_type_from_class_in_parameters()
         {
             AssertPublicApi(typeof(MethodUsingGenericTypeParameterFromClass<>),
@@ -257,6 +272,13 @@ namespace PublicApiGeneratorTests
         {
             public void Method<T>()
                 where T : IDisposable, new()
+            {
+            }
+        }
+
+        public class MethodComplexTypeParameterConstraint
+        {
+            public void Add<T, U>(string s) where U : class, IComparer<T>, IEnumerable<U>
             {
             }
         }
