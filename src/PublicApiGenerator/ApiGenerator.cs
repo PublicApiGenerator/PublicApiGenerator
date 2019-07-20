@@ -331,7 +331,8 @@ namespace PublicApiGenerator
                     typeParameter.Constraints.Add(" class");
                 foreach (var constraint in parameter.Constraints.Where(t => t.FullName != "System.ValueType"))
                 {
-                    typeParameter.Constraints.Add(CreateCodeTypeReference(constraint.GetElementType()));
+                    // for generic constraints like IEnumerable<T> call to GetElementType() returns TypeReference with Name = !0
+                    typeParameter.Constraints.Add(CreateCodeTypeReference(constraint/*.GetElementType()*/));
                 }
                 parameters.Add(typeParameter);
             }
@@ -841,11 +842,12 @@ namespace PublicApiGenerator
 
         static CodeTypeReference[] CreateGenericArguments(TypeReference type)
         {
-            var genericInstance = type as IGenericInstance;
-            if (genericInstance == null) return null;
+            // ReSharper disable once RedundantEnumerableCastCall
+            var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
+            if (genericArgs == null) return null;
 
             var genericArguments = new List<CodeTypeReference>();
-            foreach (var argument in genericInstance.GenericArguments)
+            foreach (var argument in genericArgs)
             {
                 genericArguments.Add(CreateCodeTypeReference(argument));
             }
