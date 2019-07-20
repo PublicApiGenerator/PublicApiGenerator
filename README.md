@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/5vdwwducje0miayf?svg=true)](https://ci.appveyor.com/project/JakeGinnivan/apiapprover)
+[![Build status](https://ci.appveyor.com/api/projects/status/5y4s79ph3n9b57jw?svg=true)](https://ci.appveyor.com/project/JakeGinnivan/apiapprover)
 
 # ApiApprover
 
