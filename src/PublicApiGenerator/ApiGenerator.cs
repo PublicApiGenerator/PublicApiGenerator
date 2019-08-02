@@ -590,7 +590,7 @@ namespace PublicApiGenerator
                     direction |= FieldDirection.Ref;
 
                 var parameterType = parameter.ParameterType.IsByReference
-                    ? parameter.ParameterType.GetElementType()
+                    ? ((ByReferenceType)parameter.ParameterType).ElementType
                     : parameter.ParameterType;
 
                 var type = CreateCodeTypeReference(parameterType);

@@ -174,6 +174,50 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_out_parameter_with_generic_type()
+        {
+            AssertPublicApi<MethodWithOutGenericTypeParameter>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodWithOutGenericTypeParameter
+    {
+        public MethodWithOutGenericTypeParameter() { }
+        public void Method(out PublicApiGeneratorTests.Examples.GenericType<int> value) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_out_parameter_with_generic_enumerable()
+        {
+            AssertPublicApi<MethodWithOutGenericTypeParameterEnumerable>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodWithOutGenericTypeParameterEnumerable
+    {
+        public MethodWithOutGenericTypeParameterEnumerable() { }
+        public void Method(out System.Collections.Generic.IEnumerable<int> value) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_out_parameter_fully_qualified_type_name_for_generic_parameter()
+        {
+            AssertPublicApi<MethodWithOutGenericTypeOfComplexTypeParameter>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodWithOutGenericTypeOfComplexTypeParameter
+    {
+        public MethodWithOutGenericTypeOfComplexTypeParameter() { }
+        public void Method(out PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> value) { }
+    }
+}");
+        }
+
+        //
+
+        [Fact]
         public void Should_output_params_keyword()
         {
             AssertPublicApi<MethodWithParams>(
@@ -266,6 +310,30 @@ namespace PublicApiGeneratorTests
         public class MethodWithOutParameter
         {
             public void Method(out string value)
+            {
+                value = null;
+            }
+        }
+
+        public class MethodWithOutGenericTypeParameter
+        {
+            public void Method(out GenericType<int> value)
+            {
+                value = null;
+            }
+        }
+
+        public class MethodWithOutGenericTypeParameterEnumerable
+        {
+            public void Method(out System.Collections.Generic.IEnumerable<int> value)
+            {
+                value = null;
+            }
+        }
+
+        public class MethodWithOutGenericTypeOfComplexTypeParameter
+        {
+            public void Method(out GenericType<ComplexType> value)
             {
                 value = null;
             }
