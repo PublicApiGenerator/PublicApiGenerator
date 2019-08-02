@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiApprover", "ApiApprover\ApiApprover.csproj", "{75D25110-B0C7-4BCD-9B28-0679DD036C43}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicApiGeneratorTests", "PublicApiGeneratorTests\PublicApiGeneratorTests.csproj", "{3D33D60B-860D-4706-ABA3-11F485FB0C6F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicApiGenerator", "PublicApiGenerator\PublicApiGenerator.csproj", "{18D13F6D-7AFF-4E23-9905-6AF5F55F8852}"
@@ -27,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{75D25110-B0C7-4BCD-9B28-0679DD036C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75D25110-B0C7-4BCD-9B28-0679DD036C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75D25110-B0C7-4BCD-9B28-0679DD036C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75D25110-B0C7-4BCD-9B28-0679DD036C43}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D33D60B-860D-4706-ABA3-11F485FB0C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3D33D60B-860D-4706-ABA3-11F485FB0C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D33D60B-860D-4706-ABA3-11F485FB0C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
