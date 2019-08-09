@@ -6,6 +6,20 @@ namespace PublicApiGeneratorTests
     public class Class_attributes : ApiGeneratorTestsBase
     {
         [Fact]
+        public void Should_add_attribute_with_multiline_text()
+        {
+            AssertPublicApi<ClassWithAttributeWithMultilineStringPositionalParameters>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello world!\\r\\nSecond line"")]
+    public class ClassWithAttributeWithMultilineStringPositionalParameters
+    {
+        public ClassWithAttributeWithMultilineStringPositionalParameters() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_add_attribute_with_no_parameters()
         {
             AssertPublicApi<ClassWithSimpleAttribute>(
@@ -301,6 +315,12 @@ namespace PublicApiGeneratorTests
 
         [AttributeWithPositionalParameters1("Hello")]
         public class ClassWithAttributeWithStringPositionalParameters
+        {
+        }
+
+        [AttributeWithPositionalParameters1(@"Hello world!
+Second line")]
+        public class ClassWithAttributeWithMultilineStringPositionalParameters
         {
         }
 
