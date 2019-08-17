@@ -489,13 +489,13 @@ namespace PublicApiGenerator
                 return new CodeTypeOfExpression(CreateCodeTypeReference(typeRef));
             }
 
-            if (value is string)
-            {
-                // CodeDOM outputs a verbatim string. Any string with \n is treated as such, so normalize
-                // it to make it easier for comparisons
-                value = Regex.Replace((string)value, @"\n", "\\n");
-                value = Regex.Replace((string)value, @"\r\n|\r\\n", "\\r\\n");
-            }
+            //if (value is string)
+            //{
+            //    // CodeDOM outputs a verbatim string. Any string with \n is treated as such, so normalize
+            //    // it to make it easier for comparisons
+            //    value = Regex.Replace((string)value, @"\n", "\\n");
+            //    value = Regex.Replace((string)value, @"\r\n|\r\\n", "\\r\\n");
+            //}
 
             return new CodePrimitiveExpression(value);
         }

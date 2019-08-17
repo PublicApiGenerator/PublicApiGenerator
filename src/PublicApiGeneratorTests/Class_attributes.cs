@@ -1,4 +1,5 @@
 ﻿using PublicApiGeneratorTests.Examples;
+using System;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -8,13 +9,27 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_add_attribute_with_multiline_text()
         {
-            AssertPublicApi<ClassWithAttributeWithMultilineStringPositionalParameters>(
+            AssertPublicApi<ClassWithAttributeWithMultilineStringPositionalParameters1>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello world!\\r\\nSecond line"")]
-    public class ClassWithAttributeWithMultilineStringPositionalParameters
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello world!\r\nSecond line"")]
+    public class ClassWithAttributeWithMultilineStringPositionalParameters1
     {
-        public ClassWithAttributeWithMultilineStringPositionalParameters() { }
+        public ClassWithAttributeWithMultilineStringPositionalParameters1() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_add_attribute_with_multiline_text2()
+        {
+            AssertPublicApi<ClassWithAttributeWithMultilineStringPositionalParameters2>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello world!\r\nSecond line"")]
+    public class ClassWithAttributeWithMultilineStringPositionalParameters2
+    {
+        public ClassWithAttributeWithMultilineStringPositionalParameters2() { }
     }
 }");
         }
@@ -320,7 +335,12 @@ namespace PublicApiGeneratorTests
 
         [AttributeWithPositionalParameters1(@"Hello world!
 Second line")]
-        public class ClassWithAttributeWithMultilineStringPositionalParameters
+        public class ClassWithAttributeWithMultilineStringPositionalParameters1
+        {
+        }
+
+        [AttributeWithPositionalParameters1("Hello world!\r\nSecond line")]
+        public class ClassWithAttributeWithMultilineStringPositionalParameters2
         {
         }
 
