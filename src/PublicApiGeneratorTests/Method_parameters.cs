@@ -76,6 +76,34 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_generic_ref_type()
+        {
+            AssertPublicApi<MethodWithGenericRefTypeParameter>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodWithGenericRefTypeParameter
+    {
+        public MethodWithGenericRefTypeParameter() { }
+        public void Method(ref PublicApiGeneratorTests.Examples.GenericType<int> value) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_generic_in_type()
+        {
+            AssertPublicApi<MethodWithGenericInTypeParameter>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodWithGenericInTypeParameter
+    {
+        public MethodWithGenericInTypeParameter() { }
+        public void Method(in PublicApiGeneratorTests.Examples.GenericType<int> value) { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_fully_qualified_type_name_for_generic_parameter()
         {
             AssertPublicApi<MethodWithGenericTypeOfComplexTypeParameter>(
@@ -158,7 +186,7 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
-        
+
         [Fact]
         public void Should_output_in_parameters()
         {
@@ -279,6 +307,20 @@ namespace PublicApiGeneratorTests
             }
         }
 
+        public class MethodWithGenericRefTypeParameter
+        {
+            public void Method(ref GenericType<int> value)
+            {
+            }
+        }
+
+        public class MethodWithGenericInTypeParameter
+        {
+            public void Method(in GenericType<int> value)
+            {
+            }
+        }
+
         public class MethodWithGenericTypeOfComplexTypeParameter
         {
             public void Method(GenericType<ComplexType> value)
@@ -320,7 +362,7 @@ namespace PublicApiGeneratorTests
             {
             }
         }
-        
+
         public class MethodWithInParameter
         {
             public void Method(in string value)
