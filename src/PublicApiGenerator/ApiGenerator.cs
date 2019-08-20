@@ -417,6 +417,7 @@ namespace PublicApiGenerator
             "System.Runtime.CompilerServices.ExtensionAttribute",
             "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
             "System.Runtime.CompilerServices.IteratorStateMachineAttribute",
+            "System.Runtime.CompilerServices.IsReadOnlyAttribute",
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
             "System.Diagnostics.DebuggerNonUserCodeAttribute",
@@ -599,6 +600,15 @@ namespace PublicApiGenerator
                 {
                     type = ModifyCodeTypeReference(type, "this");
                     isExtension = false;
+                }
+
+                // special case of ref is in
+                // TODO: Move CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute") to extension method once other PR is merged
+                if (direction == FieldDirection.Ref && parameter.CustomAttributes.Any(a =>
+                        a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute"))
+                {
+                    type = ModifyCodeTypeReference(type, "in");
+                    direction = FieldDirection.In;
                 }
 
                 var name = parameter.HasConstant
