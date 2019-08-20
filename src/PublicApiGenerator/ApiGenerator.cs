@@ -209,10 +209,24 @@ namespace PublicApiGenerator
             // correct C#, but it's good enough for our API outline
             var name = publicType.Name;
 
+            var isStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum;
+            
+            var @readonly = isStruct && publicType.CustomAttributes.Any(a =>
+                                 a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute");
+
             var index = name.IndexOf('`');
             if (index != -1)
                 name = name.Substring(0, index);
-            var declaration = new CodeTypeDeclaration(@static ? "static " + name : name)
+
+            var declarationName = string.Empty;
+            if (@readonly)
+                declarationName += "readonly ";
+            if (@static)
+                declarationName += "static ";
+
+            declarationName += name;
+            
+            var declaration = new CodeTypeDeclaration(declarationName)
             {
                 CustomAttributes = CreateCustomAttributes(publicType, excludeAttributes),
                 // TypeAttributes must be specified before the IsXXX as they manipulate TypeAttributes!
@@ -220,7 +234,7 @@ namespace PublicApiGenerator
                 IsClass = publicType.IsClass,
                 IsEnum = publicType.IsEnum,
                 IsInterface = publicType.IsInterface,
-                IsStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum,
+                IsStruct = isStruct,
             };
 
             if (declaration.IsInterface && publicType.BaseType != null)
@@ -417,6 +431,7 @@ namespace PublicApiGenerator
             "System.Runtime.CompilerServices.ExtensionAttribute",
             "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
             "System.Runtime.CompilerServices.IteratorStateMachineAttribute",
+            "System.Runtime.CompilerServices.IsReadOnlyAttribute",
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
             "System.Diagnostics.DebuggerNonUserCodeAttribute",
