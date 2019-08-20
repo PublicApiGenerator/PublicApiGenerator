@@ -158,6 +158,20 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+        
+        [Fact]
+        public void Should_output_in_parameters()
+        {
+            AssertPublicApi<MethodWithInParameter>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodWithInParameter
+    {
+        public MethodWithInParameter() { }
+        public void Method(in string value) { }
+    }
+}");
+        }
 
         [Fact]
         public void Should_output_out_parameters()
@@ -303,6 +317,13 @@ namespace PublicApiGeneratorTests
         public class MethodWithRefParameter
         {
             public void Method(ref string value)
+            {
+            }
+        }
+        
+        public class MethodWithInParameter
+        {
+            public void Method(in string value)
             {
             }
         }
