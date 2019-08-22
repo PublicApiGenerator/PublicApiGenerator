@@ -149,6 +149,19 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        void Should_output_in_parameters()
+        {
+            AssertPublicApi<IMethodWithInParameter>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IMethodWithInParameter
+    {
+        void Method(in string value);
+    }
+}");
+        }
+
+        [Fact]
         void Should_output_out_parameters()
         {
             AssertPublicApi<IMethodWithOutParameter>(
@@ -228,6 +241,11 @@ namespace PublicApiGeneratorTests
         public interface IMethodWithRefParameter
         {
             void Method(ref string value);
+        }
+
+        public interface IMethodWithInParameter
+        {
+            void Method(in string value);
         }
 
         public interface IMethodWithOutParameter

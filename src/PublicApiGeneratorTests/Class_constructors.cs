@@ -73,7 +73,7 @@ namespace PublicApiGeneratorTests
 {
     public class ClassWithConstructorWithParameters
     {
-        public ClassWithConstructorWithParameters(int intValue, string stringValue, PublicApiGeneratorTests.Examples.ComplexType complexType, PublicApiGeneratorTests.Examples.GenericType<int> genericType) { }
+        public ClassWithConstructorWithParameters(int intValue, string stringValue, PublicApiGeneratorTests.Examples.ComplexType complexType, PublicApiGeneratorTests.Examples.GenericType<int> genericType, ref int intValueByRef, in int intValueByIn) { }
     }
 }");
         }
@@ -147,7 +147,7 @@ namespace PublicApiGeneratorTests
 
         public class ClassWithConstructorWithParameters
         {
-            public ClassWithConstructorWithParameters(int intValue, string stringValue, ComplexType complexType, GenericType<int> genericType)
+            public ClassWithConstructorWithParameters(int intValue, string stringValue, ComplexType complexType, GenericType<int> genericType, ref int intValueByRef, in int intValueByIn)
             {
             }
         }

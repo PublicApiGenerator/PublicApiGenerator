@@ -604,9 +604,16 @@ namespace PublicApiGenerator
                 else if (parameter.ParameterType.IsByReference)
                     direction |= FieldDirection.Ref;
 
-                var parameterType = parameter.ParameterType.IsByReference
-                    ? ((ByReferenceType)parameter.ParameterType).ElementType
-                    : parameter.ParameterType;
+                var parameterType = parameter.ParameterType;
+                if (parameterType is RequiredModifierType requiredModifierType)
+                {
+                    parameterType = requiredModifierType.ElementType;
+                }
+                // order is crucial because a RequiredModifierType can be a ByReferenceType
+                if (parameterType is ByReferenceType byReferenceType)
+                {
+                    parameterType = byReferenceType.ElementType;
+                }
 
                 var type = CreateCodeTypeReference(parameterType);
 
@@ -614,6 +621,15 @@ namespace PublicApiGenerator
                 {
                     type = ModifyCodeTypeReference(type, "this");
                     isExtension = false;
+                }
+
+                // special case of ref is in
+                // TODO: Move CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute") to extension method once other PR is merged
+                if (parameter.CustomAttributes.Any(a =>
+                        a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute"))
+                {
+                    type = ModifyCodeTypeReference(type, "in");
+                    direction = FieldDirection.In;
                 }
 
                 var name = parameter.HasConstant
