@@ -8,7 +8,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_public_struct()
         {
-            AssertPublicApi<PublicStruct>(
+            AssertRoslynPublicApi<PublicStruct>(
 @"namespace PublicApiGeneratorTests.Examples
 {
     public struct PublicStruct { }
@@ -18,7 +18,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_not_output_internal_struct()
         {
-            AssertPublicApi<InternalStruct>(string.Empty);
+            AssertRoslynPublicApi<InternalStruct>(string.Empty);
         }
     }
 

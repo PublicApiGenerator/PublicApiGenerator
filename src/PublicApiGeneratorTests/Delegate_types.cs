@@ -8,7 +8,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_void_delegate()
         {
-            AssertPublicApi<VoidDelegate>(
+            AssertRoslynPublicApi<VoidDelegate>(
 @"namespace PublicApiGeneratorTests.Examples
 {
     public delegate void VoidDelegate();

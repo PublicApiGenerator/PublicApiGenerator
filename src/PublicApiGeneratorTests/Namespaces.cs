@@ -26,7 +26,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_declare_new_namespace_for_classes_in_different_namespaces()
         {
-            AssertPublicApi(new[]{typeof(Simple1), typeof(OtherSimple1)},
+            AssertRoslynPublicApi(new[]{typeof(Simple1), typeof(OtherSimple1)},
 @"namespace PublicApiGeneratorTests.Examples1
 {
     public class Simple1

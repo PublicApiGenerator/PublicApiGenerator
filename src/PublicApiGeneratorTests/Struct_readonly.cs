@@ -9,10 +9,10 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output()
         {
-            AssertPublicApi<ReadonlyStruct>(
+            AssertRoslynPublicApi<ReadonlyStruct>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public struct readonly ReadonlyStruct { }
+    public readonly struct ReadonlyStruct { }
 }");
         }
     }

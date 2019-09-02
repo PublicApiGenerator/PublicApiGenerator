@@ -28,7 +28,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_filter_microsoft_namespace()
         {
-            AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
+            AssertRoslynPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
                 @"namespace Microsoft.Whitelisted
 {
     public class Simple1 { }
@@ -58,7 +58,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_filter_system_namespace()
         {
-            AssertPublicApi(new[] { typeof(System1), typeof(System2) },
+            AssertRoslynPublicApi(new[] { typeof(System1), typeof(System2) },
                 @"namespace System.Whitelisted
 {
     public class System1 { }

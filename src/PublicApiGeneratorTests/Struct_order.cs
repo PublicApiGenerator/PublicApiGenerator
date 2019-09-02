@@ -8,7 +8,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_structs_in_alphabetical_order()
         {
-            AssertPublicApi(new[] { typeof(ZZ_Struct), typeof(AA_Struct), typeof(MM_Struct), typeof(I_Struct), typeof(i_Struct) },
+            AssertRoslynPublicApi(new[] { typeof(ZZ_Struct), typeof(AA_Struct), typeof(MM_Struct), typeof(I_Struct), typeof(i_Struct) },
 @"namespace PublicApiGeneratorTests.Examples
 {
     public struct AA_Struct { }

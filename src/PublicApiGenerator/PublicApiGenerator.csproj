@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Description>This library simply returns your public API as a string. You can use this in approval style tests or for documentation.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SignAssembly>true</SignAssembly>
@@ -11,10 +11,11 @@
   <ItemGroup>
     <PackageReference Include="MinVer" Version="1.1.0" PrivateAssets="All" />
     <PackageReference Include="Mono.Cecil" Version="0.10.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.2.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>
-  
+
 </Project>
