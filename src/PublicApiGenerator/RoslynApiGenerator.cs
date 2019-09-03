@@ -41,7 +41,7 @@ public static class RoslynApiGenerator
                     AssemblyResolver = assemblyResolver
                 }))
                 {
-                    var publicApiForAssembly = CreatePublicApiForAssembly(asm, assemblyPath, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName),
+                    var publicApiForAssembly = CreatePublicApiForAssembly(asm, assemblyPath, (typeName, assemblyName) => includeTypes == null || includeTypes.Any(t => t.FullName == typeName && t.Assembly.FullName == assemblyName),
                         shouldIncludeAssemblyAttributes, whitelistedNamespacePrefixes ?? defaultWhitelistedNamespacePrefixes, attributesToExclude);
                     return RemoveUnnecessaryWhiteSpace(publicApiForAssembly);
                 }
@@ -60,70 +60,26 @@ public static class RoslynApiGenerator
 
         // TODO: Assembly references?
         // TODO: Better handle namespaces - using statements? - requires non-qualified type names
-        static string CreatePublicApiForAssembly(AssemblyDefinition assembly, string assemblyPath, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] whitelistedNamespacePrefixes, HashSet<string> excludeAttributes)
+        static string CreatePublicApiForAssembly(AssemblyDefinition assembly, string assemblyPath, Func<string, string, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] whitelistedNamespacePrefixes, HashSet<string> excludeAttributes)
         {
             var reference = MetadataReference.CreateFromFile(assemblyPath);
             var compilation = CSharpCompilation.Create(null)
                 .AddReferences(reference)
-                .AddReferences(GetGlobalReferences());
+                .AddReferences(GetGlobalReferences(assembly));
 
             var publicApiBuilder = new StringBuilder();
             
             var assemblySymbol = (IAssemblySymbol)compilation.GetAssemblyOrModuleSymbol(reference);
-            var visitor = new MyVisitor(publicApiBuilder);
+            var visitor = new MyVisitor(publicApiBuilder, shouldIncludeType, excludeAttributes);
             assemblySymbol.Accept(visitor);
             
-            
-            var cgo = new CodeGeneratorOptions
-            {
-                BracingStyle = "C",
-                BlankLinesBetweenMembers = false,
-                VerbatimOrder = false,
-                IndentString = "    "
-            };
-
-            using (var provider = new CSharpCodeProvider())
-            {
-                var compileUnit = new CodeCompileUnit();
-                if (shouldIncludeAssemblyAttributes && assembly.HasCustomAttributes)
-                {
-                    PopulateCustomAttributes(assembly, compileUnit.AssemblyCustomAttributes, excludeAttributes);
-                }
-
-                var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
-                    .Where(t => !t.IsNested && ShouldIncludeType(t) && shouldIncludeType(t))
-                    .OrderBy(t => t.FullName, StringComparer.Ordinal);
-                foreach (var publicType in publicTypes)
-                {
-                    var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>()
-                        .FirstOrDefault(n => n.Name == publicType.Namespace);
-                    if (@namespace == null)
-                    {
-                        @namespace = new CodeNamespace(publicType.Namespace);
-                        compileUnit.Namespaces.Add(@namespace);
-                    }
-
-                    var typeDeclaration = CreateTypeDeclaration(publicType, whitelistedNamespacePrefixes, excludeAttributes);
-                    @namespace.Types.Add(typeDeclaration);
-                }
-
-                using (var writer = new StringWriter())
-                {
-                    provider.GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
-                    var typeDeclarationText = NormaliseGeneratedCode(writer);
-                    publicApiBuilder.AppendLine(typeDeclarationText);
-                }
-            }
             return NormaliseLineEndings(publicApiBuilder.ToString().Trim());
         }
         
-        private static IEnumerable<MetadataReference> GetGlobalReferences()
+        private static IEnumerable<MetadataReference> GetGlobalReferences(AssemblyDefinition assemblyDefinition)
         {
-            var assemblies = new[]
-            {
-                typeof(System.Object).Assembly, //mscorlib
-            };
-
+            var assemblies = assemblyDefinition.MainModule.AssemblyReferences.Select(reference => Assembly.Load(reference.FullName)).Union(new[] { typeof(Object).Assembly} );
+            
             var refs = from a in assemblies
                 select MetadataReference.CreateFromFile(a.Location);
 
@@ -133,9 +89,14 @@ public static class RoslynApiGenerator
         class MyVisitor : SymbolVisitor
         {
             private StringBuilder builder;
+            private Func<string, string, bool> shouldIncludeType;
+            private HashSet<string> excludeAttributes;
 
-            public MyVisitor(StringBuilder builder)
+            public MyVisitor(StringBuilder builder, Func<string, string, bool> shouldIncludeType,
+                HashSet<string> excludeAttributes)
             {
+                this.excludeAttributes = excludeAttributes;
+                this.shouldIncludeType = shouldIncludeType;
                 this.builder = builder;
             }
             
@@ -143,7 +104,10 @@ public static class RoslynApiGenerator
             {
                 foreach (var child in symbol.GetAttributes())
                 {
-                    builder.AppendLine($"[assembly: {child.ToString()}]");
+                    if (!excludeAttributes.Contains(child.AttributeClass.ToString()))
+                    {
+                        builder.AppendLine($"[assembly: {child.ToString()}]");    
+                    }
                 }
 
                 symbol.GlobalNamespace.Accept(this);
