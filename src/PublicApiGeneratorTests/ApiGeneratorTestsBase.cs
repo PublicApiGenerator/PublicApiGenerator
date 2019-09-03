@@ -31,5 +31,28 @@ namespace PublicApiGeneratorTests
             Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
                 ignoreWhiteSpaceDifferences: true);
         }
+
+        protected void AssertRoslynPublicApi<T>(string expectedOutput, bool includeAssemblyAttributes = false, string[] excludeAttributes = null)
+        {
+            AssertRoslynPublicApi(typeof(T), expectedOutput, includeAssemblyAttributes, excludeAttributes);
+        }
+
+        protected void AssertRoslynPublicApi(Type type, string expectedOutput, bool includeAssemblyAttributes = false, string[] excludeAttributes = null)
+        {
+            AssertRoslynPublicApi(new[] { type }, expectedOutput, includeAssemblyAttributes, excludeAttributes: excludeAttributes);
+        }
+
+        protected void AssertRoslynPublicApi(Type[] types, string expectedOutput, bool includeAssemblyAttributes = false, string[] whitelistedNamespacePrefixes = default(string[]), string[] excludeAttributes = null)
+        {
+            AssertRoslynPublicApi(GetType().Assembly, types, expectedOutput, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
+        }
+
+        private static void AssertRoslynPublicApi(Assembly assembly, Type[] types, string expectedOutput, bool includeAssemblyAttributes, string[] whitelistedNamespacePrefixes, string[] excludeAttributes)
+        {
+            var actualOutput = PublicApiGenerator.RoslynApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
+            actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
+            Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
+                ignoreWhiteSpaceDifferences: true);
+        }
     }
 }

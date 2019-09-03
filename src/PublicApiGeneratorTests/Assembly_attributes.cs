@@ -56,7 +56,7 @@ namespace PublicApiGeneratorTests.Examples
 }";
 #endif
 
-            AssertPublicApi<NotImportant>(api, true);
+            AssertRoslynPublicApi<NotImportant>(api, true);
         }
     }
 
