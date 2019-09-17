@@ -644,9 +644,15 @@ namespace PublicApiGenerator
             }
         }
 
-        static object FormatParameterConstant(IConstantProvider parameter)
+        static object FormatParameterConstant(ParameterDefinition parameter)
         {
-            return parameter.Constant is string ? string.Format(CultureInfo.InvariantCulture, "\"{0}\"", parameter.Constant) : (parameter.Constant ?? "null");
+            if (parameter.Constant is string)
+                return string.Format(CultureInfo.InvariantCulture, "\"{0}\"", parameter.Constant);
+
+            if (parameter.Constant != null)
+                return parameter.Constant;
+
+            return parameter.ParameterType.IsValueType ? "default" : "null";
         }
 
         static MemberAttributes GetMethodAttributes(MethodDefinition method)

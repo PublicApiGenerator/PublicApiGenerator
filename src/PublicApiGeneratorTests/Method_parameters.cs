@@ -1,4 +1,5 @@
 ﻿using PublicApiGeneratorTests.Examples;
+using System.Threading;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -168,7 +169,7 @@ namespace PublicApiGeneratorTests
     public class MethodWithDefaultValues
     {
         public MethodWithDefaultValues() { }
-        public void Method(int value1 = 42, string value2 = ""hello world"") { }
+        public void Method(int value1 = 42, string value2 = ""hello world"", System.Threading.CancellationToken token = default, int value3 = 0, string value4 = null) { }
     }
 }");
         }
@@ -351,7 +352,7 @@ namespace PublicApiGeneratorTests
 
         public class MethodWithDefaultValues
         {
-            public void Method(int value1 = 42, string value2 = "hello world")
+            public void Method(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default)
             {
             }
         }
