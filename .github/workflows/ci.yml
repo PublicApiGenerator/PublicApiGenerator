@@ -24,5 +24,5 @@ jobs:
       run: build.cmd
     - uses: actions/upload-artifact@master
       with:
-        name: nugets
+        name: nugetss
         path: nugets/*.nupkg  
