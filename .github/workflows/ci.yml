@@ -11,17 +11,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [windows-2016, windows-2019]
+        runs-on: [ubuntu-16.04, ubuntu-18.04, windows-2016, windows-2019]
     name: ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
     steps:
-    - uses: actions/setup-dotnet@6c0e2a2a6b8dbd557c411f0bd105b341d4ce40d2
-      with:
-        dotnet-version: '2.2.402'
     - run: dotnet --info
     - uses: actions/checkout@af513c7a016048ae468971c52ed77d9562c7c819
     - if: contains(matrix.runs-on, 'windows')
       run: build.cmd
+    - if: contains(matrix.runs-on, 'ubuntu')
+      run: ./build.sh
     - uses: actions/upload-artifact@master
       with:
         name: nugets
