@@ -86,6 +86,7 @@ namespace PublicApiGeneratorTests
     public class FieldWithFunc
     {
         public readonly System.Func<string, string, string, System.Collections.Generic.IEnumerable<string>, string> FuncField;
+        public readonly System.Func<string, string, string, string> FuncField2;
         public FieldWithFunc() { }
     }
 }");
@@ -124,6 +125,7 @@ namespace PublicApiGeneratorTests
         public class FieldWithFunc
         {
             public readonly Func<string, string, string, IEnumerable<string>, string> FuncField = (a, b, c, d) => null;
+            public readonly Func<string, string, string, string> FuncField2;
         }
     }
     // ReSharper restore UnusedMember.Global
