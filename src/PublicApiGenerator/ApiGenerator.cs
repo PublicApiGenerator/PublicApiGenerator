@@ -855,7 +855,14 @@ namespace PublicApiGenerator
         static CodeTypeReference ModifyCodeTypeReference(CodeTypeReference typeReference, string modifier)
         {
             using (var provider = new CSharpCodeProvider())
-                return new CodeTypeReference(modifier + " " + provider.GetTypeOutput(typeReference));
+            {
+                if (typeReference.TypeArguments.Count == 0)
+                    // provider.GetTypeOutput(typeReference) gives int, string and so on
+                    return new CodeTypeReference(modifier + " " + provider.GetTypeOutput(typeReference));
+                else
+                    // typeReference.BaseType is System.Int32 not int, System.String not string and so on
+                    return new CodeTypeReference(modifier + " " + typeReference.BaseType, typeReference.TypeArguments.Cast<CodeTypeReference>().ToArray());
+            }
         }
 
         static CodeTypeReference CreateCodeTypeReference(TypeReference type)
