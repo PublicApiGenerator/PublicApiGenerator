@@ -1,4 +1,6 @@
 ﻿using PublicApiGeneratorTests.Examples;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -74,6 +76,21 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_readonly_func_with_type_arguments()
+        {
+            AssertPublicApi<FieldWithFunc>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithFunc
+    {
+        public readonly System.Func<string, string, string, System.Collections.Generic.IEnumerable<string>, string> FuncField;
+        public readonly System.Func<string, string, string, string> FuncField2;
+        public FieldWithFunc() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -103,6 +120,12 @@ namespace PublicApiGeneratorTests
         public class FieldWithMultipleGenericTypeParameters
         {
             public GenericTypeExtra<int, string, ComplexType> Field;
+        }
+
+        public class FieldWithFunc
+        {
+            public readonly Func<string, string, string, IEnumerable<string>, string> FuncField = (a, b, c, d) => null;
+            public readonly Func<string, string, string, string> FuncField2;
         }
     }
     // ReSharper restore UnusedMember.Global

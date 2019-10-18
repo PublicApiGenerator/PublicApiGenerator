@@ -855,7 +855,16 @@ namespace PublicApiGenerator
         static CodeTypeReference ModifyCodeTypeReference(CodeTypeReference typeReference, string modifier)
         {
             using (var provider = new CSharpCodeProvider())
-                return new CodeTypeReference(modifier + " " + provider.GetTypeOutput(typeReference));
+            {
+                if (typeReference.TypeArguments.Count == 0)
+                    // For types without generic arguments we resolve the output type directly to turn System.String into string
+                    return new CodeTypeReference(modifier + " " + provider.GetTypeOutput(typeReference));
+                else
+                    // For types with generic types the BaseType is GenericType`<Arity>. Then we cannot resolve the output type and need to pass on the BaseType
+                    // to avoid falling into hardcoded assumptions in CodeTypeReference that cuts of the type after the 4th comma. i.ex. readonly Func<string, string, string, string>
+                    // works but readonly Func<string, string, string, string, string> would turn into readonly Func<string
+                    return new CodeTypeReference(modifier + " " + typeReference.BaseType, typeReference.TypeArguments.Cast<CodeTypeReference>().ToArray());
+            }
         }
 
         static CodeTypeReference CreateCodeTypeReference(TypeReference type)
