@@ -1,3 +1,10 @@
+// In case this file is included in a project with the <Nullable>enable</Nullable> csproj property (which sets the
+// /nullable:enable compiler option):
+
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
