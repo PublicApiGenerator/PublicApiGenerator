@@ -174,6 +174,11 @@ namespace PublicApiGeneratorTests
         public override int GetHashCode() { }
         public PublicApiGeneratorTests.Examples.ReturnType? NullableParamAndReturnMethod(string? nullableParam, string nonNullParam, int? nullableValueType) { }
         public PublicApiGeneratorTests.Examples.ReturnType NullableParamMethod(string? nullableParam, string nonNullParam, int? nullableValueType) { }
+        public PublicApiGeneratorTests.Examples.Data<string> NullableStruct1(PublicApiGeneratorTests.Examples.Data<string> param) { }
+        public PublicApiGeneratorTests.Examples.Data<string>? NullableStruct2(PublicApiGeneratorTests.Examples.Data<string>? param) { }
+        public PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>> NullableStruct3(PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>> param) { }
+        public PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?> NullableStruct4(PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?> param) { }
+        public PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?>? NullableStruct5(PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?>? param) { }
     }
 }");
         }
@@ -226,6 +231,50 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_Annotate_Tuples()
+        {
+            AssertPublicApi<Tuples>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Tuples
+    {
+           public Tuples() { }
+           public System.Tuple<string, string?, int, int?> Tuple1(System.Tuple<string, string?, int, int?>? tuple) { }
+           public System.ValueTuple<string, string?, int, int?> Tuple2(System.ValueTuple<string, string?, int, int?>? tuple) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Annotate_Constraints()
+        {
+            AssertPublicApi<Constraints>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Constraints
+    {
+           public Constraints() { }
+           public T Convert<T>(T data)
+               where T : System.IComparable<string?> { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Annotate_BaseType()
+        {
+            AssertPublicApi<NullableComparable>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class NullableComparable : System.Collections.Generic.List<string?>, System.IComparable<string?>
+    {
+           public NullableComparable() { }
+           public int CompareTo(string? other) { }
+    }
+}");
+        }
     }
 
 #nullable enable
@@ -261,7 +310,6 @@ namespace PublicApiGeneratorTests
 
         public class Structs
         {
-            //public Data<string?> Convert(Data<string> value) => new Data<string?>();
             public KeyValuePair<string?, int?> field;
         }
 
@@ -314,12 +362,16 @@ namespace PublicApiGeneratorTests
             public ReturnType NonNullProperty { get; protected set; } = new ReturnType();
             public ReturnType? NullableProperty { get; set; }
             public ReturnType NullableParamMethod(string? nullableParam, string nonNullParam, int? nullableValueType) { return new ReturnType(); }
-            public ReturnType? NullableParamAndReturnMethod(string? nullableParam, string nonNullParam, int? nullableValueType) { return null; }
+            public ReturnType? NullableParamAndReturnMethod(string? nullableParam, string nonNullParam, int? nullableValueType) { return default; }
             public Dictionary<string, Dictionary<string, Dictionary<int, int?>?>>? ComplicatedDictionary { get; set; }
             public override bool Equals(object? obj) => base.Equals(obj);
             public override int GetHashCode() => base.GetHashCode();
-
             public string? Convert(string source) => source;
+            public Data<string> NullableStruct1(Data<string> param) => default;
+            public Data<string>? NullableStruct2(Data<string>? param) => default;
+            public Data<KeyValuePair<string, string?>> NullableStruct3(Data<KeyValuePair<string, string?>> param) => default;
+            public Data<KeyValuePair<string, string?>?> NullableStruct4(Data<KeyValuePair<string, string?>?> param) => default;
+            public Data<KeyValuePair<string, string?>?>? NullableStruct5(Data<KeyValuePair<string, string?>?>? param) => default;
         }
 
         public class SystemNullable
@@ -330,6 +382,30 @@ namespace PublicApiGeneratorTests
             public float? Calc(double? first, decimal? second) { return null; }
 
             public List<Guid?> GetSecrets(Dictionary<int?, Dictionary<bool?, byte?>> data) => null;
+        }
+
+        public class Tuples
+        {
+            public Tuple<string, string?, int, int?> Tuple1(Tuple<string, string?, int, int?>? tuple) => default;
+            public ValueTuple<string, string?, int, int?> Tuple2(ValueTuple<string, string?, int, int?>? tuple) => default;
+        }
+
+        public class Constraints
+        {
+            public T Convert<T>(T data) where T : IComparable<string?> => default;
+        }
+
+        public class NullableComparable : List<string?>, IComparable<string?>
+        {
+            public int CompareTo(string? other)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public class StringNullableList<T> : List<T?> where T : struct
+        {
+
         }
     }
     // ReSharper restore ClassNeverInstantiated.Global
