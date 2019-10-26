@@ -10,7 +10,7 @@ namespace PublicApiGenerator
     {
         private const int MAX_COUNT = 1000;
 
-        internal static CodeTypeReference CreateCodeTypeReference(TypeReference type, ICustomAttributeProvider attributeProvider)
+        internal static CodeTypeReference CreateCodeTypeReference(this TypeReference type, ICustomAttributeProvider attributeProvider = null)
         {
             return CreateCodeTypeReferenceWithNullabilityMap(type, GetNullabilityMap(attributeProvider), false);
         }
