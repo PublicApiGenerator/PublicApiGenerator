@@ -1,4 +1,5 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -124,6 +125,71 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_Nested_Classes_From_NullableExample1()
+        {
+            AssertPublicApi(typeof(Foo),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Foo
+    {
+        public Foo(PublicApiGeneratorTests.Examples.Foo.Bar bar) { }
+        public class Bar
+        {
+            public Bar(PublicApiGeneratorTests.Examples.Foo.Bar.Baz? baz) { }
+            public class Baz
+            {
+                public Baz() { }
+            }
+        }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_Nested_Classes_From_NullableExample2()
+        {
+            AssertPublicApi(typeof(Foo<>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Foo<T>
+    {
+        public Foo(PublicApiGeneratorTests.Examples.Foo<T>.Bar<int> bar) { }
+        public class Bar<U>
+        {
+            public Bar(PublicApiGeneratorTests.Examples.Foo<T>.Bar<U>.Baz<T, U>? baz) { }
+            public class Baz<V, K>
+            {
+                public Baz() { }
+            }
+        }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Not_Output_Generic_Parameters_From_Declaring_Type()
+        {
+            AssertPublicApi(typeof(Foo<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Foo<T1, T2>
+    {
+        public Foo() { }
+        public class Bar
+        {
+            public T1 Data;
+            public Bar() { }
+        }
+        public class Bar<T3>
+        {
+            public System.Collections.Generic.List<T2>? Field;
+            public Bar() { }
+        }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -204,6 +270,52 @@ namespace PublicApiGeneratorTests
             }
 
             public void Method() { }
+        }
+
+#nullable enable
+
+        // nullable example
+        public class Foo
+        {
+            public class Bar
+            {
+                public class Baz { }
+
+                public Bar(Baz? baz) { }
+            }
+
+            public Foo(Bar bar)
+            {
+            }
+        }
+
+        // nullable generic example 1
+        public class Foo<T>
+        {
+            public class Bar<U>
+            {
+                public class Baz<V, K> { }
+
+                public Bar(Baz<T, U>? baz) { }
+            }
+
+            public Foo(Bar<int> bar)
+            {
+            }
+        }
+
+        // nullable generic example 2
+        public class Foo<T1, T2>
+        {
+            public class Bar
+            {
+                public T1 Data;
+            }
+
+            public class Bar<T3>
+            {
+                public List<T2>? Field;
+            }
         }
     }
     // ReSharper restore UnusedMember.Local

@@ -250,7 +250,7 @@ public static class Program
         var asm = Assembly.LoadFile(fullPath);
         File.WriteAllText(outputPath, ApiGenerator.GeneratePublicApi(asm));
         var destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(outputPath));
-        if(File.Exists(destinationFilePath))
+        if (File.Exists(destinationFilePath))
         {
             File.Delete(destinationFilePath);
         }

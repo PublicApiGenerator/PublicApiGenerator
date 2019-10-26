@@ -1,18 +1,18 @@
+using Microsoft.CSharp;
+using Mono.Cecil;
+using Mono.Cecil.Rocks;
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.CSharp;
-using Mono.Cecil;
-using Mono.Cecil.Rocks;
 using ICustomAttributeProvider = Mono.Cecil.ICustomAttributeProvider;
 using TypeAttributes = System.Reflection.TypeAttributes;
-using System.Globalization;
 
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace PublicApiGenerator
@@ -54,6 +54,7 @@ namespace PublicApiGenerator
                     Environment.NewLine
                 }, StringSplitOptions.RemoveEmptyEntries)
                 .Where(l => !string.IsNullOrWhiteSpace(l))
+                .Select(l => l.TrimEnd())
             );
         }
 
@@ -91,8 +92,11 @@ namespace PublicApiGenerator
                         compileUnit.Namespaces.Add(@namespace);
                     }
 
-                    var typeDeclaration = CreateTypeDeclaration(publicType, whitelistedNamespacePrefixes, excludeAttributes);
-                    @namespace.Types.Add(typeDeclaration);
+                    using (NullableContext.Push(publicType))
+                    {
+                        var typeDeclaration = CreateTypeDeclaration(publicType, whitelistedNamespacePrefixes, excludeAttributes);
+                        @namespace.Types.Add(typeDeclaration);
+                    }
                 }
 
                 using (var writer = new StringWriter())
@@ -143,24 +147,27 @@ namespace PublicApiGenerator
             IMemberDefinition memberInfo,
             HashSet<string> excludeAttributes)
         {
-            if (memberInfo is MethodDefinition methodDefinition)
+            using (NullableContext.Push(memberInfo))
             {
-                if (methodDefinition.IsConstructor)
-                    AddCtorToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
-                else
-                    AddMethodToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
-            }
-            else if (memberInfo is PropertyDefinition propertyDefinition)
-            {
-                AddPropertyToTypeDeclaration(typeDeclaration, propertyDefinition, excludeAttributes);
-            }
-            else if (memberInfo is EventDefinition eventDefinition)
-            {
-                typeDeclaration.Members.Add(GenerateEvent(eventDefinition, excludeAttributes));
-            }
-            else if (memberInfo is FieldDefinition fieldDefinition)
-            {
-                AddFieldToTypeDeclaration(typeDeclaration, fieldDefinition, excludeAttributes);
+                if (memberInfo is MethodDefinition methodDefinition)
+                {
+                    if (methodDefinition.IsConstructor)
+                        AddCtorToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
+                    else
+                        AddMethodToTypeDeclaration(typeDeclaration, methodDefinition, excludeAttributes);
+                }
+                else if (memberInfo is PropertyDefinition propertyDefinition)
+                {
+                    AddPropertyToTypeDeclaration(typeDeclaration, propertyDefinition, excludeAttributes);
+                }
+                else if (memberInfo is EventDefinition eventDefinition)
+                {
+                    typeDeclaration.Members.Add(GenerateEvent(eventDefinition, excludeAttributes));
+                }
+                else if (memberInfo is FieldDefinition fieldDefinition)
+                {
+                    AddFieldToTypeDeclaration(typeDeclaration, fieldDefinition, excludeAttributes);
+                }
             }
         }
 
@@ -210,7 +217,7 @@ namespace PublicApiGenerator
             var name = publicType.Name;
 
             var isStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum;
-            
+
             var @readonly = isStruct && publicType.CustomAttributes.Any(a =>
                                  a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute");
 
@@ -225,7 +232,7 @@ namespace PublicApiGenerator
                 declarationName += "static ";
 
             declarationName += name;
-            
+
             var declaration = new CodeTypeDeclaration(declarationName)
             {
                 CustomAttributes = CreateCustomAttributes(publicType, excludeAttributes),
@@ -240,7 +247,20 @@ namespace PublicApiGenerator
             if (declaration.IsInterface && publicType.BaseType != null)
                 throw new NotImplementedException("Base types for interfaces needs testing");
 
-            PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes);
+            PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes, parameter =>
+            {
+                var declaringType = publicType.DeclaringType;
+
+                while (declaringType != null)
+                {
+                    if (declaringType.GenericParameters.Any(p => p.Name == parameter.Name))
+                        return false; // https://github.com/ApiApprover/ApiApprover/issues/108
+
+                    declaringType = declaringType.DeclaringType;
+                }
+
+                return true;
+            });
 
             if (publicType.BaseType != null && ShouldOutputBaseType(publicType))
             {
@@ -248,16 +268,16 @@ namespace PublicApiGenerator
                 {
                     var underlyingType = publicType.GetEnumUnderlyingType();
                     if (underlyingType.FullName != "System.Int32")
-                        declaration.BaseTypes.Add(CreateCodeTypeReference(underlyingType));
+                        declaration.BaseTypes.Add(underlyingType.CreateCodeTypeReference());
                 }
                 else
-                    declaration.BaseTypes.Add(CreateCodeTypeReference(publicType.BaseType));
+                    declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(publicType));
             }
-            foreach(var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
+            foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
                 .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
                 .Where(t => ShouldIncludeType(t.Definition))
                 .Select(t => t.Reference))
-                declaration.BaseTypes.Add(CreateCodeTypeReference(@interface.InterfaceType));
+                declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(@interface));
 
             foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name, StringComparer.Ordinal))
                 AddMemberToTypeDeclaration(declaration, memberInfo, excludeAttributes);
@@ -271,8 +291,11 @@ namespace PublicApiGenerator
 
             foreach (var nestedType in publicType.NestedTypes.Where(ShouldIncludeType).OrderBy(t => t.FullName, StringComparer.Ordinal))
             {
-                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, whitelistedNamespacePrefixes, excludeAttributes);
-                declaration.Members.Add(nestedTypeDeclaration);
+                using (NullableContext.Push(nestedType))
+                {
+                    var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, whitelistedNamespacePrefixes, excludeAttributes);
+                    declaration.Members.Add(nestedTypeDeclaration);
+                }
             }
 
             return declaration;
@@ -281,31 +304,34 @@ namespace PublicApiGenerator
         static CodeTypeDeclaration CreateDelegateDeclaration(TypeDefinition publicType, HashSet<string> excludeAttributes)
         {
             var invokeMethod = publicType.Methods.Single(m => m.Name == "Invoke");
-            var name = publicType.Name;
-            var index = name.IndexOf('`');
-            if (index != -1)
-                name = name.Substring(0, index);
-            var declaration = new CodeTypeDelegate(name)
+            using (NullableContext.Push(invokeMethod)) // for delegates NullableContextAttribute is stored on Invoke method
             {
-                Attributes = MemberAttributes.Public,
-                CustomAttributes = CreateCustomAttributes(publicType, excludeAttributes),
-                ReturnType = CreateCodeTypeReference(invokeMethod.ReturnType),
-            };
+                var name = publicType.Name;
+                var index = name.IndexOf('`');
+                if (index != -1)
+                    name = name.Substring(0, index);
+                var declaration = new CodeTypeDelegate(name)
+                {
+                    Attributes = MemberAttributes.Public,
+                    CustomAttributes = CreateCustomAttributes(publicType, excludeAttributes),
+                    ReturnType = invokeMethod.ReturnType.CreateCodeTypeReference(invokeMethod.MethodReturnType),
+                };
 
-            // CodeDOM. No support. Return type attributes.
-            PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => ModifyCodeTypeReference(type, "return:"), excludeAttributes);
-            PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes);
-            PopulateMethodParameters(invokeMethod, declaration.Parameters, excludeAttributes);
+                // CodeDOM. No support. Return type attributes.
+                PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => ModifyCodeTypeReference(type, "return:"), excludeAttributes);
+                PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes, _ => true);
+                PopulateMethodParameters(invokeMethod, declaration.Parameters, excludeAttributes);
 
-            // Of course, CodeDOM doesn't support generic type parameters for delegates. Of course.
-            if (declaration.TypeParameters.Count > 0)
-            {
-                var parameterNames = from parameterType in declaration.TypeParameters.Cast<CodeTypeParameter>()
-                    select parameterType.Name;
-                declaration.Name = string.Format(CultureInfo.InvariantCulture, "{0}<{1}>", declaration.Name, string.Join(", ", parameterNames));
+                // Of course, CodeDOM doesn't support generic type parameters for delegates. Of course.
+                if (declaration.TypeParameters.Count > 0)
+                {
+                    var parameterNames = from parameterType in declaration.TypeParameters.Cast<CodeTypeParameter>()
+                                         select parameterType.Name;
+                    declaration.Name = string.Format(CultureInfo.InvariantCulture, "{0}<{1}>", declaration.Name, string.Join(", ", parameterNames));
+                }
+
+                return declaration;
             }
-
-            return declaration;
         }
 
         static bool ShouldOutputBaseType(TypeDefinition publicType)
@@ -313,9 +339,9 @@ namespace PublicApiGenerator
             return publicType.BaseType.FullName != "System.Object" && publicType.BaseType.FullName != "System.ValueType";
         }
 
-        static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters, HashSet<string> excludeAttributes)
+        static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters, HashSet<string> excludeAttributes, Func<GenericParameter, bool> shouldUseParameter)
         {
-            foreach (var parameter in publicType.GenericParameters)
+            foreach (var parameter in publicType.GenericParameters.Where(shouldUseParameter))
             {
                 // A little hacky. Means we get "in" and "out" prefixed on any constraints, but it's either that
                 // or add it as a custom attribute
@@ -339,16 +365,40 @@ namespace PublicApiGenerator
 
                 typeParameter.CustomAttributes.AddRange(attributeCollection.OfType<CodeAttributeDeclaration>().ToArray());
 
+                var nullableConstraint = parameter.GetNullabilityMap().First();
+                var unmanagedConstraint = parameter.CustomAttributes.Any(attr => attr.AttributeType.FullName == "System.Runtime.CompilerServices.IsUnmanagedAttribute");
+
                 if (parameter.HasNotNullableValueTypeConstraint)
-                    typeParameter.Constraints.Add(" struct"); // Extra space is a hack!
+                    typeParameter.Constraints.Add(unmanagedConstraint ? " unmanaged" : " struct");
+
                 if (parameter.HasReferenceTypeConstraint)
-                    typeParameter.Constraints.Add(" class");
-                foreach (var constraint in parameter.Constraints.Where(t => t.FullName != "System.ValueType"))
+                    typeParameter.Constraints.Add(nullableConstraint == true ? " class?" : " class");
+                else if (nullableConstraint == false)
+                    typeParameter.Constraints.Add(" notnull");
+
+                using (NullableContext.Push(parameter))
                 {
-                    // for generic constraints like IEnumerable<T> call to GetElementType() returns TypeReference with Name = !0
-                    typeParameter.Constraints.Add(CreateCodeTypeReference(constraint/*.GetElementType()*/));
+                    foreach (var constraint in parameter.Constraints.Where(constraint => !IsSpecialConstraint(constraint)))
+                    {
+                        // for generic constraints like IEnumerable<T> call to GetElementType() returns TypeReference with Name = !0
+                        var typeReference = constraint.ConstraintType /*.GetElementType()*/.CreateCodeTypeReference(constraint);
+                        typeParameter.Constraints.Add(typeReference);
+                    }
                 }
                 parameters.Add(typeParameter);
+            }
+
+            bool IsSpecialConstraint(GenericParameterConstraint constraint)
+            {
+                // struct
+                if (constraint.ConstraintType is TypeReference reference && reference.FullName == "System.ValueType")
+                    return true;
+
+                // unmanaged
+                if (constraint.ConstraintType is RequiredModifierType type && type.ModifierType.FullName == "System.Runtime.InteropServices.UnmanagedType")
+                    return true;
+
+                return false;
             }
         }
 
@@ -381,7 +431,7 @@ namespace PublicApiGenerator
 
         static CodeAttributeDeclaration GenerateCodeAttributeDeclaration(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
         {
-            var attribute = new CodeAttributeDeclaration(codeTypeModifier(CreateCodeTypeReference(customAttribute.AttributeType)));
+            var attribute = new CodeAttributeDeclaration(codeTypeModifier(customAttribute.AttributeType.CreateCodeTypeReference(mode: NullableMode.Disable)));
             foreach (var arg in customAttribute.ConstructorArguments)
             {
                 attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
@@ -432,6 +482,10 @@ namespace PublicApiGenerator
             "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
             "System.Runtime.CompilerServices.IteratorStateMachineAttribute",
             "System.Runtime.CompilerServices.IsReadOnlyAttribute",
+            "System.Runtime.CompilerServices.NullableAttribute",
+            "System.Runtime.CompilerServices.NullableContextAttribute",
+            "System.Runtime.CompilerServices.IsUnmanagedAttribute",
+            //"System.Runtime.CompilerServices.DynamicAttribute",
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
             "System.Diagnostics.DebuggerNonUserCodeAttribute",
@@ -464,7 +518,7 @@ namespace PublicApiGenerator
             {
                 var initialisers = from argument in customAttributeArguments
                                    select CreateInitialiserExpression(argument);
-                return new CodeArrayCreateExpression(CreateCodeTypeReference(attributeArgument.Type), initialisers.ToArray());
+                return new CodeArrayCreateExpression(attributeArgument.Type.CreateCodeTypeReference(), initialisers.ToArray());
             }
 
             var type = attributeArgument.Type.Resolve();
@@ -495,13 +549,13 @@ namespace PublicApiGenerator
                                where f.Constant != null
                                let v = Convert.ToInt64(f.Constant)
                                where v == originalValue
-                               select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(CreateCodeTypeReference(type)), f.Name);
+                               select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(type.CreateCodeTypeReference()), f.Name);
                 return allFlags.FirstOrDefault();
             }
 
             if (type.FullName == "System.Type" && value is TypeReference typeRef)
             {
-                return new CodeTypeOfExpression(CreateCodeTypeReference(typeRef));
+                return new CodeTypeOfExpression(typeRef.CreateCodeTypeReference());
             }
 
             if (value is string)
@@ -570,7 +624,7 @@ namespace PublicApiGenerator
                 memberName = mappedMemberName;
             }
 
-            var returnType = CreateCodeTypeReference(member.ReturnType);
+            var returnType = member.ReturnType.CreateCodeTypeReference(member.MethodReturnType);
 
             var method = new CodeMemberMethod
             {
@@ -580,7 +634,7 @@ namespace PublicApiGenerator
                 ReturnType = returnType,
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, excludeAttributes);
-            PopulateGenericParameters(member, method.TypeParameters, excludeAttributes);
+            PopulateGenericParameters(member, method.TypeParameters, excludeAttributes, _ => true);
             PopulateMethodParameters(member, method.Parameters, excludeAttributes, IsExtensionMethod(member));
 
             typeDeclaration.Members.Add(method);
@@ -615,7 +669,7 @@ namespace PublicApiGenerator
                     parameterType = byReferenceType.ElementType;
                 }
 
-                var type = CreateCodeTypeReference(parameterType);
+                var type = parameterType.CreateCodeTypeReference(parameter);
 
                 if (isExtension)
                 {
@@ -691,9 +745,9 @@ namespace PublicApiGenerator
             if (typeDefinition.IsInterface)
             {
                 var interfaceMethods = from @interfaceReference in typeDefinition.Interfaces
-                    let interfaceDefinition = @interfaceReference.InterfaceType.Resolve()
-                    where interfaceDefinition != null
-                    select interfaceDefinition.Methods;
+                                       let interfaceDefinition = @interfaceReference.InterfaceType.Resolve()
+                                       where interfaceDefinition != null
+                                       select interfaceDefinition.Methods;
 
                 return interfaceMethods.Any(ms => MetadataResolver.GetMethod(ms, method) != null);
             }
@@ -728,7 +782,7 @@ namespace PublicApiGenerator
 
             var propertyType = member.PropertyType.IsGenericParameter
                 ? new CodeTypeReference(member.PropertyType.Name)
-                : CreateCodeTypeReference(member.PropertyType);
+                : member.PropertyType.CreateCodeTypeReference(member);
 
             var property = new CodeMemberProperty
             {
@@ -754,7 +808,7 @@ namespace PublicApiGenerator
             foreach (var parameter in member.Parameters)
             {
                 property.Parameters.Add(
-                    new CodeParameterDeclarationExpression(CreateCodeTypeReference(parameter.ParameterType),
+                    new CodeParameterDeclarationExpression(parameter.ParameterType.CreateCodeTypeReference(parameter),
                         parameter.Name));
             }
 
@@ -785,12 +839,12 @@ namespace PublicApiGenerator
             // Scope should be the same for getter and setter. If one isn't specified, it'll be 0
             var getterScope = getterAttributes & MemberAttributes.ScopeMask;
             var setterScope = setterAttributes & MemberAttributes.ScopeMask;
-            var scope = (MemberAttributes) Math.Max((int) getterScope, (int) setterScope);
+            var scope = (MemberAttributes)Math.Max((int)getterScope, (int)setterScope);
 
             // Vtable should be the same for getter and setter. If one isn't specified, it'll be 0
             var getterVtable = getterAttributes & MemberAttributes.VTableMask;
             var setterVtable = setterAttributes & MemberAttributes.VTableMask;
-            var vtable = (MemberAttributes) Math.Max((int) getterVtable, (int) setterVtable);
+            var vtable = (MemberAttributes)Math.Max((int)getterVtable, (int)setterVtable);
 
             return access | scope | vtable;
         }
@@ -810,7 +864,7 @@ namespace PublicApiGenerator
                 Name = eventDefinition.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
                 CustomAttributes = CreateCustomAttributes(eventDefinition, excludeAttributes),
-                Type = CreateCodeTypeReference(eventDefinition.EventType)
+                Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
             };
 
             return @event;
@@ -832,7 +886,7 @@ namespace PublicApiGenerator
                 attributes |= MemberAttributes.Static;
 
             // TODO: Values for readonly fields are set in the ctor
-            var codeTypeReference = CreateCodeTypeReference(memberInfo.FieldType);
+            var codeTypeReference = memberInfo.FieldType.CreateCodeTypeReference(memberInfo);
             if (memberInfo.IsInitOnly)
                 codeTypeReference = MakeReadonly(codeTypeReference);
             var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
@@ -865,39 +919,6 @@ namespace PublicApiGenerator
                     // works but readonly Func<string, string, string, string, string> would turn into readonly Func<string
                     return new CodeTypeReference(modifier + " " + typeReference.BaseType, typeReference.TypeArguments.Cast<CodeTypeReference>().ToArray());
             }
-        }
-
-        static CodeTypeReference CreateCodeTypeReference(TypeReference type)
-        {
-            var typeName = GetTypeName(type);
-            return new CodeTypeReference(typeName, CreateGenericArguments(type));
-        }
-
-        static string GetTypeName(TypeReference type)
-        {
-            if (type.IsGenericParameter)
-                return type.Name;
-
-            if (!type.IsNested)
-            {
-                return (!string.IsNullOrEmpty(type.Namespace) ? (type.Namespace + ".") : "") + type.Name;
-            }
-
-            return GetTypeName(type.DeclaringType) + "." + type.Name;
-        }
-
-        static CodeTypeReference[] CreateGenericArguments(TypeReference type)
-        {
-            // ReSharper disable once RedundantEnumerableCastCall
-            var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
-            if (genericArgs == null) return null;
-
-            var genericArguments = new List<CodeTypeReference>();
-            foreach (var argument in genericArgs)
-            {
-                genericArguments.Add(CreateCodeTypeReference(argument));
-            }
-            return genericArguments.ToArray();
         }
     }
 
