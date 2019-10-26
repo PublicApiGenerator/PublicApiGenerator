@@ -169,6 +169,7 @@ namespace PublicApiGeneratorTests
         public System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<int, int?>?>>? ComplicatedDictionary { get; set; }
         public PublicApiGeneratorTests.Examples.ReturnType NonNullProperty { get; set; }
         public PublicApiGeneratorTests.Examples.ReturnType? NullableProperty { get; set; }
+        public string? Convert(string source) { }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public PublicApiGeneratorTests.Examples.ReturnType? NullableParamAndReturnMethod(string? nullableParam, string nonNullParam, int? nullableValueType) { }
@@ -317,6 +318,8 @@ namespace PublicApiGeneratorTests
             public Dictionary<string, Dictionary<string, Dictionary<int, int?>?>>? ComplicatedDictionary { get; set; }
             public override bool Equals(object? obj) => base.Equals(obj);
             public override int GetHashCode() => base.GetHashCode();
+
+            public string? Convert(string source) => source;
         }
 
         public class SystemNullable
