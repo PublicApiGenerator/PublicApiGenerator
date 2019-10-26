@@ -254,16 +254,16 @@ namespace PublicApiGenerator
                 {
                     var underlyingType = publicType.GetEnumUnderlyingType();
                     if (underlyingType.FullName != "System.Int32")
-                        declaration.BaseTypes.Add(underlyingType.CreateCodeTypeReference(SuppressNullableProvider.Instance));
+                        declaration.BaseTypes.Add(underlyingType.CreateCodeTypeReference());
                 }
                 else
-                    declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(SuppressNullableProvider.Instance));
+                    declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(publicType));
             }
             foreach(var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
                 .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
                 .Where(t => ShouldIncludeType(t.Definition))
                 .Select(t => t.Reference))
-                declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(SuppressNullableProvider.Instance));
+                declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(@interface));
 
             foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name, StringComparer.Ordinal))
                 AddMemberToTypeDeclaration(declaration, memberInfo, excludeAttributes);
@@ -358,7 +358,7 @@ namespace PublicApiGenerator
                 foreach (var constraint in parameter.Constraints.Where(t => t.FullName != "System.ValueType"))
                 {
                     // for generic constraints like IEnumerable<T> call to GetElementType() returns TypeReference with Name = !0
-                    typeParameter.Constraints.Add(constraint/*.GetElementType()*/.CreateCodeTypeReference());
+                    typeParameter.Constraints.Add(constraint/*.GetElementType()*/.CreateCodeTypeReference(parameter));
                 }
                 parameters.Add(typeParameter);
             }

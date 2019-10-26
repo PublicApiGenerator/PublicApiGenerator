@@ -32,9 +32,6 @@ namespace PublicApiGenerator
 
         private static IEnumerator<bool> GetNullabilityMap(ICustomAttributeProvider attributeProvider)
         {
-            if (attributeProvider is SuppressNullableProvider)
-                return Enumerable.Repeat(false, MAX_COUNT).GetEnumerator();
-
             var nullableAttr = attributeProvider?.CustomAttributes.SingleOrDefault(d => d.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute");
 
             if (nullableAttr == null)
