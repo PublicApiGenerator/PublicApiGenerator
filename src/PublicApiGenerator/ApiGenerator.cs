@@ -254,16 +254,16 @@ namespace PublicApiGenerator
                 {
                     var underlyingType = publicType.GetEnumUnderlyingType();
                     if (underlyingType.FullName != "System.Int32")
-                        declaration.BaseTypes.Add(CodeTypeReferenceBuilder.CreateCodeTypeReference(underlyingType, SuppressNullableProvider.Instance));
+                        declaration.BaseTypes.Add(underlyingType.CreateCodeTypeReference(SuppressNullableProvider.Instance));
                 }
                 else
-                    declaration.BaseTypes.Add(CodeTypeReferenceBuilder.CreateCodeTypeReference(publicType.BaseType, SuppressNullableProvider.Instance));
+                    declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(SuppressNullableProvider.Instance));
             }
             foreach(var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
                 .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
                 .Where(t => ShouldIncludeType(t.Definition))
                 .Select(t => t.Reference))
-                declaration.BaseTypes.Add(CodeTypeReferenceBuilder.CreateCodeTypeReference(@interface.InterfaceType, SuppressNullableProvider.Instance));
+                declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(SuppressNullableProvider.Instance));
 
             foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name, StringComparer.Ordinal))
                 AddMemberToTypeDeclaration(declaration, memberInfo, excludeAttributes);
@@ -300,7 +300,7 @@ namespace PublicApiGenerator
                 {
                     Attributes = MemberAttributes.Public,
                     CustomAttributes = CreateCustomAttributes(publicType, excludeAttributes),
-                    ReturnType = CodeTypeReferenceBuilder.CreateCodeTypeReference(invokeMethod.ReturnType, invokeMethod.MethodReturnType),
+                    ReturnType = invokeMethod.ReturnType.CreateCodeTypeReference(invokeMethod.MethodReturnType),
                 };
 
                 // CodeDOM. No support. Return type attributes.
@@ -358,7 +358,7 @@ namespace PublicApiGenerator
                 foreach (var constraint in parameter.Constraints.Where(t => t.FullName != "System.ValueType"))
                 {
                     // for generic constraints like IEnumerable<T> call to GetElementType() returns TypeReference with Name = !0
-                    typeParameter.Constraints.Add(CodeTypeReferenceBuilder.CreateCodeTypeReference(constraint/*.GetElementType()*/, null));
+                    typeParameter.Constraints.Add(constraint/*.GetElementType()*/.CreateCodeTypeReference());
                 }
                 parameters.Add(typeParameter);
             }
@@ -393,7 +393,7 @@ namespace PublicApiGenerator
 
         static CodeAttributeDeclaration GenerateCodeAttributeDeclaration(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
         {
-            var attribute = new CodeAttributeDeclaration(codeTypeModifier(CodeTypeReferenceBuilder.CreateCodeTypeReference(customAttribute.AttributeType, null)));
+            var attribute = new CodeAttributeDeclaration(codeTypeModifier(customAttribute.AttributeType.CreateCodeTypeReference()));
             foreach (var arg in customAttribute.ConstructorArguments)
             {
                 attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
@@ -478,7 +478,7 @@ namespace PublicApiGenerator
             {
                 var initialisers = from argument in customAttributeArguments
                                    select CreateInitialiserExpression(argument);
-                return new CodeArrayCreateExpression(CodeTypeReferenceBuilder.CreateCodeTypeReference(attributeArgument.Type, null), initialisers.ToArray());
+                return new CodeArrayCreateExpression(attributeArgument.Type.CreateCodeTypeReference(), initialisers.ToArray());
             }
 
             var type = attributeArgument.Type.Resolve();
@@ -509,13 +509,13 @@ namespace PublicApiGenerator
                                where f.Constant != null
                                let v = Convert.ToInt64(f.Constant)
                                where v == originalValue
-                               select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(CodeTypeReferenceBuilder.CreateCodeTypeReference(type, null)), f.Name);
+                               select new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(type.CreateCodeTypeReference()), f.Name);
                 return allFlags.FirstOrDefault();
             }
 
             if (type.FullName == "System.Type" && value is TypeReference typeRef)
             {
-                return new CodeTypeOfExpression(CodeTypeReferenceBuilder.CreateCodeTypeReference(typeRef, null));
+                return new CodeTypeOfExpression(typeRef.CreateCodeTypeReference());
             }
 
             if (value is string)
@@ -584,7 +584,7 @@ namespace PublicApiGenerator
                 memberName = mappedMemberName;
             }
 
-            var returnType = CodeTypeReferenceBuilder.CreateCodeTypeReference(member.ReturnType, member.MethodReturnType);
+            var returnType = member.ReturnType.CreateCodeTypeReference(member.MethodReturnType);
 
             var method = new CodeMemberMethod
             {
@@ -629,7 +629,7 @@ namespace PublicApiGenerator
                     parameterType = byReferenceType.ElementType;
                 }
 
-                var type = CodeTypeReferenceBuilder.CreateCodeTypeReference(parameterType, parameter);
+                var type = parameterType.CreateCodeTypeReference(parameter);
 
                 if (isExtension)
                 {
@@ -742,7 +742,7 @@ namespace PublicApiGenerator
 
             var propertyType = member.PropertyType.IsGenericParameter
                 ? new CodeTypeReference(member.PropertyType.Name)
-                : CodeTypeReferenceBuilder.CreateCodeTypeReference(member.PropertyType, member);
+                : member.PropertyType.CreateCodeTypeReference(member);
 
             var property = new CodeMemberProperty
             {
@@ -768,7 +768,7 @@ namespace PublicApiGenerator
             foreach (var parameter in member.Parameters)
             {
                 property.Parameters.Add(
-                    new CodeParameterDeclarationExpression(CodeTypeReferenceBuilder.CreateCodeTypeReference(parameter.ParameterType, parameter),
+                    new CodeParameterDeclarationExpression(parameter.ParameterType.CreateCodeTypeReference(parameter),
                         parameter.Name));
             }
 
@@ -824,7 +824,7 @@ namespace PublicApiGenerator
                 Name = eventDefinition.Name,
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
                 CustomAttributes = CreateCustomAttributes(eventDefinition, excludeAttributes),
-                Type = CodeTypeReferenceBuilder.CreateCodeTypeReference(eventDefinition.EventType, eventDefinition)
+                Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
             };
 
             return @event;
@@ -846,7 +846,7 @@ namespace PublicApiGenerator
                 attributes |= MemberAttributes.Static;
 
             // TODO: Values for readonly fields are set in the ctor
-            var codeTypeReference = CodeTypeReferenceBuilder.CreateCodeTypeReference(memberInfo.FieldType, memberInfo);
+            var codeTypeReference = memberInfo.FieldType.CreateCodeTypeReference(memberInfo);
             if (memberInfo.IsInitOnly)
                 codeTypeReference = MakeReadonly(codeTypeReference);
             var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
