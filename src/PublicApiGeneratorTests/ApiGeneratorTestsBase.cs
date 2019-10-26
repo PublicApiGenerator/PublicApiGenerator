@@ -19,7 +19,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(new[] { type }, expectedOutput, includeAssemblyAttributes, excludeAttributes: excludeAttributes);
         }
 
-        protected void AssertPublicApi(Type[] types, string expectedOutput, bool includeAssemblyAttributes = false, string[] whitelistedNamespacePrefixes = default(string[]), string[] excludeAttributes = null)
+        protected void AssertPublicApi(Type[] types, string expectedOutput, bool includeAssemblyAttributes = false, string[] whitelistedNamespacePrefixes = default, string[] excludeAttributes = null)
         {
             AssertPublicApi(GetType().Assembly, types, expectedOutput, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
         }
