@@ -12,7 +12,7 @@ namespace PublicApiGenerator
 
         internal static CodeTypeReference CreateCodeTypeReference(this TypeReference type, ICustomAttributeProvider attributeProvider = null)
         {
-            return CreateCodeTypeReferenceWithNullabilityMap(type, GetNullabilityMap(attributeProvider), false);
+            return CreateCodeTypeReferenceWithNullabilityMap(type, attributeProvider.GetNullabilityMap().GetEnumerator(), false);
         }
 
         static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool> nullabilityMap, bool forceNullable)
@@ -30,7 +30,7 @@ namespace PublicApiGenerator
             }
         }
 
-        private static IEnumerator<bool> GetNullabilityMap(ICustomAttributeProvider attributeProvider)
+        internal static IEnumerable<bool> GetNullabilityMap(this ICustomAttributeProvider attributeProvider)
         {
             var nullableAttr = attributeProvider?.CustomAttributes.SingleOrDefault(d => d.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute");
 
@@ -45,13 +45,13 @@ namespace PublicApiGenerator
             }
 
             if (nullableAttr == null)
-                return Enumerable.Repeat(false, MAX_COUNT).GetEnumerator();
+                return Enumerable.Repeat(false, MAX_COUNT);
 
             var value = nullableAttr.ConstructorArguments[0].Value;
             if (value is CustomAttributeArgument[] arguments)
-                return arguments.Select(a => (byte)a.Value == 2).GetEnumerator();
+                return arguments.Select(a => (byte)a.Value == 2);
 
-            return Enumerable.Repeat((byte)value == 2, MAX_COUNT).GetEnumerator();
+            return Enumerable.Repeat((byte)value == 2, MAX_COUNT);
         }
 
         // The compiler optimizes the size of metadata bypassing a sequence of bytes for value types.

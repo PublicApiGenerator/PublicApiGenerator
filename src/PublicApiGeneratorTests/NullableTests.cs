@@ -1,11 +1,13 @@
 ﻿using PublicApiGeneratorTests.Examples;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Xunit;
 
 namespace PublicApiGeneratorTests
 {
     // Tests for https://github.com/ApiApprover/ApiApprover/issues/54
+    // See also https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-reference-types.md
     [Trait("NRT", "Nullable Reference Types")]
     public class NullableTests : ApiGeneratorTestsBase
     {
@@ -256,8 +258,33 @@ namespace PublicApiGeneratorTests
     public class Constraints
     {
            public Constraints() { }
+           public void Print1<T>(T val)
+               where T : class { }
+           public void Print2<T>(T val)
+               where T : class? { }
+           public static void Print3<T>()
+                where T : System.IO.Stream { }
+           public static void Print4<T>()
+                where T : System.IDisposable { }
+    }
+}");
+        }
+
+        [Fact(Skip = "There is a problem with these tests - the attribute says 1 instead of 2")]
+        public void Should_Annotate_Nullable_Constraints()
+        {
+            AssertPublicApi<Constraints2>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Constraints2
+    {
+           public Constraints2() { }
            public T Convert<T>(T data)
                where T : System.IComparable<string?> { }
+           public static void Print1<T>()
+                where T : System.IO.Stream? { }
+           public static void Print2<T>()
+                where T : System.IDisposable? { }
     }
 }");
         }
@@ -392,7 +419,26 @@ namespace PublicApiGeneratorTests
 
         public class Constraints
         {
+            public void Print1<T>(T val) where T : class
+            {
+                val.ToString();
+            }
+
+            public void Print2<T>(T val) where T : class?
+            {
+                if (val != null)
+                    val.ToString();
+            }
+
+            public static void Print3<T>() where T : Stream { }
+            public static void Print4<T>() where T : IDisposable { }
+        }
+
+        public class Constraints2
+        {
             public T Convert<T>(T data) where T : IComparable<string?> => default;
+            public static void Print1<T>() where T : Stream? { }
+            public static void Print2<T>() where T : IDisposable? { }
         }
 
         public class NullableComparable : List<string?>, IComparable<string?>
