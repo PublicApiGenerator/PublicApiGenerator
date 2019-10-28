@@ -304,6 +304,63 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_Annotate_OpenGeneric()
+        {
+            AssertPublicApi(typeof(StringNullableList<>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class StringNullableList<T> : System.Collections.Generic.List<T?>
+        where T : struct
+    {
+           public StringNullableList() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Annotate_NotNull_Constraint()
+        {
+            AssertPublicApi(typeof(IDoStuff1<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IDoStuff1<TIn, TOut>
+         where TIn : notnull
+         where TOut : notnull
+    {
+           TOut DoStuff(TIn input);
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Annotate_NotNull_And_Null_Constraint()
+        {
+            AssertPublicApi(typeof(IDoStuff2<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IDoStuff2<TIn, TOut>
+         where TIn : class?
+         where TOut : notnull
+    {
+           TOut DoStuff(TIn input);
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Annotate_Without_Explicit_Constraints()
+        {
+            AssertPublicApi(typeof(IDoStuff3<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IDoStuff3<TIn, TOut>
+    {
+           TOut DoStuff(TIn input);
+    }
+}");
+        }
     }
 
 #nullable enable
@@ -454,6 +511,25 @@ namespace PublicApiGeneratorTests
         public class StringNullableList<T> : List<T?> where T : struct
         {
 
+        }
+
+        public interface IDoStuff1<TIn, TOut>
+            where TIn : notnull
+            where TOut : notnull
+        {
+            TOut DoStuff(TIn input);
+        }
+
+        public interface IDoStuff2<TIn, TOut>
+           where TIn : class?
+           where TOut : notnull
+        {
+            TOut DoStuff(TIn input);
+        }
+
+        public interface IDoStuff3<TIn, TOut>
+        {
+            TOut DoStuff(TIn input);
         }
     }
     // ReSharper restore ClassNeverInstantiated.Global

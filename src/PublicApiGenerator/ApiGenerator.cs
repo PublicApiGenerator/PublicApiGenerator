@@ -353,8 +353,14 @@ namespace PublicApiGenerator
 
                 if (parameter.HasNotNullableValueTypeConstraint)
                     typeParameter.Constraints.Add(" struct"); // Extra space is a hack!
+                
+                var nullableConstraint = parameter.GetNullabilityMap().First();
+
                 if (parameter.HasReferenceTypeConstraint)
-                    typeParameter.Constraints.Add(parameter.GetNullabilityMap().First() ? " class?" : " class");
+                    typeParameter.Constraints.Add(nullableConstraint == true ? " class?" : " class"); // Extra space is a hack!
+                else if (nullableConstraint == false)
+                    typeParameter.Constraints.Add(" notnull"); // Extra space is a hack!
+
                 using (NullableContext.Push(parameter))
                 {
                     foreach (var constraint in parameter.Constraints.Where(t => t.ConstraintType.FullName != "System.ValueType"))

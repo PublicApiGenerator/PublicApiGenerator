@@ -15,7 +15,7 @@ namespace PublicApiGenerator
             return CreateCodeTypeReferenceWithNullabilityMap(type, attributeProvider.GetNullabilityMap().GetEnumerator(), false);
         }
 
-        static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool> nullabilityMap, bool forceNullable)
+        static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable)
         {
             var typeName = GetTypeName(type, nullabilityMap, forceNullable);
             if (type.IsValueType && type.Name == "Nullable`1" && type.Namespace == "System")
@@ -29,8 +29,8 @@ namespace PublicApiGenerator
                 return new CodeTypeReference(typeName, CreateGenericArguments(type, nullabilityMap));
             }
         }
-
-        internal static IEnumerable<bool> GetNullabilityMap(this ICustomAttributeProvider attributeProvider)
+       
+        internal static IEnumerable<bool?> GetNullabilityMap(this ICustomAttributeProvider attributeProvider)
         {
             var nullableAttr = attributeProvider?.CustomAttributes.SingleOrDefault(d => d.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute");
 
@@ -45,13 +45,29 @@ namespace PublicApiGenerator
             }
 
             if (nullableAttr == null)
-                return Enumerable.Repeat(false, MAX_COUNT);
+                return Enumerable.Repeat((bool?)null, MAX_COUNT);
 
             var value = nullableAttr.ConstructorArguments[0].Value;
             if (value is CustomAttributeArgument[] arguments)
-                return arguments.Select(a => (byte)a.Value == 2);
+                return arguments.Select(a => Convert((byte)a.Value));
 
-            return Enumerable.Repeat((byte)value == 2, MAX_COUNT);
+            return Enumerable.Repeat(Convert((byte)value), MAX_COUNT);
+
+            // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md 
+            // returns:
+            // true : explicitly nullable
+            // false: explicitly not nullable
+            // null : oblivious
+            bool? Convert(byte value)
+            {
+                switch (value)
+                {
+                    case 2: return true;
+                    case 1: return false;
+                    case 0: return null;
+                    default: throw new NotSupportedException(value.ToString());
+                }
+            }
         }
 
         // The compiler optimizes the size of metadata bypassing a sequence of bytes for value types.
@@ -75,7 +91,7 @@ namespace PublicApiGenerator
             return false;
         }
 
-        static string GetTypeName(TypeReference type, IEnumerator<bool> nullabilityMap, bool forceNullable)
+        static string GetTypeName(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable)
         {
             bool nullable = forceNullable || HasAnyReferenceType(type) && IsNullable();
 
@@ -95,11 +111,11 @@ namespace PublicApiGenerator
                 {
                     throw new InvalidOperationException("Not enough nullability information");
                 }
-                return nullabilityMap.Current;
+                return nullabilityMap.Current == true;
             }
         }
 
-        static string GetTypeNameCore(TypeReference type, IEnumerator<bool> nullabilityMap, bool nullable)
+        static string GetTypeNameCore(TypeReference type, IEnumerator<bool?> nullabilityMap, bool nullable)
         {
             if (type.IsGenericParameter)
             {
@@ -122,7 +138,7 @@ namespace PublicApiGenerator
             return GetTypeName(type.DeclaringType, null, false) + "." + GetTypeName(type, nullabilityMap, false);
         }
 
-        static CodeTypeReference[] CreateGenericArguments(TypeReference type, IEnumerator<bool> nullabilityMap)
+        static CodeTypeReference[] CreateGenericArguments(TypeReference type, IEnumerator<bool?> nullabilityMap)
         {
             // ReSharper disable once RedundantEnumerableCastCall
             var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
