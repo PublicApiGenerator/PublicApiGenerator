@@ -270,7 +270,7 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        [Fact(Skip = "There is a problem with these tests - the attribute says 1 instead of 2")]
+        [Fact]
         public void Should_Annotate_Nullable_Constraints()
         {
             AssertPublicApi<Constraints2>(
