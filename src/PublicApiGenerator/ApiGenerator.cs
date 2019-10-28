@@ -351,19 +351,20 @@ namespace PublicApiGenerator
 
                 typeParameter.CustomAttributes.AddRange(attributeCollection.OfType<CodeAttributeDeclaration>().ToArray());
 
-                if (parameter.HasNotNullableValueTypeConstraint)
-                    typeParameter.Constraints.Add(" struct"); // Extra space is a hack!
-                
                 var nullableConstraint = parameter.GetNullabilityMap().First();
+                var unmanagedConstraint = parameter.CustomAttributes.Any(attr => attr.AttributeType.FullName == "System.Runtime.CompilerServices.IsUnmanagedAttribute");
 
+                if (parameter.HasNotNullableValueTypeConstraint)
+                    typeParameter.Constraints.Add(unmanagedConstraint ? " unmanaged" : " struct");
+                
                 if (parameter.HasReferenceTypeConstraint)
-                    typeParameter.Constraints.Add(nullableConstraint == true ? " class?" : " class"); // Extra space is a hack!
+                    typeParameter.Constraints.Add(nullableConstraint == true ? " class?" : " class");
                 else if (nullableConstraint == false)
-                    typeParameter.Constraints.Add(" notnull"); // Extra space is a hack!
+                    typeParameter.Constraints.Add(" notnull");
 
                 using (NullableContext.Push(parameter))
                 {
-                    foreach (var constraint in parameter.Constraints.Where(t => t.ConstraintType.FullName != "System.ValueType"))
+                    foreach (var constraint in parameter.Constraints.Where(constraint => !IsSpecialConstraint(constraint)))
                     {
                         // for generic constraints like IEnumerable<T> call to GetElementType() returns TypeReference with Name = !0
                         var typeReference = constraint.ConstraintType /*.GetElementType()*/.CreateCodeTypeReference(constraint);
@@ -371,6 +372,19 @@ namespace PublicApiGenerator
                     }
                 }
                 parameters.Add(typeParameter);
+            }
+
+            bool IsSpecialConstraint(GenericParameterConstraint constraint)
+            {
+                // struct
+                if (constraint.ConstraintType is TypeReference reference && reference.FullName == "System.ValueType")
+                    return true;
+
+                // unmanaged
+                if (constraint.ConstraintType is RequiredModifierType type && type.ModifierType.FullName == "System.Runtime.InteropServices.UnmanagedType")
+                    return true;
+
+                return false;
             }
         }
 
@@ -456,6 +470,7 @@ namespace PublicApiGenerator
             "System.Runtime.CompilerServices.IsReadOnlyAttribute",
             "System.Runtime.CompilerServices.NullableAttribute",
             "System.Runtime.CompilerServices.NullableContextAttribute",
+            "System.Runtime.CompilerServices.IsUnmanagedAttribute",
             "System.Reflection.DefaultMemberAttribute",
             "System.Diagnostics.DebuggableAttribute",
             "System.Diagnostics.DebuggerNonUserCodeAttribute",

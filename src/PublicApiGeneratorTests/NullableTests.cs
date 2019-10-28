@@ -391,6 +391,21 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_Annotate_Unmanaged_Constraint()
+        {
+            AssertPublicApi(typeof(IDoStuff6<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IDoStuff5<TIn, TOut>
+         where TIn : class?
+         where TOut : unmanaged
+    {
+           TOut DoStuff(TIn input);
+    }
+}");
+        }
     }
 
 #nullable enable
@@ -572,6 +587,13 @@ namespace PublicApiGeneratorTests
         public interface IDoStuff5<TIn, TOut>
          where TIn : class?
          where TOut : struct
+        {
+            TOut DoStuff(TIn input);
+        }
+
+        public interface IDoStuff6<TIn, TOut>
+         where TIn : notnull
+         where TOut : unmanaged
         {
             TOut DoStuff(TIn input);
         }
