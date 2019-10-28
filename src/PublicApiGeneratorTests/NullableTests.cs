@@ -276,9 +276,9 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(typeof(Constraints2<,>),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class Constraints2
-        where X: IComparable<X>
-        where Y: class?
+    public class Constraints2<X, Y>
+        where X : System.IComparable<X>
+        where Y : class?
     {
            public Constraints2() { }
            public T Convert<T>(T data)
