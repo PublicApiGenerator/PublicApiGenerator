@@ -398,8 +398,8 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(typeof(IDoStuff6<,>),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public interface IDoStuff5<TIn, TOut>
-         where TIn : class?
+    public interface IDoStuff6<TIn, TOut>
+         where TIn : notnull
          where TOut : unmanaged
     {
            TOut DoStuff(TIn input);
