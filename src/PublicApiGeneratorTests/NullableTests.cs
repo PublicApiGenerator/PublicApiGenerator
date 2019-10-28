@@ -273,10 +273,12 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_Annotate_Nullable_Constraints()
         {
-            AssertPublicApi<Constraints2>(
+            AssertPublicApi(typeof(Constraints2<,>),
 @"namespace PublicApiGeneratorTests.Examples
 {
     public class Constraints2
+        where X: IComparable<X>
+        where Y: class?
     {
            public Constraints2() { }
            public T Convert<T>(T data)
@@ -434,7 +436,7 @@ namespace PublicApiGeneratorTests
             public static void Print4<T>() where T : IDisposable { }
         }
 
-        public class Constraints2
+        public class Constraints2<X, Y> where X: IComparable<X> where Y : class?
         {
             public T Convert<T>(T data) where T : IComparable<string?> => default;
             public static void Print1<T>() where T : Stream? { }

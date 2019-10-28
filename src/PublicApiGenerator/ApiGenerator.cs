@@ -355,9 +355,9 @@ namespace PublicApiGenerator
                     typeParameter.Constraints.Add(" struct"); // Extra space is a hack!
                 if (parameter.HasReferenceTypeConstraint)
                     typeParameter.Constraints.Add(parameter.GetNullabilityMap().First() ? " class?" : " class");
-                foreach (var constraint in parameter.Constraints.Where(t => t.ConstraintType.FullName != "System.ValueType"))
+                using (NullableContext.Push(parameter))
                 {
-                    using (NullableContext.Push(constraint))
+                    foreach (var constraint in parameter.Constraints.Where(t => t.ConstraintType.FullName != "System.ValueType"))
                     {
                         // for generic constraints like IEnumerable<T> call to GetElementType() returns TypeReference with Name = !0
                         var typeReference = constraint.ConstraintType /*.GetElementType()*/.CreateCodeTypeReference(constraint);
