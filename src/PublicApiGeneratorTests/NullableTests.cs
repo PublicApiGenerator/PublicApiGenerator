@@ -361,6 +361,36 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_Annotate_NotNull_And_Null_Class_Constraint()
+        {
+            AssertPublicApi(typeof(IDoStuff4<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IDoStuff4<TIn, TOut>
+         where TIn : class?
+         where TOut : class
+    {
+           TOut DoStuff(TIn input);
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Annotate_Nullable_Class_And_Struct_Constraint()
+        {
+            AssertPublicApi(typeof(IDoStuff5<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IDoStuff5<TIn, TOut>
+         where TIn : class?
+         where TOut : struct
+    {
+           TOut DoStuff(TIn input);
+    }
+}");
+        }
     }
 
 #nullable enable
@@ -528,6 +558,20 @@ namespace PublicApiGeneratorTests
         }
 
         public interface IDoStuff3<TIn, TOut>
+        {
+            TOut DoStuff(TIn input);
+        }
+
+        public interface IDoStuff4<TIn, TOut>
+          where TIn : class?
+          where TOut : class
+        {
+            TOut DoStuff(TIn input);
+        }
+
+        public interface IDoStuff5<TIn, TOut>
+         where TIn : class?
+         where TOut : struct
         {
             TOut DoStuff(TIn input);
         }
