@@ -308,13 +308,15 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_Annotate_OpenGeneric()
         {
-            AssertPublicApi(typeof(StringNullableList<>),
+            AssertPublicApi(typeof(StringNullableList<,>),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class StringNullableList<T> : System.Collections.Generic.List<T?>
+    public class StringNullableList<T, U> : System.Collections.Generic.List<T?>, System.IComparable<U>
         where T : struct
+        where U : class
     {
            public StringNullableList() { }
+           public int CompareTo(U other) { }
     }
 }");
         }
@@ -553,9 +555,9 @@ namespace PublicApiGeneratorTests
             }
         }
 
-        public class StringNullableList<T> : List<T?> where T : struct
+        public class StringNullableList<T,U> : List<T?>, IComparable<U> where T : struct where U : class
         {
-
+            public int CompareTo(U other) => 0;
         }
 
         public interface IDoStuff1<TIn, TOut>
