@@ -124,6 +124,48 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_Nested_Classes_From_NullableExample1()
+        {
+            AssertPublicApi(typeof(Foo),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Foo
+    {
+        public Foo(PublicApiGeneratorTests.Examples.Foo.Bar bar) { }
+        public class Bar
+        {
+            public Bar(PublicApiGeneratorTests.Examples.Foo.Bar.Baz? baz) { }
+            public class Baz
+            {
+                public Baz() { }
+            }
+        }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_Nested_Classes_From_NullableExample2()
+        {
+            AssertPublicApi(typeof(Foo<>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Foo<T>
+    {
+        public Foo(PublicApiGeneratorTests.Examples.Foo<T>.Bar<int> bar) { }
+        public class Bar<T, U>
+        {
+            public Bar(PublicApiGeneratorTests.Examples.Foo<T>.Bar<U>.Baz<T, U>? baz) { }
+            public class Baz<T, U, V, K>
+            {
+                public Baz() { }
+            }
+        }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -204,6 +246,38 @@ namespace PublicApiGeneratorTests
             }
 
             public void Method() { }
+        }
+
+#nullable enable
+
+        // nullable example
+        public class Foo
+        {
+            public class Bar
+            {
+                public class Baz { }
+
+                public Bar(Baz? baz) { }
+            }
+
+            public Foo(Bar bar)
+            {
+            }
+        }
+
+        // nullable generic example
+        public class Foo<T>
+        {
+            public class Bar<U>
+            {
+                public class Baz<V, K> { }
+
+                public Bar(Baz<T, U>? baz) { }
+            }
+
+            public Foo(Bar<int> bar)
+            {
+            }
         }
     }
     // ReSharper restore UnusedMember.Local

@@ -8,28 +8,42 @@ namespace PublicApiGenerator
 {
     internal static class CodeTypeReferenceBuilder
     {
-        private const int MAX_COUNT = 1000;
+        private const int MAX_COUNT = 100;
 
         internal static CodeTypeReference CreateCodeTypeReference(this TypeReference type, ICustomAttributeProvider attributeProvider = null)
         {
-            return CreateCodeTypeReferenceWithNullabilityMap(type, attributeProvider.GetNullabilityMap().GetEnumerator(), false);
+            return CreateCodeTypeReferenceWithNullabilityMap(type, attributeProvider.GetNullabilityMap().GetEnumerator(), false, false);
         }
 
-        static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable)
+        static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable, bool disableNested)
         {
-            var typeName = GetTypeName(type, nullabilityMap, forceNullable);
+            var typeName = GetTypeName(type, nullabilityMap, forceNullable, disableNested);
             if (type.IsValueType && type.Name == "Nullable`1" && type.Namespace == "System")
             {
                 // unwrap System.Nullable<Type> into Type? for readability
                 var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
-                return CreateCodeTypeReferenceWithNullabilityMap(genericArgs.Single(), nullabilityMap, true);
+                return CreateCodeTypeReferenceWithNullabilityMap(genericArgs.Single(), nullabilityMap, true, disableNested);
             }
             else
             {
                 return new CodeTypeReference(typeName, CreateGenericArguments(type, nullabilityMap));
             }
         }
-       
+
+        static CodeTypeReference[] CreateGenericArguments(TypeReference type, IEnumerator<bool?> nullabilityMap)
+        {
+            // ReSharper disable once RedundantEnumerableCastCall
+            var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
+            if (genericArgs == null) return null;
+
+            var genericArguments = new List<CodeTypeReference>();
+            foreach (var argument in genericArgs)
+            {
+                genericArguments.Add(CreateCodeTypeReferenceWithNullabilityMap(argument, nullabilityMap, false, false));
+            }
+            return genericArguments.ToArray();
+        }
+
         internal static IEnumerable<bool?> GetNullabilityMap(this ICustomAttributeProvider attributeProvider)
         {
             var nullableAttr = attributeProvider?.CustomAttributes.SingleOrDefault(d => d.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute");
@@ -91,11 +105,11 @@ namespace PublicApiGenerator
             return false;
         }
 
-        static string GetTypeName(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable)
+        static string GetTypeName(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable, bool disableNested)
         {
             bool nullable = forceNullable || HasAnyReferenceType(type) && IsNullable();
 
-            var typeName = GetTypeNameCore(type, nullabilityMap, nullable);
+            var typeName = GetTypeNameCore(type, nullabilityMap, nullable, disableNested);
 
             if (nullable)
                 typeName = CSharpAlias.Get(typeName) + "?";
@@ -115,7 +129,7 @@ namespace PublicApiGenerator
             }
         }
 
-        static string GetTypeNameCore(TypeReference type, IEnumerator<bool?> nullabilityMap, bool nullable)
+        static string GetTypeNameCore(TypeReference type, IEnumerator<bool?> nullabilityMap, bool nullable, bool disableNested)
         {
             if (type.IsGenericParameter)
             {
@@ -125,31 +139,17 @@ namespace PublicApiGenerator
             if (type is ArrayType array)
             {
                 if (nullable)
-                    return CSharpAlias.Get(GetTypeName(array.ElementType, nullabilityMap, false)) + "[]";
+                    return CSharpAlias.Get(GetTypeName(array.ElementType, nullabilityMap, false, disableNested)) + "[]";
                 else
-                    return GetTypeName(array.ElementType, nullabilityMap, false) + "[]";
+                    return GetTypeName(array.ElementType, nullabilityMap, false, disableNested) + "[]";
             }
 
-            if (!type.IsNested)
+            if (!type.IsNested || disableNested)
             {
                 return (!string.IsNullOrEmpty(type.Namespace) ? (type.Namespace + ".") : "") + type.Name;
             }
 
-            return GetTypeName(type.DeclaringType, null, false) + "." + GetTypeName(type, nullabilityMap, false);
-        }
-
-        static CodeTypeReference[] CreateGenericArguments(TypeReference type, IEnumerator<bool?> nullabilityMap)
-        {
-            // ReSharper disable once RedundantEnumerableCastCall
-            var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
-            if (genericArgs == null) return null;
-
-            var genericArguments = new List<CodeTypeReference>();
-            foreach (var argument in genericArgs)
-            {
-                genericArguments.Add(CreateCodeTypeReferenceWithNullabilityMap(argument, nullabilityMap, false));
-            }
-            return genericArguments.ToArray();
+            return GetTypeName(type.DeclaringType, null, false, false) + "." + GetTypeName(type, null, false, true);
         }
     }
 }
