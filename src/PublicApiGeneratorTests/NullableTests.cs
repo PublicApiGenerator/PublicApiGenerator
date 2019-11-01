@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +26,19 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_Annotate_VoidReturn()
+        {
+            AssertPublicApi(typeof(VoidReturn),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class static VoidReturn
+    {
+        public static void ShouldBeEquivalentTo(this object actual, object expected) { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_Annotate_Derived_ReturnType()
         {
             AssertPublicApi<ReturnArgs>(
@@ -45,8 +58,10 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<NullableCtor>(
 @"namespace PublicApiGeneratorTests.Examples
 {
+    [System.ObsoleteAttribute(""Foo"")]
     public class NullableCtor
     {
+        [System.ObsoleteAttribute(""Bar"")]
         public NullableCtor(string? nullableLabel, string nope) { }
     }
 }");
@@ -420,13 +435,20 @@ namespace PublicApiGeneratorTests
             public string? ReturnProperty { get; set; }
         }
 
+        public static class VoidReturn
+        {
+            public static void ShouldBeEquivalentTo(this object actual, object expected) { }
+        }
+
         public class ReturnArgs : EventArgs
         {
             public string? Target { get; set; }
         }
 
+        [Obsolete("Foo")]
         public class NullableCtor
         {
+            [Obsolete("Bar")]
             public NullableCtor(string? nullableLabel, string nope) { }
         }
 
