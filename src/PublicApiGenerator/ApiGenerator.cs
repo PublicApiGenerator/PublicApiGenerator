@@ -216,7 +216,7 @@ namespace PublicApiGenerator
             var name = publicType.Name;
 
             var isStruct = publicType.IsValueType && !publicType.IsPrimitive && !publicType.IsEnum;
-            
+
             var @readonly = isStruct && publicType.CustomAttributes.Any(a =>
                                  a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute");
 
@@ -231,7 +231,7 @@ namespace PublicApiGenerator
                 declarationName += "static ";
 
             declarationName += name;
-            
+
             var declaration = new CodeTypeDeclaration(declarationName)
             {
                 CustomAttributes = CreateCustomAttributes(publicType, excludeAttributes),
@@ -259,7 +259,7 @@ namespace PublicApiGenerator
                 else
                     declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(publicType));
             }
-            foreach(var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
+            foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
                 .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
                 .Where(t => ShouldIncludeType(t.Definition))
                 .Select(t => t.Reference))
@@ -356,7 +356,7 @@ namespace PublicApiGenerator
 
                 if (parameter.HasNotNullableValueTypeConstraint)
                     typeParameter.Constraints.Add(unmanagedConstraint ? " unmanaged" : " struct");
-                
+
                 if (parameter.HasReferenceTypeConstraint)
                     typeParameter.Constraints.Add(nullableConstraint == true ? " class?" : " class");
                 else if (nullableConstraint == false)
@@ -730,9 +730,9 @@ namespace PublicApiGenerator
             if (typeDefinition.IsInterface)
             {
                 var interfaceMethods = from @interfaceReference in typeDefinition.Interfaces
-                    let interfaceDefinition = @interfaceReference.InterfaceType.Resolve()
-                    where interfaceDefinition != null
-                    select interfaceDefinition.Methods;
+                                       let interfaceDefinition = @interfaceReference.InterfaceType.Resolve()
+                                       where interfaceDefinition != null
+                                       select interfaceDefinition.Methods;
 
                 return interfaceMethods.Any(ms => MetadataResolver.GetMethod(ms, method) != null);
             }
@@ -824,12 +824,12 @@ namespace PublicApiGenerator
             // Scope should be the same for getter and setter. If one isn't specified, it'll be 0
             var getterScope = getterAttributes & MemberAttributes.ScopeMask;
             var setterScope = setterAttributes & MemberAttributes.ScopeMask;
-            var scope = (MemberAttributes) Math.Max((int) getterScope, (int) setterScope);
+            var scope = (MemberAttributes)Math.Max((int)getterScope, (int)setterScope);
 
             // Vtable should be the same for getter and setter. If one isn't specified, it'll be 0
             var getterVtable = getterAttributes & MemberAttributes.VTableMask;
             var setterVtable = setterAttributes & MemberAttributes.VTableMask;
-            var vtable = (MemberAttributes) Math.Max((int) getterVtable, (int) setterVtable);
+            var vtable = (MemberAttributes)Math.Max((int)getterVtable, (int)setterVtable);
 
             return access | scope | vtable;
         }
