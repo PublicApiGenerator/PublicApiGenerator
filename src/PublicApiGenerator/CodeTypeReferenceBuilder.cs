@@ -10,19 +10,19 @@ namespace PublicApiGenerator
     {
         private const int MAX_COUNT = 100;
 
-        internal static CodeTypeReference CreateCodeTypeReference(this TypeReference type, ICustomAttributeProvider attributeProvider = null)
+        internal static CodeTypeReference CreateCodeTypeReference(this TypeReference type, ICustomAttributeProvider attributeProvider = null, NullableMode mode = NullableMode.Default)
         {
-            return CreateCodeTypeReferenceWithNullabilityMap(type, attributeProvider.GetNullabilityMap().GetEnumerator(), false, false);
+            return CreateCodeTypeReferenceWithNullabilityMap(type, attributeProvider.GetNullabilityMap().GetEnumerator(), mode, false);
         }
 
-        static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable, bool disableNested)
+        static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool?> nullabilityMap, NullableMode mode, bool disableNested)
         {
-            var typeName = GetTypeName(type, nullabilityMap, forceNullable, disableNested);
+            var typeName = GetTypeName(type, nullabilityMap, mode, disableNested);
             if (type.IsValueType && type.Name == "Nullable`1" && type.Namespace == "System")
             {
                 // unwrap System.Nullable<Type> into Type? for readability
                 var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
-                return CreateCodeTypeReferenceWithNullabilityMap(genericArgs.Single(), nullabilityMap, true, disableNested);
+                return CreateCodeTypeReferenceWithNullabilityMap(genericArgs.Single(), nullabilityMap, NullableMode.Force, disableNested);
             }
             else
             {
@@ -39,7 +39,7 @@ namespace PublicApiGenerator
             var genericArguments = new List<CodeTypeReference>();
             foreach (var argument in genericArgs)
             {
-                genericArguments.Add(CreateCodeTypeReferenceWithNullabilityMap(argument, nullabilityMap, false, false));
+                genericArguments.Add(CreateCodeTypeReferenceWithNullabilityMap(argument, nullabilityMap,  NullableMode.Default, false));
             }
             return genericArguments.ToArray();
         }
@@ -105,9 +105,9 @@ namespace PublicApiGenerator
             return false;
         }
 
-        static string GetTypeName(TypeReference type, IEnumerator<bool?> nullabilityMap, bool forceNullable, bool disableNested)
+        static string GetTypeName(TypeReference type, IEnumerator<bool?> nullabilityMap, NullableMode mode, bool disableNested)
         {
-            bool nullable = forceNullable || HasAnyReferenceType(type) && IsNullable();
+            bool nullable = mode != NullableMode.Disable && (mode == NullableMode.Force || HasAnyReferenceType(type) && IsNullable());
 
             var typeName = GetTypeNameCore(type, nullabilityMap, nullable, disableNested);
 
@@ -139,9 +139,9 @@ namespace PublicApiGenerator
             if (type is ArrayType array)
             {
                 if (nullable)
-                    return CSharpAlias.Get(GetTypeName(array.ElementType, nullabilityMap, false, disableNested)) + "[]";
+                    return CSharpAlias.Get(GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested)) + "[]";
                 else
-                    return GetTypeName(array.ElementType, nullabilityMap, false, disableNested) + "[]";
+                    return GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested) + "[]";
             }
 
             if (!type.IsNested || disableNested)
@@ -149,7 +149,7 @@ namespace PublicApiGenerator
                 return (!string.IsNullOrEmpty(type.Namespace) ? (type.Namespace + ".") : "") + type.Name;
             }
 
-            return GetTypeName(type.DeclaringType, null, false, false) + "." + GetTypeName(type, null, false, true);
+            return GetTypeName(type.DeclaringType, null, NullableMode.Default, false) + "." + GetTypeName(type, null, NullableMode.Default, true);
         }
     }
 }

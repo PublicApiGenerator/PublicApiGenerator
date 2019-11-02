@@ -58,11 +58,26 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<NullableCtor>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [System.ObsoleteAttribute(""Foo"")]
     public class NullableCtor
     {
-        [System.ObsoleteAttribute(""Bar"")]
         public NullableCtor(string? nullableLabel, string nope) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Not_Annotate_Obsolete_Attribute()
+        {
+            AssertPublicApi<ClassWithObsolete>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    [System.ObsoleteAttribute(""Foo"")]
+    public class ClassWithObsolete
+    {
+        [System.ObsoleteAttribute(""Bar"")]
+        public ClassWithObsolete(string? nullableLabel) { }
+        [System.ObsoleteAttribute(""Bar"")]
+        public ClassWithObsolete(string? nullableLabel, string? nullableLabel2) { }
     }
 }");
         }
@@ -445,11 +460,19 @@ namespace PublicApiGeneratorTests
             public string? Target { get; set; }
         }
 
-        [Obsolete("Foo")]
         public class NullableCtor
         {
-            [Obsolete("Bar")]
             public NullableCtor(string? nullableLabel, string nope) { }
+        }
+
+        [Obsolete("Foo")]
+        public class ClassWithObsolete
+        {
+            [Obsolete("Bar")]
+            public ClassWithObsolete(string? nullableLabel) { }
+
+            [Obsolete("Bar")]
+            public ClassWithObsolete(string? nullableLabel, string? nullableLabel2) { }
         }
 
         public class GenericEvent
