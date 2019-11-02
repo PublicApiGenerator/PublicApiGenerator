@@ -19,7 +19,7 @@ namespace PublicApiGeneratorTests
     public class MethodWithSimpleAttribute
     {
         public MethodWithSimpleAttribute() { }
-        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.Simple]
         public void Method() { }
     }
 }");
@@ -34,11 +34,11 @@ namespace PublicApiGeneratorTests
     public class MethodsWithAttributeWithPositionalParameters
     {
         public MethodsWithAttributeWithPositionalParameters() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
         public void Method1() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
         public void Method2() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
         public void Method3() { }
     }
 }");
@@ -53,9 +53,9 @@ namespace PublicApiGeneratorTests
     public class MethodsWithAttributeWithNamedParameters
     {
         public MethodsWithAttributeWithNamedParameters() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
         public void Method1() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
         public void Method2() { }
     }
 }");
@@ -70,7 +70,7 @@ namespace PublicApiGeneratorTests
     public class MethodWithAttributeWithMultipleNamedParameters
     {
         public MethodWithAttributeWithMultipleNamedParameters() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
         public void Method() { }
     }
 }");
@@ -85,7 +85,7 @@ namespace PublicApiGeneratorTests
     public class MethodWithAttributeWithBothNamedAndPositionalParameters
     {
         public MethodWithAttributeWithBothNamedAndPositionalParameters() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         public void Method() { }
     }
 }");
@@ -100,7 +100,7 @@ namespace PublicApiGeneratorTests
     public class MethodWithAttributeWithEnumFlags
     {
         public MethodWithAttributeWithEnumFlags() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
         public void Method() { }
     }
 }");
@@ -115,11 +115,11 @@ namespace PublicApiGeneratorTests
     public class MethodWithAttributeWithType
     {
         public MethodWithAttributeWithType() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(string))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameter(typeof(string))]
         public void Method1() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.ComplexType))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameter(typeof(PublicApiGeneratorTests.Examples.ComplexType))]
         public void Method2() { }
-        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameterAttribute(typeof(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>))]
+        [PublicApiGeneratorTests.Examples.AttributeWithTypeParameter(typeof(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>))]
         public void Method3() { }
     }
 }");
@@ -134,9 +134,9 @@ namespace PublicApiGeneratorTests
     public class MethodWithMultipleAttributes
     {
         public MethodWithMultipleAttributes() { }
-        [PublicApiGeneratorTests.Examples.Attribute_AA()]
-        [PublicApiGeneratorTests.Examples.Attribute_MM()]
-        [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+        [PublicApiGeneratorTests.Examples.Attribute_AA]
+        [PublicApiGeneratorTests.Examples.Attribute_MM]
+        [PublicApiGeneratorTests.Examples.Attribute_ZZ]
         public void Method() { }
     }
 }");

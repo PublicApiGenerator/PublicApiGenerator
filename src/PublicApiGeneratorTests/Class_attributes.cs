@@ -11,7 +11,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithSimpleAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+    [PublicApiGeneratorTests.Examples.Simple]
     public class ClassWithSimpleAttribute
     {
         public ClassWithSimpleAttribute() { }
@@ -25,7 +25,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithStringPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
     public class ClassWithAttributeWithStringPositionalParameters
     {
         public ClassWithAttributeWithStringPositionalParameters() { }
@@ -34,7 +34,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithIntPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
     public class ClassWithAttributeWithIntPositionalParameters
     {
         public ClassWithAttributeWithIntPositionalParameters() { }
@@ -43,7 +43,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithMultiplePositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
     public class ClassWithAttributeWithMultiplePositionalParameters
     {
         public ClassWithAttributeWithMultiplePositionalParameters() { }
@@ -57,7 +57,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithIntNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
     public class ClassWithIntNamedParameterAttribute
     {
         public ClassWithIntNamedParameterAttribute() { }
@@ -67,7 +67,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithStringNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
     public class ClassWithStringNamedParameterAttribute
     {
         public ClassWithStringNamedParameterAttribute() { }
@@ -81,7 +81,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithMultipleNamedParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
     public class ClassWithAttributeWithMultipleNamedParameters
     {
         public ClassWithAttributeWithMultipleNamedParameters() { }
@@ -95,7 +95,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithIntNamedFieldAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(IntValue=42)]
     public class ClassWithIntNamedFieldAttribute
     {
         public ClassWithIntNamedFieldAttribute() { }
@@ -105,7 +105,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithStringNamedFieldAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(StringValue=""Hello"")]
     public class ClassWithStringNamedFieldAttribute
     {
         public ClassWithStringNamedFieldAttribute() { }
@@ -119,7 +119,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithMultipleNamedFields>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(IntValue=42, StringValue=""Hello world"")]
     public class ClassWithAttributeWithMultipleNamedFields
     {
         public ClassWithAttributeWithMultipleNamedFields() { }
@@ -133,7 +133,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithBothNamedAndPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello"", IntValue=13, StringValue=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello"", IntValue=13, StringValue=""World"")]
     public class ClassWithAttributeWithBothNamedAndPositionalParameters
     {
         public ClassWithAttributeWithBothNamedAndPositionalParameters() { }
@@ -147,7 +147,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithBothNamedParametersAndFields>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAndFieldAttribute(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAndField(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
     public class ClassWithAttributeWithBothNamedParametersAndFields
     {
         public ClassWithAttributeWithBothNamedParametersAndFields() { }
@@ -161,7 +161,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithSimpleEnum>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
+    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnum(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
     public class ClassWithAttributeWithSimpleEnum
     {
         public ClassWithAttributeWithSimpleEnum() { }
@@ -175,7 +175,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithAttributeWithEnumFlags>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public class ClassWithAttributeWithEnumFlags
     {
         public ClassWithAttributeWithEnumFlags() { }
@@ -189,9 +189,9 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithMultipleAttributes>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.Attribute_AA()]
-    [PublicApiGeneratorTests.Examples.Attribute_MM()]
-    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA]
+    [PublicApiGeneratorTests.Examples.Attribute_MM]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ]
     public class ClassWithMultipleAttributes
     {
         public ClassWithMultipleAttributes() { }
@@ -280,8 +280,8 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithMultipleAttributes>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.Attribute_AA()]
-    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ]
     public class ClassWithMultipleAttributes
     {
         public ClassWithMultipleAttributes() { }

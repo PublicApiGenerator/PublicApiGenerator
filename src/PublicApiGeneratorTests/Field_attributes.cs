@@ -13,7 +13,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithSimpleAttribute
     {
-        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.Simple]
         public string Value;
         public FieldWithSimpleAttribute() { }
     }
@@ -28,7 +28,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithAttributeWithStringPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
         public string Value;
         public FieldWithAttributeWithStringPositionalParameters() { }
     }
@@ -38,7 +38,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithAttributeWithIntPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
         public string Value;
         public FieldWithAttributeWithIntPositionalParameters() { }
     }
@@ -48,7 +48,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithAttributeWithMultiplePositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
         public string Value;
         public FieldWithAttributeWithMultiplePositionalParameters() { }
     }
@@ -63,7 +63,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithIntNamedParameterAttribute
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
         public string Value;
         public FieldWithIntNamedParameterAttribute() { }
     }
@@ -74,7 +74,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithStringNamedParameterAttribute
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
         public string Value;
         public FieldWithStringNamedParameterAttribute() { }
     }
@@ -89,7 +89,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithAttributeWithMultipleNamedParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
         public string Value;
         public FieldWithAttributeWithMultipleNamedParameters() { }
     }
@@ -104,7 +104,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithAttributeWithBothNamedAndPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         public string Value;
         public FieldWithAttributeWithBothNamedAndPositionalParameters() { }
     }
@@ -119,7 +119,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithAttributeWithSimpleEnum
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
+        [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnum(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
         public string Value;
         public FieldWithAttributeWithSimpleEnum() { }
     }
@@ -134,7 +134,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithAttributeWithEnumFlags
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
         public string Value;
         public FieldWithAttributeWithEnumFlags() { }
     }
@@ -149,9 +149,9 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithMultipleAttributes
     {
-        [PublicApiGeneratorTests.Examples.Attribute_AA()]
-        [PublicApiGeneratorTests.Examples.Attribute_MM()]
-        [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+        [PublicApiGeneratorTests.Examples.Attribute_AA]
+        [PublicApiGeneratorTests.Examples.Attribute_MM]
+        [PublicApiGeneratorTests.Examples.Attribute_ZZ]
         public string Value;
         public FieldWithMultipleAttributes() { }
     }
@@ -166,7 +166,7 @@ namespace PublicApiGeneratorTests
 {
     public class FieldWithMultipleAttributes
     {
-        [PublicApiGeneratorTests.Examples.Attribute_AA()]
+        [PublicApiGeneratorTests.Examples.Attribute_AA]
         public string Value;
         public FieldWithMultipleAttributes() { }
     }

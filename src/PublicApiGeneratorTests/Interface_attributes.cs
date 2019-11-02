@@ -11,7 +11,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithSimpleAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+    [PublicApiGeneratorTests.Examples.Simple]
     public interface IInterfaceWithSimpleAttribute { }
 }");
         }
@@ -22,19 +22,19 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithAttributeWithStringPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
     public interface IInterfaceWithAttributeWithStringPositionalParameters { }
 }");
             AssertPublicApi<IInterfaceWithAttributeWithIntPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
     public interface IInterfaceWithAttributeWithIntPositionalParameters { }
 }");
             AssertPublicApi<IInterfaceWithAttributeWithMultiplePositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
     public interface IInterfaceWithAttributeWithMultiplePositionalParameters { }
 }");
         }
@@ -45,14 +45,14 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithIntNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
     public interface IInterfaceWithIntNamedParameterAttribute { }
 }");
 
             AssertPublicApi<IInterfaceWithStringNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
     public interface IInterfaceWithStringNamedParameterAttribute { }
 }");
         }
@@ -63,7 +63,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithAttributeWithMultipleNamedParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
     public interface IInterfaceWithAttributeWithMultipleNamedParameters { }
 }");
         }
@@ -74,7 +74,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithAttributeWithBothNamedAndPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
     public interface IInterfaceWithAttributeWithBothNamedAndPositionalParameters { }
 }");
         }
@@ -85,7 +85,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithAttributeWithSimpleEnum>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
+    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnum(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
     public interface IInterfaceWithAttributeWithSimpleEnum { }
 }");
         }
@@ -96,7 +96,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithAttributeWithEnumFlags>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public interface IInterfaceWithAttributeWithEnumFlags { }
 }");
         }
@@ -107,9 +107,9 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<IInterfaceWithMultipleAttributes>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.Attribute_AA()]
-    [PublicApiGeneratorTests.Examples.Attribute_MM()]
-    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA]
+    [PublicApiGeneratorTests.Examples.Attribute_MM]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ]
     public interface IInterfaceWithMultipleAttributes { }
 }");
         }

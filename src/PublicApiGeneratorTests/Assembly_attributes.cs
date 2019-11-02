@@ -20,14 +20,14 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Attributes()
         {
-            var api = @"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello"")]
-[assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello"")]
-[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
-[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
-[assembly: PublicApiGeneratorTests.Examples.SimpleAttribute()]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.InteropServices.GuidAttribute(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute("".NETCoreApp,Version=v2.2"", FrameworkDisplayName="""")]
+            var api = @"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
+[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
+[assembly: PublicApiGeneratorTests.Examples.Simple]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.InteropServices.Guid(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
+[assembly: System.Runtime.Versioning.TargetFramework("".NETCoreApp,Version=v2.2"", FrameworkDisplayName="""")]
 namespace PublicApiGeneratorTests.Examples
 {
     public class NotImportant

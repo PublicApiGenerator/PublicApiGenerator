@@ -11,7 +11,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithSimpleAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+    [PublicApiGeneratorTests.Examples.Simple]
     public delegate void DelegateWithSimpleAttribute();
 }");
         }
@@ -22,19 +22,19 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeWithStringPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
     public delegate void DelegateWithAttributeWithStringPositionalParameters();
 }");
             AssertPublicApi<DelegateWithAttributeWithIntPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
     public delegate void DelegateWithAttributeWithIntPositionalParameters();
 }");
             AssertPublicApi<DelegateWithAttributeWithMultiplePositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
     public delegate void DelegateWithAttributeWithMultiplePositionalParameters();
 }");
         }
@@ -45,14 +45,14 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithIntNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
     public delegate void DelegateWithIntNamedParameterAttribute();
 }");
 
             AssertPublicApi<DelegateWithStringNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
     public delegate void DelegateWithStringNamedParameterAttribute();
 }");
         }
@@ -63,7 +63,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeWithMultipleNamedParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
     public delegate void DelegateWithAttributeWithMultipleNamedParameters();
 }");
         }
@@ -74,14 +74,14 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithIntNamedFieldAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(IntValue=42)]
     public delegate void DelegateWithIntNamedFieldAttribute();
 }");
 
             AssertPublicApi<DelegateWithStringNamedFieldAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(StringValue=""Hello"")]
     public delegate void DelegateWithStringNamedFieldAttribute();
 }");
         }
@@ -92,7 +92,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeWithMultipleNamedFields>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedFieldAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(IntValue=42, StringValue=""Hello world"")]
     public delegate void DelegateWithAttributeWithMultipleNamedFields();
 }");
         }
@@ -103,7 +103,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeWithBothNamedAndPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello"", IntValue=13, StringValue=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello"", IntValue=13, StringValue=""World"")]
     public delegate void DelegateWithAttributeWithBothNamedAndPositionalParameters();
 }");
         }
@@ -114,7 +114,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeWithBothNamedParametersAndFields>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAndFieldAttribute(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAndField(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
     public delegate void DelegateWithAttributeWithBothNamedParametersAndFields();
 }");
         }
@@ -125,7 +125,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeWithSimpleEnum>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
+    [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnum(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
     public delegate void DelegateWithAttributeWithSimpleEnum();
 }");
         }
@@ -136,7 +136,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeWithEnumFlags>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public delegate void DelegateWithAttributeWithEnumFlags();
 }");
         }
@@ -147,9 +147,9 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithMultipleAttributes>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.Attribute_AA()]
-    [PublicApiGeneratorTests.Examples.Attribute_MM()]
-    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA]
+    [PublicApiGeneratorTests.Examples.Attribute_MM]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ]
     public delegate void DelegateWithMultipleAttributes();
 }");
         }
@@ -197,7 +197,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeOnReturnValue>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [return: PublicApiGeneratorTests.Examples.SimpleAttribute()]
+    [return: PublicApiGeneratorTests.Examples.Simple]
     public delegate string DelegateWithAttributeOnReturnValue();
 }");
         }
@@ -208,7 +208,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithAttributeOnParameter>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public delegate string DelegateWithAttributeOnParameter([PublicApiGeneratorTests.Examples.SimpleAttribute()] int value);
+    public delegate string DelegateWithAttributeOnParameter([PublicApiGeneratorTests.Examples.Simple] int value);
 }");
         }
 
@@ -218,8 +218,8 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<DelegateWithMultipleAttributes>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.Attribute_AA()]
-    [PublicApiGeneratorTests.Examples.Attribute_MM()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA]
+    [PublicApiGeneratorTests.Examples.Attribute_MM]
     public delegate void DelegateWithMultipleAttributes();
 }", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.Attribute_ZZ" });
         }

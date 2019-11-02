@@ -95,8 +95,6 @@ namespace PublicApiGenerator
             }
         }
 
-
-
         static bool ShouldIncludeType(TypeDefinition t)
         {
             return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily || t.IsNestedFamilyOrAssembly) && !t.IsCompilerGenerated();
@@ -396,6 +394,10 @@ namespace PublicApiGenerator
         static CodeAttributeDeclaration GenerateCodeAttributeDeclaration(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
         {
             var attribute = new CodeAttributeDeclaration(codeTypeModifier(customAttribute.AttributeType.CreateCodeTypeReference(mode: NullableMode.Disable)));
+            if (attribute.Name != "System.ParamArrayAttribute")
+            {
+                attribute.Name = $"{attribute.Name}{CodeNormalizer.AttributeMarker}";
+            }
             foreach (var arg in customAttribute.ConstructorArguments)
             {
                 attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));

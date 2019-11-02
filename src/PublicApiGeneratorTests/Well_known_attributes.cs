@@ -14,17 +14,17 @@ namespace PublicApiGeneratorTests
 {
      public class ClassWithInternalWellKnownAttributes
     {
-        [System.Diagnostics.CodeAnalysis.AllowNullAttribute()]
-        [System.Diagnostics.CodeAnalysis.DisallowNullAttribute()]
-        [System.Diagnostics.CodeAnalysis.MaybeNullAttribute()]
-        [System.Diagnostics.CodeAnalysis.NotNullAttribute()]
+        [System.Diagnostics.CodeAnalysis.AllowNull]
+        [System.Diagnostics.CodeAnalysis.DisallowNull]
+        [System.Diagnostics.CodeAnalysis.MaybeNull]
+        [System.Diagnostics.CodeAnalysis.NotNull]
         public object Field;
         public ClassWithInternalWellKnownAttributes() { }
-        public bool BoolReturningMethod([System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute(true)] object a, [System.Diagnostics.CodeAnalysis.NotNullWhenAttribute(true)] object b) { }
-        [return: System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute(""a"")]
+        public bool BoolReturningMethod([System.Diagnostics.CodeAnalysis.MaybeNullWhen(true)] object a, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] object b) { }
+        [return: System.Diagnostics.CodeAnalysis.NotNullIfNotNull(""a"")]
         public object C(object a) { }
-        [System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute()]
-        public void MethodWithBoolParameter([System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute(true)] bool a) { }
+        [System.Diagnostics.CodeAnalysis.DoesNotReturn]
+        public void MethodWithBoolParameter([System.Diagnostics.CodeAnalysis.DoesNotReturnIf(true)] bool a) { }
     }
 }");
         }

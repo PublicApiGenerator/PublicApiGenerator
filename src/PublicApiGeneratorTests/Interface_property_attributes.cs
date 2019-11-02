@@ -13,7 +13,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithSimpleAttribute
     {
-        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.Simple]
         string Value { get; set; }
     }
 }");
@@ -27,7 +27,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithAttributeWithStringPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
         string Value { get; set; }
     }
 }");
@@ -36,7 +36,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithAttributeWithIntPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
         string Value { get; set; }
     }
 }");
@@ -45,7 +45,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithAttributeWithMultiplePositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
         string Value { get; set; }
     }
 }");
@@ -59,7 +59,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithIntNamedParameterAttribute
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
         string Value { get; set; }
     }
 }");
@@ -69,7 +69,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithStringNamedParameterAttribute
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
         string Value { get; set; }
     }
 }");
@@ -83,7 +83,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithAttributeWithMultipleNamedParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
         string Value { get; set; }
     }
 }");
@@ -97,7 +97,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithAttributeWithBothNamedAndPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
         string Value { get; set; }
     }
 }");
@@ -111,7 +111,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithAttributeWithSimpleEnum
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnumAttribute(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
+        [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnum(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
         string Value { get; set; }
     }
 }");
@@ -125,7 +125,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithAttributeWithEnumFlags
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+        [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
         string Value { get; set; }
     }
 }");
@@ -139,9 +139,9 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithMultipleAttributes
     {
-        [PublicApiGeneratorTests.Examples.Attribute_AA()]
-        [PublicApiGeneratorTests.Examples.Attribute_MM()]
-        [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+        [PublicApiGeneratorTests.Examples.Attribute_AA]
+        [PublicApiGeneratorTests.Examples.Attribute_MM]
+        [PublicApiGeneratorTests.Examples.Attribute_ZZ]
         string Value { get; set; }
     }
 }");
@@ -156,8 +156,8 @@ namespace PublicApiGeneratorTests
 {
     public interface IPropertyWithSimpleAttributeOnGetterAndSetter
     {
-        [get: PublicApiGeneratorTests.Examples.SimpleAttribute()]
-        [set: PublicApiGeneratorTests.Examples.SimpleAttribute()]
+        [get: PublicApiGeneratorTests.Examples.Simple]
+        [set: PublicApiGeneratorTests.Examples.Simple]
         string Value { get; set; }
     }
 }");

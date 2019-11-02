@@ -15,7 +15,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithEventWithAttribute
     {
         public ClassWithEventWithAttribute() { }
-        [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+        [PublicApiGeneratorTests.Examples.Simple]
         public event System.EventHandler OnClicked;
     }
 }");
