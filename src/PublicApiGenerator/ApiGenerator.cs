@@ -99,7 +99,7 @@ namespace PublicApiGenerator
 
         static bool ShouldIncludeType(TypeDefinition t)
         {
-            return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily) && !t.IsCompilerGenerated();
+            return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily || t.IsNestedFamilyOrAssembly) && !t.IsCompilerGenerated();
         }
 
         static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
@@ -153,7 +153,7 @@ namespace PublicApiGenerator
             TypeAttributes attributes = 0;
             if (publicType.IsPublic || publicType.IsNestedPublic)
                 attributes |= TypeAttributes.Public;
-            if (publicType.IsNestedFamily)
+            if (publicType.IsNestedFamily || publicType.IsNestedFamilyOrAssembly)
                 attributes |= TypeAttributes.NestedFamily;
             if (publicType.IsSealed && !publicType.IsAbstract)
                 attributes |= TypeAttributes.Sealed;
