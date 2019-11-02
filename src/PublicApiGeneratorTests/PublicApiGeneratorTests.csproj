@@ -2,8 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <NoWarn>$(NoWarn);CS0067</NoWarn>
-    <LangVersion>latest</LangVersion>
+    <NoWarn>$(NoWarn);CS0067;IDE0051;IDE0060;IDE1006</NoWarn>
+    <!--
+    CS0067  The event 'event' is never used
+    IDE0051 Private member 'SomeTest.Should_XXX' is unused.
+    IDE0060 Remove unused parameter 'name' if it is not part of a shipped public API
+    IDE1006 Naming rule violation: These words must begin with upper case characters
+    -->
   </PropertyGroup>
 
   <ItemGroup>
