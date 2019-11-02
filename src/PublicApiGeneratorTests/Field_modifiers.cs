@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -16,6 +16,20 @@ namespace PublicApiGeneratorTests
         protected static string StaticProtectedField;
         public static int StaticPublicField;
         public ClassWithStaticFields() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Include_Volatile_field_Without_modreq()
+        {
+            AssertPublicApi<ClassWithVolatileField>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithVolatileField
+    {
+        public static int StaticVolatilePublicField;
+        public ClassWithVolatileField() { }
     }
 }");
         }
@@ -62,6 +76,11 @@ namespace PublicApiGeneratorTests
         {
             public static int StaticPublicField;
             protected static string StaticProtectedField;
+        }
+
+        public class ClassWithVolatileField
+        {
+            public static volatile int StaticVolatilePublicField;
         }
 
         public class ClassWithReadonlyFields

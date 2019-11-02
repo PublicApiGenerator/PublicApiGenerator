@@ -146,7 +146,8 @@ namespace PublicApiGenerator
 
             if (!type.IsNested || disableNested)
             {
-                return (!string.IsNullOrEmpty(type.Namespace) ? (type.Namespace + ".") : "") + type.Name;
+                var name = type is RequiredModifierType modType ? modType.ElementType.Name : type.Name;
+                return (!string.IsNullOrEmpty(type.Namespace) ? (type.Namespace + ".") : "") + name;
             }
 
             return GetTypeName(type.DeclaringType, null, NullableMode.Default, false) + "." + GetTypeName(type, null, NullableMode.Default, true);
