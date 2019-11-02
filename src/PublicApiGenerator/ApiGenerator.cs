@@ -95,7 +95,7 @@ namespace PublicApiGenerator
             }
         }
 
-      
+
 
         static bool ShouldIncludeType(TypeDefinition t)
         {
@@ -105,6 +105,19 @@ namespace PublicApiGenerator
         static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
         {
             return !m.IsCompilerGenerated() && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
+        }
+
+        static bool ShouldIncludeMethod(Mono.Cecil.MethodAttributes methodAttributes)
+        {
+            switch (methodAttributes & Mono.Cecil.MethodAttributes.MemberAccessMask)
+            {
+                case Mono.Cecil.MethodAttributes.Private:
+                case Mono.Cecil.MethodAttributes.Assembly:
+                case Mono.Cecil.MethodAttributes.FamANDAssem:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         static bool IsDotNetTypeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
@@ -485,7 +498,7 @@ namespace PublicApiGenerator
 
         static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
         {
-            if (member.IsAssembly || member.IsPrivate)
+            if (!ShouldIncludeMethod(member.Attributes))
                 return;
 
             var method = new CodeConstructor
@@ -501,7 +514,8 @@ namespace PublicApiGenerator
 
         static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
         {
-            if (member.IsAssembly || member.IsPrivate) return;
+            if (!ShouldIncludeMethod(member.Attributes))
+                return;
 
             if (member.IsSpecialName && !member.Name.StartsWith("op_")) return;
 
@@ -590,11 +604,14 @@ namespace PublicApiGenerator
 
         static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member, AttributeFilter attributeFilter)
         {
-            var getterAttributes = member.GetMethod != null ? member.GetMethod.GetMethodAttributes() : 0;
-            var setterAttributes = member.SetMethod != null ? member.SetMethod.GetMethodAttributes() : 0;
+            var hasGet = member.GetMethod != null && ShouldIncludeMethod(member.GetMethod.Attributes);
+            var hasSet = member.SetMethod != null && ShouldIncludeMethod(member.SetMethod.Attributes);
 
-            if (!getterAttributes.HasVisiblePropertyMethod() && !setterAttributes.HasVisiblePropertyMethod())
+            if (!(hasGet | hasSet))
                 return;
+
+            var getterAttributes = hasGet ? member.GetMethod.GetMethodAttributes() : 0;
+            var setterAttributes = hasSet ? member.SetMethod.GetMethodAttributes() : 0;
 
             var propertyAttributes = CecilEx.GetPropertyAttributes(getterAttributes, setterAttributes);
 
@@ -608,8 +625,8 @@ namespace PublicApiGenerator
                 Type = propertyType,
                 Attributes = propertyAttributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
-                HasGet = member.GetMethod != null && getterAttributes.HasVisiblePropertyMethod(),
-                HasSet = member.SetMethod != null && setterAttributes.HasVisiblePropertyMethod()
+                HasGet = hasGet,
+                HasSet = hasSet
             };
 
             // Here's a nice hack, because hey, guess what, the CodeDOM doesn't support
@@ -651,7 +668,7 @@ namespace PublicApiGenerator
 
         static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo, AttributeFilter attributeFilter)
         {
-            if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsSpecialName)
+            if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsFamilyAndAssembly || memberInfo.IsSpecialName)
                 return;
 
             MemberAttributes attributes = 0;

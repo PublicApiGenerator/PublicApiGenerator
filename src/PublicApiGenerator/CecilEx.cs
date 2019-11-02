@@ -58,14 +58,6 @@ namespace PublicApiGenerator
             return m.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute");
         }
 
-        public static bool HasVisiblePropertyMethod(this MemberAttributes attributes)
-        {
-            var access = attributes & MemberAttributes.AccessMask;
-            return access == MemberAttributes.Public ||
-                   access == MemberAttributes.Family ||
-                   access == MemberAttributes.FamilyOrAssembly;
-        }
-
         public static MemberAttributes GetPropertyAttributes(MemberAttributes getterAttributes, MemberAttributes setterAttributes)
         {
             MemberAttributes access = 0;
