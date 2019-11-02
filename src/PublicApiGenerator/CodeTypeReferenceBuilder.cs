@@ -111,7 +111,7 @@ namespace PublicApiGenerator
 
             var typeName = GetTypeNameCore(type, nullabilityMap, nullable, disableNested);
 
-            if (nullable)
+            if (nullable && typeName != "System.Void")
                 typeName = CSharpAlias.Get(typeName) + "?";
 
             return typeName;

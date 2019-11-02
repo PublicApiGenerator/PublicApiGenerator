@@ -1,4 +1,4 @@
-﻿namespace PublicApiGenerator
+namespace PublicApiGenerator
 {
     internal static class CSharpAlias
     {

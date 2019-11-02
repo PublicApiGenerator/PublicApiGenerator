@@ -33,7 +33,7 @@ namespace PublicApiGeneratorTests
 {
     public class static VoidReturn
     {
-        public static void ShouldBeEquivalentTo(this object actual, object expected) { }
+        public static void ShouldBeEquivalentTo(this object? actual, object? expected) { }
     }
 }");
         }
@@ -437,7 +437,7 @@ namespace PublicApiGeneratorTests
 
         public static class VoidReturn
         {
-            public static void ShouldBeEquivalentTo(this object actual, object expected) { }
+            public static void ShouldBeEquivalentTo(this object? actual, object? expected) { }
         }
 
         public class ReturnArgs : EventArgs
