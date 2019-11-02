@@ -1,6 +1,6 @@
 namespace PublicApiGenerator
 {
-    internal static class CSharpAlias
+    internal static class CSharpTypeKeyword
     {
         public static string Get(string typeName)
         {

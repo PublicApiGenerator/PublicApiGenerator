@@ -61,13 +61,13 @@ namespace PublicApiGenerator
             if (nullableAttr == null)
                 return Enumerable.Repeat((bool?)null, MAX_COUNT);
 
-            var value = nullableAttr.ConstructorArguments[0].Value;
-            if (value is CustomAttributeArgument[] arguments)
+            var argumentValue = nullableAttr.ConstructorArguments[0].Value;
+            if (argumentValue is CustomAttributeArgument[] arguments)
                 return arguments.Select(a => Convert((byte)a.Value));
 
-            return Enumerable.Repeat(Convert((byte)value), MAX_COUNT);
+            return Enumerable.Repeat(Convert((byte)argumentValue), MAX_COUNT);
 
-            // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md 
+            // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
             // returns:
             // true : explicitly nullable
             // false: explicitly not nullable
@@ -112,7 +112,7 @@ namespace PublicApiGenerator
             var typeName = GetTypeNameCore(type, nullabilityMap, nullable, disableNested);
 
             if (nullable && typeName != "System.Void")
-                typeName = CSharpAlias.Get(typeName) + "?";
+                typeName = CSharpTypeKeyword.Get(typeName) + "?";
 
             return typeName;
 
@@ -139,7 +139,7 @@ namespace PublicApiGenerator
             if (type is ArrayType array)
             {
                 if (nullable)
-                    return CSharpAlias.Get(GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested)) + "[]";
+                    return CSharpTypeKeyword.Get(GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested)) + "[]";
                 else
                     return GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested) + "[]";
             }
