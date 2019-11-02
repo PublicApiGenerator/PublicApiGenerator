@@ -616,7 +616,7 @@ namespace PublicApiGenerator
             if (!(hasGet | hasSet))
                 return;
 
-            var propertyAttributes = CecilEx.GetPropertyAttributes(getterAttributes, setterAttributes);
+            var propertyAttributes = CecilEx.CombineAccessorAttributes(getterAttributes, setterAttributes);
 
             var propertyType = member.PropertyType.IsGenericParameter
                 ? new CodeTypeReference(member.PropertyType.Name)
@@ -667,7 +667,7 @@ namespace PublicApiGenerator
             var @event = new CodeMemberEvent
             {
                 Name = eventDefinition.Name,
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                Attributes = CecilEx.CombineAccessorAttributes(addAccessorAttributes, removeAccessorAttributes),
                 CustomAttributes = CreateCustomAttributes(eventDefinition, attributeFilter),
                 Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
             };
