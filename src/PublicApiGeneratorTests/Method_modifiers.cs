@@ -50,13 +50,28 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_override_modifier()
         {
-         AssertPublicApi<ClassWithOverridingMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithOverridingMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         public ClassWithOverridingMethod() { }
         public override void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact(Skip = "Not supported by CodeDOM")]
+        [Trait("TODO", "Sealed override members not supported by CodeDOM")]
+        public void Should_output_sealed_modifier()
+        {
+            AssertPublicApi<ClassWithSealedOverridingMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithSealedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
+    {
+        public ClassWithSealedOverridingMethod() { }
+        public sealed override void DoSomething() { }
     }
 }");
         }
@@ -134,6 +149,14 @@ namespace PublicApiGeneratorTests
         public class ClassWithOverridingMethod : ClassWithVirtualMethod
         {
             public override void DoSomething()
+            {
+                base.DoSomething();
+            }
+        }
+
+        public class ClassWithSealedOverridingMethod : ClassWithVirtualMethod
+        {
+            public sealed override void DoSomething()
             {
                 base.DoSomething();
             }
