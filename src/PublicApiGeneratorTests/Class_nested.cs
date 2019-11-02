@@ -1,4 +1,5 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -155,13 +156,36 @@ namespace PublicApiGeneratorTests
     public class Foo<T>
     {
         public Foo(PublicApiGeneratorTests.Examples.Foo<T>.Bar<int> bar) { }
-        public class Bar<T, U>
+        public class Bar<U>
         {
             public Bar(PublicApiGeneratorTests.Examples.Foo<T>.Bar<U>.Baz<T, U>? baz) { }
-            public class Baz<T, U, V, K>
+            public class Baz<V, K>
             {
                 public Baz() { }
             }
+        }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_Not_Output_Generic_Parameters_From_Declaring_Type()
+        {
+            AssertPublicApi(typeof(Foo<,>),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class Foo<T1, T2>
+    {
+        public Foo() { }
+        public class Bar
+        {
+            public T1 Data;
+            public Bar() { }
+        }
+        public class Bar<T3>
+        {
+            public System.Collections.Generic.List<T2>? Field;
+            public Bar() { }
         }
     }
 }");
@@ -265,7 +289,7 @@ namespace PublicApiGeneratorTests
             }
         }
 
-        // nullable generic example
+        // nullable generic example 1
         public class Foo<T>
         {
             public class Bar<U>
@@ -277,6 +301,20 @@ namespace PublicApiGeneratorTests
 
             public Foo(Bar<int> bar)
             {
+            }
+        }
+
+        // nullable generic example 2
+        public class Foo<T1, T2>
+        {
+            public class Bar
+            {
+                public T1 Data;
+            }
+
+            public class Bar<T3>
+            {
+                public List<T2>? Field;
             }
         }
     }

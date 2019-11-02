@@ -247,7 +247,20 @@ namespace PublicApiGenerator
             if (declaration.IsInterface && publicType.BaseType != null)
                 throw new NotImplementedException("Base types for interfaces needs testing");
 
-            PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes);
+            PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes, parameter =>
+            {
+                var declaringType = publicType.DeclaringType;
+
+                while (declaringType != null)
+                {
+                    if (declaringType.GenericParameters.Any(p => p.Name == parameter.Name))
+                        return false; // https://github.com/ApiApprover/ApiApprover/issues/108
+
+                    declaringType = declaringType.DeclaringType;
+                }
+
+                return true;
+            });
 
             if (publicType.BaseType != null && ShouldOutputBaseType(publicType))
             {
@@ -306,7 +319,7 @@ namespace PublicApiGenerator
 
                 // CodeDOM. No support. Return type attributes.
                 PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => ModifyCodeTypeReference(type, "return:"), excludeAttributes);
-                PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes);
+                PopulateGenericParameters(publicType, declaration.TypeParameters, excludeAttributes, _ => true);
                 PopulateMethodParameters(invokeMethod, declaration.Parameters, excludeAttributes);
 
                 // Of course, CodeDOM doesn't support generic type parameters for delegates. Of course.
@@ -326,9 +339,9 @@ namespace PublicApiGenerator
             return publicType.BaseType.FullName != "System.Object" && publicType.BaseType.FullName != "System.ValueType";
         }
 
-        static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters, HashSet<string> excludeAttributes)
+        static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters, HashSet<string> excludeAttributes, Func<GenericParameter, bool> shouldUseParameter)
         {
-            foreach (var parameter in publicType.GenericParameters)
+            foreach (var parameter in publicType.GenericParameters.Where(shouldUseParameter))
             {
                 // A little hacky. Means we get "in" and "out" prefixed on any constraints, but it's either that
                 // or add it as a custom attribute
@@ -620,7 +633,7 @@ namespace PublicApiGenerator
                 ReturnType = returnType,
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, excludeAttributes);
-            PopulateGenericParameters(member, method.TypeParameters, excludeAttributes);
+            PopulateGenericParameters(member, method.TypeParameters, excludeAttributes, _ => true);
             PopulateMethodParameters(member, method.Parameters, excludeAttributes, IsExtensionMethod(member));
 
             typeDeclaration.Members.Add(method);
