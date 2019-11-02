@@ -40,6 +40,16 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_not_output_private_protected_constructor()
+        {
+            AssertPublicApi<ClassWithPrivateProtectedConstructor>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPrivateProtectedConstructor { }
+}");
+        }
+
+        [Fact]
         public void Should_output_public_constructor()
         {
             AssertPublicApi<ClassWithPublicConstructor>(
@@ -56,11 +66,24 @@ namespace PublicApiGeneratorTests
         public void Should_output_protected_constructor()
         {
             AssertPublicApi<ClassWithProtectedConstructor>(
-@"namespace PublicApiGeneratorTests.Examples
+                @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedConstructor
     {
         protected ClassWithProtectedConstructor() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_internal_constructor()
+        {
+            AssertPublicApi<ClassWithProtectedInternalConstructor>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedInternalConstructor
+    {
+        protected ClassWithProtectedInternalConstructor() { }
     }
 }");
         }
@@ -130,9 +153,23 @@ namespace PublicApiGeneratorTests
             }
         }
 
+        public class ClassWithPrivateProtectedConstructor
+        {
+            private protected ClassWithPrivateProtectedConstructor()
+            {
+            }
+        }
+
         public class ClassWithProtectedConstructor
         {
             protected ClassWithProtectedConstructor()
+            {
+            }
+        }
+
+        public class ClassWithProtectedInternalConstructor
+        {
+            protected internal ClassWithProtectedInternalConstructor()
             {
             }
         }
