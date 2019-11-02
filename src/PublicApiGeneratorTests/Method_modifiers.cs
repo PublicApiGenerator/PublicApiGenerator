@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -98,7 +98,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithUnsafeMethod
     {
         public ClassWithUnsafeMethod() { }
-        public unsafe System.Void* DoSomething() { }
+        public unsafe void* DoSomething() { }
     }
 }");
         }

@@ -77,8 +77,8 @@ namespace PublicApiGeneratorTests
 {
     public class ClassWithUnsafeFields
     {
-        protected unsafe System.Void* UnsafeProtectedField;
-        public unsafe System.Void* UnsafePublicField;
+        protected unsafe void* UnsafeProtectedField;
+        public unsafe void* UnsafePublicField;
         public ClassWithUnsafeFields() { }
     }
 }");

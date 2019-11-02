@@ -34,6 +34,8 @@ namespace PublicApiGenerator
                     return "string";
                 case "System.Boolean":
                     return "bool";
+                case "System.Void":
+                    return "void";
                 default:
                     return typeName;
             }

@@ -144,6 +144,11 @@ namespace PublicApiGenerator
                     return GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested) + "[]";
             }
 
+            if (type is PointerType pointer)
+            {
+                return CSharpTypeKeyword.Get(GetTypeName(pointer.ElementType, nullabilityMap, NullableMode.Default, disableNested)) + "*";
+            }
+
             if (!type.IsNested || disableNested)
             {
                 var name = type is RequiredModifierType modType ? modType.ElementType.Name : type.Name;
