@@ -107,13 +107,14 @@ namespace PublicApiGenerator
             return !m.IsCompilerGenerated() && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
         }
 
-        static bool ShouldIncludeMethod(Mono.Cecil.MethodAttributes methodAttributes)
+        static bool ShouldIncludeMember(MemberAttributes memberAttributes)
         {
-            switch (methodAttributes & Mono.Cecil.MethodAttributes.MemberAccessMask)
+            switch (memberAttributes & MemberAttributes.AccessMask)
             {
-                case Mono.Cecil.MethodAttributes.Private:
-                case Mono.Cecil.MethodAttributes.Assembly:
-                case Mono.Cecil.MethodAttributes.FamANDAssem:
+                case 0: // This represents no CodeDOM keyword being specified.
+                case MemberAttributes.Private:
+                case MemberAttributes.Assembly:
+                case MemberAttributes.FamilyAndAssembly:
                     return false;
                 default:
                     return true;
@@ -498,14 +499,15 @@ namespace PublicApiGenerator
 
         static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
         {
-            if (!ShouldIncludeMethod(member.Attributes))
+            var attributes = member.GetMethodAttributes();
+            if (!ShouldIncludeMember(attributes))
                 return;
 
             var method = new CodeConstructor
             {
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 Name = member.Name,
-                Attributes = member.GetMethodAttributes()
+                Attributes = attributes
             };
             PopulateMethodParameters(member, method.Parameters, attributeFilter);
 
@@ -514,7 +516,8 @@ namespace PublicApiGenerator
 
         static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
         {
-            if (!ShouldIncludeMethod(member.Attributes))
+            var attributes = member.GetMethodAttributes();
+            if (!ShouldIncludeMember(attributes))
                 return;
 
             if (member.IsSpecialName && !member.Name.StartsWith("op_")) return;
@@ -527,7 +530,7 @@ namespace PublicApiGenerator
             var method = new CodeMemberMethod
             {
                 Name = CSharpOperatorKeyword.Get(member.Name),
-                Attributes = member.GetMethodAttributes(),
+                Attributes = attributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 ReturnType = returnType,
             };
@@ -604,14 +607,14 @@ namespace PublicApiGenerator
 
         static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member, AttributeFilter attributeFilter)
         {
-            var hasGet = member.GetMethod != null && ShouldIncludeMethod(member.GetMethod.Attributes);
-            var hasSet = member.SetMethod != null && ShouldIncludeMethod(member.SetMethod.Attributes);
+            var getterAttributes = member.GetMethod?.GetMethodAttributes() ?? 0;
+            var setterAttributes = member.SetMethod?.GetMethodAttributes() ?? 0;
+
+            var hasGet = ShouldIncludeMember(getterAttributes);
+            var hasSet = ShouldIncludeMember(setterAttributes);
 
             if (!(hasGet | hasSet))
                 return;
-
-            var getterAttributes = hasGet ? member.GetMethod.GetMethodAttributes() : 0;
-            var setterAttributes = hasSet ? member.SetMethod.GetMethodAttributes() : 0;
 
             var propertyAttributes = CecilEx.GetPropertyAttributes(getterAttributes, setterAttributes);
 
@@ -655,7 +658,10 @@ namespace PublicApiGenerator
 
         static void AddEventToTypeDeclaration(CodeTypeDeclaration typeDeclaration, EventDefinition eventDefinition, AttributeFilter attributeFilter)
         {
-            if (!(ShouldIncludeMethod(eventDefinition.AddMethod.Attributes) || ShouldIncludeMethod(eventDefinition.RemoveMethod.Attributes)))
+            var addAccessorAttributes = eventDefinition.AddMethod.GetMethodAttributes();
+            var removeAccessorAttributes = eventDefinition.RemoveMethod.GetMethodAttributes();
+
+            if (!(ShouldIncludeMember(addAccessorAttributes) || ShouldIncludeMember(removeAccessorAttributes)))
                 return;
 
             var @event = new CodeMemberEvent
