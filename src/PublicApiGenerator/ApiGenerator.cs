@@ -148,7 +148,7 @@ namespace PublicApiGenerator
                 }
                 else if (memberInfo is EventDefinition eventDefinition)
                 {
-                    typeDeclaration.Members.Add(GenerateEvent(eventDefinition, attributeFilter));
+                    AddEventToTypeDeclaration(typeDeclaration, eventDefinition, attributeFilter);
                 }
                 else if (memberInfo is FieldDefinition fieldDefinition)
                 {
@@ -653,8 +653,11 @@ namespace PublicApiGenerator
             typeDeclaration.Members.Add(property);
         }
 
-        static CodeTypeMember GenerateEvent(EventDefinition eventDefinition, AttributeFilter attributeFilter)
+        static void AddEventToTypeDeclaration(CodeTypeDeclaration typeDeclaration, EventDefinition eventDefinition, AttributeFilter attributeFilter)
         {
+            if (!(ShouldIncludeMethod(eventDefinition.AddMethod.Attributes) || ShouldIncludeMethod(eventDefinition.RemoveMethod.Attributes)))
+                return;
+
             var @event = new CodeMemberEvent
             {
                 Name = eventDefinition.Name,
@@ -663,7 +666,7 @@ namespace PublicApiGenerator
                 Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
             };
 
-            return @event;
+            typeDeclaration.Members.Add(@event);
         }
 
         static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo, AttributeFilter attributeFilter)
