@@ -54,6 +54,7 @@ namespace PublicApiGenerator
                     Environment.NewLine
                 }, StringSplitOptions.RemoveEmptyEntries)
                 .Where(l => !string.IsNullOrWhiteSpace(l))
+                .Select(l => l.TrimEnd())
             );
         }
 
