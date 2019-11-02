@@ -88,6 +88,20 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_unsafe_modifier()
+        {
+            AssertPublicApi<ClassWithUnsafeMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithUnsafeMethod
+    {
+        public ClassWithUnsafeMethod() { }
+        public unsafe System.Void* DoSomething() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -144,6 +158,14 @@ namespace PublicApiGeneratorTests
             public override string ToString()
             {
                 return base.ToString();
+            }
+        }
+
+        public class ClassWithUnsafeMethod
+        {
+            public unsafe void* DoSomething()
+            {
+                return null;
             }
         }
     }
