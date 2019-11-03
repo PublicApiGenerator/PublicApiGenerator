@@ -18,7 +18,7 @@ namespace PublicApiGenerator
         public bool ShouldIncludeAttribute(CustomAttribute attribute)
         {
             var attributeTypeDefinition = attribute.AttributeType.Resolve();
-            return attributeTypeDefinition != null && !_excludedAttributes.Contains(attribute.AttributeType.FullName) && (attributeTypeDefinition.IsPublic || attributeTypeDefinition.FullName == "System.Runtime.CompilerServices.NullableAttribute");
+            return attributeTypeDefinition != null && !_excludedAttributes.Contains(attribute.AttributeType.FullName) && attributeTypeDefinition.IsPublic;
         }
     }
 }
