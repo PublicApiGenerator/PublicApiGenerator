@@ -14,7 +14,13 @@ namespace PublicApiGenerator
             "System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute",
             "System.Diagnostics.CodeAnalysis.NotNullAttribute",
             "System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute",
-            "System.Diagnostics.CodeAnalysis.NotNullWhenAttribute"
+            "System.Diagnostics.CodeAnalysis.NotNullWhenAttribute",
+            "System.SerializableAttribute",
+            "System.Runtime.CompilerServices.CallerArgumentExpressionAttribute",
+            "System.Runtime.CompilerServices.CallerFilePath",
+            "System.Runtime.CompilerServices.CallerLineNumberAttribute",
+            "System.Runtime.CompilerServices.CallerMemberName",
+            "System.Runtime.CompilerServices.ReferenceAssemblyAttribute"
         };
     }
 }
