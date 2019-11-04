@@ -31,7 +31,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(typeof(VoidReturn),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class static VoidReturn
+    public static class VoidReturn
     {
         public static void ShouldBeEquivalentTo(this object? actual, object? expected) { }
     }

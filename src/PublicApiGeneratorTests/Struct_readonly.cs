@@ -1,4 +1,3 @@
-﻿using System;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 
@@ -12,7 +11,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ReadonlyStruct>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public struct readonly ReadonlyStruct { }
+    public readonly struct ReadonlyStruct { }
 }");
         }
     }
