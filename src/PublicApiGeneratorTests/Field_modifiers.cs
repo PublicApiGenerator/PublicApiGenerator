@@ -28,7 +28,7 @@ namespace PublicApiGeneratorTests
 {
     public class ClassWithVolatileField
     {
-        public static int StaticVolatilePublicField;
+        public static volatile int StaticVolatilePublicField;
         public ClassWithVolatileField() { }
     }
 }");

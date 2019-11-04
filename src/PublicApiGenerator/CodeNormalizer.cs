@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace PublicApiGenerator
@@ -37,7 +38,19 @@ namespace PublicApiGenerator
             gennedClass = gennedClass.Replace("struct " + ReadonlyMarker, "readonly struct ");
             gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
 
+            gennedClass = RemoveUnnecessaryWhiteSpace(gennedClass);
             return gennedClass;
+        }
+
+        static string RemoveUnnecessaryWhiteSpace(string publicApi)
+        {
+            return string.Join(Environment.NewLine, publicApi.Split(new[]
+                {
+                    Environment.NewLine
+                }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(l => !string.IsNullOrWhiteSpace(l))
+                .Select(l => l.TrimEnd())
+            );
         }
     }
 }
