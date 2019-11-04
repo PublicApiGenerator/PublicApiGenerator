@@ -193,9 +193,9 @@ namespace PublicApiGenerator
 
             var declarationName = string.Empty;
             if (@readonly)
-                declarationName += CodeNormalizer.readonlyMarker;
+                declarationName += CodeNormalizer.ReadonlyMarker;
             if (@static)
-                declarationName += CodeNormalizer.staticMarker;
+                declarationName += CodeNormalizer.StaticMarker;
 
             declarationName += name;
 
