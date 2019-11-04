@@ -78,7 +78,10 @@ namespace PublicApiGeneratorTests
     public class ClassWithUnsafeFields
     {
         protected unsafe void* UnsafeProtectedField;
+        public unsafe byte* UnsafePublicByteField;
         public unsafe void* UnsafePublicField;
+        public unsafe int* UnsafePublicIntField;
+        public unsafe long* UnsafePublicLongField;
         public ClassWithUnsafeFields() { }
     }
 }");
@@ -115,6 +118,9 @@ namespace PublicApiGeneratorTests
         public class ClassWithUnsafeFields
         {
             public unsafe void* UnsafePublicField;
+            public unsafe byte* UnsafePublicByteField;
+            public unsafe int* UnsafePublicIntField;
+            public unsafe long* UnsafePublicLongField;
             protected unsafe void* UnsafeProtectedField;
         }
     }
