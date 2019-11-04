@@ -626,6 +626,9 @@ namespace PublicApiGenerator
 
             var returnType = member.ReturnType.CreateCodeTypeReference(member.MethodReturnType);
 
+            if (IsUnsafeSignatureType(member.ReturnType) || member.Parameters.Any(p => IsUnsafeSignatureType(p.ParameterType)))
+                returnType = MakeUnsafe(returnType);
+
             var method = new CodeMemberMethod
             {
                 Name = memberName,
@@ -638,6 +641,22 @@ namespace PublicApiGenerator
             PopulateMethodParameters(member, method.Parameters, excludeAttributes, IsExtensionMethod(member));
 
             typeDeclaration.Members.Add(method);
+        }
+
+        static bool IsUnsafeSignatureType(TypeReference typeReference)
+        {
+            while (true)
+            {
+                if (typeReference.IsPointer) return true;
+
+                if (typeReference.IsArray || typeReference.IsByReference)
+                {
+                    typeReference = typeReference.GetElementType();
+                    continue;
+                }
+
+                return false;
+            }
         }
 
         static bool IsExtensionMethod(ICustomAttributeProvider method)
@@ -889,6 +908,9 @@ namespace PublicApiGenerator
             var codeTypeReference = memberInfo.FieldType.CreateCodeTypeReference(memberInfo);
             if (memberInfo.IsInitOnly)
                 codeTypeReference = MakeReadonly(codeTypeReference);
+            if (IsUnsafeSignatureType(memberInfo.FieldType))
+                codeTypeReference = MakeUnsafe(codeTypeReference);
+
             var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
             {
                 Attributes = attributes,
@@ -904,6 +926,11 @@ namespace PublicApiGenerator
         static CodeTypeReference MakeReadonly(CodeTypeReference typeReference)
         {
             return ModifyCodeTypeReference(typeReference, "readonly");
+        }
+
+        static CodeTypeReference MakeUnsafe(CodeTypeReference typeReference)
+        {
+            return ModifyCodeTypeReference(typeReference, "unsafe");
         }
 
         static CodeTypeReference ModifyCodeTypeReference(CodeTypeReference typeReference, string modifier)

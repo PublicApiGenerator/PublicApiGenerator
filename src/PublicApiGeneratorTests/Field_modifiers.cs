@@ -56,13 +56,33 @@ namespace PublicApiGeneratorTests
             // Have to include the ctor - I can't figure out how to hide it
             // when values are initialized
             AssertPublicApi<ClassWithConstFields>(
-@"namespace PublicApiGeneratorTests.Examples
+                @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithConstFields
     {
         protected const string ConstProtectedField = ""hello world"";
         public const int ConstPublicField = 42;
         public ClassWithConstFields() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Include_unsafe_fields()
+        {
+            // Have to include the ctor - I can't figure out how to hide it
+            // when values are initialized
+            AssertPublicApi<ClassWithUnsafeFields>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithUnsafeFields
+    {
+        protected unsafe void* UnsafeProtectedField;
+        public unsafe byte* UnsafePublicByteField;
+        public unsafe void* UnsafePublicField;
+        public unsafe int* UnsafePublicIntField;
+        public unsafe long* UnsafePublicLongField;
+        public ClassWithUnsafeFields() { }
     }
 }");
         }
@@ -93,6 +113,15 @@ namespace PublicApiGeneratorTests
         {
             public const int ConstPublicField = 42;
             protected const string ConstProtectedField = "hello world";
+        }
+
+        public class ClassWithUnsafeFields
+        {
+            public unsafe void* UnsafePublicField;
+            public unsafe byte* UnsafePublicByteField;
+            public unsafe int* UnsafePublicIntField;
+            public unsafe long* UnsafePublicLongField;
+            protected unsafe void* UnsafeProtectedField;
         }
     }
     // ReSharper restore UnusedMember.Global
