@@ -11,8 +11,8 @@ namespace PublicApiGenerator
         public AttributeFilter(IEnumerable<string> excludedAttributes)
         {
             _excludedAttributes = excludedAttributes is null
-                ? SkippedAttributeNames
-                : new HashSet<string>(SkippedAttributeNames.Concat(excludedAttributes));
+                ? AttributesNotRelevantForThePublicApi
+                : new HashSet<string>(AttributesNotRelevantForThePublicApi.Concat(excludedAttributes));
         }
 
         public bool ShouldIncludeAttribute(CustomAttribute attribute)
@@ -21,7 +21,7 @@ namespace PublicApiGenerator
 
             return attributeTypeDefinition != null
                    && !_excludedAttributes.Contains(attribute.AttributeType.FullName)
-                   && (attributeTypeDefinition.IsPublic || RequiredAttributeNames.Contains(attribute.AttributeType.FullName));
+                   && (attributeTypeDefinition.IsPublic || InternalAttributesThatAffectCompilerOrRuntimeBehavior.Contains(attribute.AttributeType.FullName));
         }
     }
 }

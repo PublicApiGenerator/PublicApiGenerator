@@ -4,7 +4,7 @@ namespace PublicApiGenerator
 {
     partial class AttributeFilter
     {
-        private static readonly HashSet<string> SkippedAttributeNames = new HashSet<string>
+        private static readonly HashSet<string> AttributesNotRelevantForThePublicApi = new HashSet<string>
         {
             "System.CodeDom.Compiler.GeneratedCodeAttribute",
             "System.ComponentModel.EditorBrowsableAttribute",

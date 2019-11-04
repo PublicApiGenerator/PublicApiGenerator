@@ -4,8 +4,12 @@ namespace PublicApiGenerator
 {
     partial class AttributeFilter
     {
-        private static readonly HashSet<string> RequiredAttributeNames = new HashSet<string>
+        /// <summary>
+        /// Contains attributes that are internal that influence the compiler or runtime behavior
+        /// </summary>
+        private static readonly HashSet<string> InternalAttributesThatAffectCompilerOrRuntimeBehavior = new HashSet<string>
         {
+            // Nullability
             "System.Diagnostics.CodeAnalysis.AllowNullAttribute",
             "System.Diagnostics.CodeAnalysis.DisallowNullAttribute",
             "System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute",
@@ -15,7 +19,9 @@ namespace PublicApiGenerator
             "System.Diagnostics.CodeAnalysis.NotNullAttribute",
             "System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute",
             "System.Diagnostics.CodeAnalysis.NotNullWhenAttribute",
+            // Serializable
             "System.SerializableAttribute",
+            // Caller information propagation to default arguments
             "System.Runtime.CompilerServices.CallerArgumentExpressionAttribute",
             "System.Runtime.CompilerServices.CallerFilePath",
             "System.Runtime.CompilerServices.CallerLineNumberAttribute",
