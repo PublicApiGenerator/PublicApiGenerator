@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using System.Collections.Generic;
 using Xunit;
 
@@ -13,7 +13,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(typeof(StringExtensions),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class static StringExtensions
+    public static class StringExtensions
     {
         public static bool CheckLength(this string value, int length) { }
     }
@@ -26,7 +26,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(typeof(GenericExtensions),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class static GenericExtensions
+    public static class GenericExtensions
     {
         public static PublicApiGeneratorTests.Examples.Configurator<T> Add<T>(this PublicApiGeneratorTests.Examples.Configurator<T> configurator)
             where T :  class { }

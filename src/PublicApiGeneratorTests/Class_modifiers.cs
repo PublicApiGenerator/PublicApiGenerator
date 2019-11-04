@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -24,7 +24,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(typeof(StaticClass),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class static StaticClass { }
+    public static class StaticClass { }
 }");
         }
 
