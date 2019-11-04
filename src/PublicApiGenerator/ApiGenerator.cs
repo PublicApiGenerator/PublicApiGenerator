@@ -37,22 +37,14 @@ namespace PublicApiGenerator
                     AssemblyResolver = assemblyResolver
                 }))
                 {
-                    var publicApiForAssembly = CreatePublicApiForAssembly(asm, tr => includeTypes == null || includeTypes.Any(t => t.FullName == tr.FullName && t.Assembly.FullName == tr.Module.Assembly.FullName),
-                        shouldIncludeAssemblyAttributes, whitelistedNamespacePrefixes ?? defaultWhitelistedNamespacePrefixes, attributeFilter);
-                    return RemoveUnnecessaryWhiteSpace(publicApiForAssembly);
+                    return CreatePublicApiForAssembly(
+                        asm,
+                        typeDefinition => includeTypes == null || includeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName),
+                        shouldIncludeAssemblyAttributes,
+                        whitelistedNamespacePrefixes ?? defaultWhitelistedNamespacePrefixes,
+                        attributeFilter);
                 }
             }
-        }
-
-        static string RemoveUnnecessaryWhiteSpace(string publicApi)
-        {
-            return string.Join(Environment.NewLine, publicApi.Split(new[]
-                {
-                    Environment.NewLine
-                }, StringSplitOptions.RemoveEmptyEntries)
-                .Where(l => !string.IsNullOrWhiteSpace(l))
-                .Select(l => l.TrimEnd())
-            );
         }
 
         // TODO: Assembly references?
@@ -103,24 +95,16 @@ namespace PublicApiGenerator
             }
         }
 
-        static bool IsDelegate(TypeDefinition publicType)
-        {
-            return publicType.BaseType != null && publicType.BaseType.FullName == "System.MulticastDelegate";
-        }
+      
 
         static bool ShouldIncludeType(TypeDefinition t)
         {
-            return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily) && !IsCompilerGenerated(t);
+            return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily) && !t.IsCompilerGenerated();
         }
 
         static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
         {
-            return !IsCompilerGenerated(m) && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
-        }
-
-        static bool IsCompilerGenerated(IMemberDefinition m)
-        {
-            return m.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute");
+            return !m.IsCompilerGenerated() && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
         }
 
         static bool IsDotNetTypeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
@@ -162,7 +146,7 @@ namespace PublicApiGenerator
 
         static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] whitelistedNamespacePrefixes, AttributeFilter attributeFilter)
         {
-            if (IsDelegate(publicType))
+            if (publicType.IsDelegate())
                 return CreateDelegateDeclaration(publicType, attributeFilter);
 
             var @static = false;
@@ -284,7 +268,7 @@ namespace PublicApiGenerator
                 };
 
                 // CodeDOM. No support. Return type attributes.
-                PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => ModifyCodeTypeReference(type, "return:"), attributeFilter);
+                PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => type.MakeReturn(), attributeFilter);
                 PopulateGenericParameters(publicType, declaration.TypeParameters, attributeFilter, _ => true);
                 PopulateMethodParameters(invokeMethod, declaration.Parameters, attributeFilter);
 
@@ -361,7 +345,7 @@ namespace PublicApiGenerator
                     return true;
 
                 // unmanaged
-                if (constraint.ConstraintType is RequiredModifierType type && type.ModifierType.FullName == "System.Runtime.InteropServices.UnmanagedType")
+                if (constraint.ConstraintType.IsUnmanaged())
                     return true;
 
                 return false;
@@ -508,38 +492,12 @@ namespace PublicApiGenerator
             {
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 Name = member.Name,
-                Attributes = GetMethodAttributes(member)
+                Attributes = member.GetMethodAttributes()
             };
             PopulateMethodParameters(member, method.Parameters, attributeFilter);
 
             typeDeclaration.Members.Add(method);
         }
-
-        static readonly IDictionary<string, string> OperatorNameMap = new Dictionary<string, string>
-        {
-            { "op_Addition", "+" },
-            { "op_UnaryPlus", "+" },
-            { "op_Subtraction", "-" },
-            { "op_UnaryNegation", "-" },
-            { "op_Multiply", "*" },
-            { "op_Division", "/" },
-            { "op_Modulus", "%" },
-            { "op_Increment", "++" },
-            { "op_Decrement", "--" },
-            { "op_OnesComplement", "~" },
-            { "op_LogicalNot", "!" },
-            { "op_BitwiseAnd", "&" },
-            { "op_BitwiseOr", "|" },
-            { "op_ExclusiveOr", "^" },
-            { "op_LeftShift", "<<" },
-            { "op_RightShift", ">>" },
-            { "op_Equality", "==" },
-            { "op_Inequality", "!=" },
-            { "op_GreaterThan", ">" },
-            { "op_GreaterThanOrEqual", ">=" },
-            { "op_LessThan", "<" },
-            { "op_LessThanOrEqual", "<=" }
-        };
 
         static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
         {
@@ -547,51 +505,23 @@ namespace PublicApiGenerator
 
             if (member.IsSpecialName && !member.Name.StartsWith("op_")) return;
 
-            var memberName = member.Name;
-            // ReSharper disable once InlineOutVariableDeclaration
-            if (OperatorNameMap.TryGetValue(memberName, out string mappedMemberName))
-            {
-                memberName = mappedMemberName;
-            }
-
             var returnType = member.ReturnType.CreateCodeTypeReference(member.MethodReturnType);
 
-            if (IsUnsafeSignatureType(member.ReturnType) || member.Parameters.Any(p => IsUnsafeSignatureType(p.ParameterType)))
-                returnType = MakeUnsafe(returnType);
+            if (member.ReturnType.IsUnsafeSignatureType() || member.Parameters.Any(p => p.ParameterType.IsUnsafeSignatureType()))
+                returnType = returnType.MakeUnsafe();
 
             var method = new CodeMemberMethod
             {
-                Name = memberName,
-                Attributes = GetMethodAttributes(member),
+                Name = CSharpOperatorKeyword.Get(member.Name),
+                Attributes = member.GetMethodAttributes(),
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 ReturnType = returnType,
             };
             PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, attributeFilter);
             PopulateGenericParameters(member, method.TypeParameters, attributeFilter, _ => true);
-            PopulateMethodParameters(member, method.Parameters, attributeFilter, IsExtensionMethod(member));
+            PopulateMethodParameters(member, method.Parameters, attributeFilter, member.IsExtensionMethod());
 
             typeDeclaration.Members.Add(method);
-        }
-
-        static bool IsUnsafeSignatureType(TypeReference typeReference)
-        {
-            while (true)
-            {
-                if (typeReference.IsPointer) return true;
-
-                if (typeReference.IsArray || typeReference.IsByReference)
-                {
-                    typeReference = typeReference.GetElementType();
-                    continue;
-                }
-
-                return false;
-            }
-        }
-
-        static bool IsExtensionMethod(ICustomAttributeProvider method)
-        {
-            return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute");
         }
 
         static void PopulateMethodParameters(IMethodSignature member,
@@ -622,7 +552,7 @@ namespace PublicApiGenerator
 
                 if (isExtension)
                 {
-                    type = ModifyCodeTypeReference(type, "this");
+                    type = type.MakeThis();
                     isExtension = false;
                 }
 
@@ -631,7 +561,7 @@ namespace PublicApiGenerator
                 if (parameter.CustomAttributes.Any(a =>
                         a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute"))
                 {
-                    type = ModifyCodeTypeReference(type, "in");
+                    type = type.MakeIn();
                     direction = FieldDirection.In;
                 }
 
@@ -658,76 +588,15 @@ namespace PublicApiGenerator
             return parameter.ParameterType.IsValueType ? "default" : "null";
         }
 
-        static MemberAttributes GetMethodAttributes(MethodDefinition method)
-        {
-            MemberAttributes access = 0;
-            if (method.IsFamily || method.IsFamilyOrAssembly)
-                access = MemberAttributes.Family;
-            if (method.IsPublic)
-                access = MemberAttributes.Public;
-            if (method.IsAssembly)
-                access = MemberAttributes.Assembly;
-
-            MemberAttributes scope = 0;
-            if (method.IsStatic)
-                scope |= MemberAttributes.Static;
-            if (method.IsFinal || !method.IsVirtual)
-                scope |= MemberAttributes.Final;
-            if (method.IsAbstract)
-                scope |= MemberAttributes.Abstract;
-            if (method.IsVirtual && !method.IsNewSlot)
-                scope |= MemberAttributes.Override;
-
-            MemberAttributes vtable = 0;
-            if (IsHidingMethod(method))
-                vtable = MemberAttributes.New;
-
-            return access | scope | vtable;
-        }
-
-        static bool IsHidingMethod(MethodDefinition method)
-        {
-            var typeDefinition = method.DeclaringType;
-
-            // If we're an interface, just try and find any method with the same signature
-            // in any of the interfaces that we implement
-            if (typeDefinition.IsInterface)
-            {
-                var interfaceMethods = from @interfaceReference in typeDefinition.Interfaces
-                                       let interfaceDefinition = @interfaceReference.InterfaceType.Resolve()
-                                       where interfaceDefinition != null
-                                       select interfaceDefinition.Methods;
-
-                return interfaceMethods.Any(ms => MetadataResolver.GetMethod(ms, method) != null);
-            }
-
-            // If we're not an interface, find a base method that isn't virtual
-            return !method.IsVirtual && GetBaseTypes(typeDefinition).Any(d => MetadataResolver.GetMethod(d.Methods, method) != null);
-        }
-
-        static IEnumerable<TypeDefinition> GetBaseTypes(TypeDefinition type)
-        {
-            var baseType = type.BaseType;
-            while (baseType != null)
-            {
-                var definition = baseType.Resolve();
-                if (definition == null)
-                    yield break;
-                yield return definition;
-
-                baseType = baseType.DeclaringType;
-            }
-        }
-
         static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member, AttributeFilter attributeFilter)
         {
-            var getterAttributes = member.GetMethod != null ? GetMethodAttributes(member.GetMethod) : 0;
-            var setterAttributes = member.SetMethod != null ? GetMethodAttributes(member.SetMethod) : 0;
+            var getterAttributes = member.GetMethod != null ? member.GetMethod.GetMethodAttributes() : 0;
+            var setterAttributes = member.SetMethod != null ? member.SetMethod.GetMethodAttributes() : 0;
 
-            if (!HasVisiblePropertyMethod(getterAttributes) && !HasVisiblePropertyMethod(setterAttributes))
+            if (!getterAttributes.HasVisiblePropertyMethod() && !setterAttributes.HasVisiblePropertyMethod())
                 return;
 
-            var propertyAttributes = GetPropertyAttributes(getterAttributes, setterAttributes);
+            var propertyAttributes = CecilEx.GetPropertyAttributes(getterAttributes, setterAttributes);
 
             var propertyType = member.PropertyType.IsGenericParameter
                 ? new CodeTypeReference(member.PropertyType.Name)
@@ -739,19 +608,19 @@ namespace PublicApiGenerator
                 Type = propertyType,
                 Attributes = propertyAttributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
-                HasGet = member.GetMethod != null && HasVisiblePropertyMethod(getterAttributes),
-                HasSet = member.SetMethod != null && HasVisiblePropertyMethod(setterAttributes)
+                HasGet = member.GetMethod != null && getterAttributes.HasVisiblePropertyMethod(),
+                HasSet = member.SetMethod != null && setterAttributes.HasVisiblePropertyMethod()
             };
 
             // Here's a nice hack, because hey, guess what, the CodeDOM doesn't support
             // attributes on getters or setters
             if (member.GetMethod != null && member.GetMethod.HasCustomAttributes)
             {
-                PopulateCustomAttributes(member.GetMethod, property.CustomAttributes, type => ModifyCodeTypeReference(type, "get:"), attributeFilter);
+                PopulateCustomAttributes(member.GetMethod, property.CustomAttributes, type => type.MakeGet(), attributeFilter);
             }
             if (member.SetMethod != null && member.SetMethod.HasCustomAttributes)
             {
-                PopulateCustomAttributes(member.SetMethod, property.CustomAttributes, type => ModifyCodeTypeReference(type, "set:"), attributeFilter);
+                PopulateCustomAttributes(member.SetMethod, property.CustomAttributes, type => type.MakeSet(), attributeFilter);
             }
 
             foreach (var parameter in member.Parameters)
@@ -765,45 +634,6 @@ namespace PublicApiGenerator
             // TODO: CodeDOM has no support for attributes on setters or getters - promote to property?
 
             typeDeclaration.Members.Add(property);
-        }
-
-        static MemberAttributes GetPropertyAttributes(MemberAttributes getterAttributes, MemberAttributes setterAttributes)
-        {
-            MemberAttributes access = 0;
-            var getterAccess = getterAttributes & MemberAttributes.AccessMask;
-            var setterAccess = setterAttributes & MemberAttributes.AccessMask;
-            if (getterAccess == MemberAttributes.Public || setterAccess == MemberAttributes.Public)
-                access = MemberAttributes.Public;
-            else if (getterAccess == MemberAttributes.Family || setterAccess == MemberAttributes.Family)
-                access = MemberAttributes.Family;
-            else if (getterAccess == MemberAttributes.FamilyAndAssembly || setterAccess == MemberAttributes.FamilyAndAssembly)
-                access = MemberAttributes.FamilyAndAssembly;
-            else if (getterAccess == MemberAttributes.FamilyOrAssembly || setterAccess == MemberAttributes.FamilyOrAssembly)
-                access = MemberAttributes.FamilyOrAssembly;
-            else if (getterAccess == MemberAttributes.Assembly || setterAccess == MemberAttributes.Assembly)
-                access = MemberAttributes.Assembly;
-            else if (getterAccess == MemberAttributes.Private || setterAccess == MemberAttributes.Private)
-                access = MemberAttributes.Private;
-
-            // Scope should be the same for getter and setter. If one isn't specified, it'll be 0
-            var getterScope = getterAttributes & MemberAttributes.ScopeMask;
-            var setterScope = setterAttributes & MemberAttributes.ScopeMask;
-            var scope = (MemberAttributes)Math.Max((int)getterScope, (int)setterScope);
-
-            // Vtable should be the same for getter and setter. If one isn't specified, it'll be 0
-            var getterVtable = getterAttributes & MemberAttributes.VTableMask;
-            var setterVtable = setterAttributes & MemberAttributes.VTableMask;
-            var vtable = (MemberAttributes)Math.Max((int)getterVtable, (int)setterVtable);
-
-            return access | scope | vtable;
-        }
-
-        static bool HasVisiblePropertyMethod(MemberAttributes attributes)
-        {
-            var access = attributes & MemberAttributes.AccessMask;
-            return access == MemberAttributes.Public ||
-                   access == MemberAttributes.Family ||
-                   access == MemberAttributes.FamilyOrAssembly;
         }
 
         static CodeTypeMember GenerateEvent(EventDefinition eventDefinition, AttributeFilter attributeFilter)
@@ -837,9 +667,11 @@ namespace PublicApiGenerator
             // TODO: Values for readonly fields are set in the ctor
             var codeTypeReference = memberInfo.FieldType.CreateCodeTypeReference(memberInfo);
             if (memberInfo.IsInitOnly)
-                codeTypeReference = MakeReadonly(codeTypeReference);
-            if (IsUnsafeSignatureType(memberInfo.FieldType))
-                codeTypeReference = MakeUnsafe(codeTypeReference);
+                codeTypeReference = codeTypeReference.MakeReadonly();
+            if (memberInfo.FieldType.IsUnsafeSignatureType())
+                codeTypeReference = codeTypeReference.MakeUnsafe();
+            if (memberInfo.FieldType.IsVolatile())
+                codeTypeReference = codeTypeReference.MakeVolatile();
 
             var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
             {
@@ -851,31 +683,6 @@ namespace PublicApiGenerator
                 field.InitExpression = new CodePrimitiveExpression(memberInfo.Constant);
 
             typeDeclaration.Members.Add(field);
-        }
-
-        static CodeTypeReference MakeReadonly(CodeTypeReference typeReference)
-        {
-            return ModifyCodeTypeReference(typeReference, "readonly");
-        }
-
-        static CodeTypeReference MakeUnsafe(CodeTypeReference typeReference)
-        {
-            return ModifyCodeTypeReference(typeReference, "unsafe");
-        }
-
-        static CodeTypeReference ModifyCodeTypeReference(CodeTypeReference typeReference, string modifier)
-        {
-            using (var provider = new CSharpCodeProvider())
-            {
-                if (typeReference.TypeArguments.Count == 0)
-                    // For types without generic arguments we resolve the output type directly to turn System.String into string
-                    return new CodeTypeReference(modifier + " " + provider.GetTypeOutput(typeReference));
-                else
-                    // For types with generic types the BaseType is GenericType`<Arity>. Then we cannot resolve the output type and need to pass on the BaseType
-                    // to avoid falling into hardcoded assumptions in CodeTypeReference that cuts of the type after the 4th comma. i.ex. readonly Func<string, string, string, string>
-                    // works but readonly Func<string, string, string, string, string> would turn into readonly Func<string
-                    return new CodeTypeReference(modifier + " " + typeReference.BaseType, typeReference.TypeArguments.Cast<CodeTypeReference>().ToArray());
-            }
         }
     }
 }
