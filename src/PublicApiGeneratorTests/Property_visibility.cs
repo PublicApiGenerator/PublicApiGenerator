@@ -37,12 +37,25 @@ namespace PublicApiGeneratorTests
         public void Should_output_protected_internal_property()
         {
             AssertPublicApi<ClassWithProtectedInternalProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+                @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalProperty
     {
         public ClassWithProtectedInternalProperty() { }
         protected string Value { get; set; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_not_output_private_protected_property()
+        {
+            AssertPublicApi<ClassWithPrivateProtectedProperty>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPrivateProtectedProperty
+    {
+        public ClassWithPrivateProtectedProperty() { }
     }
 }");
         }
@@ -134,12 +147,26 @@ namespace PublicApiGeneratorTests
         public void Should_output_protected_internal_setter_for_public_property()
         {
             AssertPublicApi<ClassWithPublicGetterProtectedInternalSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+                @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedInternalSetter
     {
         public ClassWithPublicGetterProtectedInternalSetter() { }
         public string Value1 { get; set; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_not_output_private_protected_setter_for_public_property()
+        {
+            AssertPublicApi<ClassWithPublicGetterPrivateProtectedSetter>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPublicGetterPrivateProtectedSetter
+    {
+        public ClassWithPublicGetterPrivateProtectedSetter() { }
+        public string Value1 { get; }
     }
 }");
         }
@@ -281,6 +308,11 @@ namespace PublicApiGeneratorTests
             protected internal string Value { get; set; }
         }
 
+        public class ClassWithPrivateProtectedProperty
+        {
+            private protected string Value { get; set; }
+        }
+
         public class ClassWithPublicGetterPrivateSetter
         {
             public string Value1 { get; private set; }
@@ -299,6 +331,11 @@ namespace PublicApiGeneratorTests
         public class ClassWithPublicGetterProtectedInternalSetter
         {
             public string Value1 { get; protected internal set; }
+        }
+
+        public class ClassWithPublicGetterPrivateProtectedSetter
+        {
+            public string Value1 { get; private protected set; }
         }
 
         public class ClassWithPrivateGetterPublicSetter

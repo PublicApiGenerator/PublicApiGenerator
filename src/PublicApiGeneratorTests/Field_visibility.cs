@@ -34,6 +34,7 @@ namespace PublicApiGeneratorTests
         {
             private int privateFieldNotVisible;
             internal int internalFieldNotVisible;
+            private protected int privateProtectedFieldNotVisible;
 
             protected int protectedFieldIsVisible;
             protected internal int protectedInternalFieldIsVisible;

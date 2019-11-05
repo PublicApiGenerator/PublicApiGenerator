@@ -95,16 +95,30 @@ namespace PublicApiGenerator
             }
         }
 
-      
+
 
         static bool ShouldIncludeType(TypeDefinition t)
         {
-            return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily) && !t.IsCompilerGenerated();
+            return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily || t.IsNestedFamilyOrAssembly) && !t.IsCompilerGenerated();
         }
 
         static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
         {
             return !m.IsCompilerGenerated() && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
+        }
+
+        static bool ShouldIncludeMember(MemberAttributes memberAttributes)
+        {
+            switch (memberAttributes & MemberAttributes.AccessMask)
+            {
+                case 0: // This represents no CodeDOM keyword being specified.
+                case MemberAttributes.Private:
+                case MemberAttributes.Assembly:
+                case MemberAttributes.FamilyAndAssembly:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         static bool IsDotNetTypeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
@@ -135,7 +149,7 @@ namespace PublicApiGenerator
                 }
                 else if (memberInfo is EventDefinition eventDefinition)
                 {
-                    typeDeclaration.Members.Add(GenerateEvent(eventDefinition, attributeFilter));
+                    AddEventToTypeDeclaration(typeDeclaration, eventDefinition, attributeFilter);
                 }
                 else if (memberInfo is FieldDefinition fieldDefinition)
                 {
@@ -153,7 +167,7 @@ namespace PublicApiGenerator
             TypeAttributes attributes = 0;
             if (publicType.IsPublic || publicType.IsNestedPublic)
                 attributes |= TypeAttributes.Public;
-            if (publicType.IsNestedFamily)
+            if (publicType.IsNestedFamily || publicType.IsNestedFamilyOrAssembly)
                 attributes |= TypeAttributes.NestedFamily;
             if (publicType.IsSealed && !publicType.IsAbstract)
                 attributes |= TypeAttributes.Sealed;
@@ -485,14 +499,15 @@ namespace PublicApiGenerator
 
         static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
         {
-            if (member.IsAssembly || member.IsPrivate)
+            var attributes = member.GetMethodAttributes();
+            if (!ShouldIncludeMember(attributes))
                 return;
 
             var method = new CodeConstructor
             {
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 Name = member.Name,
-                Attributes = member.GetMethodAttributes()
+                Attributes = attributes
             };
             PopulateMethodParameters(member, method.Parameters, attributeFilter);
 
@@ -501,7 +516,9 @@ namespace PublicApiGenerator
 
         static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
         {
-            if (member.IsAssembly || member.IsPrivate) return;
+            var attributes = member.GetMethodAttributes();
+            if (!ShouldIncludeMember(attributes))
+                return;
 
             if (member.IsSpecialName && !member.Name.StartsWith("op_")) return;
 
@@ -513,7 +530,7 @@ namespace PublicApiGenerator
             var method = new CodeMemberMethod
             {
                 Name = CSharpOperatorKeyword.Get(member.Name),
-                Attributes = member.GetMethodAttributes(),
+                Attributes = attributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 ReturnType = returnType,
             };
@@ -590,13 +607,16 @@ namespace PublicApiGenerator
 
         static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member, AttributeFilter attributeFilter)
         {
-            var getterAttributes = member.GetMethod != null ? member.GetMethod.GetMethodAttributes() : 0;
-            var setterAttributes = member.SetMethod != null ? member.SetMethod.GetMethodAttributes() : 0;
+            var getterAttributes = member.GetMethod?.GetMethodAttributes() ?? 0;
+            var setterAttributes = member.SetMethod?.GetMethodAttributes() ?? 0;
 
-            if (!getterAttributes.HasVisiblePropertyMethod() && !setterAttributes.HasVisiblePropertyMethod())
+            var hasGet = ShouldIncludeMember(getterAttributes);
+            var hasSet = ShouldIncludeMember(setterAttributes);
+
+            if (!(hasGet | hasSet))
                 return;
 
-            var propertyAttributes = CecilEx.GetPropertyAttributes(getterAttributes, setterAttributes);
+            var propertyAttributes = CecilEx.CombineAccessorAttributes(getterAttributes, setterAttributes);
 
             var propertyType = member.PropertyType.IsGenericParameter
                 ? new CodeTypeReference(member.PropertyType.Name)
@@ -608,8 +628,8 @@ namespace PublicApiGenerator
                 Type = propertyType,
                 Attributes = propertyAttributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
-                HasGet = member.GetMethod != null && getterAttributes.HasVisiblePropertyMethod(),
-                HasSet = member.SetMethod != null && setterAttributes.HasVisiblePropertyMethod()
+                HasGet = hasGet,
+                HasSet = hasSet
             };
 
             // Here's a nice hack, because hey, guess what, the CodeDOM doesn't support
@@ -636,22 +656,28 @@ namespace PublicApiGenerator
             typeDeclaration.Members.Add(property);
         }
 
-        static CodeTypeMember GenerateEvent(EventDefinition eventDefinition, AttributeFilter attributeFilter)
+        static void AddEventToTypeDeclaration(CodeTypeDeclaration typeDeclaration, EventDefinition eventDefinition, AttributeFilter attributeFilter)
         {
+            var addAccessorAttributes = eventDefinition.AddMethod.GetMethodAttributes();
+            var removeAccessorAttributes = eventDefinition.RemoveMethod.GetMethodAttributes();
+
+            if (!(ShouldIncludeMember(addAccessorAttributes) || ShouldIncludeMember(removeAccessorAttributes)))
+                return;
+
             var @event = new CodeMemberEvent
             {
                 Name = eventDefinition.Name,
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                Attributes = CecilEx.CombineAccessorAttributes(addAccessorAttributes, removeAccessorAttributes),
                 CustomAttributes = CreateCustomAttributes(eventDefinition, attributeFilter),
                 Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
             };
 
-            return @event;
+            typeDeclaration.Members.Add(@event);
         }
 
         static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo, AttributeFilter attributeFilter)
         {
-            if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsSpecialName)
+            if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsFamilyAndAssembly || memberInfo.IsSpecialName)
                 return;
 
             MemberAttributes attributes = 0;

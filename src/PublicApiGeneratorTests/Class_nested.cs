@@ -40,6 +40,34 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_ignore_internal_nested_class()
+        {
+            AssertPublicApi<ClassWithInternalNestedClass>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithInternalNestedClass
+    {
+        public ClassWithInternalNestedClass() { }
+        public void Method() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_ignore_private_protected_nested_class()
+        {
+            AssertPublicApi<ClassWithPrivateProtectedNestedClass>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPrivateProtectedNestedClass
+    {
+        public ClassWithPrivateProtectedNestedClass() { }
+        public void Method() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_protected_nested_class()
         {
             AssertPublicApi<ClassWithProtectedNestedClass>(
@@ -48,6 +76,25 @@ namespace PublicApiGeneratorTests
     public class ClassWithProtectedNestedClass
     {
         public ClassWithProtectedNestedClass() { }
+        public void Method() { }
+        protected class NestedClass
+        {
+            public NestedClass() { }
+            public void Method() { }
+        }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_internal_nested_class()
+        {
+            AssertPublicApi<ClassWithProtectedInternalNestedClass>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedInternalNestedClass
+    {
+        public ClassWithProtectedInternalNestedClass() { }
         public void Method() { }
         protected class NestedClass
         {
@@ -217,9 +264,39 @@ namespace PublicApiGeneratorTests
             public void Method() { }
         }
 
+        public class ClassWithInternalNestedClass
+        {
+            internal class NestedClass
+            {
+                public void Method() { }
+            }
+
+            public void Method() { }
+        }
+
         public class ClassWithProtectedNestedClass
         {
             protected class NestedClass
+            {
+                public void Method() { }
+            }
+
+            public void Method() { }
+        }
+
+        public class ClassWithProtectedInternalNestedClass
+        {
+            protected internal class NestedClass
+            {
+                public void Method() { }
+            }
+
+            public void Method() { }
+        }
+
+        public class ClassWithPrivateProtectedNestedClass
+        {
+            private protected class NestedClass
             {
                 public void Method() { }
             }

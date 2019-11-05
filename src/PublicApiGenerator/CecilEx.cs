@@ -58,41 +58,33 @@ namespace PublicApiGenerator
             return m.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute");
         }
 
-        public static bool HasVisiblePropertyMethod(this MemberAttributes attributes)
-        {
-            var access = attributes & MemberAttributes.AccessMask;
-            return access == MemberAttributes.Public ||
-                   access == MemberAttributes.Family ||
-                   access == MemberAttributes.FamilyOrAssembly;
-        }
-
-        public static MemberAttributes GetPropertyAttributes(MemberAttributes getterAttributes, MemberAttributes setterAttributes)
+        public static MemberAttributes CombineAccessorAttributes(MemberAttributes first, MemberAttributes second)
         {
             MemberAttributes access = 0;
-            var getterAccess = getterAttributes & MemberAttributes.AccessMask;
-            var setterAccess = setterAttributes & MemberAttributes.AccessMask;
-            if (getterAccess == MemberAttributes.Public || setterAccess == MemberAttributes.Public)
+            var firstAccess = first & MemberAttributes.AccessMask;
+            var secondAccess = second & MemberAttributes.AccessMask;
+            if (firstAccess == MemberAttributes.Public || secondAccess == MemberAttributes.Public)
                 access = MemberAttributes.Public;
-            else if (getterAccess == MemberAttributes.Family || setterAccess == MemberAttributes.Family)
+            else if (firstAccess == MemberAttributes.Family || secondAccess == MemberAttributes.Family)
                 access = MemberAttributes.Family;
-            else if (getterAccess == MemberAttributes.FamilyAndAssembly || setterAccess == MemberAttributes.FamilyAndAssembly)
+            else if (firstAccess == MemberAttributes.FamilyAndAssembly || secondAccess == MemberAttributes.FamilyAndAssembly)
                 access = MemberAttributes.FamilyAndAssembly;
-            else if (getterAccess == MemberAttributes.FamilyOrAssembly || setterAccess == MemberAttributes.FamilyOrAssembly)
+            else if (firstAccess == MemberAttributes.FamilyOrAssembly || secondAccess == MemberAttributes.FamilyOrAssembly)
                 access = MemberAttributes.FamilyOrAssembly;
-            else if (getterAccess == MemberAttributes.Assembly || setterAccess == MemberAttributes.Assembly)
+            else if (firstAccess == MemberAttributes.Assembly || secondAccess == MemberAttributes.Assembly)
                 access = MemberAttributes.Assembly;
-            else if (getterAccess == MemberAttributes.Private || setterAccess == MemberAttributes.Private)
+            else if (firstAccess == MemberAttributes.Private || secondAccess == MemberAttributes.Private)
                 access = MemberAttributes.Private;
 
             // Scope should be the same for getter and setter. If one isn't specified, it'll be 0
-            var getterScope = getterAttributes & MemberAttributes.ScopeMask;
-            var setterScope = setterAttributes & MemberAttributes.ScopeMask;
-            var scope = (MemberAttributes)Math.Max((int)getterScope, (int)setterScope);
+            var firstScope = first & MemberAttributes.ScopeMask;
+            var secondScope = second & MemberAttributes.ScopeMask;
+            var scope = (MemberAttributes)Math.Max((int)firstScope, (int)secondScope);
 
             // Vtable should be the same for getter and setter. If one isn't specified, it'll be 0
-            var getterVtable = getterAttributes & MemberAttributes.VTableMask;
-            var setterVtable = setterAttributes & MemberAttributes.VTableMask;
-            var vtable = (MemberAttributes)Math.Max((int)getterVtable, (int)setterVtable);
+            var firstVtable = first & MemberAttributes.VTableMask;
+            var secondVtable = second & MemberAttributes.VTableMask;
+            var vtable = (MemberAttributes)Math.Max((int)firstVtable, (int)secondVtable);
 
             return access | scope | vtable;
         }
