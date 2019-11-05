@@ -71,12 +71,12 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithObsolete>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [System.ObsoleteAttribute(""Foo"")]
+    [System.Obsolete(""Foo"")]
     public class ClassWithObsolete
     {
-        [System.ObsoleteAttribute(""Bar"")]
+        [System.Obsolete(""Bar"")]
         public ClassWithObsolete(string? nullableLabel) { }
-        [System.ObsoleteAttribute(""Bar"")]
+        [System.Obsolete(""Bar"")]
         public ClassWithObsolete(string? nullableLabel, string? nullableLabel2) { }
     }
 }");

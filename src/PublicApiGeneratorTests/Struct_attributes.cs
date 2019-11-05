@@ -11,7 +11,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<StructWithSimpleAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.SimpleAttribute()]
+    [PublicApiGeneratorTests.Examples.Simple]
     public struct StructWithSimpleAttribute { }
 }");
         }
@@ -22,19 +22,19 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<StructWithAttributeWithStringPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1Attribute(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
     public struct StructWithAttributeWithStringPositionalParameters { }
 }");
             AssertPublicApi<StructWithAttributeWithIntPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute(42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
     public struct StructWithAttributeWithIntPositionalParameters { }
 }");
             AssertPublicApi<StructWithAttributeWithMultiplePositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParametersAttribute(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
     public struct StructWithAttributeWithMultiplePositionalParameters { }
 }");
         }
@@ -45,14 +45,14 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<StructWithIntNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42)]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
     public struct StructWithIntNamedParameterAttribute { }
 }");
 
             AssertPublicApi<StructWithStringNamedParameterAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
     public struct StructWithStringNamedParameterAttribute { }
 }");
         }
@@ -63,7 +63,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<StructWithAttributeWithMultipleNamedParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
     public struct StructWithAttributeWithMultipleNamedParameters { }
 }");
         }
@@ -74,7 +74,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<StructWithAttributeWithBothNamedAndPositionalParameters>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameterAttribute(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
     public struct StructWithAttributeWithBothNamedAndPositionalParameters { }
 }");
         }
@@ -85,7 +85,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<StructWithAttributeWithEnumFlags>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlagsAttribute(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public struct StructWithAttributeWithEnumFlags { }
 }");
         }
@@ -96,9 +96,9 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<StructWithMultipleAttributes>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.Attribute_AA()]
-    [PublicApiGeneratorTests.Examples.Attribute_MM()]
-    [PublicApiGeneratorTests.Examples.Attribute_ZZ()]
+    [PublicApiGeneratorTests.Examples.Attribute_AA]
+    [PublicApiGeneratorTests.Examples.Attribute_MM]
+    [PublicApiGeneratorTests.Examples.Attribute_ZZ]
     public struct StructWithMultipleAttributes { }
 }");
         }

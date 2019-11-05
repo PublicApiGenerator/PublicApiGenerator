@@ -25,7 +25,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi(typeof(ClassWithGenericTypeAttribute<>),
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithGenericTypeAttribute<[PublicApiGeneratorTests.Examples.MyTypeAttribute()] T>
+    public class ClassWithGenericTypeAttribute<[PublicApiGeneratorTests.Examples.MyType] T>
     {
         public ClassWithGenericTypeAttribute() { }
     }

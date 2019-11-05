@@ -61,7 +61,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<EnumWithFlagsAttribute>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    [System.FlagsAttribute()]
+    [System.Flags]
     public enum EnumWithFlagsAttribute
     {
         One = 1,

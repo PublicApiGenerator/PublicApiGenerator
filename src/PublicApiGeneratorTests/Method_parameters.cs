@@ -175,6 +175,22 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_default_values_even_if_they_look_like_attributes()
+        {
+            AssertPublicApi<MethodWithDefaultThatLooksLikeAnAttribute>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodWithDefaultThatLooksLikeAnAttribute
+    {
+        public MethodWithDefaultThatLooksLikeAnAttribute() { }
+        public void Method(string value2 = ""MyAttribute[()]"") { }
+    }
+}");
+        }
+
+
+
+        [Fact]
         public void Should_output_ref_parameters()
         {
             AssertPublicApi<MethodWithRefParameter>(
@@ -353,6 +369,13 @@ namespace PublicApiGeneratorTests
         public class MethodWithDefaultValues
         {
             public void Method(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default)
+            {
+            }
+        }
+
+        public class MethodWithDefaultThatLooksLikeAnAttribute
+        {
+            public void Method(string value2 = "MyAttribute[()]")
             {
             }
         }
