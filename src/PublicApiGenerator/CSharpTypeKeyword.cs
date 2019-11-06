@@ -36,6 +36,8 @@ namespace PublicApiGenerator
                     return "bool";
                 case "System.Void":
                     return "void";
+                case "System.TimeSpan":
+                    return "TimeSpan";                    
                 default:
                     return typeName;
             }
