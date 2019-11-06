@@ -51,6 +51,7 @@ namespace PublicApiGenerator
 
             gennedClass = gennedClass.Replace("class " + StaticMarker, "static class ");
             gennedClass = gennedClass.Replace("struct " + ReadonlyMarker, "readonly struct ");
+            gennedClass = gennedClass.Replace(ReadonlyMarker, string.Empty); // remove magic marker from readonly struct ctor
             gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
 
             gennedClass = RemoveUnnecessaryWhiteSpace(gennedClass);

@@ -14,6 +14,19 @@ namespace PublicApiGeneratorTests
     public readonly struct ReadonlyStruct { }
 }");
         }
+
+        [Fact]
+        public void Should_output_with_ctor()
+        {
+            AssertPublicApi<ReadonlyStructWithCtor>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public readonly struct ReadonlyStructWithCtor
+    {
+        public ReadonlyStructWithCtor(int parameter) { }
+    }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -21,6 +34,13 @@ namespace PublicApiGeneratorTests
     {
         public readonly struct ReadonlyStruct
         {
+        }
+
+        public readonly struct ReadonlyStructWithCtor
+        {
+            public ReadonlyStructWithCtor(int parameter)
+            {
+            }
         }
     }
     // ReSharper restore ClassNeverInstantiated.Global
