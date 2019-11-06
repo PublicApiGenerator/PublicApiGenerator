@@ -1,4 +1,5 @@
 using PublicApiGeneratorTests.Examples;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -37,6 +38,21 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_extension_methods_with_nullable()
+        {
+            AssertPublicApi(typeof(ExtensionMethodWithNullable),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public static class ExtensionMethodWithNullable
+    {
+            public static int? Int(this object @object, int? value = default) { }
+            public static long? Long(this object @object, long? value = default) { }
+            public static TimeSpan? Time(this object @object, TimeSpan? timeSpan = default) { }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -61,6 +77,15 @@ namespace PublicApiGeneratorTests
             public static Configurator<T> Add<T, U>(this Configurator<T> configurator) where U : class, IComparer<T>, IEnumerable<U> => configurator;
 
             public static void Add<T, U>(this string s) where U : class, IComparer<T>, IEnumerable<U> { }
+        }
+
+        public static class ExtensionMethodWithNullable
+        {
+            public static TimeSpan? Time(this object @object, TimeSpan? timeSpan = null) => null;
+
+            public static int? Int(this object @object, int? @value = null) => null;
+
+            public static long? Long(this object @object, long? @value = null) => null;
         }
     }
     // ReSharper restore ClassNeverInstantiated.Global
