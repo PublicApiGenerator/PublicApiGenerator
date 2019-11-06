@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 
@@ -128,6 +128,29 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_not_output_static_constructor_of_class()
+        {
+            AssertPublicApi<ClassWithStaticConstructor>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithStaticConstructor
+    {
+        public ClassWithStaticConstructor() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_not_output_static_constructor_of_static_class()
+        {
+            AssertPublicApi(typeof(StaticClassWithStaticConstructor),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public static class StaticClassWithStaticConstructor { }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -203,6 +226,20 @@ namespace PublicApiGeneratorTests
         public class ClassWithConstructorWithDefaultValues
         {
             public ClassWithConstructorWithDefaultValues(int intValue = 42, string stringValue = "hello world", Type typeValue = null)
+            {
+            }
+        }
+
+        public class ClassWithStaticConstructor
+        {
+            static ClassWithStaticConstructor()
+            {
+            }
+        }
+
+        public static class StaticClassWithStaticConstructor
+        {
+            static StaticClassWithStaticConstructor()
             {
             }
         }
