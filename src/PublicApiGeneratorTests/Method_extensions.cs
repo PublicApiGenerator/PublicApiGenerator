@@ -49,7 +49,7 @@ namespace PublicApiGeneratorTests
     {
             public static int? Int(this object @object, int? value = default) { }
             public static long? Long(this object @object, long? value = default) { }
-            public static TimeSpan? Time(this object @object, TimeSpan? timeSpan = default) { }
+            public static System.TimeSpan? Time(this object @object, System.TimeSpan? timeSpan = default) { }
     }
 }");
         }

@@ -101,7 +101,7 @@ namespace PublicApiGeneratorTests
     public class FieldWithNullable
     {
         public readonly int? NullableInt;
-        public readonly TimeSpan? NullableTimespan;
+        public readonly System.TimeSpan? NullableTimespan;
         public FieldWithNullable() { }
     }
 }");
