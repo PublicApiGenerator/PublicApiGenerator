@@ -91,6 +91,21 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_nullable_types()
+        {
+            AssertPublicApi<FieldWithNullable>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class FieldWithNullable
+    {
+        public readonly int? NullableInt;
+        public readonly TimeSpan? NullableTimespan;
+        public FieldWithNullable() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable ClassNeverInstantiated.Global
@@ -126,6 +141,12 @@ namespace PublicApiGeneratorTests
         {
             public readonly Func<string, string, string, IEnumerable<string>, string> FuncField = (a, b, c, d) => null;
             public readonly Func<string, string, string, string> FuncField2;
+        }
+
+        public class FieldWithNullable
+        {
+            public readonly TimeSpan? NullableTimespan;
+            public readonly int? NullableInt;
         }
     }
     // ReSharper restore UnusedMember.Global
