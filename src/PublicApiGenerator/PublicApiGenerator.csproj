@@ -6,6 +6,14 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\PublicApiGenerator.snk</AssemblyOriginatorKeyFile>
+
+    <!-- Enable debugger source-stepping by embedding source files in the PDB. -->
+    <EmbedAllSources>true</EmbedAllSources>
+
+    <!-- The PDBs go in a .snupkg file to be uploaded to the nuget.org symbol server. -->
+    <!-- https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
