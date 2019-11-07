@@ -30,7 +30,6 @@ namespace PublicApiGeneratorTests
     // ReSharper disable UnusedMember.Global
     namespace Examples
     {
-#nullable enable
         public class ClassWithDynamic : List<dynamic>
         {
             public class ClassWithDynamic2 : List<dynamic?> { }

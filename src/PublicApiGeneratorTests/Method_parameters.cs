@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using System.Threading;
 using Xunit;
 
@@ -368,7 +368,7 @@ namespace PublicApiGeneratorTests
 
         public class MethodWithDefaultValues
         {
-            public void Method(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default)
+            public void Method(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default!)
             {
             }
         }
@@ -398,7 +398,7 @@ namespace PublicApiGeneratorTests
         {
             public void Method(out string value)
             {
-                value = null;
+                value = null!;
             }
         }
 
@@ -406,7 +406,7 @@ namespace PublicApiGeneratorTests
         {
             public void Method(out GenericType<int> value)
             {
-                value = null;
+                value = null!;
             }
         }
 
@@ -414,7 +414,7 @@ namespace PublicApiGeneratorTests
         {
             public void Method(out System.Collections.Generic.IEnumerable<int> value)
             {
-                value = null;
+                value = null!;
             }
         }
 
@@ -422,7 +422,7 @@ namespace PublicApiGeneratorTests
         {
             public void Method(out GenericType<ComplexType> value)
             {
-                value = null;
+                value = null!;
             }
         }
 

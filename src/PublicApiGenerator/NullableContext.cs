@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ namespace PublicApiGenerator
     internal class NullableContext
     {
         [ThreadStatic]
-        private static Stack<ICustomAttributeProvider> _nullableContextProviders;
+        private static Stack<ICustomAttributeProvider>? _nullableContextProviders;
 
         private static Stack<ICustomAttributeProvider> NullableContextProviders
         {

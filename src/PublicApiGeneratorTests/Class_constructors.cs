@@ -225,7 +225,7 @@ namespace PublicApiGeneratorTests
 
         public class ClassWithConstructorWithDefaultValues
         {
-            public ClassWithConstructorWithDefaultValues(int intValue = 42, string stringValue = "hello world", Type typeValue = null)
+            public ClassWithConstructorWithDefaultValues(int intValue = 42, string stringValue = "hello world", Type typeValue = null!)
             {
             }
         }

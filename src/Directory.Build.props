@@ -8,6 +8,7 @@
     <PackageTags>semanticversioning versioning api</PackageTags>
     <PackageOutputPath>..\..\nugets</PackageOutputPath>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
