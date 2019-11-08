@@ -349,8 +349,6 @@ namespace PublicApiGeneratorTests
             public void Method() { }
         }
 
-#nullable enable
-
         // nullable example
         public class Foo
         {

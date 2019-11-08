@@ -440,8 +440,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-#nullable enable
-
     // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {

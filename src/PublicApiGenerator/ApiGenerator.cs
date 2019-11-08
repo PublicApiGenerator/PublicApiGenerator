@@ -20,8 +20,10 @@ namespace PublicApiGenerator
     {
         static readonly string[] defaultWhitelistedNamespacePrefixes = new string[0];
 
-        public static string GeneratePublicApi(Assembly assembly, Type[] includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[] whitelistedNamespacePrefixes = null, string[] excludeAttributes = null)
+        public static string GeneratePublicApi(Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
         {
+            if (assembly is null) throw new ArgumentNullException(nameof(assembly));
+
             var attributeFilter = new AttributeFilter(excludeAttributes);
 
             using (var assemblyResolver = new DefaultAssemblyResolver())

@@ -10,7 +10,7 @@ namespace PublicApiGenerator
     {
         private const int MAX_COUNT = 100;
 
-        internal static CodeTypeReference CreateCodeTypeReference(this TypeReference type, ICustomAttributeProvider attributeProvider = null, NullableMode mode = NullableMode.Default)
+        internal static CodeTypeReference CreateCodeTypeReference(this TypeReference type, ICustomAttributeProvider? attributeProvider = null, NullableMode mode = NullableMode.Default)
         {
             return CreateCodeTypeReferenceWithNullabilityMap(type, attributeProvider.GetNullabilityMap().GetEnumerator(), mode, false);
         }
@@ -30,7 +30,7 @@ namespace PublicApiGenerator
             }
         }
 
-        static CodeTypeReference[] CreateGenericArguments(TypeReference type, IEnumerator<bool?> nullabilityMap)
+        static CodeTypeReference[]? CreateGenericArguments(TypeReference type, IEnumerator<bool?> nullabilityMap)
         {
             // ReSharper disable once RedundantEnumerableCastCall
             var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
@@ -44,7 +44,7 @@ namespace PublicApiGenerator
             return genericArguments.ToArray();
         }
 
-        internal static IEnumerable<bool?> GetNullabilityMap(this ICustomAttributeProvider attributeProvider)
+        internal static IEnumerable<bool?> GetNullabilityMap(this ICustomAttributeProvider? attributeProvider)
         {
             var nullableAttr = attributeProvider?.CustomAttributes.SingleOrDefault(d => d.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute");
 
@@ -105,7 +105,7 @@ namespace PublicApiGenerator
             return false;
         }
 
-        static string GetTypeName(TypeReference type, IEnumerator<bool?> nullabilityMap, NullableMode mode, bool disableNested)
+        static string GetTypeName(TypeReference type, IEnumerator<bool?>? nullabilityMap, NullableMode mode, bool disableNested)
         {
             bool nullable = mode != NullableMode.Disable && (mode == NullableMode.Force || HasAnyReferenceType(type) && IsNullable());
 
@@ -129,7 +129,7 @@ namespace PublicApiGenerator
             }
         }
 
-        static string GetTypeNameCore(TypeReference type, IEnumerator<bool?> nullabilityMap, bool nullable, bool disableNested)
+        static string GetTypeNameCore(TypeReference type, IEnumerator<bool?>? nullabilityMap, bool nullable, bool disableNested)
         {
             if (type.IsGenericParameter)
             {

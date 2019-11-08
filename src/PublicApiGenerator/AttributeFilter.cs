@@ -8,7 +8,7 @@ namespace PublicApiGenerator
     {
         private readonly HashSet<string> _excludedAttributes;
 
-        public AttributeFilter(IEnumerable<string> excludedAttributes)
+        public AttributeFilter(IEnumerable<string>? excludedAttributes)
         {
             _excludedAttributes = excludedAttributes is null
                 ? AttributesNotRelevantForThePublicApi

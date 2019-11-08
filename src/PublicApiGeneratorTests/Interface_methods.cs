@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 
@@ -93,7 +93,7 @@ namespace PublicApiGeneratorTests
 
         public interface IMethodsWithDefaultParameters
         {
-            void Method1(int intValue = 42, string stringValue = "hello world", Type typeValue = null);
+            void Method1(int intValue = 42, string stringValue = "hello world", Type typeValue = null!);
         }
 
         public interface IMultipleMethods

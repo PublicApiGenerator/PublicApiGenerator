@@ -22,7 +22,7 @@ namespace PublicApiGenerator.Tool
         /// <param name="verbose"></param>
         /// <param name="leaveArtifacts"></param>
         /// <returns></returns>
-        static int Main(string targetFrameworks, string assembly = null, string projectPath = null, string package = null, string packageVersion = null, string generatorVersion = null, string workingDirectory = null, string outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
+        static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
         {
             if (string.IsNullOrEmpty(outputDirectory))
             {
@@ -47,7 +47,7 @@ namespace PublicApiGenerator.Tool
             {
                 AssertInputParameters(targetFrameworks, projectPath, package, packageVersion, workingArea, assembly);
 
-                var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion);
+                var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
 
                 SaveProjectTemplate(workingArea, template, verbose);
 
@@ -77,7 +77,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void GeneratePublicApi(string assembly, string package, string workingArea, string framework, string outputDirectory, bool verbose)
+        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, bool verbose)
         {
             var relativePath = Path.Combine(workingArea, "bin", "Release", framework);
             var name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
@@ -168,7 +168,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static string CreateProjectTemplate(string targetFrameworks, string project, string package, string packageVersion, string generatorVersion)
+        private static string CreateProjectTemplate(string targetFrameworks, string? project, string? package, string? packageVersion, string generatorVersion)
         {
             return ProjectTemplate
                 .Replace("{TargetFrameworks}", targetFrameworks)
@@ -182,8 +182,8 @@ namespace PublicApiGenerator.Tool
                 );
         }
 
-        private static void AssertInputParameters(string targetFrameworks, string project, string package,
-            string packageVersion, string workingArea, string assembly)
+        private static void AssertInputParameters(string targetFrameworks, string? project, string? package,
+            string? packageVersion, string workingArea, string? assembly)
         {
             if (string.IsNullOrEmpty(targetFrameworks))
             {
