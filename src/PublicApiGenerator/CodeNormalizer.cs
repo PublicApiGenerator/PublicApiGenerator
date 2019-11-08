@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace PublicApiGenerator
@@ -19,6 +20,8 @@ namespace PublicApiGenerator
         internal const string StaticMarker = "static_C91E2709_C00B-4CAB_8BBC_B2B11DC75E50 ";
         internal const string ReadonlyMarker = "readonly_79D3ED2A_0B60_4C3B_8432_941FE471A38B ";
         internal const string AttributeMarker = "_attribute_292C96C3_C42E_4C07_BEED_73F5DAA0A6DF_";
+        internal const string EventModifierMarkerTemplate = "_{0}_292C96C3C42E4C07BEED73F5DAA0A6DF_";
+        internal const string EventRemovePublicMarker = "removepublic";
 
         public static string NormalizeGeneratedCode(StringWriter writer)
         {
@@ -49,6 +52,7 @@ namespace PublicApiGenerator
                 RegexOptions.Singleline |
                 RegexOptions.IgnorePatternWhitespace); // SingleLine is required for multi line params arrays
 
+            gennedClass = Regex.Replace(gennedClass, @"(.*) _(.*)_292C96C3C42E4C07BEED73F5DAA0A6DF_(.*)", EventModifierMatcher, RegexOptions.IgnorePatternWhitespace);
             gennedClass = gennedClass.Replace("class " + StaticMarker, "static class ");
             gennedClass = gennedClass.Replace("struct " + ReadonlyMarker, "readonly struct ");
             gennedClass = gennedClass.Replace(ReadonlyMarker, string.Empty); // remove magic marker from readonly struct ctor
@@ -56,6 +60,26 @@ namespace PublicApiGenerator
 
             gennedClass = RemoveUnnecessaryWhiteSpace(gennedClass);
             return gennedClass;
+        }
+
+        static string EventModifierMatcher(Match group)
+        {
+            var modifier = @group.Groups[2].Value;
+
+            var replacementBuilder = new StringBuilder();
+            if (modifier.EndsWith(EventRemovePublicMarker))
+            {
+                replacementBuilder.Append(modifier == EventRemovePublicMarker
+                    ? "event "
+                    : $"{modifier.Replace(EventRemovePublicMarker, string.Empty)} event ");
+            }
+            else
+            {
+                replacementBuilder.Append($"public {modifier} event ");
+            }
+
+            return group.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
+                .Replace("public event ", replacementBuilder.ToString());
         }
 
         static string RemoveUnnecessaryWhiteSpace(string publicApi)

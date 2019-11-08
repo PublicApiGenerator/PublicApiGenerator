@@ -50,13 +50,28 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_override_modifier()
         {
-            AssertPublicApi<ClassWithOverriddenProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithOverridingProperty>(
+                @"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithOverriddenProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
+    public class ClassWithOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
     {
-        public ClassWithOverriddenProperty() { }
+        public ClassWithOverridingProperty() { }
         public override string Value { get; set; }
+    }
+}");
+        }
+
+        [Fact(Skip = "Not supported by CodeDOM")]
+        [Trait("TODO", "Sealed override members not supported by CodeDOM")]
+        public void Should_output_sealed_modifier()
+        {
+            AssertPublicApi<ClassWithSealedOverridingProperty>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithSealedOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
+    {
+        public ClassWithSealedOverridingProperty() { }
+        public sealed override string Value { get; set; }
     }
 }");
         }
@@ -113,9 +128,18 @@ namespace PublicApiGeneratorTests
             }
         }
 
-        public class ClassWithOverriddenProperty : ClassWithVirtualProperty
+        public class ClassWithOverridingProperty : ClassWithVirtualProperty
         {
             public override string Value
+            {
+                get { return string.Empty; }
+                set { }
+            }
+        }
+
+        public class ClassWithSealedOverridingProperty : ClassWithVirtualProperty
+        {
+            public sealed override string Value
             {
                 get { return string.Empty; }
                 set { }

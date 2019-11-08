@@ -16,7 +16,7 @@ namespace PublicApiGeneratorTests
     public interface IInterfaceWithEventWithAttribute
     {
         [PublicApiGeneratorTests.Examples.Simple]
-        public event System.EventHandler OnClicked;
+        event System.EventHandler OnClicked;
     }
 }");
         }
@@ -34,7 +34,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IInterfaceWithEventWithAttribute
     {
-        public event System.EventHandler OnClicked;
+        event System.EventHandler OnClicked;
     }
 }", options);
         }
