@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using PublicApiGenerator;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -9,24 +10,29 @@ namespace PublicApiGeneratorTests
     {
         private static readonly Regex StripEmptyLines = new Regex(@"^\s+$[\r\n]*", RegexOptions.Multiline | RegexOptions.Compiled);
 
-        protected void AssertPublicApi<T>(string expectedOutput, bool includeAssemblyAttributes = false, string[]? excludeAttributes = null)
+        protected void AssertPublicApi<T>(string expectedOutput, ApiGeneratorOptions? options = null)
         {
-            AssertPublicApi(typeof(T), expectedOutput, includeAssemblyAttributes, excludeAttributes);
+            AssertPublicApi(typeof(T), expectedOutput, options);
         }
 
-        protected void AssertPublicApi(Type type, string expectedOutput, bool includeAssemblyAttributes = false, string[]? excludeAttributes = null)
+        protected void AssertPublicApi(Type type, string expectedOutput, ApiGeneratorOptions? options = null)
         {
-            AssertPublicApi(new[] { type }, expectedOutput, includeAssemblyAttributes, excludeAttributes: excludeAttributes);
+            AssertPublicApi(new[] { type }, expectedOutput, options);
         }
 
-        protected void AssertPublicApi(Type[] types, string expectedOutput, bool includeAssemblyAttributes = false, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
+        protected void AssertPublicApi(Type[] types, string expectedOutput, ApiGeneratorOptions? options = null)
         {
-            AssertPublicApi(types[0].Assembly, types, expectedOutput, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
+            options ??= new DefaultApiGeneratorOptions();
+            options.IncludeTypes = types;
+
+            AssertPublicApi(types[0].Assembly, expectedOutput, options);
         }
 
-        private static void AssertPublicApi(Assembly assembly, Type[] types, string expectedOutput, bool includeAssemblyAttributes, string[]? whitelistedNamespacePrefixes, string[]? excludeAttributes)
+        private static void AssertPublicApi(Assembly assembly, string expectedOutput,  ApiGeneratorOptions? options = null)
         {
-            var actualOutput = PublicApiGenerator.ApiGenerator.GeneratePublicApi(assembly, types, includeAssemblyAttributes, whitelistedNamespacePrefixes, excludeAttributes);
+            options ??= new DefaultApiGeneratorOptions();
+
+            var actualOutput = ApiGenerator.GeneratePublicApi(assembly, options);
             actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
             Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
                 ignoreWhiteSpaceDifferences: true);

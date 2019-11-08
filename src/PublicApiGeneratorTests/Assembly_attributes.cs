@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 
@@ -36,7 +37,7 @@ namespace PublicApiGeneratorTests.Examples
     }
 }";
 
-            AssertPublicApi<NotImportant>(api, true);
+            AssertPublicApi<NotImportant>(api, new ApiGeneratorOptions { IncludeAssemblyAttributes = true });
         }
     }
 
