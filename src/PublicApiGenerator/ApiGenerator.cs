@@ -18,6 +18,12 @@ namespace PublicApiGenerator
 {
     public static class ApiGenerator
     {
+        /// <summary>
+        /// Generates a public API from the specified assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly to generate an API from.</param>
+        /// <param name="options">The options to control the API output.</param>
+        /// <returns>The API output.</returns>
         public static string GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = null)
         {
             options ??= new ApiGeneratorOptions();
@@ -47,6 +53,25 @@ namespace PublicApiGenerator
             }
         }
 
+        /// <summary>
+        /// Generates a public API from the specified types.
+        /// </summary>
+        /// <param name="types">The types to generate an API from.</param>
+        /// <param name="options">The options to control the API output.</param>
+        /// <remarks>This method assumes all the types belong to the same assembly. The assembly of the first type <code>types[0].Assembly</code> is used.</remarks>
+        /// <returns>The API output.</returns>
+        public static string GeneratePublicApi(this Type[] types, ApiGeneratorOptions? options = null)
+        {
+            (options ??= new ApiGeneratorOptions()).IncludeTypes = types;
+            return types[0].Assembly.GeneratePublicApi(options);
+        }
+
+        /// <summary>
+        /// Generates a public API from the specified type.
+        /// </summary>
+        /// <param name="type">The type to generate an API from.</param>
+        /// <param name="options">The options to control the API output.</param>
+        /// <returns>The API output.</returns>
         public static string GeneratePublicApi(this Type type, ApiGeneratorOptions? options = null)
         {
             (options ??= new ApiGeneratorOptions()).IncludeTypes = new Type[] { type };

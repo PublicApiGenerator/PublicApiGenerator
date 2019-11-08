@@ -32,7 +32,7 @@ namespace PublicApiGeneratorTests
         {
             options ??= new DefaultApiGeneratorOptions();
 
-            var actualOutput = ApiGenerator.GeneratePublicApi(assembly, options);
+            var actualOutput = assembly.GeneratePublicApi(options);
             actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
             Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
                 ignoreWhiteSpaceDifferences: true);
