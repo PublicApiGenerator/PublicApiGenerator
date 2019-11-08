@@ -21,6 +21,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_abstract_new_modifier()
+        {
+            AssertPublicApi<ClassWithAbstractNewEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractNewEvent : PublicApiGeneratorTests.Examples.ClassWithVirtualEvent
+    {
+        protected ClassWithAbstractNewEvent() { }
+        public new abstract event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_static_modifier()
         {
             AssertPublicApi<ClassWithStaticEvent>(
@@ -89,6 +103,20 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_new_modifier_even_under_evil_circumstances()
+        {
+            AssertPublicApi<ClassBeingReallyEvilWithInheritingEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassBeingReallyEvilWithInheritingEvent : PublicApiGeneratorTests.Examples.ClassInheritingVirtualGenericEvent
+    {
+        public ClassBeingReallyEvilWithInheritingEvent() { }
+        public new abstract event System.EventHandler Event;
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -99,6 +127,11 @@ namespace PublicApiGeneratorTests
         public abstract class ClassWithAbstractEvent
         {
             public abstract event EventHandler Event;
+        }
+
+        public abstract class ClassWithAbstractNewEvent : ClassWithVirtualEvent
+        {
+            public new abstract event EventHandler Event;
         }
 
         public class ClassWithStaticEvent
@@ -124,6 +157,23 @@ namespace PublicApiGeneratorTests
         public class ClassWithEventHiding : ClassWithVirtualEvent
         {
             public new event EventHandler Event;
+        }
+
+        public class ClassWithVirtualGenericEvent
+        {
+            public virtual event EventHandler<EventArgs> Event;
+        }
+
+        public class ClassInheritingVirtualGenericEvent : ClassWithVirtualGenericEvent
+        {
+        }
+
+        public abstract class ClassBeingReallyEvilWithInheritingEvent : ClassInheritingVirtualGenericEvent
+        {
+            public ClassBeingReallyEvilWithInheritingEvent()
+            {
+            }
+            public new abstract event EventHandler Event;
         }
     }
     // ReSharper restore ValueParameterNotUsed
