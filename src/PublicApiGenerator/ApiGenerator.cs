@@ -62,6 +62,10 @@ namespace PublicApiGenerator
         /// <returns>The API output.</returns>
         public static string GeneratePublicApi(this Type[] types, ApiGeneratorOptions? options = null)
         {
+            if (types.Length == 0)
+            {
+                return string.Empty;
+            }
             (options ??= new ApiGeneratorOptions()).IncludeTypes = types;
             return types[0].Assembly.GeneratePublicApi(options);
         }
