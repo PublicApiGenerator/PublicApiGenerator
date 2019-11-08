@@ -684,7 +684,6 @@ namespace PublicApiGenerator
             if (!(ShouldIncludeMember(addAccessorAttributes) || ShouldIncludeMember(removeAccessorAttributes)))
                 return;
 
-
             var @event = new CodeMemberEvent
             {
                 Name = EventNameBuilder.AugmentEventNameWithEventModifierMarkerTemplate(eventDefinition, eventDefinition.Name, addAccessorAttributes, removeAccessorAttributes),
