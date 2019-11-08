@@ -36,31 +36,21 @@ namespace PublicApiGenerator
                 baseType = typeDef?.BaseType;
             }
 
-            var addScopeAttributes = addAccessorAttributes & MemberAttributes.ScopeMask;
-            switch (addScopeAttributes)
-            {
-                case MemberAttributes.Static when addScopeAttributes == MemberAttributes.Static && !isNew.HasValue:
-                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "static")+ name;
-                case MemberAttributes.Static when addScopeAttributes == MemberAttributes.Static && isNew.HasValue && isNew.Value:
-                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "static new")+ name;
-                case MemberAttributes.Override when addScopeAttributes == MemberAttributes.Override:
-                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "override")+ name;
-                case MemberAttributes.Final | MemberAttributes.Override when addScopeAttributes == (MemberAttributes.Final | MemberAttributes.Override):
-                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "sealed override")+ name;
-                case MemberAttributes.Final when addScopeAttributes == MemberAttributes.Final && isNew.HasValue && isNew.Value:
-                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "new")+ name;
-                case MemberAttributes.Abstract when addScopeAttributes == MemberAttributes.Abstract && !isNew.HasValue:
-                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract")+ name;
-                case MemberAttributes.Abstract when addScopeAttributes == MemberAttributes.Abstract && isNew.HasValue && isNew.Value:
-                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "new abstract")+ name;
-            }
-
-            if (eventDefinition.AddMethod.IsVirtual && !eventDefinition.AddMethod.IsAbstract)
-            {
-                return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "virtual")+ name;
-            }
-
-            return name;
+            return (addAccessorAttributes & MemberAttributes.ScopeMask, isNew, eventDefinition.AddMethod.IsVirtual,
+                    eventDefinition.AddMethod.IsAbstract) switch
+                {
+                    (MemberAttributes.Static, null, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "static") + name),
+                    (MemberAttributes.Static, true, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "static new") + name),
+                    (MemberAttributes.Override, _, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "override") + name),
+                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate,"sealed override") + name),
+                    (MemberAttributes.Final, true, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "new") + name),
+                    (MemberAttributes.Abstract, null, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract") + name),
+                    (MemberAttributes.Abstract, true, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "new abstract") + name),
+                    (MemberAttributes.Const, _, _, _) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract override") + name),
+                    (_, null, true, false) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "virtual") + name),
+                    (_, true, true, false) => (string.Format(CodeNormalizer.EventModifierMarkerTemplate, "new virtual") + name),
+                    _ => name
+                };
         }
     }
 }
