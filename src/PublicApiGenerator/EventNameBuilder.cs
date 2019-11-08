@@ -39,8 +39,10 @@ namespace PublicApiGenerator
             var addScopeAttributes = addAccessorAttributes & MemberAttributes.ScopeMask;
             switch (addScopeAttributes)
             {
-                case MemberAttributes.Static when addScopeAttributes == MemberAttributes.Static:
+                case MemberAttributes.Static when addScopeAttributes == MemberAttributes.Static && !isNew.HasValue:
                     return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "static")+ name;
+                case MemberAttributes.Static when addScopeAttributes == MemberAttributes.Static && isNew.HasValue && isNew.Value:
+                    return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "static new")+ name;
                 case MemberAttributes.Override when addScopeAttributes == MemberAttributes.Override:
                     return string.Format(CodeNormalizer.EventModifierMarkerTemplate, "override")+ name;
                 case MemberAttributes.Final | MemberAttributes.Override when addScopeAttributes == (MemberAttributes.Final | MemberAttributes.Override):

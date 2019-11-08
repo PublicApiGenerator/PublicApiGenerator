@@ -49,6 +49,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_static_new_modifier()
+        {
+            AssertPublicApi<ClassWithStaticNewEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithStaticNewEvent : PublicApiGeneratorTests.Examples.ClassWithStaticEvent
+    {
+        public ClassWithStaticNewEvent() { }
+        public static new event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_virtual_modifier()
         {
             AssertPublicApi<ClassWithVirtualEvent>(
@@ -137,6 +151,11 @@ namespace PublicApiGeneratorTests
         public class ClassWithStaticEvent
         {
             public static event EventHandler Event;
+        }
+
+        public class ClassWithStaticNewEvent : ClassWithStaticEvent
+        {
+            public new static event EventHandler Event;
         }
 
         public class ClassWithVirtualEvent
