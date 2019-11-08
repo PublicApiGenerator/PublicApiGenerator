@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace PublicApiGenerator
@@ -64,8 +65,21 @@ namespace PublicApiGenerator
         static string EventModifierMatcher(Match group)
         {
             var modifier = @group.Groups[2].Value;
-            var replacement = modifier == EventRemovePublicMarker ? $"event " : $"public {modifier} event ";
-            return group.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty).Replace("public event ", replacement);
+
+            var replacementBuilder = new StringBuilder();
+            if (modifier.EndsWith(EventRemovePublicMarker))
+            {
+                replacementBuilder.Append(modifier == EventRemovePublicMarker
+                    ? "event "
+                    : $"{modifier.Replace(EventRemovePublicMarker, string.Empty)} event ");
+            }
+            else
+            {
+                replacementBuilder.Append($"public {modifier} event ");
+            }
+
+            return group.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
+                .Replace("public event ", replacementBuilder.ToString());
         }
 
         static string RemoveUnnecessaryWhiteSpace(string publicApi)

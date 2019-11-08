@@ -15,7 +15,7 @@ namespace PublicApiGenerator
             {
                 if (addVTableAttributes == MemberAttributes.New && removeVTableAttributes == MemberAttributes.New)
                 {
-                    return $"{string.Format(CodeNormalizer.EventModifierMarkerTemplate, "new")}{name}";
+                    return $"{string.Format(CodeNormalizer.EventModifierMarkerTemplate, $"new{CodeNormalizer.EventRemovePublicMarker}")}{name}";
                 }
 
                 return $"{string.Format(CodeNormalizer.EventModifierMarkerTemplate, CodeNormalizer.EventRemovePublicMarker)}{name}";;
