@@ -684,9 +684,10 @@ namespace PublicApiGenerator
             if (!(ShouldIncludeMember(addAccessorAttributes) || ShouldIncludeMember(removeAccessorAttributes)))
                 return;
 
+
             var @event = new CodeMemberEvent
             {
-                Name = eventDefinition.Name,
+                Name = EventNameBuilder.AugmentEventNameWithEventModifierMarkerTemplate(eventDefinition, eventDefinition.Name, addAccessorAttributes, removeAccessorAttributes),
                 Attributes = CecilEx.CombineAccessorAttributes(addAccessorAttributes, removeAccessorAttributes),
                 CustomAttributes = CreateCustomAttributes(eventDefinition, attributeFilter),
                 Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
