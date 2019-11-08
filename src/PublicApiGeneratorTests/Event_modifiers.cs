@@ -77,6 +77,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_new_virtual_modifier()
+        {
+            AssertPublicApi<ClassWithNewVirtualEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithNewVirtualEvent : PublicApiGeneratorTests.Examples.ClassWithVirtualEvent
+    {
+        public ClassWithNewVirtualEvent() { }
+        public new virtual event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_override_modifier()
         {
             AssertPublicApi<ClassWithOverridingEvent>(
@@ -86,6 +100,20 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithOverridingEvent() { }
         public override event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_abstract_override_modifier()
+        {
+            AssertPublicApi<ClassWithAbstractOverrideEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractOverrideEvent : PublicApiGeneratorTests.Examples.ClassWithVirtualEvent
+    {
+        protected ClassWithAbstractOverrideEvent() { }
+        public abstract override event System.EventHandler Event;
     }
 }");
         }
@@ -148,6 +176,11 @@ namespace PublicApiGeneratorTests
             public new abstract event EventHandler Event;
         }
 
+        public abstract class ClassWithAbstractOverrideEvent : ClassWithVirtualEvent
+        {
+            public abstract override event EventHandler Event;
+        }
+
         public class ClassWithStaticEvent
         {
             public static event EventHandler Event;
@@ -161,6 +194,11 @@ namespace PublicApiGeneratorTests
         public class ClassWithVirtualEvent
         {
             public virtual event EventHandler Event;
+        }
+
+        public class ClassWithNewVirtualEvent : ClassWithVirtualEvent
+        {
+            public new virtual event EventHandler Event;
         }
 
         public class ClassWithOverridingEvent : ClassWithVirtualEvent
