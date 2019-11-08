@@ -29,7 +29,6 @@ namespace PublicApiGeneratorTests
                 ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" }
             };
 
-
             AssertPublicApi<IInterfaceWithEventWithAttribute>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
