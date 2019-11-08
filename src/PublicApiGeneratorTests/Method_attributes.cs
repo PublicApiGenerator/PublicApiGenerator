@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 
@@ -159,6 +160,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" }
+            };
+
             AssertPublicApi<MethodWithAttributeWithMultipleNamedParameters>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -167,7 +173,7 @@ namespace PublicApiGeneratorTests
         public MethodWithAttributeWithMultipleNamedParameters() { }
         public void Method() { }
     }
-}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" });
+}", options);
         }
     }
 

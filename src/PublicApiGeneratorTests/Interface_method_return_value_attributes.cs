@@ -1,4 +1,5 @@
-﻿using PublicApiGeneratorTests.Examples;
+﻿using PublicApiGenerator;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -129,6 +130,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" }
+            };
+
             AssertPublicApi<IMethodReturnValueWithAttributeWithMultipleNamedParameters>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -136,7 +142,7 @@ namespace PublicApiGeneratorTests
     {
         void Method();
     }
-}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" });
+}", options);
         }
     }
 

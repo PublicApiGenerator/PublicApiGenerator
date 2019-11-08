@@ -18,13 +18,13 @@ namespace PublicApiGenerator
 {
     public static class ApiGenerator
     {
-        static readonly string[] defaultWhitelistedNamespacePrefixes = new string[0];
-
-        public static string GeneratePublicApi(Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
+        public static string GeneratePublicApi(Assembly assembly, ApiGeneratorOptions? options = null)
         {
             if (assembly is null) throw new ArgumentNullException(nameof(assembly));
 
-            var attributeFilter = new AttributeFilter(excludeAttributes);
+            options ??= new ApiGeneratorOptions();
+
+            var attributeFilter = new AttributeFilter(options.ExcludeAttributes);
 
             using (var assemblyResolver = new DefaultAssemblyResolver())
             {
@@ -41,12 +41,28 @@ namespace PublicApiGenerator
                 {
                     return CreatePublicApiForAssembly(
                         asm,
-                        typeDefinition => includeTypes == null || includeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName),
-                        shouldIncludeAssemblyAttributes,
-                        whitelistedNamespacePrefixes ?? defaultWhitelistedNamespacePrefixes,
+                        typeDefinition => options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName),
+                        options.IncludeAssemblyAttributes,
+                        options.WhitelistedNamespacePrefixes,
                         attributeFilter);
                 }
             }
+        }
+
+        [Obsolete("Use `GeneratePublicApi(Assembly assembly, ApiGeneratorOptions? options = null)` instead. Will be removed in the next major.")]
+        public static string GeneratePublicApi(Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
+        {
+            var options = new ApiGeneratorOptions
+            {
+                IncludeTypes = includeTypes,
+                IncludeAssemblyAttributes = shouldIncludeAssemblyAttributes,
+                ExcludeAttributes = excludeAttributes,
+            };
+            if (whitelistedNamespacePrefixes != null)
+            {
+                options.WhitelistedNamespacePrefixes = whitelistedNamespacePrefixes;
+            }
+            return GeneratePublicApi(assembly, options);
         }
 
         // TODO: Assembly references?

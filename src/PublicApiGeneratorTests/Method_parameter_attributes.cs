@@ -1,4 +1,5 @@
-﻿using PublicApiGeneratorTests.Examples;
+﻿using PublicApiGenerator;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -109,6 +110,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute" }
+            };
+
             AssertPublicApi<MethodParameterWithAttributeWithPositionalParameters>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -119,7 +125,7 @@ namespace PublicApiGeneratorTests
         public void Method2(int value) { }
         public void Method3([PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")] int value) { }
     }
-}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute" });
+}", options);
         }
     }
 

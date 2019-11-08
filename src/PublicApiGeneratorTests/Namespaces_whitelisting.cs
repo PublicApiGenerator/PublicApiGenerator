@@ -1,5 +1,6 @@
 ﻿using Microsoft.Whitelisted;
 using System.Whitelisted;
+using PublicApiGenerator;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -9,6 +10,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_allow_microsoft_namespace_whitelisting()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                WhitelistedNamespacePrefixes = new[] {"Microsoft.Whitelisted"}
+            };
+
             AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
                 @"namespace Microsoft.Whitelisted
 {
@@ -22,7 +28,7 @@ namespace PublicApiGeneratorTests
         public Simple2() { }
         public void Simple() { }
     }
-}", whitelistedNamespacePrefixes: new[] { "Microsoft.Whitelisted" });
+}", options);
         }
 
         [Fact]
@@ -39,6 +45,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_allow_system_namespace_whitelisting()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                WhitelistedNamespacePrefixes = new[] { "System.Whitelisted" }
+            };
+
             AssertPublicApi(new[] { typeof(System1), typeof(System2)},
                 @"namespace System.Whitelisted
 {
@@ -52,7 +63,7 @@ namespace PublicApiGeneratorTests
         public System2() { }
         public void System() { }
     }
-}", whitelistedNamespacePrefixes: new[] { "System.Whitelisted" });
+}", options);
         }
 
         [Fact]

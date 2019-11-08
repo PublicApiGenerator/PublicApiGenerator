@@ -1,4 +1,5 @@
 ﻿using System;
+using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 
@@ -23,6 +24,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" }
+            };
+
             AssertPublicApi<IInterfaceWithEventWithAttribute>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -30,7 +36,7 @@ namespace PublicApiGeneratorTests
     {
         public event System.EventHandler OnClicked;
     }
-}", excludeAttributes: new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+}", options);
         }
     }
 

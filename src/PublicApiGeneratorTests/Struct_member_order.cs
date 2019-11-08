@@ -1,4 +1,5 @@
 ﻿using System;
+using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 
@@ -9,6 +10,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_in_known_order_and_alphabetically()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" }
+            };
+
             // Fields, properties, events, methods, nested type (inc. delegates)
             AssertPublicApi<StructMemberOrder>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -36,12 +42,17 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", excludeAttributes: new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" });
+}", options);
         }
 
         [Fact]
         public void Should_output_in_known_order_with_nested_class()
         {
+            var options = new DefaultApiGeneratorOptions
+            {
+                ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" }
+            };
+
             // Fields, properties, events, methods
             AssertPublicApi<StructMemberOrderAndNestedClass>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -99,7 +110,7 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", excludeAttributes: new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" });
+}", options);
         }
     }
     // ReSharper disable EventNeverInvoked
