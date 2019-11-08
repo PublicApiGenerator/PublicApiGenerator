@@ -6,8 +6,7 @@ namespace PublicApiGeneratorTests
 {
     public class Event_modifiers : ApiGeneratorTestsBase
     {
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Scope modifiers on events not supported by CodeDOM")]
+        [Fact]
         public void Should_output_abstract_modifier()
         {
             AssertPublicApi<ClassWithAbstractEvent>(
@@ -21,8 +20,7 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Scope modifiers on events not supported by CodeDOM")]
+        [Fact]
         public void Should_output_static_modifier()
         {
             AssertPublicApi<ClassWithStaticEvent>(
@@ -36,8 +34,7 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Scope modifiers on events not supported by CodeDOM")]
+        [Fact]
         public void Should_output_virtual_modifier()
         {
             AssertPublicApi<ClassWithVirtualEvent>(
@@ -51,8 +48,7 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Scope modifiers on events not supported by CodeDOM")]
+        [Fact]
         public void Should_output_override_modifier()
         {
             AssertPublicApi<ClassWithOverridingEvent>(
@@ -66,8 +62,7 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Scope modifiers on events not supported by CodeDOM")]
+        [Fact]
         public void Should_output_sealed_modifier()
         {
             AssertPublicApi<ClassWithSealedOverridingEvent>(
@@ -81,14 +76,13 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Scope modifiers on events not supported by CodeDOM")]
+        [Fact]
         public void Should_output_new_modifier()
         {
             AssertPublicApi<ClassWithEventHiding>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class ClassWithEventHiding : PublicApiGeneratorTests.Examples.ClassWithEvent
+    public class ClassWithEventHiding : PublicApiGeneratorTests.Examples.ClassWithVirtualEvent
     {
         public ClassWithEventHiding() { }
         public new event System.EventHandler Event;

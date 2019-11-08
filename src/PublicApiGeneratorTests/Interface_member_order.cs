@@ -19,10 +19,10 @@ namespace PublicApiGeneratorTests
         int Property1 { get; set; }
         int Property2 { get; set; }
         int iProperty2 { get; set; }
-        public event System.EventHandler Event1;
-        public event System.EventHandler Event2;
-        public event System.EventHandler IEvent1;
-        public event System.EventHandler iEvent2;
+        event System.EventHandler Event1;
+        event System.EventHandler Event2;
+        event System.EventHandler IEvent1;
+        event System.EventHandler iEvent2;
         void IMethod1();
         void Method1();
         void Method2();

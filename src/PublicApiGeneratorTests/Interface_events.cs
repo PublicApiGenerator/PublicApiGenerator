@@ -9,15 +9,25 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_event()
         {
-            // TODO: CodeDOM outputs "public" in event declarations in interfaces
-            // This looks like a bug? That's what the implementation does, but it's
-            // not valid C#...
             AssertPublicApi<ISimpleEvent>(
 @"namespace PublicApiGeneratorTests.Examples
 {
     public interface ISimpleEvent
     {
-        public event System.EventHandler Event;
+        event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_event_redeclaration()
+        {
+            AssertPublicApi<IInheritedEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public interface IInheritedEvent : PublicApiGeneratorTests.Examples.ISimpleEvent
+    {
+        new event System.EventHandler Event;
     }
 }");
         }
@@ -30,7 +40,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IGenericEventHandler
     {
-        public event System.EventHandler<System.EventArgs> Event;
+        event System.EventHandler<System.EventArgs> Event;
     }
 }");
         }
@@ -47,6 +57,11 @@ namespace PublicApiGeneratorTests
         public interface IGenericEventHandler
         {
             event EventHandler<EventArgs> Event;
+        }
+
+        public interface IInheritedEvent : ISimpleEvent
+        {
+            new event EventHandler Event;
         }
     }
     // ReSharper restore EventNeverSubscribedTo.Global
