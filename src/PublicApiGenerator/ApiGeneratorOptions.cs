@@ -25,7 +25,7 @@ namespace PublicApiGenerator
         /// <code>
         /// var options = new DefaultApiGeneratorOptions
         /// {
-        ///    WhitelistedNamespacePrefixes = new[] {"Microsoft.Whitelisted" }
+        ///    WhitelistedNamespacePrefixes = new[] { "Microsoft.Whitelisted" }
         /// };
         /// </code>
         /// </example>

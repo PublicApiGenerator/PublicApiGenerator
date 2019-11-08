@@ -18,10 +18,8 @@ namespace PublicApiGenerator
 {
     public static class ApiGenerator
     {
-        public static string GeneratePublicApi(Assembly assembly, ApiGeneratorOptions? options = null)
+        public static string GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = null)
         {
-            if (assembly is null) throw new ArgumentNullException(nameof(assembly));
-
             options ??= new ApiGeneratorOptions();
 
             var attributeFilter = new AttributeFilter(options.ExcludeAttributes);
@@ -49,7 +47,13 @@ namespace PublicApiGenerator
             }
         }
 
-        [Obsolete("Use `GeneratePublicApi(Assembly assembly, ApiGeneratorOptions? options = null)` instead. Will be removed in the next major.")]
+        public static string GeneratePublicApi(this Type type, ApiGeneratorOptions? options = null)
+        {
+            (options ??= new ApiGeneratorOptions()).IncludeTypes = new Type[] { type };
+            return type.Assembly.GeneratePublicApi(options);
+        }
+
+        [Obsolete("Use `GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = null)` instead. Will be removed in the next major.")]
         public static string GeneratePublicApi(Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
         {
             var options = new ApiGeneratorOptions
