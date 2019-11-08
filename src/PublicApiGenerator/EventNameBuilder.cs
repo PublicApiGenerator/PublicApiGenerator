@@ -7,9 +7,10 @@ namespace PublicApiGenerator
 {
     public static class EventNameBuilder
     {
-        public static string AugmentEventNameWithEventModifierMarkerTemplate(EventDefinition eventDefinition, string name,
+        public static string AugmentEventNameWithEventModifierMarkerTemplate(EventDefinition eventDefinition,
             MemberAttributes addAccessorAttributes, MemberAttributes removeAccessorAttributes)
         {
+            string name = eventDefinition.Name;
             if (addAccessorAttributes != removeAccessorAttributes)
             {
                 return name;

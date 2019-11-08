@@ -686,7 +686,7 @@ namespace PublicApiGenerator
 
             var @event = new CodeMemberEvent
             {
-                Name = EventNameBuilder.AugmentEventNameWithEventModifierMarkerTemplate(eventDefinition, eventDefinition.Name, addAccessorAttributes, removeAccessorAttributes),
+                Name = EventNameBuilder.AugmentEventNameWithEventModifierMarkerTemplate(eventDefinition, addAccessorAttributes, removeAccessorAttributes),
                 Attributes = CecilEx.CombineAccessorAttributes(addAccessorAttributes, removeAccessorAttributes),
                 CustomAttributes = CreateCustomAttributes(eventDefinition, attributeFilter),
                 Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
