@@ -34,6 +34,21 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_named_indexer_with_getset()
+        {
+            AssertPublicApi<ClassWithNamedIndexerGetSet>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithNamedIndexerGetSet
+    {
+        public ClassWithNamedIndexerGetSet() { }
+        [System.Runtime.CompilerServices.IndexerName(""Bar"")]
+        public int this[int x] { get; set; }
+    }
+}");
+        }
     }
 
 
@@ -51,6 +66,18 @@ namespace PublicApiGeneratorTests
         {
             [IndexerName("Bar")]
             public int this[int x] => x;
+        }
+
+        public class ClassWithNamedIndexerGetSet
+        {
+            private int y;
+
+            [IndexerName("Bar")]
+            public int this[int x]
+            {
+                get => y;
+                set => y = value;
+            }
         }
     }
     // ReSharper restore ValueParameterNotUsed
