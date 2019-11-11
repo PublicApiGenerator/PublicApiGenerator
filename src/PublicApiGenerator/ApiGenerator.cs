@@ -180,6 +180,7 @@ namespace PublicApiGenerator
         }
 
         static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration,
+            IMemberDefinition typeDeclarationInfo,
             IMemberDefinition memberInfo,
             AttributeFilter attributeFilter)
         {
@@ -194,7 +195,7 @@ namespace PublicApiGenerator
                 }
                 else if (memberInfo is PropertyDefinition propertyDefinition)
                 {
-                    AddPropertyToTypeDeclaration(typeDeclaration, propertyDefinition, attributeFilter);
+                    AddPropertyToTypeDeclaration(typeDeclaration, typeDeclarationInfo, propertyDefinition, attributeFilter);
                 }
                 else if (memberInfo is EventDefinition eventDefinition)
                 {
@@ -293,14 +294,14 @@ namespace PublicApiGenerator
                 declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(@interface));
 
             foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name, StringComparer.Ordinal))
-                AddMemberToTypeDeclaration(declaration, memberInfo, attributeFilter);
+                AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
 
             // Fields should be in defined order for an enum
             var fields = !publicType.IsEnum
                 ? publicType.Fields.OrderBy(f => f.Name, StringComparer.Ordinal)
                 : (IEnumerable<FieldDefinition>)publicType.Fields;
             foreach (var field in fields)
-                AddMemberToTypeDeclaration(declaration, field, attributeFilter);
+                AddMemberToTypeDeclaration(declaration, publicType, field, attributeFilter);
 
             foreach (var nestedType in publicType.NestedTypes.Where(ShouldIncludeType).OrderBy(t => t.FullName, StringComparer.Ordinal))
             {
@@ -445,10 +446,7 @@ namespace PublicApiGenerator
         static CodeAttributeDeclaration GenerateCodeAttributeDeclaration(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
         {
             var attribute = new CodeAttributeDeclaration(codeTypeModifier(customAttribute.AttributeType.CreateCodeTypeReference(mode: NullableMode.Disable)));
-            if (attribute.Name != "System.ParamArrayAttribute")
-            {
-                attribute.Name = $"{attribute.Name}{CodeNormalizer.AttributeMarker}";
-            }
+            attribute.Name = AttributeNameBuilder.Get(attribute.Name);
             foreach (var arg in customAttribute.ConstructorArguments)
             {
                 attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
@@ -658,7 +656,7 @@ namespace PublicApiGenerator
             return parameter.ParameterType.IsValueType ? "default" : "null";
         }
 
-        static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, PropertyDefinition member, AttributeFilter attributeFilter)
+        static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition typeDeclarationInfo, PropertyDefinition member, AttributeFilter attributeFilter)
         {
             var getterAttributes = member.GetMethod?.GetMethodAttributes() ?? 0;
             var setterAttributes = member.SetMethod?.GetMethodAttributes() ?? 0;
@@ -675,15 +673,31 @@ namespace PublicApiGenerator
                 ? new CodeTypeReference(member.PropertyType.Name)
                 : member.PropertyType.CreateCodeTypeReference(member);
 
+            var propertyName = member.Name;
             var property = new CodeMemberProperty
             {
-                Name = member.Name,
+                Name = propertyName,
                 Type = propertyType,
                 Attributes = propertyAttributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 HasGet = hasGet,
                 HasSet = hasSet
             };
+
+            // DefaultMemberAttribute on type gets propagated to IndexerNameAttribute
+            var defaultMemberAttributeValue = typeDeclarationInfo.CustomAttributes.SingleOrDefault(x =>
+                    x.AttributeType.FullName == "System.Reflection.DefaultMemberAttribute")
+                ?.ConstructorArguments.Select(x => x.Value).OfType<string>().SingleOrDefault();
+            if (!string.IsNullOrEmpty(defaultMemberAttributeValue) && propertyName != "Item")
+            {
+                property.Name = "Item";
+                property.CustomAttributes.Add(
+                    new CodeAttributeDeclaration(
+                        AttributeNameBuilder.Get("System.Runtime.CompilerServices.IndexerNameAttribute"))
+                    {
+                        Arguments = {new CodeAttributeArgument(new CodePrimitiveExpression(defaultMemberAttributeValue))}
+                    });
+            }
 
             // Here's a nice hack, because hey, guess what, the CodeDOM doesn't support
             // attributes on getters or setters
