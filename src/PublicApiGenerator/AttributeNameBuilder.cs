@@ -4,7 +4,8 @@ namespace PublicApiGenerator
     {
         public static string Get(string name)
         {
-            return name != "System.ParamArrayAttribute" ? $"{name}{CodeNormalizer.AttributeMarker}" : name;
+            // ParamArrayAttribute cannot be augment with the attribute marker, it would trip up CodeDom
+            return name == "System.ParamArrayAttribute" ? name : $"{name}{CodeNormalizer.AttributeMarker}";
         }
     }
 }
