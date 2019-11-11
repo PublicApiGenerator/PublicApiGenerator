@@ -685,16 +685,18 @@ namespace PublicApiGenerator
             };
 
             // DefaultMemberAttribute on type gets propagated to IndexerNameAttribute
-            var defaultMemberAttribute = typeDeclarationInfo.CustomAttributes.SingleOrDefault(x =>
-                x.AttributeType.FullName == "System.Reflection.DefaultMemberAttribute");
-            var defaultMemberAttributeArgument = defaultMemberAttribute?.ConstructorArguments.SingleOrDefault();
-            var value = defaultMemberAttributeArgument?.Value as string;
-            if (!string.IsNullOrEmpty(value) && propertyName != "Item")
+            var defaultMemberAttributeValue = typeDeclarationInfo.CustomAttributes.SingleOrDefault(x =>
+                    x.AttributeType.FullName == "System.Reflection.DefaultMemberAttribute")
+                ?.ConstructorArguments.Select(x => x.Value).OfType<string>().SingleOrDefault();
+            if (!string.IsNullOrEmpty(defaultMemberAttributeValue) && propertyName != "Item")
             {
                 property.Name = "Item";
-                var codeAttributeDeclaration = new CodeAttributeDeclaration(AttributeNameBuilder.Get("System.Runtime.CompilerServices.IndexerNameAttribute"));
-                codeAttributeDeclaration.Arguments.Add(new CodeAttributeArgument(new CodePrimitiveExpression(value)));
-                property.CustomAttributes.Add(codeAttributeDeclaration);
+                property.CustomAttributes.Add(
+                    new CodeAttributeDeclaration(
+                        AttributeNameBuilder.Get("System.Runtime.CompilerServices.IndexerNameAttribute"))
+                    {
+                        Arguments = {new CodeAttributeArgument(new CodePrimitiveExpression(defaultMemberAttributeValue))}
+                    });
             }
 
             // Here's a nice hack, because hey, guess what, the CodeDOM doesn't support
