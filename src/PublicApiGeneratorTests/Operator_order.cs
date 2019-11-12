@@ -14,14 +14,14 @@ namespace PublicApiGeneratorTests
     public class ClassWithUnaryOperators
     {
         public ClassWithUnaryOperators() { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators !(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators +(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators ++(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators -(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
         public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators --(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
         public static bool op_False(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators ++(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators !(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators ~(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
         public static bool op_True(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators -(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators +(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators ~(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
     }
 }");
         }
@@ -35,16 +35,16 @@ namespace PublicApiGeneratorTests
     public class ClassWithBinaryOperators
     {
         public ClassWithBinaryOperators() { }
-        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators +(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators &(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators |(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators /(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators ^(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators <<(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, int second) { }
         public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators %(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators &(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
         public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators *(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
-        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators >>(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, int second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators +(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
         public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators -(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators /(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators <<(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, int second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators >>(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, int second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators ^(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators |(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
     }
 }");
         }
@@ -58,12 +58,12 @@ namespace PublicApiGeneratorTests
     public class ClassWithComparisonOperators
     {
         public ClassWithComparisonOperators() { }
-        public static bool ==(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
-        public static bool >(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
-        public static bool >=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
         public static bool !=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
         public static bool <(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
         public static bool <=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool ==(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool >(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
+        public static bool >=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
     }
 }");
         }
