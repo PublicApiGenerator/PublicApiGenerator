@@ -76,14 +76,14 @@ namespace PublicApiGenerator
         /// <param name="type">The type to generate an API from.</param>
         /// <param name="options">The options to control the API output.</param>
         /// <returns>The API output.</returns>
-        public static string GeneratePublicApi(this Type type, ApiGeneratorOptions? options = null)
+        public static string GeneratePublicApi(this Type type, ApiGeneratorOptions? options)
         {
             (options ??= new ApiGeneratorOptions()).IncludeTypes = new Type[] { type };
             return type.Assembly.GeneratePublicApi(options);
         }
 
         [Obsolete("Use `GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = null)` instead. Will be removed in the next major.")]
-        public static string GeneratePublicApi(Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
+        public static string GeneratePublicApi(this Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
         {
             var options = new ApiGeneratorOptions
             {
