@@ -42,7 +42,7 @@ namespace PublicApiGeneratorTests
 {
     public interface IMethodsWithDefaultParameters
     {
-        void Method1(int intValue = 42, string stringValue = ""hello world"", System.Type typeValue = null);
+        void Method1(int intValue = 42, string stringValue = ""hello world"", System.Type typeValue = null, bool canThrow = false, bool needHelp = true);
     }
 }");
         }
@@ -93,7 +93,7 @@ namespace PublicApiGeneratorTests
 
         public interface IMethodsWithDefaultParameters
         {
-            void Method1(int intValue = 42, string stringValue = "hello world", Type typeValue = null!);
+            void Method1(int intValue = 42, string stringValue = "hello world", Type typeValue = null!, bool canThrow = false, bool needHelp = true);
         }
 
         public interface IMultipleMethods
