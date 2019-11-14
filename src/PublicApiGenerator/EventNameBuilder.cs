@@ -30,7 +30,7 @@ namespace PublicApiGenerator
             {
                 var typeDef = baseType as TypeDefinition;
                 isNew = typeDef?.Methods.Any(e => e.Name.Equals(eventDefinition.AddMethod.Name, StringComparison.Ordinal));
-                if (isNew.HasValue && isNew.Value)
+                if (isNew == true)
                 {
                     break;
                 }
@@ -48,6 +48,7 @@ namespace PublicApiGenerator
                     (MemberAttributes.Abstract, null, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract") + name,
                     (MemberAttributes.Abstract, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new abstract") + name,
                     (MemberAttributes.Const, _, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract override") + name,
+                    (MemberAttributes.Final, null, true, false) => name,
                     (_, null, true, false) => Format(CodeNormalizer.EventModifierMarkerTemplate, "virtual") + name,
                     (_, true, true, false) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new virtual") + name,
                     _ => name

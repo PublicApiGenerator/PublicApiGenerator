@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using System;
 using Xunit;
 
@@ -15,6 +15,20 @@ namespace PublicApiGeneratorTests
     public class ClassWithPublicEvent
     {
         public ClassWithPublicEvent() { }
+        public event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_public_event_from_abstract_class()
+        {
+            AssertPublicApi<AbstractClassWithEvent>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class AbstractClassWithEvent : PublicApiGeneratorTests.Examples.InterfaceWithEvent
+    {
+        protected AbstractClassWithEvent() { }
         public event System.EventHandler Event;
     }
 }");
@@ -122,6 +136,16 @@ namespace PublicApiGeneratorTests
         public class ClassWithPrivateProtectedEvent
         {
             private protected event EventHandler Event;
+        }
+
+        public abstract class AbstractClassWithEvent : InterfaceWithEvent
+        {
+            public event EventHandler Event;
+        }
+
+        public interface InterfaceWithEvent
+        {
+            event EventHandler Event;
         }
     }
     // ReSharper restore UnusedMember.Local
