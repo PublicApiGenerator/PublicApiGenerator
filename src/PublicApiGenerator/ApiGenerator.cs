@@ -650,6 +650,9 @@ namespace PublicApiGenerator
             if (parameter.Constant is string)
                 return string.Format(CultureInfo.InvariantCulture, "\"{0}\"", parameter.Constant);
 
+            if (parameter.Constant is bool b)
+                return b ? "true" : "false";
+
             if (parameter.Constant != null)
                 return parameter.Constant;
 
