@@ -20,6 +20,43 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_protected_default_constructor_in_abstract_class()
+        {
+            AssertPublicApi<AbstractClass>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class AbstractClass
+    {
+        protected AbstractClass() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_not_output_protected_default_constructor_in_abstract_class_with_other_constructors()
+        {
+            AssertPublicApi<AbstractClassWithCtors>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class AbstractClassWithCtors
+    {
+        public AbstractClassWithCtors(int i) { }
+        protected AbstractClassWithCtors(string j) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_not_output_private_constructor_from_abstract_class()
+        {
+            AssertPublicApi<AbstractClassWithPrivateCtor>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class AbstractClassWithPrivateCtor { }
+}");
+        }
+
+        [Fact]
         public void Should_not_output_internal_constructor()
         {
             AssertPublicApi<ClassWithInternalConstructor>(
@@ -242,6 +279,17 @@ namespace PublicApiGeneratorTests
             static StaticClassWithStaticConstructor()
             {
             }
+        }
+
+        public abstract class AbstractClassWithCtors
+        {
+            public AbstractClassWithCtors(int i) { }
+            protected AbstractClassWithCtors(string j) { }
+        }
+
+        public abstract class AbstractClassWithPrivateCtor
+        {
+            private AbstractClassWithPrivateCtor(int i) { }
         }
     }
     // ReSharper restore UnusedMember.Global
