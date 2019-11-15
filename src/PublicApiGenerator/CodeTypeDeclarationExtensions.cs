@@ -42,7 +42,8 @@ namespace PublicApiGenerator
             var emptyParamList = new List<CodeParameterDeclarationExpression>();
 
             var sortedMembers = original.Members.OfType<CodeTypeMember>()
-                .OrderBy(m => m.GetType().Name, StringComparer.Ordinal)
+                .OrderBy(m => m.Attributes.HasFlag(MemberAttributes.Static))
+                .ThenBy(m => m.GetType().Name, StringComparer.Ordinal)
                 .ThenBy(m => m.Name, StringComparer.Ordinal)
                 .ThenBy(m => m is CodeMemberMethod method
                             ? method.TypeParameters.Count
