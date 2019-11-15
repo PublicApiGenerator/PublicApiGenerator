@@ -312,7 +312,7 @@ namespace PublicApiGenerator
                 }
             }
 
-            return declaration;
+            return declaration.Sort();
         }
 
         static CodeTypeDeclaration CreateDelegateDeclaration(TypeDefinition publicType, AttributeFilter attributeFilter)
