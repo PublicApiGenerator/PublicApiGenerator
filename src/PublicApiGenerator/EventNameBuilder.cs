@@ -30,7 +30,7 @@ namespace PublicApiGenerator
             {
                 var typeDef = baseType as TypeDefinition;
                 isNew = typeDef?.Methods.Any(e => e.Name.Equals(eventDefinition.AddMethod.Name, StringComparison.Ordinal));
-                if (isNew.HasValue && isNew.Value)
+                if (isNew is true)
                 {
                     break;
                 }
