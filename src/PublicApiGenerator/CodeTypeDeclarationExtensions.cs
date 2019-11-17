@@ -49,6 +49,9 @@ namespace PublicApiGenerator
                             ? method.TypeParameters.Count
                             : 0)
                 .ThenBy(m => m is CodeMemberMethod method
+                            ? method.Parameters.Count
+                            : 0)
+                .ThenBy(m => m is CodeMemberMethod method
                             ? method.Parameters.OfType<CodeParameterDeclarationExpression>().ToList()
                             : emptyParamList,
                         new ParamListComparer());
@@ -68,11 +71,6 @@ namespace PublicApiGenerator
                 var paramIndex = 0;
                 for (; paramIndex < x.Count; ++paramIndex)
                 {
-                    if (paramIndex == y.Count)
-                    {
-                        return 1;
-                    }
-
                     var paramX = x[paramIndex];
                     var paramY = y[paramIndex];
 
