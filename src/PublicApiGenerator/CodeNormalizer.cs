@@ -16,7 +16,7 @@ namespace PublicApiGenerator
         const string Get = @"\s+{\s+get;\s+}";
         const string Set = @"\s+{\s+set;\s+}";
 
-        // https://github.com/ApiApprover/ApiApprover/issues/80
+        // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/80
         internal const string StaticMarker = "static_C91E2709_C00B-4CAB_8BBC_B2B11DC75E50 ";
         internal const string ReadonlyMarker = "readonly_79D3ED2A_0B60_4C3B_8432_941FE471A38B ";
         internal const string AttributeMarker = "_attribute_292C96C3_C42E_4C07_BEED_73F5DAA0A6DF_";

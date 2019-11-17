@@ -1,7 +1,7 @@
 @echo Off
 
-dotnet build ./src/ApiApprover.sln --configuration Release /nologo  || goto :error
-dotnet test ./src/ApiApprover.sln --configuration Release --no-build --verbosity=normal /nologo  || goto :error
+dotnet build ./src/PublicApiGenerator.sln --configuration Release /nologo  || goto :error
+dotnet test ./src/PublicApiGenerator.sln --configuration Release --no-build --verbosity=normal /nologo  || goto :error
 dotnet publish ./src/PublicApiGenerator/PublicApiGenerator.csproj --configuration Release --no-build /nologo || goto :error
 dotnet pack ./src/PublicApiGenerator/PublicApiGenerator.csproj --configuration Release --no-build /nologo  || goto :error
 dotnet publish ./src/PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj --configuration Release --no-build /nologo  || goto :error

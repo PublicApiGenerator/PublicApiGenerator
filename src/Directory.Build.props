@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Authors>Jake Ginnivan</Authors>
-    <PackageProjectUrl>https://github.com/JakeGinnivan/ApiApprover</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/PublicApiGenerator/PublicApiGenerator</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Copyright Jake Ginnivan 2010-$([System.DateTime]::UtcNow.ToString(yyyy)). All rights reserved.</Copyright>
     <PackageTags>semanticversioning versioning api</PackageTags>
