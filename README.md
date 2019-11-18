@@ -31,7 +31,7 @@ var publicApi = typeof(MyType).GeneratePublicApi();
 More control over the API output
 
 ``` csharp
-var options = new ApiGeneratorOption { ... };
+var options = new ApiGeneratorOptions { ... };
 var publicApi = typeof(Library).Assembly.GeneratePublicApi(options);
 ```
 
