@@ -268,7 +268,7 @@ namespace PublicApiGenerator
                 while (declaringType != null)
                 {
                     if (declaringType.GenericParameters.Any(p => p.Name == parameter.Name))
-                        return false; // https://github.com/ApiApprover/ApiApprover/issues/108
+                        return false; // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/108
 
                     declaringType = declaringType.DeclaringType;
                 }

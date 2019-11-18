@@ -1,8 +1,6 @@
-_[![Build status](https://github.com/JakeGinnivan/ApiApprover/workflows/.github/workflows/ci.yml/badge.svg)](https://github.com/JakeGinnivan/ApiApprover/actions)_
+_[![Build status](https://github.com/PublicApiGenerator/PublicApiGenerator/workflows/.github/workflows/ci.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions)_
 
-# ApiApprover
-
-## PublicApiGenerator
+# PublicApiGenerator
 
 PublicApiGenerator has no dependencies and simply creates a string the represents the public API. Any approval library can be used to approve the generated public API.
 PublicApiGenerator supports C# 8 [Nullable Reference Types](https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references) from version 10.

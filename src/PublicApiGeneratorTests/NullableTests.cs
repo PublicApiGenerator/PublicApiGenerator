@@ -6,7 +6,7 @@ using Xunit;
 
 namespace PublicApiGeneratorTests
 {
-    // Tests for https://github.com/ApiApprover/ApiApprover/issues/54
+    // Tests for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/54
     // See also https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-reference-types.md
     [Trait("NRT", "Nullable Reference Types")]
     public class NullableTests : ApiGeneratorTestsBase

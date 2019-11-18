@@ -16,9 +16,9 @@ _ReSharper.*
 deploy-to-ec2*
 
 src/packages
-src/ApiApprover/results
+src/PublicApiGenerator/results
 
 *.nupkg
-src/ApiApprover.sln.ide/
+src/PublicApiGenerator.sln.ide/
 /nugets/*
 **/.vs/*
