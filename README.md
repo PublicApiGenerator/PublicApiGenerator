@@ -1,4 +1,4 @@
-_[![Build status](https://github.com/PublicApiGenerator/PublicApiGenerator/workflows/.github/workflows/ci.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions)_
+_[![Build status](https://github.com/ApiApprover/PublicApiGenerator/workflows/.github/workflows/ci.yml/badge.svg)](https://github.com/ApiApprover/PublicApiGenerator/actions)_
 
 # PublicApiGenerator
 
