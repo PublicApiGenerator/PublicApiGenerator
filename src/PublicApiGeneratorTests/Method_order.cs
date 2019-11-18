@@ -17,7 +17,9 @@ namespace PublicApiGeneratorTests
         public void Method_AA() { }
         public void Method_AA<T>() { }
         public void Method_AA<T, U>() { }
-        public void Method_BB() { }
+        public void Method_BB(int foo) { }
+        public void Method_BB(string bar) { }
+        public void Method_BB(int foo, string bar) { }
         public void Method_I() { }
         public void Method_I(string arg) { }
         public void Method_i() { }
@@ -37,7 +39,15 @@ namespace PublicApiGeneratorTests
             {
             }
 
-            public void Method_BB()
+            public void Method_BB(int foo, string bar)
+            {
+            }
+
+            public void Method_BB(string bar)
+            {
+            }
+
+            public void Method_BB(int foo)
             {
             }
 
