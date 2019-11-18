@@ -9,8 +9,30 @@ PublicApiGenerator supports C# 8 [Nullable Reference Types](https://docs.microso
 
 > Install-package PublicApiGenerator
 
+Public API of an assembly
+
 ``` csharp
-var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);
+var publicApi = typeof(Library).Assembly.GeneratePublicApi();
+```
+
+Public API of multiple types
+
+``` csharp
+var myTypes = new[] { typeof(MyType), typeof(YetAnotherType) };
+var publicApi = typeof(myTypes).GeneratePublicApi();
+```
+
+Public API of a type
+
+``` csharp
+var publicApi = typeof(MyType).GeneratePublicApi();
+```
+
+More control over the API output
+
+``` csharp
+var options = new ApiGeneratorOptions { ... };
+var publicApi = typeof(Library).Assembly.GeneratePublicApi(options);
 ```
 
 ### Manual
