@@ -41,7 +41,7 @@ var publicApi = typeof(Library).Assembly.GeneratePublicApi(options);
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
-    var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);
+    var publicApi = typeof(Library).Assembly.GeneratePublicApi();
 
     var approvedFilePath = "PublicApi.approved.txt";
     if (!File.Exists(approvedFilePath))
@@ -64,7 +64,7 @@ public void my_assembly_has_no_public_api_changes()
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
-    var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);
+    var publicApi = typeof(Library).Assembly.GeneratePublicApi();
 
     //Shouldly
     publicApi.ShouldMatchApproved();
@@ -79,7 +79,7 @@ public void my_assembly_has_no_public_api_changes()
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
-    var publicApi = ApiGenerator.GeneratePublicApi(typeof(Library).Assembly);;
+    var publicApi = typeof(Library).Assembly.GeneratePublicApi();
     var writer = new ApprovalTextWriter(publicApi, "txt");
     var approvalNamer = new AssemblyPathNamer(assembly.Location);
     Approvals.Verify(writer, approvalNamer, Approvals.GetReporter());
