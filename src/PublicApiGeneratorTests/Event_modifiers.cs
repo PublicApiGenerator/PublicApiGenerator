@@ -49,6 +49,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_protected_static_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedStaticEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedStaticEvent
+    {
+        public ClassWithProtectedStaticEvent() { }
+        protected static event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_static_new_modifier()
         {
             AssertPublicApi<ClassWithStaticNewEvent>(
@@ -58,6 +72,20 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithStaticNewEvent() { }
         public static new event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_static_new_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedStaticNewEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedStaticNewEvent : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticEvent
+    {
+        public ClassWithProtectedStaticNewEvent() { }
+        protected static new event System.EventHandler Event;
     }
 }");
         }
@@ -77,6 +105,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_protected_virtual_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedVirtualEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedVirtualEvent
+    {
+        public ClassWithProtectedVirtualEvent() { }
+        protected virtual event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_new_virtual_modifier()
         {
             AssertPublicApi<ClassWithNewVirtualEvent>(
@@ -85,6 +127,20 @@ namespace PublicApiGeneratorTests
     public class ClassWithNewVirtualEvent : PublicApiGeneratorTests.Examples.ClassWithVirtualEvent
     {
         public ClassWithNewVirtualEvent() { }
+        public new virtual event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_new_virtual_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedNewVirtualEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedNewVirtualEvent : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualEvent
+    {
+        public ClassWithProtectedNewVirtualEvent() { }
         public new virtual event System.EventHandler Event;
     }
 }");
@@ -100,6 +156,20 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithOverridingEvent() { }
         public override event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_override_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedOverridingEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedOverridingEvent : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualEvent
+    {
+        public ClassWithProtectedOverridingEvent() { }
+        protected override event System.EventHandler Event;
     }
 }");
         }
@@ -133,6 +203,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_protected_sealed_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedSealedOverridingEvent>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedSealedOverridingEvent : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualEvent
+    {
+        public ClassWithProtectedSealedOverridingEvent() { }
+        protected sealed override event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_new_modifier()
         {
             AssertPublicApi<ClassWithEventHiding>(
@@ -141,6 +225,34 @@ namespace PublicApiGeneratorTests
     public class ClassWithEventHiding : PublicApiGeneratorTests.Examples.ClassWithVirtualEvent
     {
         public ClassWithEventHiding() { }
+        public new event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_new_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedEventHiding>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedEventHiding : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualEvent
+    {
+        public ClassWithProtectedEventHiding() { }
+        protected new event System.EventHandler Event;
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_public_new_modifier()
+        {
+            AssertPublicApi<ClassWithPublicEventHiding>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPublicEventHiding : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualEvent
+    {
+        public ClassWithPublicEventHiding() { }
         public new event System.EventHandler Event;
     }
 }");
@@ -186,9 +298,19 @@ namespace PublicApiGeneratorTests
             public static event EventHandler Event;
         }
 
+        public class ClassWithProtectedStaticEvent
+        {
+            protected static event EventHandler Event;
+        }
+
         public class ClassWithStaticNewEvent : ClassWithStaticEvent
         {
             public new static event EventHandler Event;
+        }
+
+        public class ClassWithProtectedStaticNewEvent : ClassWithProtectedStaticEvent
+        {
+            protected new static event EventHandler Event;
         }
 
         public class ClassWithVirtualEvent
@@ -201,9 +323,19 @@ namespace PublicApiGeneratorTests
             public new virtual event EventHandler Event;
         }
 
+        public class ClassWithProtectedNewVirtualEvent : ClassWithProtectedVirtualEvent
+        {
+            public new virtual event EventHandler Event;
+        }
+
         public class ClassWithOverridingEvent : ClassWithVirtualEvent
         {
             public override event EventHandler Event;
+        }
+
+        public class ClassWithProtectedOverridingEvent : ClassWithProtectedVirtualEvent
+        {
+            protected override event EventHandler Event;
         }
 
         public class ClassWithSealedOverridingEvent : ClassWithVirtualEvent
@@ -211,7 +343,22 @@ namespace PublicApiGeneratorTests
             public sealed override event EventHandler Event;
         }
 
+        public class ClassWithProtectedSealedOverridingEvent : ClassWithProtectedVirtualEvent
+        {
+            protected sealed override event EventHandler Event;
+        }
+
         public class ClassWithEventHiding : ClassWithVirtualEvent
+        {
+            public new event EventHandler Event;
+        }
+
+        public class ClassWithProtectedEventHiding : ClassWithProtectedVirtualEvent
+        {
+            protected new event EventHandler Event;
+        }
+
+        public class ClassWithPublicEventHiding : ClassWithProtectedVirtualEvent
         {
             public new event EventHandler Event;
         }
@@ -231,6 +378,11 @@ namespace PublicApiGeneratorTests
             {
             }
             public new abstract event EventHandler Event;
+        }
+
+        public class ClassWithProtectedVirtualEvent
+        {
+            protected virtual event EventHandler Event;
         }
     }
     // ReSharper restore ValueParameterNotUsed
