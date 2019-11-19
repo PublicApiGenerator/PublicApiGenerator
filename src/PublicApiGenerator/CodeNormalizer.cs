@@ -52,7 +52,7 @@ namespace PublicApiGenerator
                 RegexOptions.Singleline |
                 RegexOptions.IgnorePatternWhitespace); // SingleLine is required for multi line params arrays
 
-            gennedClass = Regex.Replace(gennedClass, @"(.*) _(.*)_292C96C3C42E4C07BEED73F5DAA0A6DF_(.*)", EventModifierMatcher, RegexOptions.IgnorePatternWhitespace);
+            gennedClass = Regex.Replace(gennedClass, @"(public|protected) (.*) _(.*)_292C96C3C42E4C07BEED73F5DAA0A6DF_(.*)", EventModifierMatcher, RegexOptions.IgnorePatternWhitespace);
             gennedClass = gennedClass.Replace("class " + StaticMarker, "static class ");
             gennedClass = gennedClass.Replace("struct " + ReadonlyMarker, "readonly struct ");
             gennedClass = gennedClass.Replace(ReadonlyMarker, string.Empty); // remove magic marker from readonly struct ctor
@@ -64,7 +64,8 @@ namespace PublicApiGenerator
 
         static string EventModifierMatcher(Match group)
         {
-            var modifier = @group.Groups[2].Value;
+            var visibility = @group.Groups[1].Value;
+            var modifier = @group.Groups[3].Value;
 
             var replacementBuilder = new StringBuilder();
             if (modifier.EndsWith(EventRemovePublicMarker))
@@ -75,11 +76,11 @@ namespace PublicApiGenerator
             }
             else
             {
-                replacementBuilder.Append($"public {modifier} event ");
+                replacementBuilder.Append($"{visibility} {modifier} event ");
             }
 
             return group.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
-                .Replace("public event ", replacementBuilder.ToString());
+                .Replace($"{visibility} event ", replacementBuilder.ToString());
         }
 
         static string RemoveUnnecessaryWhiteSpace(string publicApi)
