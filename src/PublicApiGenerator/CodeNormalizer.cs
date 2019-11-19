@@ -82,8 +82,6 @@ namespace PublicApiGenerator
             return group.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
                 .Replace($"{visibility} event ", replacementBuilder.ToString());
         }
-                .Replace("public event ", replacementBuilder.ToString());
-        }
 
         static string RemoveUnnecessaryWhiteSpace(string publicApi)
         {
