@@ -24,6 +24,11 @@ namespace PublicApiGenerator
         internal const string EventRemovePublicMarker = "removepublic";
         internal const string MethodModifierMarkerTemplate = "_{0}_3C0D97CD952D40AA8B6E1ECB98FFC79F_";
 
+        public static string NormalizeMethodName(string methodName)
+        {
+            return Regex.Replace(methodName, @"(_(.*)_3C0D97CD952D40AA8B6E1ECB98FFC79F_)?", string.Empty);
+        }
+
         public static string NormalizeGeneratedCode(StringWriter writer)
         {
             var gennedClass = writer.ToString();
