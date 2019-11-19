@@ -69,10 +69,10 @@ namespace PublicApiGenerator
             return gennedClass;
         }
 
-        static string EventModifierMatcher(Match group)
+        static string EventModifierMatcher(Match match)
         {
-            var visibility = @group.Groups[1].Value;
-            var modifier = @group.Groups[3].Value;
+            var visibility = match.Groups[1].Value;
+            var modifier = match.Groups[3].Value;
 
             var replacementBuilder = new StringBuilder();
             if (modifier.EndsWith(EventRemovePublicMarker))
@@ -86,16 +86,16 @@ namespace PublicApiGenerator
                 replacementBuilder.Append($"{visibility} {modifier} event ");
             }
 
-            return group.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
+            return match.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
                 .Replace($"{visibility} event ", replacementBuilder.ToString());
         }
 
-        static string MethodModifierMatcher(Match group)
+        static string MethodModifierMatcher(Match match)
         {
-            var oldModifier = @group.Groups[2].Value;
-            var modifier = @group.Groups[4].Value;
+            var oldModifier = match.Groups[2].Value;
+            var modifier = match.Groups[4].Value;
 
-            return group.ToString().Replace(string.Format(MethodModifierMarkerTemplate, modifier), string.Empty)
+            return match.ToString().Replace(string.Format(MethodModifierMarkerTemplate, modifier), string.Empty)
                 .Replace(oldModifier, modifier);
         }
 
