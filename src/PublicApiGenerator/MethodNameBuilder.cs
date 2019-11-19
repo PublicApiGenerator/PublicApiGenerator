@@ -11,15 +11,12 @@ namespace PublicApiGenerator
         public static string AugmentMethodNameWithMethodModifierMarkerTemplate(MethodDefinition methodDefinition,
             MemberAttributes attributes)
         {
-            //CSharpOperatorKeyword.Get(member.Name)
-            string name = CSharpOperatorKeyword.Get(methodDefinition.Name);
+            var name = CSharpOperatorKeyword.Get(methodDefinition.Name);
 
-//            if (methodDefinition.DeclaringType.IsInterface)
-//            {
-//                return (attributes & MemberAttributes.VTableMask) == MemberAttributes.New
-//                    ? String.Format(CodeNormalizer.EventModifierMarkerTemplate, $"new{CodeNormalizer.EventRemovePublicMarker}") + name
-//                    : String.Format(CodeNormalizer.EventModifierMarkerTemplate, CodeNormalizer.EventRemovePublicMarker) + name;
-//            }
+            if (methodDefinition.DeclaringType.IsInterface)
+            {
+                return name;
+            }
 
             bool? isNew = null;
             var baseType = methodDefinition.DeclaringType.BaseType;
