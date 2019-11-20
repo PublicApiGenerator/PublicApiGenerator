@@ -22,6 +22,12 @@ namespace PublicApiGenerator
         internal const string AttributeMarker = "_attribute_292C96C3_C42E_4C07_BEED_73F5DAA0A6DF_";
         internal const string EventModifierMarkerTemplate = "_{0}_292C96C3C42E4C07BEED73F5DAA0A6DF_";
         internal const string EventRemovePublicMarker = "removepublic";
+        internal const string MethodModifierMarkerTemplate = "_{0}_3C0D97CD952D40AA8B6E1ECB98FFC79F_";
+
+        public static string NormalizeMethodName(string methodName)
+        {
+            return Regex.Replace(methodName, @"(_(.*)_3C0D97CD952D40AA8B6E1ECB98FFC79F_)?", string.Empty);
+        }
 
         public static string NormalizeGeneratedCode(StringWriter writer)
         {
@@ -52,7 +58,8 @@ namespace PublicApiGenerator
                 RegexOptions.Singleline |
                 RegexOptions.IgnorePatternWhitespace); // SingleLine is required for multi line params arrays
 
-            gennedClass = Regex.Replace(gennedClass, @"(public|protected) (.*) _(.*)_292C96C3C42E4C07BEED73F5DAA0A6DF_(.*)", EventModifierMatcher, RegexOptions.IgnorePatternWhitespace);
+            gennedClass = Regex.Replace(gennedClass, @"(public|protected) (.*) _(.*)_292C96C3C42E4C07BEED73F5DAA0A6DF_(.*)", EventModifierMatcher);
+            gennedClass = Regex.Replace(gennedClass, @"(public|protected) (abstract|static|new static|virtual|override|new|unsafe) (.*) _(.*)_3C0D97CD952D40AA8B6E1ECB98FFC79F_(.*)", MethodModifierMatcher);
             gennedClass = gennedClass.Replace("class " + StaticMarker, "static class ");
             gennedClass = gennedClass.Replace("struct " + ReadonlyMarker, "readonly struct ");
             gennedClass = gennedClass.Replace(ReadonlyMarker, string.Empty); // remove magic marker from readonly struct ctor
@@ -62,10 +69,10 @@ namespace PublicApiGenerator
             return gennedClass;
         }
 
-        static string EventModifierMatcher(Match group)
+        static string EventModifierMatcher(Match match)
         {
-            var visibility = @group.Groups[1].Value;
-            var modifier = @group.Groups[3].Value;
+            var visibility = match.Groups[1].Value;
+            var modifier = match.Groups[3].Value;
 
             var replacementBuilder = new StringBuilder();
             if (modifier.EndsWith(EventRemovePublicMarker))
@@ -79,8 +86,17 @@ namespace PublicApiGenerator
                 replacementBuilder.Append($"{visibility} {modifier} event ");
             }
 
-            return group.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
+            return match.ToString().Replace(string.Format(EventModifierMarkerTemplate, modifier), string.Empty)
                 .Replace($"{visibility} event ", replacementBuilder.ToString());
+        }
+
+        static string MethodModifierMatcher(Match match)
+        {
+            var oldModifier = match.Groups[2].Value;
+            var modifier = match.Groups[4].Value;
+
+            return match.ToString().Replace(string.Format(MethodModifierMarkerTemplate, modifier), string.Empty)
+                .Replace(oldModifier, modifier);
         }
 
         static string RemoveUnnecessaryWhiteSpace(string publicApi)

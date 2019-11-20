@@ -44,7 +44,7 @@ namespace PublicApiGenerator
             var sortedMembers = original.Members.OfType<CodeTypeMember>()
                 .OrderBy(m => m.Attributes.HasFlag(MemberAttributes.Static))
                 .ThenBy(m => m.GetType().Name, StringComparer.Ordinal)
-                .ThenBy(m => m.Name, StringComparer.Ordinal)
+                .ThenBy(m => CodeNormalizer.NormalizeMethodName(m.Name), StringComparer.Ordinal)
                 .ThenBy(m => m is CodeMemberMethod method
                             ? method.TypeParameters.Count
                             : 0)

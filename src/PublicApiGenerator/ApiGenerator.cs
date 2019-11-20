@@ -580,7 +580,7 @@ namespace PublicApiGenerator
 
             var method = new CodeMemberMethod
             {
-                Name = CSharpOperatorKeyword.Get(member.Name),
+                Name = MethodNameBuilder.AugmentMethodNameWithMethodModifierMarkerTemplate(member, attributes),
                 Attributes = attributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
                 ReturnType = returnType,

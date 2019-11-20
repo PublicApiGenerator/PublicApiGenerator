@@ -6,6 +6,34 @@ namespace PublicApiGeneratorTests
     public class Method_modifiers : ApiGeneratorTestsBase
     {
         [Fact]
+        public void Should_output_abstract_modifier()
+        {
+            AssertPublicApi<ClassWithAbstractMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractMethod
+    {
+        protected ClassWithAbstractMethod() { }
+        public abstract void DoSomething();
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_abstract_new_modifier()
+        {
+            AssertPublicApi<ClassWithAbstractNewMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractNewMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
+    {
+        protected ClassWithAbstractNewMethod() { }
+        public new abstract void DoSomething();
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_static_modifier()
         {
             AssertPublicApi<ClassWithStaticMethod>(
@@ -20,15 +48,57 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        public void Should_output_abstract_modifier()
+        public void Should_output_protected_static_modifier()
         {
-            AssertPublicApi<ClassWithAbstractMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedStaticMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
 {
-    public abstract class ClassWithAbstractMethod
+    public class ClassWithProtectedStaticMethod
     {
-        protected ClassWithAbstractMethod() { }
-        public abstract void DoSomething();
+        public ClassWithProtectedStaticMethod() { }
+        protected static void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_static_new_modifier()
+        {
+            AssertPublicApi<ClassWithStaticNewMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithStaticNewMethod : PublicApiGeneratorTests.Examples.ClassWithStaticMethod
+    {
+        public ClassWithStaticNewMethod() { }
+        public new static void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_static_new_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedStaticNewMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedStaticNewMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticMethod
+    {
+        public ClassWithProtectedStaticNewMethod() { }
+        protected new static void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_public_static_new_modifier()
+        {
+            AssertPublicApi<ClassWithPublicStaticNewMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPublicStaticNewMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticMethod
+    {
+        public ClassWithPublicStaticNewMethod() { }
+        public new static void DoSomething() { }
     }
 }");
         }
@@ -48,6 +118,48 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_protected_virtual_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedVirtualMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedVirtualMethod
+    {
+        public ClassWithProtectedVirtualMethod() { }
+        protected virtual void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_new_virtual_modifier()
+        {
+            AssertPublicApi<ClassWithNewVirtualMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithNewVirtualMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
+    {
+        public ClassWithNewVirtualMethod() { }
+        public new virtual void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_new_virtual_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedNewVirtualMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedNewVirtualMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualMethod
+    {
+        public ClassWithProtectedNewVirtualMethod() { }
+        protected new virtual void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_override_modifier()
         {
             AssertPublicApi<ClassWithOverridingMethod>(
@@ -61,8 +173,35 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Sealed override members not supported by CodeDOM")]
+        [Fact]
+        public void Should_output_protected_override_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedOverridingMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualMethod
+    {
+        public ClassWithProtectedOverridingMethod() { }
+        protected override void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_abstract_override_modifier()
+        {
+            AssertPublicApi<ClassWithAbstractOverridingMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
+    {
+        protected ClassWithAbstractOverridingMethod() { }
+        public abstract override void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_sealed_modifier()
         {
             AssertPublicApi<ClassWithSealedOverridingMethod>(
@@ -72,6 +211,20 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithSealedOverridingMethod() { }
         public sealed override void DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_protected_sealed_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedSealedOverridingMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedSealedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualMethod
+    {
+        public ClassWithProtectedSealedOverridingMethod() { }
+        protected sealed override void DoSomething() { }
     }
 }");
         }
@@ -105,6 +258,34 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_protected_new_modifier()
+        {
+            AssertPublicApi<ClassWithProtectedMethodHiding>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithProtectedMethodHiding : PublicApiGeneratorTests.Examples.ClassWithSimpleProtectedMethod
+    {
+        public ClassWithProtectedMethodHiding() { }
+        protected new void Method() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_public_new_modifier()
+        {
+            AssertPublicApi<ClassWithPublicMethodHiding>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPublicMethodHiding : PublicApiGeneratorTests.Examples.ClassWithSimpleProtectedMethod
+    {
+        public ClassWithPublicMethodHiding() { }
+        public new void Method() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_unsafe_modifier()
         {
             AssertPublicApi<ClassWithUnsafeMethod>(
@@ -114,6 +295,34 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithUnsafeMethod() { }
         public unsafe void* DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_unsafe_virtual_modifier()
+        {
+            AssertPublicApi<ClassWithUnsafeVirtualMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithUnsafeVirtualMethod
+    {
+        public ClassWithUnsafeVirtualMethod() { }
+        public virtual unsafe void* DoSomething() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_new_modifier_even_under_evil_circumstances()
+        {
+            AssertPublicApi<AbstractClassRedeclaringAbstractMethod>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class AbstractClassRedeclaringAbstractMethod : PublicApiGeneratorTests.Examples.ClassInheritingVirtualMethod
+    {
+        protected AbstractClassRedeclaringAbstractMethod() { }
+        public new abstract void DoSomething();
     }
 }");
         }
@@ -134,6 +343,34 @@ namespace PublicApiGeneratorTests
             }
         }
 
+        public class ClassWithProtectedStaticMethod
+        {
+            protected static void DoSomething()
+            {
+            }
+        }
+
+        public class ClassWithStaticNewMethod : ClassWithStaticMethod
+        {
+            public new static void DoSomething()
+            {
+            }
+        }
+
+        public class ClassWithProtectedStaticNewMethod : ClassWithProtectedStaticMethod
+        {
+            protected new static void DoSomething()
+            {
+            }
+        }
+
+        public class ClassWithPublicStaticNewMethod : ClassWithProtectedStaticMethod
+        {
+            public new static void DoSomething()
+            {
+            }
+        }
+
         public class ClassWithSimpleMethod
         {
             public void Method()
@@ -148,9 +385,35 @@ namespace PublicApiGeneratorTests
             }
         }
 
+        public class ClassWithSimpleProtectedMethod
+        {
+            protected void Method()
+            {
+            }
+        }
+
+        public class ClassWithProtectedMethodHiding : ClassWithSimpleProtectedMethod
+        {
+            protected new void Method()
+            {
+            }
+        }
+
+        public class ClassWithPublicMethodHiding : ClassWithSimpleProtectedMethod
+        {
+            public new void Method()
+            {
+            }
+        }
+
         public abstract class ClassWithAbstractMethod
         {
             public abstract void DoSomething();
+        }
+
+        public abstract class ClassWithAbstractNewMethod : ClassWithVirtualMethod
+        {
+            public new abstract void DoSomething();
         }
 
         public class ClassWithVirtualMethod
@@ -160,6 +423,28 @@ namespace PublicApiGeneratorTests
             }
         }
 
+        public class ClassWithProtectedVirtualMethod
+        {
+            protected virtual void DoSomething()
+            {
+            }
+        }
+
+        public class ClassWithNewVirtualMethod : ClassWithVirtualMethod
+        {
+            public new virtual void DoSomething()
+            {
+            }
+        }
+
+        public class ClassWithProtectedNewVirtualMethod : ClassWithProtectedVirtualMethod
+        {
+            protected new virtual void DoSomething()
+            {
+            }
+        }
+
+
         public class ClassWithOverridingMethod : ClassWithVirtualMethod
         {
             public override void DoSomething()
@@ -168,9 +453,30 @@ namespace PublicApiGeneratorTests
             }
         }
 
+        public class ClassWithProtectedOverridingMethod : ClassWithProtectedVirtualMethod
+        {
+            protected override void DoSomething()
+            {
+                base.DoSomething();
+            }
+        }
+
+        public abstract class ClassWithAbstractOverridingMethod : ClassWithVirtualMethod
+        {
+            public abstract override void DoSomething();
+        }
+
         public class ClassWithSealedOverridingMethod : ClassWithVirtualMethod
         {
             public sealed override void DoSomething()
+            {
+                base.DoSomething();
+            }
+        }
+
+        public class ClassWithProtectedSealedOverridingMethod : ClassWithProtectedVirtualMethod
+        {
+            protected sealed override void DoSomething()
             {
                 base.DoSomething();
             }
@@ -190,6 +496,26 @@ namespace PublicApiGeneratorTests
             {
                 return null;
             }
+        }
+
+        public class ClassWithUnsafeVirtualMethod
+        {
+            public virtual unsafe void* DoSomething()
+            {
+                return null;
+            }
+        }
+
+        public class ClassInheritingVirtualMethod : ClassWithVirtualMethod
+        {
+        }
+
+        public abstract class AbstractClassRedeclaringAbstractMethod : ClassInheritingVirtualMethod
+        {
+            protected AbstractClassRedeclaringAbstractMethod()
+            {
+            }
+            public new abstract void DoSomething();
         }
     }
     // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
