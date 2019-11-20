@@ -26,9 +26,8 @@ namespace PublicApiGenerator
 
             bool? isNew = null;
             var baseType = eventDefinition.DeclaringType.BaseType;
-            while (baseType != null)
+            while (baseType is TypeDefinition typeDef)
             {
-                var typeDef = baseType as TypeDefinition;
                 isNew = typeDef?.Methods.Any(e => e.Name.Equals(eventDefinition.AddMethod.Name, StringComparison.Ordinal));
                 if (isNew is true)
                 {

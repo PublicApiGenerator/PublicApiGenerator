@@ -20,9 +20,8 @@ namespace PublicApiGenerator
 
             bool? isNew = null;
             var baseType = methodDefinition.DeclaringType.BaseType;
-            while (baseType != null)
+            while (baseType is TypeDefinition typeDef)
             {
-                var typeDef = baseType as TypeDefinition;
                 // too simple, improve
                 isNew = typeDef?.Methods.Any(e => e.Name.Equals(methodDefinition.Name, StringComparison.Ordinal) && e.Parameters.Count == methodDefinition.Parameters.Count);
                 if (isNew is true)
