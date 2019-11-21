@@ -31,22 +31,8 @@ namespace PublicApiGenerator
                 baseType = typeDef?.BaseType;
             }
 
-            return (attributes & MemberAttributes.ScopeMask, isNew, methodDefinition.IsVirtual,
-                    methodDefinition.IsAbstract) switch
-                {
-                    (MemberAttributes.Static, null, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "static") + name,
-                    (MemberAttributes.Static, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new static") + name,
-                    (MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "override") + name,
-                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate,"override sealed") + name,
-                    (MemberAttributes.Final, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new") + name,
-                    (MemberAttributes.Abstract, null, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "abstract") + name,
-                    (MemberAttributes.Abstract, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new abstract") + name,
-                    (MemberAttributes.Const, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "abstract override") + name,
-                    (MemberAttributes.Final, null, true, false) => name,
-                    (_, null, true, false) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "virtual") + name,
-                    (_, true, true, false) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new virtual") + name,
-                    _ => name
-                };
+            return ModifierMarkerNameBuilder.Build(methodDefinition, attributes, isNew, name,
+                CodeNormalizer.MethodModifierMarkerTemplate);
         }
     }
 }

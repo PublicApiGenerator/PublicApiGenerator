@@ -28,22 +28,8 @@ namespace PublicApiGenerator
                 baseType = typeDef?.BaseType;
             }
 
-            return (getAccessorAttributes & MemberAttributes.ScopeMask, isNew, propertyDefinition.GetMethod.IsVirtual,
-                    propertyDefinition.GetMethod.IsAbstract) switch
-                {
-                    (MemberAttributes.Static, null, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "static") + name,
-                    (MemberAttributes.Static, true, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "new static") + name,
-                    (MemberAttributes.Override, _, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "override") + name,
-                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate,"override sealed") + name,
-                    (MemberAttributes.Final, true, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "new") + name,
-                    (MemberAttributes.Abstract, null, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "abstract") + name,
-                    (MemberAttributes.Abstract, true, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "new abstract") + name,
-                    (MemberAttributes.Const, _, _, _) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "abstract override") + name,
-                    (MemberAttributes.Final, null, true, false) => name,
-                    (_, null, true, false) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "virtual") + name,
-                    (_, true, true, false) => String.Format(CodeNormalizer.PropertyModifierMarkerTemplate, "new virtual") + name,
-                    _ => name
-                };
+            return ModifierMarkerNameBuilder.Build(propertyDefinition.GetMethod, getAccessorAttributes, isNew, name,
+                CodeNormalizer.PropertyModifierMarkerTemplate);
         }
     }
 }
