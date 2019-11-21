@@ -71,7 +71,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithStaticNewEvent : PublicApiGeneratorTests.Examples.ClassWithStaticEvent
     {
         public ClassWithStaticNewEvent() { }
-        public static new event System.EventHandler Event;
+        public new static event System.EventHandler Event;
     }
 }");
         }
@@ -85,7 +85,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithProtectedStaticNewEvent : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticEvent
     {
         public ClassWithProtectedStaticNewEvent() { }
-        protected static new event System.EventHandler Event;
+        protected new static event System.EventHandler Event;
     }
 }");
         }
@@ -99,7 +99,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithPublicStaticNewEvent : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticEvent
     {
         public ClassWithPublicStaticNewEvent() { }
-        public static new event System.EventHandler Event;
+        public new static event System.EventHandler Event;
     }
 }");
         }
@@ -211,7 +211,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithSealedOverridingEvent : PublicApiGeneratorTests.Examples.ClassWithVirtualEvent
     {
         public ClassWithSealedOverridingEvent() { }
-        public sealed override event System.EventHandler Event;
+        public override sealed event System.EventHandler Event;
     }
 }");
         }
@@ -225,7 +225,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithProtectedSealedOverridingEvent : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualEvent
     {
         public ClassWithProtectedSealedOverridingEvent() { }
-        protected sealed override event System.EventHandler Event;
+        protected override sealed event System.EventHandler Event;
     }
 }");
         }

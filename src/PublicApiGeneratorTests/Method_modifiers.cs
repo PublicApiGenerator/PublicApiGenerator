@@ -210,7 +210,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithSealedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         public ClassWithSealedOverridingMethod() { }
-        public sealed override void DoSomething() { }
+        public override sealed void DoSomething() { }
     }
 }");
         }
@@ -224,7 +224,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithProtectedSealedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualMethod
     {
         public ClassWithProtectedSealedOverridingMethod() { }
-        protected sealed override void DoSomething() { }
+        protected override sealed void DoSomething() { }
     }
 }");
         }

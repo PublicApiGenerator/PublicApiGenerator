@@ -19,7 +19,7 @@ namespace PublicApiGenerator
             }
 
             bool? isNew = null;
-            var baseType = methodDefinition.DeclaringType.BaseType;
+            TypeReference? baseType = methodDefinition.DeclaringType.BaseType;
             while (baseType is TypeDefinition typeDef)
             {
                 // too simple, improve
@@ -37,7 +37,7 @@ namespace PublicApiGenerator
                     (MemberAttributes.Static, null, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "static") + name,
                     (MemberAttributes.Static, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new static") + name,
                     (MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "override") + name,
-                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate,"sealed override") + name,
+                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate,"override sealed") + name,
                     (MemberAttributes.Final, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new") + name,
                     (MemberAttributes.Abstract, null, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "abstract") + name,
                     (MemberAttributes.Abstract, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new abstract") + name,
