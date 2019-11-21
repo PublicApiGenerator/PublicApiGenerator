@@ -1,8 +1,6 @@
 using System;
 using System.CodeDom;
-using System.Linq;
 using Mono.Cecil;
-using static System.String;
 
 namespace PublicApiGenerator
 {
@@ -18,18 +16,9 @@ namespace PublicApiGenerator
                 return name;
             }
 
-            bool? isNew = null;
-            TypeReference? baseType = methodDefinition.DeclaringType.BaseType;
-            while (baseType is TypeDefinition typeDef)
-            {
-                // too simple, improve
-                isNew = typeDef?.Methods.Any(e => e.Name.Equals(methodDefinition.Name, StringComparison.Ordinal) && e.Parameters.Count == methodDefinition.Parameters.Count);
-                if (isNew is true)
-                {
-                    break;
-                }
-                baseType = typeDef?.BaseType;
-            }
+            var isNew = methodDefinition.IsNew(typeDef => typeDef?.Methods, e =>
+                e.Name.Equals(methodDefinition.Name, StringComparison.Ordinal) &&
+                e.Parameters.Count == methodDefinition.Parameters.Count);
 
             return ModifierMarkerNameBuilder.Build(methodDefinition, attributes, isNew, name,
                 CodeNormalizer.MethodModifierMarkerTemplate);

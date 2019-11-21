@@ -1,6 +1,5 @@
 using System;
 using System.CodeDom;
-using System.Linq;
 using Mono.Cecil;
 using static System.String;
 
@@ -24,17 +23,8 @@ namespace PublicApiGenerator
                     : Format(CodeNormalizer.EventModifierMarkerTemplate, CodeNormalizer.EventRemovePublicMarker) + name;
             }
 
-            bool? isNew = null;
-            TypeReference? baseType = eventDefinition.DeclaringType.BaseType;
-            while (baseType is TypeDefinition typeDef)
-            {
-                isNew = typeDef?.Events.Any(e => e.Name.Equals(eventDefinition.Name, StringComparison.Ordinal));
-                if (isNew is true)
-                {
-                    break;
-                }
-                baseType = typeDef?.BaseType;
-            }
+            var isNew = eventDefinition.IsNew(typeDef => typeDef?.Events, e =>
+                e.Name.Equals(eventDefinition.Name, StringComparison.Ordinal));
 
             return ModifierMarkerNameBuilder.Build(eventDefinition.AddMethod, addAccessorAttributes, isNew, name,
                 CodeNormalizer.EventModifierMarkerTemplate);

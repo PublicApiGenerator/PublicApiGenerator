@@ -1,6 +1,5 @@
 using System;
 using System.CodeDom;
-using System.Linq;
 using Mono.Cecil;
 
 namespace PublicApiGenerator
@@ -16,17 +15,8 @@ namespace PublicApiGenerator
                 return name;
             }
 
-            bool? isNew = null;
-            TypeReference? baseType = propertyDefinition.DeclaringType.BaseType;
-            while (baseType is TypeDefinition typeDef)
-            {
-                isNew = typeDef?.Properties.Any(e => e.Name.Equals(propertyDefinition.Name, StringComparison.Ordinal) && e.PropertyType.Equals(propertyDefinition.PropertyType));
-                if (isNew is true)
-                {
-                    break;
-                }
-                baseType = typeDef?.BaseType;
-            }
+            var isNew = propertyDefinition.IsNew(typeDef => typeDef?.Properties, e =>
+                e.Name.Equals(propertyDefinition.Name, StringComparison.Ordinal) && e.PropertyType.Equals(propertyDefinition.PropertyType));
 
             return ModifierMarkerNameBuilder.Build(propertyDefinition.GetMethod, getAccessorAttributes, isNew, name,
                 CodeNormalizer.PropertyModifierMarkerTemplate);
