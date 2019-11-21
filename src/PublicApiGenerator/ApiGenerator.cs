@@ -676,6 +676,9 @@ namespace PublicApiGenerator
                 ? new CodeTypeReference(member.PropertyType.Name)
                 : member.PropertyType.CreateCodeTypeReference(member);
 
+            if (member.PropertyType.IsUnsafeSignatureType())
+                propertyType = propertyType.MakeUnsafe();
+
             var propertyName = member.Name;
             var property = new CodeMemberProperty
             {
