@@ -679,10 +679,9 @@ namespace PublicApiGenerator
             if (member.PropertyType.IsUnsafeSignatureType())
                 propertyType = propertyType.MakeUnsafe();
 
-            var propertyName = member.Name;
             var property = new CodeMemberProperty
             {
-                Name = propertyName,
+                Name = PropertyNameBuilder.AugmentPropertyNameWithPropertyModifierMarkerTemplate(member, getterAttributes, setterAttributes),
                 Type = propertyType,
                 Attributes = propertyAttributes,
                 CustomAttributes = CreateCustomAttributes(member, attributeFilter),
@@ -694,7 +693,7 @@ namespace PublicApiGenerator
             var defaultMemberAttributeValue = typeDeclarationInfo.CustomAttributes.SingleOrDefault(x =>
                     x.AttributeType.FullName == "System.Reflection.DefaultMemberAttribute")
                 ?.ConstructorArguments.Select(x => x.Value).OfType<string>().SingleOrDefault();
-            if (!string.IsNullOrEmpty(defaultMemberAttributeValue) && propertyName != "Item")
+            if (!string.IsNullOrEmpty(defaultMemberAttributeValue) && member.Name != "Item")
             {
                 property.Name = "Item";
                 property.CustomAttributes.Add(
