@@ -25,7 +25,7 @@ namespace PublicApiGenerator
             }
 
             bool? isNew = null;
-            var baseType = eventDefinition.DeclaringType.BaseType;
+            TypeReference? baseType = eventDefinition.DeclaringType.BaseType;
             while (baseType is TypeDefinition typeDef)
             {
                 isNew = typeDef?.Methods.Any(e => e.Name.Equals(eventDefinition.AddMethod.Name, StringComparison.Ordinal));
@@ -40,9 +40,9 @@ namespace PublicApiGenerator
                     eventDefinition.AddMethod.IsAbstract) switch
                 {
                     (MemberAttributes.Static, null, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "static") + name,
-                    (MemberAttributes.Static, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "static new") + name,
+                    (MemberAttributes.Static, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new static") + name,
                     (MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "override") + name,
-                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate,"sealed override") + name,
+                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate,"override sealed") + name,
                     (MemberAttributes.Final, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new") + name,
                     (MemberAttributes.Abstract, null, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract") + name,
                     (MemberAttributes.Abstract, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new abstract") + name,
