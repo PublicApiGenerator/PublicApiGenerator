@@ -28,7 +28,7 @@ namespace PublicApiGenerator
             TypeReference? baseType = eventDefinition.DeclaringType.BaseType;
             while (baseType is TypeDefinition typeDef)
             {
-                isNew = typeDef?.Methods.Any(e => e.Name.Equals(eventDefinition.AddMethod.Name, StringComparison.Ordinal));
+                isNew = typeDef?.Events.Any(e => e.Name.Equals(eventDefinition.Name, StringComparison.Ordinal));
                 if (isNew is true)
                 {
                     break;
