@@ -98,7 +98,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithPublicStaticNewProperty : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticProperty
     {
         public ClassWithPublicStaticNewProperty() { }
-        protected new static string Value { get; set; }
+        public new static string Value { get; set; }
     }
 }");
         }
@@ -182,7 +182,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithSealedOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
     {
         public ClassWithSealedOverridingProperty() { }
-        public sealed override string Value { get; set; }
+        public override sealed string Value { get; set; }
     }
 }");
         }
@@ -196,7 +196,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithProtectedSealedOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProtectedProperty
     {
         public ClassWithProtectedSealedOverridingProperty() { }
-        protected sealed override string Value { get; set; }
+        protected override sealed string Value { get; set; }
     }
 }");
         }
