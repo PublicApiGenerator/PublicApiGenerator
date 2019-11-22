@@ -1,6 +1,5 @@
 using System;
 using System.CodeDom;
-using System.Linq;
 using Mono.Cecil;
 using static System.String;
 
@@ -24,34 +23,11 @@ namespace PublicApiGenerator
                     : Format(CodeNormalizer.EventModifierMarkerTemplate, CodeNormalizer.EventRemovePublicMarker) + name;
             }
 
-            bool? isNew = null;
-            TypeReference? baseType = eventDefinition.DeclaringType.BaseType;
-            while (baseType is TypeDefinition typeDef)
-            {
-                isNew = typeDef?.Methods.Any(e => e.Name.Equals(eventDefinition.AddMethod.Name, StringComparison.Ordinal));
-                if (isNew is true)
-                {
-                    break;
-                }
-                baseType = typeDef?.BaseType;
-            }
+            var isNew = eventDefinition.IsNew(typeDef => typeDef?.Events, e =>
+                e.Name.Equals(eventDefinition.Name, StringComparison.Ordinal));
 
-            return (addAccessorAttributes & MemberAttributes.ScopeMask, isNew, eventDefinition.AddMethod.IsVirtual,
-                    eventDefinition.AddMethod.IsAbstract) switch
-                {
-                    (MemberAttributes.Static, null, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "static") + name,
-                    (MemberAttributes.Static, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new static") + name,
-                    (MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "override") + name,
-                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate,"override sealed") + name,
-                    (MemberAttributes.Final, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new") + name,
-                    (MemberAttributes.Abstract, null, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract") + name,
-                    (MemberAttributes.Abstract, true, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new abstract") + name,
-                    (MemberAttributes.Const, _, _, _) => Format(CodeNormalizer.EventModifierMarkerTemplate, "abstract override") + name,
-                    (MemberAttributes.Final, null, true, false) => name,
-                    (_, null, true, false) => Format(CodeNormalizer.EventModifierMarkerTemplate, "virtual") + name,
-                    (_, true, true, false) => Format(CodeNormalizer.EventModifierMarkerTemplate, "new virtual") + name,
-                    _ => name
-                };
+            return ModifierMarkerNameBuilder.Build(eventDefinition.AddMethod, addAccessorAttributes, isNew, name,
+                CodeNormalizer.EventModifierMarkerTemplate);
         }
     }
 }

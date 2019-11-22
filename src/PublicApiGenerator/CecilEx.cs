@@ -4,6 +4,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using Mono.Collections.Generic;
 
 namespace PublicApiGenerator
 {
@@ -125,7 +126,7 @@ namespace PublicApiGenerator
             if (typeDefinition.IsInterface)
             {
                 var interfaceMethods = from @interfaceReference in typeDefinition.Interfaces
-                                       let interfaceDefinition = @interfaceReference.InterfaceType.Resolve()
+                                       let interfaceDefinition = interfaceReference.InterfaceType.Resolve()
                                        where interfaceDefinition != null
                                        select interfaceDefinition.Methods;
 
@@ -179,6 +180,25 @@ namespace PublicApiGenerator
                     // works but readonly Func<string, string, string, string, string> would turn into readonly Func<string
                     return new CodeTypeReference(modifier + " " + typeReference.BaseType, typeReference.TypeArguments.Cast<CodeTypeReference>().ToArray());
             }
+        }
+
+        internal static bool? IsNew<TDefinition>(this TDefinition methodDefinition, Func<TypeDefinition, Collection<TDefinition>?> selector, Func<TDefinition, bool> predicate)
+            where TDefinition : IMemberDefinition
+        {
+            bool? isNew = null;
+            var baseType = methodDefinition.DeclaringType.BaseType;
+            while (baseType is TypeDefinition typeDef)
+            {
+                isNew = selector(typeDef).Any(predicate);
+                if (isNew is true)
+                {
+                    break;
+                }
+
+                baseType = typeDef.BaseType;
+            }
+
+            return isNew;
         }
     }
 }

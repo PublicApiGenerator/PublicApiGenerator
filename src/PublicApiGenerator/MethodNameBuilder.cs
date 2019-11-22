@@ -1,8 +1,6 @@
 using System;
 using System.CodeDom;
-using System.Linq;
 using Mono.Cecil;
-using static System.String;
 
 namespace PublicApiGenerator
 {
@@ -18,35 +16,12 @@ namespace PublicApiGenerator
                 return name;
             }
 
-            bool? isNew = null;
-            TypeReference? baseType = methodDefinition.DeclaringType.BaseType;
-            while (baseType is TypeDefinition typeDef)
-            {
-                // too simple, improve
-                isNew = typeDef?.Methods.Any(e => e.Name.Equals(methodDefinition.Name, StringComparison.Ordinal) && e.Parameters.Count == methodDefinition.Parameters.Count);
-                if (isNew is true)
-                {
-                    break;
-                }
-                baseType = typeDef?.BaseType;
-            }
+            var isNew = methodDefinition.IsNew(typeDef => typeDef?.Methods, e =>
+                e.Name.Equals(methodDefinition.Name, StringComparison.Ordinal) &&
+                e.Parameters.Count == methodDefinition.Parameters.Count);
 
-            return (attributes & MemberAttributes.ScopeMask, isNew, methodDefinition.IsVirtual,
-                    methodDefinition.IsAbstract) switch
-                {
-                    (MemberAttributes.Static, null, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "static") + name,
-                    (MemberAttributes.Static, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new static") + name,
-                    (MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "override") + name,
-                    (MemberAttributes.Final | MemberAttributes.Override, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate,"override sealed") + name,
-                    (MemberAttributes.Final, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new") + name,
-                    (MemberAttributes.Abstract, null, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "abstract") + name,
-                    (MemberAttributes.Abstract, true, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new abstract") + name,
-                    (MemberAttributes.Const, _, _, _) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "abstract override") + name,
-                    (MemberAttributes.Final, null, true, false) => name,
-                    (_, null, true, false) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "virtual") + name,
-                    (_, true, true, false) => Format(CodeNormalizer.MethodModifierMarkerTemplate, "new virtual") + name,
-                    _ => name
-                };
+            return ModifierMarkerNameBuilder.Build(methodDefinition, attributes, isNew, name,
+                CodeNormalizer.MethodModifierMarkerTemplate);
         }
     }
 }
