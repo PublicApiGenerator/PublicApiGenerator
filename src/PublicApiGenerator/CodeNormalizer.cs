@@ -98,7 +98,7 @@ namespace PublicApiGenerator
             var modifier = match.Groups[4].Value;
 
             var s = match.ToString().Replace(string.Format(PropertyModifierMarkerTemplate, modifier), string.Empty);
-            return string.IsNullOrWhiteSpace(oldModifier) ? s.Insert(s.IndexOf(oldModifier, StringComparison.Ordinal), modifier) : s.Replace(oldModifier, modifier);
+            return string.IsNullOrWhiteSpace(oldModifier) ? s.Insert(s.IndexOf(oldModifier, StringComparison.Ordinal), modifier.Substring(0, modifier.Length - 1)) : s.Replace(oldModifier, modifier);
         }
 
         static string MethodModifierMatcher(Match match)
@@ -107,7 +107,7 @@ namespace PublicApiGenerator
             var modifier = match.Groups[4].Value;
 
             var s = match.ToString().Replace(string.Format(MethodModifierMarkerTemplate, modifier), string.Empty);
-            return string.IsNullOrWhiteSpace(oldModifier) ? s.Insert(s.IndexOf(oldModifier, StringComparison.Ordinal), modifier) : s.Replace(oldModifier, modifier);
+            return string.IsNullOrWhiteSpace(oldModifier) ? s.Insert(s.IndexOf(oldModifier, StringComparison.Ordinal), modifier.Substring(0, modifier.Length-1)) : s.Replace(oldModifier, modifier);
         }
 
         static string RemoveUnnecessaryWhiteSpace(string publicApi)
