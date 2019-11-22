@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -211,6 +211,20 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithPropertyHiding() { }
         public new string Value { get; set; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_new_modifier_for_generics()
+        {
+            AssertPublicApi(typeof(ClassWithPropertyExtensions<>),
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPropertyExtensions<T> : PublicApiGeneratorTests.Examples.ClassWithPropertyExtensions
+    {
+        public ClassWithPropertyExtensions() { }
+        public new PublicApiGeneratorTests.Examples.ClassWithPropertyExtensions<T> Extension { get; set; }
     }
 }");
         }
@@ -461,6 +475,16 @@ namespace PublicApiGeneratorTests
             {
             }
             public new abstract string Value { get; set; }
+        }
+
+        public class ClassWithPropertyExtensions
+        {
+            public ClassWithMethodExtensions Extension { get; set; }
+        }
+
+        public class ClassWithPropertyExtensions<T> : ClassWithPropertyExtensions
+        {
+            public new ClassWithPropertyExtensions<T> Extension { get; set; }
         }
     }
     // ReSharper restore ValueParameterNotUsed

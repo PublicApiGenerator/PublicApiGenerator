@@ -258,6 +258,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_new_modifier_for_generics()
+        {
+            AssertPublicApi(typeof(ClassWithMethodExtensions<>),
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithMethodExtensions<T> : PublicApiGeneratorTests.Examples.ClassWithMethodExtensions
+    {
+        public ClassWithMethodExtensions() { }
+        public new PublicApiGeneratorTests.Examples.ClassWithMethodExtensions<T> Extend(string parameter) { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_protected_new_modifier()
         {
             AssertPublicApi<ClassWithProtectedMethodHiding>(
@@ -516,6 +530,22 @@ namespace PublicApiGeneratorTests
             {
             }
             public new abstract void DoSomething();
+        }
+
+        public class ClassWithMethodExtensions
+        {
+            public ClassWithMethodExtensions Extend(string parameter)
+            {
+                return this;
+            }
+        }
+
+        public class ClassWithMethodExtensions<T> : ClassWithMethodExtensions
+        {
+            public new ClassWithMethodExtensions<T> Extend(string parameter)
+            {
+                return this;
+            }
         }
     }
     // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
