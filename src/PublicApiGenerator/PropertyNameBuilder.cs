@@ -16,7 +16,7 @@ namespace PublicApiGenerator
             }
 
             var isNew = propertyDefinition.IsNew(typeDef => typeDef?.Properties, e =>
-                e.Name.Equals(propertyDefinition.Name, StringComparison.Ordinal) && e.PropertyType.Equals(propertyDefinition.PropertyType));
+                e.Name.Equals(propertyDefinition.Name, StringComparison.Ordinal));
 
             return ModifierMarkerNameBuilder.Build(propertyDefinition.GetMethod, getAccessorAttributes, isNew, name,
                 CodeNormalizer.PropertyModifierMarkerTemplate);
