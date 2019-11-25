@@ -300,6 +300,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_not_output_new_when_base_differs_in_parameters()
+        {
+            AssertPublicApi<ClassWithBaseMethodConstraint>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithBaseMethodConstraint : PublicApiGeneratorTests.Examples.ClassWithBaseMethod
+    {
+        public ClassWithBaseMethodConstraint() { }
+        public void SomeMethod(PublicApiGeneratorTests.Examples.ClassWithBaseMethodConstraint input1, PublicApiGeneratorTests.Examples.ClassWithBaseMethodConstraint input2) { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_unsafe_modifier()
         {
             AssertPublicApi<ClassWithUnsafeMethod>(
@@ -545,6 +559,20 @@ namespace PublicApiGeneratorTests
             public new ClassWithMethodExtensions<T> Extend(string parameter)
             {
                 return this;
+            }
+        }
+
+        public class ClassWithBaseMethod
+        {
+            public void SomeMethod(ClassWithBaseMethod input1, ClassWithBaseMethod input2)
+            {
+            }
+        }
+
+        public class ClassWithBaseMethodConstraint: ClassWithBaseMethod
+        {
+            public void SomeMethod(ClassWithBaseMethodConstraint input1, ClassWithBaseMethodConstraint input2)
+            {
             }
         }
     }
