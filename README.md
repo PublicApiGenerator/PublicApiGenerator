@@ -126,31 +126,31 @@ dotnet tool uninstall -g PublicApiGenerator.Tool
 Generate public API for fluent assertions 5.6.0 for runtime framework `netcoreapp2.1` and `net461`
 
 ```
-generate-public-api --target-frameworks 'netcoreapp2.1;net461' --package FluentAssertions --package-version 5.6.0
+generate-public-api --target-frameworks netcoreapp2.1;net461 --package FluentAssertions --package-version 5.6.0
 ```
 
 Generate public API for fluent assertions 5.* for runtime framework `net47`
 
 ```
-generate-public-api --target-frameworks 'netcoreapp2.1;net461' --package FluentAssertions --package-version 5.*
+generate-public-api --target-frameworks netcoreapp2.1;net461 --package FluentAssertions --package-version 5.*
 ```
 
 Generate public API for NServiceBus 7.1.4 for runtime framework `netcoreapp2.2` and `net452`. Note NServiceBus package doesn't contain NServiceBus.dll and therefore it is required to specify the assembly that contains the public API.
 
 ```
-generate-public-api --target-frameworks 'netcoreapp2.2;net452' --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll
+generate-public-api --target-frameworks netcoreapp2.2;net452 --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll
 ```
 
 ### Command line arguments
 
 ```
---target-frameworks framework|'framework;framework'
+--target-frameworks framework|framework;framework
 ```
 
 The target framework in which the package will be restored. The target framework is also used as runtime to generate the public API. It is required to specify a valid runtime framework. For example
 
-- 'netcoreapp2.2;net452' to build a public API for `netcoreapp2.2` and `net452`
-- 'netcoreapp2.1;net461' to build a public API for `netcoreapp2.1` and `net461`
+- `netcoreapp2.2;net452` to build a public API for `netcoreapp2.2` and `net452`
+- `netcoreapp2.1;net461` to build a public API for `netcoreapp2.1` and `net461`
 - `net47` to build a public API for `net47`
 
 It is not possible to use `netstandard2.0` because it is not a valid runtime framework.
@@ -191,7 +191,7 @@ The assembly name including the extension to generate a public API from in case 
 
 A path to a csproj file that contains the public API that needs to be built. By default a release build will be generated. When the project-path switch is used it is required to specify the `--assembly` switch to point to the output assembly that contains the public API. For example
 
-- '..\PublicApiGenerator\PublicApiGenerator.csproj'
+- `..\PublicApiGenerator\PublicApiGenerator.csproj`
 
 ```
 --working-directory Path
@@ -217,7 +217,7 @@ By default latest stable release version of PubliApiGenerator will be used in th
 --verbose
 ```
 
-Detailed information about what's going on behind the scenes
+Detailed information about whats going on behind the scenes
 
 ```
 leave-artifacts
