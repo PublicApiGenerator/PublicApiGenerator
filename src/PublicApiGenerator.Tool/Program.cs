@@ -248,7 +248,7 @@ public static class Program
         var outputPath = args[1];
         var outputDirectory = args[2];
         var asm = Assembly.LoadFile(fullPath);
-        File.WriteAllText(outputPath, ApiGenerator.GeneratePublicApi(asm));
+        File.WriteAllText(outputPath, asm.GeneratePublicApi());
         var destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(outputPath));
         if (File.Exists(destinationFilePath))
         {
