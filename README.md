@@ -217,7 +217,7 @@ By default latest stable release version of PubliApiGenerator will be used in th
 --verbose
 ```
 
-Detailed information about whats going on behind the scenes
+Detailed information about what's going on behind the scenes
 
 ```
 leave-artifacts
