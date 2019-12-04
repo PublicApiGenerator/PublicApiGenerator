@@ -693,7 +693,7 @@ namespace PublicApiGenerator
             var defaultMemberAttributeValue = typeDeclarationInfo.CustomAttributes.SingleOrDefault(x =>
                     x.AttributeType.FullName == "System.Reflection.DefaultMemberAttribute")
                 ?.ConstructorArguments.Select(x => x.Value).OfType<string>().SingleOrDefault();
-            if (!string.IsNullOrEmpty(defaultMemberAttributeValue) && member.Name != "Item")
+            if (!string.IsNullOrEmpty(defaultMemberAttributeValue) && member.Name == defaultMemberAttributeValue && member.Name != "Item")
             {
                 property.Name = "Item";
                 property.CustomAttributes.Add(
