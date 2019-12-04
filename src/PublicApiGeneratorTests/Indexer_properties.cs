@@ -49,6 +49,35 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_output_other_properties_when_indexer_exists()
+        {
+            AssertPublicApi<InterfaceWithIndexerAndAnotherProperty>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public interface InterfaceWithIndexerAndAnotherProperty
+    {
+        object this[string key] { get; }
+        string Property { get; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_other_properties_when_named_indexer_exists()
+        {
+            AssertPublicApi<InterfaceWithNamedIndexerAndAnotherProperty>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public interface InterfaceWithNamedIndexerAndAnotherProperty
+    {
+        [System.Runtime.CompilerServices.IndexerName(""Bar"")]
+        object this[string key] { get; }
+        string Property { get; }
+    }
+}");
+        }
     }
 
 
@@ -78,6 +107,21 @@ namespace PublicApiGeneratorTests
                 get => y;
                 set => y = value;
             }
+        }
+
+        public interface InterfaceWithIndexerAndAnotherProperty
+        {
+            string Property { get; }
+
+            object this[string key] { get; }
+        }
+
+        public interface InterfaceWithNamedIndexerAndAnotherProperty
+        {
+            string Property { get; }
+
+            [IndexerName("Bar")]
+            object this[string key] { get; }
         }
     }
     // ReSharper restore ValueParameterNotUsed
