@@ -664,6 +664,7 @@ namespace PublicApiGenerator
                 if (genericParam.HasNotNullableValueTypeConstraint)
                     return "default";
 
+                // this seems right for default
                 return "default";
             }
             
