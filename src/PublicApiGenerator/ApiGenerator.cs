@@ -656,6 +656,18 @@ namespace PublicApiGenerator
             if (parameter.Constant != null)
                 return parameter.Constant;
 
+            if (parameter.ParameterType is GenericParameter genericParam)
+            {
+                if (genericParam.HasReferenceTypeConstraint)
+                    return "null";
+
+                if (genericParam.HasNotNullableValueTypeConstraint)
+                    return "default";
+
+                // this seems right for default
+                return "default";
+            }
+            
             return parameter.ParameterType.IsValueType ? "default" : "null";
         }
 

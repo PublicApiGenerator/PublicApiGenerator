@@ -161,7 +161,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        public void Should_output_default_values()
+        public void Should_output_default_values_in_class()
         {
             AssertPublicApi<MethodWithDefaultValues>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -169,7 +169,30 @@ namespace PublicApiGeneratorTests
     public class MethodWithDefaultValues
     {
         public MethodWithDefaultValues() { }
-        public void Method(int value1 = 42, string value2 = ""hello world"", System.Threading.CancellationToken token = default, int value3 = 0, string value4 = null) { }
+        public void Method1(int value1 = 42, string value2 = ""hello world"", System.Threading.CancellationToken token = default, int value3 = 0, string value4 = null) { }
+        public TType Method2<TType>(string name, TType defaultValue = null)
+            where TType :  class { }
+        public TType Method3<TType>(string name, TType defaultValue = default)
+            where TType :  struct { }
+        public TType Method4<TType>(string name, TType defaultValue = default) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_default_values_in_interface()
+        {
+            AssertPublicApi<InterfaceWithDefaultValues>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public interface InterfaceWithDefaultValues
+    {
+        void Method1(int value1 = 42, string value2 = ""hello world"", System.Threading.CancellationToken token = default, int value3 = 0, string value4 = null);
+        TType Method2<TType>(string name, TType defaultValue = null)
+            where TType :  class;
+        TType Method3<TType>(string name, TType defaultValue = default)
+            where TType :  struct;
+        TType Method4<TType>(string name, TType defaultValue = default);
     }
 }");
         }
@@ -368,9 +391,20 @@ namespace PublicApiGeneratorTests
 
         public class MethodWithDefaultValues
         {
-            public void Method(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default!)
+            public void Method1(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default!)
             {
             }
+            public TType Method2<TType>(string name, TType defaultValue = null) where TType : class => default;
+            public TType Method3<TType>(string name, TType defaultValue = default) where TType : struct => default;
+            public TType Method4<TType>(string name, TType defaultValue = default) => default;
+        }
+
+        public interface InterfaceWithDefaultValues
+        {
+            void Method1(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default!);
+            TType Method2<TType>(string name, TType defaultValue = null) where TType : class;
+            TType Method3<TType>(string name, TType defaultValue = default) where TType : struct;
+            TType Method4<TType>(string name, TType defaultValue = default);
         }
 
         public class MethodWithDefaultThatLooksLikeAnAttribute
