@@ -228,7 +228,7 @@ namespace PublicApiGenerator.Tool
 
         private static readonly string PackageReferenceTemplate =
             @"
-        <PackageReference Include=""{PackageName}"" Version=""{PackageVersion}"" />";
+        <PackageReference Include=""{PackageName}"" Version=""[{PackageVersion}]"" />";
 
         private static readonly string ProjectReferenceTemplate =
             @"<ItemGroup>
