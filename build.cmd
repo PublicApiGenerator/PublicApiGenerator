@@ -1,4 +1,6 @@
 @echo Off
+setlocal
+cd "%~dp0"
 
 dotnet build ./src/PublicApiGenerator.sln --configuration Release /nologo  || goto :error
 dotnet test ./src/PublicApiGenerator.sln --configuration Release --no-build --verbosity=normal /nologo  || goto :error
