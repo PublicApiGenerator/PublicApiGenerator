@@ -19,10 +19,11 @@ namespace PublicApiGenerator.Tool
         /// <param name="generatorVersion">The version of the PublicApiGenerator package to use.</param>
         /// <param name="workingDirectory">The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.</param>
         /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
+        /// <param name="suppressWarnings">Whether to suppress warnings (<c>true</c>) or treat them like errors (<c>false</c> and default).</param>
         /// <param name="verbose"></param>
         /// <param name="leaveArtifacts"></param>
         /// <returns></returns>
-        static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
+        static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool suppressWarnings = false, bool leaveArtifacts = false)
         {
             if (string.IsNullOrEmpty(outputDirectory))
             {
@@ -47,7 +48,7 @@ namespace PublicApiGenerator.Tool
             {
                 AssertInputParameters(targetFrameworks, projectPath, package, packageVersion, workingArea, assembly);
 
-                var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
+                var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion!, suppressWarnings);
 
                 SaveProjectTemplate(workingArea, template, verbose);
 
@@ -168,7 +169,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static string CreateProjectTemplate(string targetFrameworks, string? project, string? package, string? packageVersion, string generatorVersion)
+        private static string CreateProjectTemplate(string targetFrameworks, string? project, string? package, string? packageVersion, string generatorVersion, bool suppressWarnings)
         {
             return ProjectTemplate
                 .Replace("{TargetFrameworks}", targetFrameworks)
@@ -179,7 +180,8 @@ namespace PublicApiGenerator.Tool
                 )
                 .Replace("{ProjectReference}", string.IsNullOrEmpty(project) ? string.Empty : ProjectReferenceTemplate
                     .Replace("{ProjectFile}", Path.GetFullPath(project))
-                );
+                )
+                .Replace("{TreatWarningsAsErrors}", !suppressWarnings ? "true" : "false");
         }
 
         private static void AssertInputParameters(string targetFrameworks, string? project, string? package,
@@ -218,6 +220,7 @@ namespace PublicApiGenerator.Tool
         <OutputType>Exe</OutputType>
         <TargetFrameworks>{TargetFrameworks}</TargetFrameworks>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <TreatWarningsAsErrors>{TreatWarningsAsErrors}</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
