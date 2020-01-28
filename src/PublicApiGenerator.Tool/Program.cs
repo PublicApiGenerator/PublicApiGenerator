@@ -11,6 +11,8 @@ namespace PublicApiGenerator.Tool
     /// </summary>
     public static class Program
     {
+        static TextWriter? _log;
+
         /// <summary>
         /// Public API generator tool that is useful for semantic versioning
         /// </summary>
@@ -43,8 +45,10 @@ namespace PublicApiGenerator.Tool
 
             if (verbose)
             {
-                Console.WriteLine($"Working area: {workingArea}");
+                _log = Console.Error;
             }
+
+            _log?.WriteLine($"Working area: {workingArea}");
 
             try
             {
@@ -93,11 +97,8 @@ namespace PublicApiGenerator.Tool
                 // Because we run in different appdomain we can always unload
                 RunDotnet(workingArea, verbose, $"run --configuration Release --framework {framework} -- {fullPath} {outputPath} {outputDirectory}");
 
-                if (verbose)
-                {
-                    Console.WriteLine($"Public API file: {outputPath}");
-                    Console.WriteLine();
-                }
+                _log?.WriteLine($"Public API file: {outputPath}");
+                _log?.WriteLine();
             }
             catch (FileNotFoundException)
             {
@@ -108,11 +109,8 @@ namespace PublicApiGenerator.Tool
 
         private static void RunDotnet(string workingArea, bool verbose, string arguments)
         {
-            if (verbose)
-            {
-                Console.WriteLine($"Dotnet arguments: {arguments}");
-                Console.WriteLine();
-            }
+            _log?.WriteLine($"Dotnet arguments: {arguments}");
+            _log?.WriteLine();
 
             var psi = new ProcessStartInfo
             {
@@ -127,11 +125,8 @@ namespace PublicApiGenerator.Tool
 
             var output = process.StandardOutput.ReadToEnd();
 
-            if (verbose)
-            {
-                Console.WriteLine($"Dotnet output: {output}");
-                Console.WriteLine();
-            }
+            _log?.WriteLine($"Dotnet output: {output}");
+            _log?.WriteLine();
 
             if (process.ExitCode != 0)
             {
@@ -147,12 +142,9 @@ namespace PublicApiGenerator.Tool
             var fullPath = Path.Combine(workingArea, "project.csproj");
             using (var output = File.CreateText(fullPath))
             {
-                if (verbose)
-                {
-                    Console.WriteLine($"Project output path: {fullPath}");
-                    Console.WriteLine($"Project template: {template}");
-                    Console.WriteLine();
-                }
+                _log?.WriteLine($"Project output path: {fullPath}");
+                _log?.WriteLine($"Project template: {template}");
+                _log?.WriteLine();
 
                 output.Write(template);
             }
@@ -160,12 +152,9 @@ namespace PublicApiGenerator.Tool
             fullPath = Path.Combine(workingArea, "Program.cs");
             using (var output = File.CreateText(fullPath))
             {
-                if (verbose)
-                {
-                    Console.WriteLine($"Program output path: {fullPath}");
-                    Console.WriteLine($"Program template: {ProgramMain}");
-                    Console.WriteLine();
-                }
+                _log?.WriteLine($"Program output path: {fullPath}");
+                _log?.WriteLine($"Program template: {ProgramMain}");
+                _log?.WriteLine();
 
                 output.Write(ProgramMain);
             }
