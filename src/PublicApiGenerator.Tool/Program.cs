@@ -60,7 +60,7 @@ namespace PublicApiGenerator.Tool
             }
             catch (InvalidOperationException e)
             {
-                Console.WriteLine($"Configuration error: {e.Message}");
+                Console.Error.WriteLine($"Configuration error: {e.Message}");
                 return 1;
             }
             catch (Exception e)
@@ -98,7 +98,7 @@ namespace PublicApiGenerator.Tool
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine($"Unable to find {fullPath}. Consider specifying --assembly");
+                Console.Error.WriteLine($"Unable to find {fullPath}. Consider specifying --assembly");
                 throw;
             }
         }
