@@ -219,7 +219,7 @@ namespace PublicApiGenerator.Cli
         static void AssertInputParameters(string targetFrameworks, string? project, string? package,
             string? packageVersion, string workingArea, string? assembly)
         {
-            Exception Error(string message) =>
+            static Exception Error(string message) =>
                 new Exception("Argument error: " + message);
 
             if (string.IsNullOrEmpty(targetFrameworks))
