@@ -119,6 +119,7 @@ namespace PublicApiGenerator.Tool
             process.WaitForExit(10000);
 
             var output = process.StandardOutput.ReadToEnd();
+            Console.WriteLine(output);
 
             logVerbose.WriteLine($"Dotnet output: {output}");
             logVerbose.WriteLine();
@@ -235,7 +236,9 @@ public static class Program
         var outputPath = args[1];
         var outputDirectory = args[2];
         var asm = Assembly.LoadFile(fullPath);
-        File.WriteAllText(outputPath, asm.GeneratePublicApi());
+        var apiString = asm.GeneratePublicApi();
+        Console.WriteLine(apiString);
+        File.WriteAllText(outputPath, apiString);
         var destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(outputPath));
         if (File.Exists(destinationFilePath))
         {
