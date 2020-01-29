@@ -41,10 +41,9 @@ namespace PublicApiGenerator.Tool
                 Path.Combine(workingDirectory, Path.GetRandomFileName()) :
                 Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
-            if (verbose)
-            {
-                Console.WriteLine($"Working area: {workingArea}");
-            }
+            var logError = Console.Error;
+            var logVerbose = verbose ? Console.Error : TextWriter.Null;
+            logVerbose.WriteLine($"Working area: {workingArea}");
 
             try
             {
@@ -52,23 +51,23 @@ namespace PublicApiGenerator.Tool
 
                 var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
 
-                SaveProjectTemplate(workingArea, template, verbose);
+                SaveProjectTemplate(workingArea, template, logVerbose);
 
                 foreach (var framework in targetFrameworks.Split(";"))
                 {
-                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, verbose);
+                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, logVerbose, logError);
                 }
 
                 return 0;
             }
             catch (InvalidOperationException e)
             {
-                Console.Error.WriteLine($"Configuration error: {e.Message}");
+                logError.WriteLine($"Configuration error: {e.Message}");
                 return 1;
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine($"Failed: {e}");
+                logError.WriteLine($"Failed: {e}");
                 return 1;
             }
             finally
@@ -80,7 +79,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, bool verbose)
+        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, TextWriter logVerbose, TextWriter logError)
         {
             var relativePath = Path.Combine(workingArea, "bin", "Release", framework);
             var name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
@@ -91,28 +90,22 @@ namespace PublicApiGenerator.Tool
             try
             {
                 // Because we run in different appdomain we can always unload
-                RunDotnet(workingArea, verbose, $"run --configuration Release --framework {framework} -- {fullPath} {outputPath} {outputDirectory}");
+                RunDotnet(workingArea, $"run --configuration Release --framework {framework} -- {fullPath} {outputPath} {outputDirectory}", logVerbose);
 
-                if (verbose)
-                {
-                    Console.WriteLine($"Public API file: {outputPath}");
-                    Console.WriteLine();
-                }
+                logVerbose.WriteLine($"Public API file: {outputPath}");
+                logVerbose.WriteLine();
             }
             catch (FileNotFoundException)
             {
-                Console.Error.WriteLine($"Unable to find {fullPath}. Consider specifying --assembly");
+                logError.WriteLine($"Unable to find {fullPath}. Consider specifying --assembly");
                 throw;
             }
         }
 
-        private static void RunDotnet(string workingArea, bool verbose, string arguments)
+        private static void RunDotnet(string workingArea, string arguments, TextWriter logVerbose)
         {
-            if (verbose)
-            {
-                Console.WriteLine($"Dotnet arguments: {arguments}");
-                Console.WriteLine();
-            }
+            logVerbose.WriteLine($"Dotnet arguments: {arguments}");
+            logVerbose.WriteLine();
 
             var psi = new ProcessStartInfo
             {
@@ -127,11 +120,8 @@ namespace PublicApiGenerator.Tool
 
             var output = process.StandardOutput.ReadToEnd();
 
-            if (verbose)
-            {
-                Console.WriteLine($"Dotnet output: {output}");
-                Console.WriteLine();
-            }
+            logVerbose.WriteLine($"Dotnet output: {output}");
+            logVerbose.WriteLine();
 
             if (process.ExitCode != 0)
             {
@@ -141,18 +131,15 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void SaveProjectTemplate(string workingArea, string template, bool verbose)
+        private static void SaveProjectTemplate(string workingArea, string template, TextWriter logVerbose)
         {
             Directory.CreateDirectory(workingArea);
             var fullPath = Path.Combine(workingArea, "project.csproj");
             using (var output = File.CreateText(fullPath))
             {
-                if (verbose)
-                {
-                    Console.WriteLine($"Project output path: {fullPath}");
-                    Console.WriteLine($"Project template: {template}");
-                    Console.WriteLine();
-                }
+                logVerbose.WriteLine($"Project output path: {fullPath}");
+                logVerbose.WriteLine($"Project template: {template}");
+                logVerbose.WriteLine();
 
                 output.Write(template);
             }
@@ -160,12 +147,9 @@ namespace PublicApiGenerator.Tool
             fullPath = Path.Combine(workingArea, "Program.cs");
             using (var output = File.CreateText(fullPath))
             {
-                if (verbose)
-                {
-                    Console.WriteLine($"Program output path: {fullPath}");
-                    Console.WriteLine($"Program template: {ProgramMain}");
-                    Console.WriteLine();
-                }
+                logVerbose.WriteLine($"Program output path: {fullPath}");
+                logVerbose.WriteLine($"Program template: {ProgramMain}");
+                logVerbose.WriteLine();
 
                 output.Write(ProgramMain);
             }
