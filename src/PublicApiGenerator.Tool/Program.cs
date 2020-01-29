@@ -11,6 +11,9 @@ namespace PublicApiGenerator.Tool
     /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// Public API generator tool that is useful for semantic versioning
+        /// </summary>
         /// <param name="targetFrameworks">Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461</param>
         /// <param name="assembly">The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case in differs from the package name.</param>
         /// <param name="projectPath">The path to the csproj that should be used to build the public API.</param>
