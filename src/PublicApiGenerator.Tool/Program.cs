@@ -41,9 +41,9 @@ namespace PublicApiGenerator.Tool
                 Path.Combine(workingDirectory, Path.GetRandomFileName()) :
                 Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
-            var log = verbose ? Console.Error : null;
-
-            log?.WriteLine($"Working area: {workingArea}");
+            var logError = Console.Error;
+            var logVerbose = verbose ? Console.Error : TextWriter.Null;
+            logVerbose.WriteLine($"Working area: {workingArea}");
 
             try
             {
@@ -51,23 +51,23 @@ namespace PublicApiGenerator.Tool
 
                 var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
 
-                SaveProjectTemplate(workingArea, template, log);
+                SaveProjectTemplate(workingArea, template, logVerbose);
 
                 foreach (var framework in targetFrameworks.Split(";"))
                 {
-                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, log);
+                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, logVerbose, logError);
                 }
 
                 return 0;
             }
             catch (InvalidOperationException e)
             {
-                Console.Error.WriteLine($"Configuration error: {e.Message}");
+                logError.WriteLine($"Configuration error: {e.Message}");
                 return 1;
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine($"Failed: {e}");
+                logError.WriteLine($"Failed: {e}");
                 return 1;
             }
             finally
@@ -79,7 +79,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, TextWriter? log)
+        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, TextWriter logVerbose, TextWriter logError)
         {
             var relativePath = Path.Combine(workingArea, "bin", "Release", framework);
             var name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
@@ -90,22 +90,22 @@ namespace PublicApiGenerator.Tool
             try
             {
                 // Because we run in different appdomain we can always unload
-                RunDotnet(workingArea, log, $"run --configuration Release --framework {framework} -- {fullPath} {outputPath} {outputDirectory}");
+                RunDotnet(workingArea, $"run --configuration Release --framework {framework} -- {fullPath} {outputPath} {outputDirectory}", logVerbose);
 
-                log?.WriteLine($"Public API file: {outputPath}");
-                log?.WriteLine();
+                logVerbose.WriteLine($"Public API file: {outputPath}");
+                logVerbose.WriteLine();
             }
             catch (FileNotFoundException)
             {
-                Console.Error.WriteLine($"Unable to find {fullPath}. Consider specifying --assembly");
+                logError.WriteLine($"Unable to find {fullPath}. Consider specifying --assembly");
                 throw;
             }
         }
 
-        private static void RunDotnet(string workingArea, TextWriter? log, string arguments)
+        private static void RunDotnet(string workingArea, string arguments, TextWriter logVerbose)
         {
-            log?.WriteLine($"Dotnet arguments: {arguments}");
-            log?.WriteLine();
+            logVerbose.WriteLine($"Dotnet arguments: {arguments}");
+            logVerbose.WriteLine();
 
             var psi = new ProcessStartInfo
             {
@@ -120,8 +120,8 @@ namespace PublicApiGenerator.Tool
 
             var output = process.StandardOutput.ReadToEnd();
 
-            log?.WriteLine($"Dotnet output: {output}");
-            log?.WriteLine();
+            logVerbose.WriteLine($"Dotnet output: {output}");
+            logVerbose.WriteLine();
 
             if (process.ExitCode != 0)
             {
@@ -131,15 +131,15 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void SaveProjectTemplate(string workingArea, string template, TextWriter? log)
+        private static void SaveProjectTemplate(string workingArea, string template, TextWriter logVerbose)
         {
             Directory.CreateDirectory(workingArea);
             var fullPath = Path.Combine(workingArea, "project.csproj");
             using (var output = File.CreateText(fullPath))
             {
-                log?.WriteLine($"Project output path: {fullPath}");
-                log?.WriteLine($"Project template: {template}");
-                log?.WriteLine();
+                logVerbose.WriteLine($"Project output path: {fullPath}");
+                logVerbose.WriteLine($"Project template: {template}");
+                logVerbose.WriteLine();
 
                 output.Write(template);
             }
@@ -147,9 +147,9 @@ namespace PublicApiGenerator.Tool
             fullPath = Path.Combine(workingArea, "Program.cs");
             using (var output = File.CreateText(fullPath))
             {
-                log?.WriteLine($"Program output path: {fullPath}");
-                log?.WriteLine($"Program template: {ProgramMain}");
-                log?.WriteLine();
+                logVerbose.WriteLine($"Program output path: {fullPath}");
+                logVerbose.WriteLine($"Program template: {ProgramMain}");
+                logVerbose.WriteLine();
 
                 output.Write(ProgramMain);
             }
