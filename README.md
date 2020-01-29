@@ -132,7 +132,13 @@ generate-public-api --target-frameworks netcoreapp2.1;net461 --package FluentAss
 Generate public API for fluent assertions 5.* for runtime framework `net47`
 
 ```
-generate-public-api --target-frameworks netcoreapp2.1;net461 --package FluentAssertions --package-version 5.*
+generate-public-api --target-frameworks net47 --package FluentAssertions --package-version 5.*
+```
+
+Generate public API for fluent assertions 5.6.0 (exact version match) for runtime framework `net47`
+
+```
+generate-public-api --target-frameworks net47 --package FluentAssertions --package-version [5.6.0]
 ```
 
 Generate public API for NServiceBus 7.1.4 for runtime framework `netcoreapp2.2` and `net452`. Note NServiceBus package doesn't contain NServiceBus.dll and therefore it is required to specify the assembly that contains the public API.
@@ -170,7 +176,7 @@ When the `--package-name` switch is used the `--package-version` switch is manda
 --package-version Version
 ```
 
-A nuget package version or floating versions as specified by https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files. For example
+A nuget package version or floating versions as specified by https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files and https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges-and-wildcards. For example
 
 - 8.1.1
 - 8.0
