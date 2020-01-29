@@ -19,6 +19,7 @@ namespace PublicApiGenerator.Cli
         /// <param name="projectPath">The path to the csproj that should be used to build the public API.</param>
         /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/></param>
         /// <param name="packageVersion">The version of the package defined in <paramref name="package"/> to be used.</param>
+        /// <param name="packageSource">Package source or feed to use (multiple allowed).</param>
         /// <param name="generatorVersion">The version of the PublicApiGenerator package to use.</param>
         /// <param name="workingDirectory">The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.</param>
         /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
@@ -29,13 +30,15 @@ namespace PublicApiGenerator.Cli
                         string? projectPath = null,
                         string? package = null,
                         string? packageVersion = null,
+                        ICollection<string>? packageSource = null,
                         string? generatorVersion = null,
                         string? workingDirectory = null,
                         string? outputDirectory = null,
                         bool verbose = false,
                         bool leaveArtifacts = false) =>
             Wain(targetFramework ?? Array.Empty<string>(),
-                 assembly, projectPath, package, packageVersion,
+                 assembly, projectPath,
+                 package, packageVersion, packageSource ?? Array.Empty<string>(),
                  generatorVersion, workingDirectory, outputDirectory,
                  verbose, leaveArtifacts);
 
@@ -44,6 +47,7 @@ namespace PublicApiGenerator.Cli
                         string? projectPath,
                         string? package,
                         string? packageVersion,
+                        ICollection<string> packageSources,
                         string? generatorVersion,
                         string? workingDirectory,
                         string? outputDirectory,
@@ -68,7 +72,7 @@ namespace PublicApiGenerator.Cli
             {
                 AssertInputParameters(frameworks, projectPath, package, packageVersion, workingArea, assembly);
 
-                var template = CreateProject(frameworks, projectPath, package, packageVersion, generatorVersion!);
+                var template = CreateProject(frameworks, projectPath, package, packageVersion, packageSources, generatorVersion!);
 
                 SaveProject(workingArea, template, log);
 
@@ -211,13 +215,20 @@ namespace PublicApiGenerator.Cli
             }
         }
 
-        static XElement CreateProject(ICollection<string> targetFrameworks, string? project, string? package, string? packageVersion, string generatorVersion)
+        static XElement CreateProject(ICollection<string> targetFrameworks,
+                                      string? project, string? package,
+                                      string? packageVersion,
+                                      ICollection<string> packageSources,
+                                      string generatorVersion)
         {
             return new XElement("Project", new XAttribute("Sdk", "Microsoft.NET.Sdk"),
                 new XElement("PropertyGroup",
                     new XElement("OutputType", "Exe"),
                     new XElement("TargetFrameworks", string.Join(";", targetFrameworks)),
-                    new XElement("CopyLocalLockFileAssemblies", "true")),
+                    new XElement("CopyLocalLockFileAssemblies", "true"),
+                    packageSources.Count > 0
+                        ? new XElement("RestoreAdditionalProjectSources", string.Join(";", packageSources))
+                        : null),
                 new XElement("ItemGroup",
                     PackageReference(nameof(PublicApiGenerator), generatorVersion),
                     !string.IsNullOrEmpty(package) ? PackageReference(package, packageVersion!) : null,
