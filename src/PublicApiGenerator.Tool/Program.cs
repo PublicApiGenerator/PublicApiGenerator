@@ -79,7 +79,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, TextWriter log)
+        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, TextWriter? log)
         {
             var relativePath = Path.Combine(workingArea, "bin", "Release", framework);
             var name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
@@ -102,7 +102,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void RunDotnet(string workingArea, TextWriter log, string arguments)
+        private static void RunDotnet(string workingArea, TextWriter? log, string arguments)
         {
             log?.WriteLine($"Dotnet arguments: {arguments}");
             log?.WriteLine();
@@ -131,7 +131,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void SaveProjectTemplate(string workingArea, string template, TextWriter log)
+        private static void SaveProjectTemplate(string workingArea, string template, TextWriter? log)
         {
             Directory.CreateDirectory(workingArea);
             var fullPath = Path.Combine(workingArea, "project.csproj");
