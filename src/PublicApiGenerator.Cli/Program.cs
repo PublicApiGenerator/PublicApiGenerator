@@ -14,7 +14,7 @@ namespace PublicApiGenerator.Cli
         /// <summary>
         /// Public API generator tool that is useful for semantic versioning
         /// </summary>
-        /// <param name="targetFrameworks">Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461</param>
+        /// <param name="targetFramework">Target framework to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks.</param>
         /// <param name="assembly">The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case in differs from the package name.</param>
         /// <param name="projectPath">The path to the csproj that should be used to build the public API.</param>
         /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/></param>
@@ -24,8 +24,7 @@ namespace PublicApiGenerator.Cli
         /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
         /// <param name="verbose"></param>
         /// <param name="leaveArtifacts"></param>
-
-        static int Main(string targetFrameworks,
+        static int Main(ICollection<string>? targetFramework,
                         string? assembly = null,
                         string? projectPath = null,
                         string? package = null,
@@ -34,13 +33,26 @@ namespace PublicApiGenerator.Cli
                         string? workingDirectory = null,
                         string? outputDirectory = null,
                         bool verbose = false,
-                        bool leaveArtifacts = false)
+                        bool leaveArtifacts = false) =>
+            Wain(targetFramework ?? Array.Empty<string>(),
+                 assembly, projectPath, package, packageVersion,
+                 generatorVersion, workingDirectory, outputDirectory,
+                 verbose, leaveArtifacts);
+
+        static int Wain(ICollection<string> frameworks,
+                        string? assembly,
+                        string? projectPath,
+                        string? package,
+                        string? packageVersion,
+                        string? generatorVersion,
+                        string? workingDirectory,
+                        string? outputDirectory,
+                        bool verbose,
+                        bool leaveArtifacts)
         {
             var log = verbose ? Console.Error : null;
 
-            var frameworks = targetFrameworks.Split(";");
-
-            if (string.IsNullOrEmpty(outputDirectory) && frameworks.Length > 1)
+            if (string.IsNullOrEmpty(outputDirectory) && frameworks.Count > 1)
                 outputDirectory = Environment.CurrentDirectory;
 
             if (string.IsNullOrEmpty(generatorVersion))
@@ -54,9 +66,9 @@ namespace PublicApiGenerator.Cli
 
             try
             {
-                AssertInputParameters(targetFrameworks, projectPath, package, packageVersion, workingArea, assembly);
+                AssertInputParameters(frameworks, projectPath, package, packageVersion, workingArea, assembly);
 
-                var template = CreateProject(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
+                var template = CreateProject(frameworks, projectPath, package, packageVersion, generatorVersion!);
 
                 SaveProject(workingArea, template, log);
 
@@ -199,12 +211,12 @@ namespace PublicApiGenerator.Cli
             }
         }
 
-        static XElement CreateProject(string targetFrameworks, string? project, string? package, string? packageVersion, string generatorVersion)
+        static XElement CreateProject(ICollection<string> targetFrameworks, string? project, string? package, string? packageVersion, string generatorVersion)
         {
             return new XElement("Project", new XAttribute("Sdk", "Microsoft.NET.Sdk"),
                 new XElement("PropertyGroup",
                     new XElement("OutputType", "Exe"),
-                    new XElement("TargetFrameworks", targetFrameworks),
+                    new XElement("TargetFrameworks", string.Join(";", targetFrameworks)),
                     new XElement("CopyLocalLockFileAssemblies", "true")),
                 new XElement("ItemGroup",
                     PackageReference(nameof(PublicApiGenerator), generatorVersion),
@@ -216,14 +228,14 @@ namespace PublicApiGenerator.Cli
                                                  new XAttribute("Version", version));
         }
 
-        static void AssertInputParameters(string targetFrameworks, string? project, string? package,
+        static void AssertInputParameters(ICollection<string> targetFrameworks, string? project, string? package,
             string? packageVersion, string workingArea, string? assembly)
         {
             static Exception Error(string message) =>
                 new Exception("Argument error: " + message);
 
-            if (string.IsNullOrEmpty(targetFrameworks))
-                throw Error("specify the target frameworks like 'netcoreapp2.1;net461' or 'netcoreapp2.1'.");
+            if (targetFrameworks.Count == 0)
+                throw Error("specify one or more target frameworks, like 'net461' or 'netcoreapp2.1'.");
 
             if (!string.IsNullOrEmpty(package) && string.IsNullOrEmpty(packageVersion))
                 throw Error("when using the package switch the package-version switch needs to be specified.");
