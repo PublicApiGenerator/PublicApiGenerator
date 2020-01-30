@@ -4,6 +4,7 @@ namespace PublicApiGenerator.Tool
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
+    using System.Text;
     using System.Xml.Linq;
     using Process = System.Diagnostics.Process;
 
@@ -145,15 +146,28 @@ namespace PublicApiGenerator.Tool
                 output.Write(project);
             }
 
+            var programMain = typeof(Program).GetManifestResourceText("SubProgram.cs");
+
             fullPath = Path.Combine(workingArea, "Program.cs");
             using (var output = File.CreateText(fullPath))
             {
                 logVerbose.WriteLine($"Program output path: {fullPath}");
-                logVerbose.WriteLine($"Program template: {ProgramMain}");
+                logVerbose.WriteLine($"Program template: {programMain}");
                 logVerbose.WriteLine();
 
-                output.Write(ProgramMain);
+                output.Write(programMain);
             }
+        }
+
+        private static string GetManifestResourceText(this Type type, string name,
+                                                      Encoding? encoding = null)
+        {
+            using var stream = type.Assembly.GetManifestResourceStream(type, name);
+            if (stream == null)
+                throw new Exception($"Resource named \"{type.Namespace}.{name}\" not found.");
+            using var reader = encoding == null ? new StreamReader(stream)
+                                                : new StreamReader(stream, encoding);
+            return reader.ReadToEnd();
         }
 
         private static XElement CreateProject(string  targetFrameworks,
@@ -207,29 +221,5 @@ namespace PublicApiGenerator.Tool
                 throw new InvalidOperationException($"{workingArea} already exists");
             }
         }
-
-        private static readonly string ProgramMain = @"using System;
-using System.Reflection;
-using System.IO;
-using PublicApiGenerator;
-
-public static class Program
-{
-    public static void Main(string[] args)
-    {
-        var fullPath = args[0];
-        var outputPath = args[1];
-        var outputDirectory = args[2];
-        var asm = Assembly.LoadFile(fullPath);
-        File.WriteAllText(outputPath, asm.GeneratePublicApi());
-        var destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(outputPath));
-        if (File.Exists(destinationFilePath))
-        {
-            File.Delete(destinationFilePath);
-        }
-        File.Move(outputPath, destinationFilePath);
-    }
-}
-";
     }
 }
