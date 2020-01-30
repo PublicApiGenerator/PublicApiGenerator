@@ -147,15 +147,6 @@ namespace PublicApiGenerator.Tool
 
             using var process = Process.Start(psi);
 
-            static DataReceivedEventHandler
-                DataReceivedEventHandler(TextWriter writer,
-                                         string? prefix = null) =>
-                (_, args) =>
-                {
-                    if (args.Data == null)
-                        return; // EOI
-                    writer.WriteLine(prefix + args.Data);
-                };
 
             if (stdout == null)
             {
@@ -188,6 +179,15 @@ namespace PublicApiGenerator.Tool
                 throw new Exception(
                     $"dotnet exit code {process.ExitCode}. Directory: {workingArea}. Args: {pseudoCommandLine}.");
             }
+
+            static DataReceivedEventHandler
+                DataReceivedEventHandler(TextWriter writer, string? prefix = null) =>
+                (_, args) =>
+                {
+                    if (args.Data == null)
+                        return; // EOI
+                    writer.WriteLine(prefix + args.Data);
+                };
         }
 
         private static void SaveProject(string workingArea, XElement project, TextWriter logVerbose)
