@@ -4,6 +4,7 @@ namespace PublicApiGenerator.Tool
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
+    using System.Xml.Linq;
     using Process = System.Diagnostics.Process;
 
     /// <summary>
@@ -49,9 +50,9 @@ namespace PublicApiGenerator.Tool
             {
                 AssertInputParameters(targetFrameworks, projectPath, package, packageVersion, workingArea, assembly);
 
-                var template = CreateProjectTemplate(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
+                var project = CreateProject(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
 
-                SaveProjectTemplate(workingArea, template, logVerbose);
+                SaveProject(workingArea, project, logVerbose);
 
                 foreach (var framework in targetFrameworks.Split(";"))
                 {
@@ -131,17 +132,17 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void SaveProjectTemplate(string workingArea, string template, TextWriter logVerbose)
+        private static void SaveProject(string workingArea, XElement project, TextWriter logVerbose)
         {
             Directory.CreateDirectory(workingArea);
             var fullPath = Path.Combine(workingArea, "project.csproj");
             using (var output = File.CreateText(fullPath))
             {
                 logVerbose.WriteLine($"Project output path: {fullPath}");
-                logVerbose.WriteLine($"Project template: {template}");
+                logVerbose.WriteLine($"Project template: {project}");
                 logVerbose.WriteLine();
 
-                output.Write(template);
+                output.Write(project);
             }
 
             fullPath = Path.Combine(workingArea, "Program.cs");
@@ -155,18 +156,25 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static string CreateProjectTemplate(string targetFrameworks, string? project, string? package, string? packageVersion, string generatorVersion)
+        private static XElement CreateProject(string  targetFrameworks,
+                                              string? project,
+                                              string? package, string? packageVersion,
+                                              string  generatorVersion)
         {
-            return ProjectTemplate
-                .Replace("{TargetFrameworks}", targetFrameworks)
-                .Replace("{PublicApiGeneratorVersion}", generatorVersion)
-                .Replace("{PackageReference}", string.IsNullOrEmpty(package) ? string.Empty : PackageReferenceTemplate
-                    .Replace("{PackageName}", package)
-                    .Replace("{PackageVersion}", packageVersion)
-                )
-                .Replace("{ProjectReference}", string.IsNullOrEmpty(project) ? string.Empty : ProjectReferenceTemplate
-                    .Replace("{ProjectFile}", Path.GetFullPath(project))
-                );
+            return
+                new XElement("Project", new XAttribute("Sdk", "Microsoft.NET.Sdk"),
+                    new XElement("PropertyGroup",
+                        new XElement("OutputType", "Exe"),
+                        new XElement("TargetFrameworks", targetFrameworks),
+                        new XElement("CopyLocalLockFileAssemblies", "true")),
+                    new XElement("ItemGroup",
+                        PackageReference(nameof(PublicApiGenerator), generatorVersion),
+                        !string.IsNullOrEmpty(package) ? PackageReference(package!, packageVersion!) : null,
+                        !string.IsNullOrEmpty(project) ? new XElement("ProjectReference", new XAttribute("Include", project)) : null));
+
+            static XElement PackageReference(string id, string version) =>
+                new XElement("PackageReference", new XAttribute("Include", id),
+                                                 new XAttribute("Version", version));
         }
 
         private static void AssertInputParameters(string targetFrameworks, string? project, string? package,
@@ -199,28 +207,6 @@ namespace PublicApiGenerator.Tool
                 throw new InvalidOperationException($"{workingArea} already exists");
             }
         }
-
-        private static readonly string ProjectTemplate = @"<Project Sdk=""Microsoft.NET.Sdk"">
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFrameworks>{TargetFrameworks}</TargetFrameworks>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include=""PublicApiGenerator"" Version=""{PublicApiGeneratorVersion}"" />{PackageReference}
-    </ItemGroup >
-    {ProjectReference}
-</Project >";
-
-        private static readonly string PackageReferenceTemplate =
-            @"
-        <PackageReference Include=""{PackageName}"" Version=""{PackageVersion}"" />";
-
-        private static readonly string ProjectReferenceTemplate =
-            @"<ItemGroup>
-        <ProjectReference Include=""{ProjectFile}"" />
-    </ItemGroup >";
 
         private static readonly string ProgramMain = @"using System;
 using System.Reflection;
