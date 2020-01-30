@@ -12,6 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SubProgram.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SubProgram.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.CommandLine.DragonFruit" Version="0.2.0-alpha.19156.3" />
     <PackageReference Include="MinVer" Version="1.1.0" PrivateAssets="All" />
   </ItemGroup>
