@@ -3,6 +3,7 @@ namespace PublicApiGenerator.Tool
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
     using System.Xml.Linq;
@@ -29,7 +30,9 @@ namespace PublicApiGenerator.Tool
         /// <returns></returns>
         static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
         {
-            if (string.IsNullOrEmpty(outputDirectory))
+            var frameworks = targetFrameworks.Split(";");
+
+            if (string.IsNullOrEmpty(outputDirectory) && frameworks.Length > 1)
             {
                 outputDirectory = Environment.CurrentDirectory;
             }
@@ -55,7 +58,7 @@ namespace PublicApiGenerator.Tool
 
                 SaveProject(workingArea, project, logVerbose);
 
-                foreach (var framework in targetFrameworks.Split(";"))
+                foreach (var framework in frameworks)
                 {
                     GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, logVerbose, logError);
                 }
@@ -86,50 +89,104 @@ namespace PublicApiGenerator.Tool
             var relativePath = Path.Combine(workingArea, "bin", "Release", framework);
             var name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
             relativePath = Path.Combine(relativePath, name);
-            var fullPath = Path.GetFullPath(relativePath);
-            var outputPath = Path.Combine(Path.GetDirectoryName(relativePath), $"{Path.GetFileNameWithoutExtension(name)}.{framework}.received.txt");
+            var assemblyPath = Path.GetFullPath(relativePath);
+
+            var apiFilePath = outputDirectory != null
+                ? Path.Combine(workingArea, $"{Path.GetFileNameWithoutExtension(name)}.{framework}.received.txt")
+                : null;
 
             try
             {
                 // Because we run in different appdomain we can always unload
-                RunDotnet(workingArea, $"run --configuration Release --framework {framework} -- {fullPath} {outputPath} {outputDirectory}", logVerbose);
-
-                logVerbose.WriteLine($"Public API file: {outputPath}");
-                logVerbose.WriteLine();
+                RunDotnet(workingArea, logVerbose,
+                          apiFilePath != null ? null : Console.Out,
+                          "run",
+                          "--configuration", "Release",
+                          "--framework", framework,
+                          "--",
+                          assemblyPath, apiFilePath ?? "-");
             }
             catch (FileNotFoundException)
             {
-                logError.WriteLine($"Unable to find {fullPath}. Consider specifying --assembly");
+                logError.WriteLine($"Unable to find {assemblyPath}. Consider specifying --assembly");
                 throw;
             }
-        }
 
-        private static void RunDotnet(string workingArea, string arguments, TextWriter logVerbose)
-        {
-            logVerbose.WriteLine($"Dotnet arguments: {arguments}");
+            if (outputDirectory == null || apiFilePath == null)
+                return;
+
+            logVerbose.WriteLine($"Public API file: {apiFilePath}");
             logVerbose.WriteLine();
 
+            var destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(apiFilePath));
+
+            if (File.Exists(destinationFilePath))
+                File.Delete(destinationFilePath);
+            File.Move(apiFilePath, destinationFilePath);
+
+            Console.WriteLine(Path.GetFullPath(destinationFilePath));
+        }
+
+        private static void RunDotnet(string workingArea, TextWriter logVerbose, TextWriter? stdout, params string[] arguments)
+        {
             var psi = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = arguments,
                 WorkingDirectory = workingArea,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
-            var process = Process.Start(psi);
-            process.WaitForExit(10000);
 
-            var output = process.StandardOutput.ReadToEnd();
-
-            logVerbose.WriteLine($"Dotnet output: {output}");
+            logVerbose.WriteLine($"Invoking dotnet with arguments:");
+            foreach (var (i, arg) in arguments.Select((arg, i) => (i + 1, arg)))
+            {
+                logVerbose.WriteLine($"{i,4}. {arg}");
+                psi.ArgumentList.Add(arg);
+            }
             logVerbose.WriteLine();
+
+            using var process = Process.Start(psi);
+
+            static DataReceivedEventHandler
+                DataReceivedEventHandler(TextWriter writer,
+                                         string? prefix = null) =>
+                (_, args) =>
+                {
+                    if (args.Data == null)
+                        return; // EOI
+                    writer.WriteLine(prefix + args.Data);
+                };
+
+            if (stdout == null)
+            {
+                logVerbose.WriteLine("Dotnet output:");
+            }
+
+            const string indent = "  ";
+            process.OutputDataReceived += DataReceivedEventHandler(stdout ?? logVerbose, stdout == null ? indent : null);
+            process.ErrorDataReceived  += DataReceivedEventHandler(logVerbose, indent);
+
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
+            if (stdout == null)
+            {
+                logVerbose.WriteLine();
+            }
+
+            if (!process.WaitForExit(10000))
+            {
+                throw new TimeoutException($"Process \"{psi.FileName}\" ({process.Id}) took too long to run.");
+            }
 
             if (process.ExitCode != 0)
             {
-                var error = process.StandardError.ReadToEnd();
+                var pseudoCommandLine = string.Join(" ", from arg in arguments
+                                                         select arg.IndexOf('"') >= 0
+                                                              ? $"\"{arg.Replace("\"", "\"\"")}\""
+                                                              : arg);
                 throw new Exception(
-                    $"dotnet exit code {process.ExitCode}. Directory: {workingArea}. Args: {arguments}. Output: {output}. Error: {error}");
+                    $"dotnet exit code {process.ExitCode}. Directory: {workingArea}. Args: {pseudoCommandLine}.");
             }
         }
 
