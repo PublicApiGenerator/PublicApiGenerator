@@ -1,6 +1,7 @@
 namespace PublicApiGenerator.Tool
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -22,13 +23,14 @@ namespace PublicApiGenerator.Tool
         /// <param name="projectPath">The path to the csproj that should be used to build the public API.</param>
         /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/></param>
         /// <param name="packageVersion">The version of the package defined in <paramref name="package"/> to be used.</param>
+        /// <param name="packageSource">Package source or feed to use (multiple allowed).</param>
         /// <param name="generatorVersion">The version of the PublicApiGenerator package to use.</param>
         /// <param name="workingDirectory">The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.</param>
         /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
         /// <param name="verbose"></param>
         /// <param name="leaveArtifacts"></param>
         /// <returns></returns>
-        static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
+        static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, ICollection<string>? packageSource = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
         {
             var logError = Console.Error;
             var logVerbose = verbose ? Console.Error : TextWriter.Null;
@@ -55,7 +57,7 @@ namespace PublicApiGenerator.Tool
                     generatorVersion = $"{Assembly.GetEntryAssembly().GetName().Version.Major}.*";
                 }
 
-                var project = CreateProject(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
+                var project = CreateProject(targetFrameworks, projectPath, package, packageVersion, packageSource, generatorVersion!);
 
                 SaveProject(workingArea, project, logVerbose);
 
@@ -237,7 +239,9 @@ namespace PublicApiGenerator.Tool
 
         private static XElement CreateProject(string  targetFrameworks,
                                               string? project,
-                                              string? package, string? packageVersion,
+                                              string? package,
+                                              string? packageVersion,
+                                              ICollection<string>? packageSource,
                                               string  generatorVersion)
         {
             return
@@ -245,7 +249,10 @@ namespace PublicApiGenerator.Tool
                     new XElement("PropertyGroup",
                         new XElement("OutputType", "Exe"),
                         new XElement("TargetFrameworks", targetFrameworks),
-                        new XElement("CopyLocalLockFileAssemblies", "true")),
+                        new XElement("CopyLocalLockFileAssemblies", "true"),
+                    packageSource?.Count > 0
+                        ? new XElement("RestoreAdditionalProjectSources", string.Join(";", packageSource))
+                        : null),
                     new XElement("ItemGroup",
                         PackageReference(nameof(PublicApiGenerator), generatorVersion),
                         !string.IsNullOrEmpty(package) ? PackageReference(package!, packageVersion!) : null,
