@@ -159,6 +159,12 @@ Generate public API for NServiceBus 7.1.4 for runtime framework `netcoreapp2.2` 
 generate-public-api --target-frameworks netcoreapp2.2;net452 --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll
 ```
 
+Generate a public API for NServiceBus release available on myget
+
+```
+generate-public-api --target-frameworks netcoreapp2.2;net452 --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll --package-source https://www.myget.org/F/particular/api/v3/index.json
+```
+
 ### Command line arguments
 
 ```
@@ -195,6 +201,12 @@ A nuget package version or floating versions as specified by https://docs.micros
 - 8.1.1
 - 8.0
 - 8.0-*
+
+```
+--package-source Source
+```
+
+Allows specifying one or multiple package sources to look for packages.
 
 ```
 --assembly Assembly.dll
