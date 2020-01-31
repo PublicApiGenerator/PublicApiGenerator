@@ -30,29 +30,30 @@ namespace PublicApiGenerator.Tool
         /// <returns></returns>
         static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
         {
-            var frameworks = targetFrameworks.Split(";");
-
-            if (string.IsNullOrEmpty(outputDirectory) && frameworks.Length > 1)
-            {
-                outputDirectory = Environment.CurrentDirectory;
-            }
-
-            if (string.IsNullOrEmpty(generatorVersion))
-            {
-                generatorVersion = $"{Assembly.GetEntryAssembly().GetName().Version.Major}.*";
-            }
-
-            var workingArea = !string.IsNullOrEmpty(workingDirectory) ?
-                Path.Combine(workingDirectory, Path.GetRandomFileName()) :
-                Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-
             var logError = Console.Error;
             var logVerbose = verbose ? Console.Error : TextWriter.Null;
+
+            var workingArea = !string.IsNullOrEmpty(workingDirectory)
+                ? Path.Combine(workingDirectory, Path.GetRandomFileName())
+                : Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
             logVerbose.WriteLine($"Working area: {workingArea}");
 
             try
             {
                 AssertInputParameters(targetFrameworks, projectPath, package, packageVersion, workingArea, assembly);
+
+                var frameworks = targetFrameworks.Split(";");
+
+                if (string.IsNullOrEmpty(outputDirectory) && frameworks.Length > 1)
+                {
+                    outputDirectory = Environment.CurrentDirectory;
+                }
+
+                if (string.IsNullOrEmpty(generatorVersion))
+                {
+                    generatorVersion = $"{Assembly.GetEntryAssembly().GetName().Version.Major}.*";
+                }
 
                 var project = CreateProject(targetFrameworks, projectPath, package, packageVersion, generatorVersion!);
 
@@ -228,7 +229,7 @@ namespace PublicApiGenerator.Tool
             {
                 throw new Exception($"Resource named \"{type.Namespace}.{name}\" not found.");
             }
-            
+
             using var reader = encoding == null ? new StreamReader(stream)
                                                 : new StreamReader(stream, encoding);
             return reader.ReadToEnd();
