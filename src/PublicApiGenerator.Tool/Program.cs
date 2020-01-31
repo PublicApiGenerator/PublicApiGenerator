@@ -113,7 +113,9 @@ namespace PublicApiGenerator.Tool
             }
 
             if (outputDirectory == null || apiFilePath == null)
+            {
                 return;
+            }
 
             logVerbose.WriteLine($"Public API file: {apiFilePath}");
             logVerbose.WriteLine();
@@ -146,7 +148,6 @@ namespace PublicApiGenerator.Tool
             logVerbose.WriteLine();
 
             using var process = Process.Start(psi);
-
 
             if (stdout == null)
             {
@@ -185,7 +186,10 @@ namespace PublicApiGenerator.Tool
                 (_, args) =>
                 {
                     if (args.Data == null)
+                    {
                         return; // EOI
+                    }
+
                     writer.WriteLine(prefix + args.Data);
                 };
         }
@@ -221,7 +225,10 @@ namespace PublicApiGenerator.Tool
         {
             using var stream = type.Assembly.GetManifestResourceStream(type, name);
             if (stream == null)
+            {
                 throw new Exception($"Resource named \"{type.Namespace}.{name}\" not found.");
+            }
+            
             using var reader = encoding == null ? new StreamReader(stream)
                                                 : new StreamReader(stream, encoding);
             return reader.ReadToEnd();
