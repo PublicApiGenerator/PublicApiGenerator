@@ -5,18 +5,23 @@ using PublicApiGenerator;
 
 static class Program
 {
-    static void Main(string[] args)
+    static int Main(string[] args)
     {
-        var fullPath = args[0];
-        var outputPath = args[1];
-        var outputDirectory = args[2];
-        var asm = Assembly.LoadFile(fullPath);
-        File.WriteAllText(outputPath, asm.GeneratePublicApi());
-        var destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(outputPath));
-        if (File.Exists(destinationFilePath))
+        try
         {
-            File.Delete(destinationFilePath);
+            var assemblyPath = args[0];
+            var asm = Assembly.LoadFile(assemblyPath);
+            switch (args[1])
+            {
+                case "-": Console.WriteLine(asm.GeneratePublicApi()); break;
+                case string apiFilePath: File.WriteAllText(apiFilePath, asm.GeneratePublicApi()); break;
+            }
+            return 0;
         }
-        File.Move(outputPath, destinationFilePath);
+        catch (Exception e)
+        {
+            Console.Error.WriteLine(e);
+            return 1;
+        }
     }
 }

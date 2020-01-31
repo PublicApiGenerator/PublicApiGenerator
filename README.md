@@ -135,6 +135,18 @@ Generate public API for fluent assertions 5.* for runtime framework `net47`
 generate-public-api --target-frameworks net47 --package FluentAssertions --package-version 5.*
 ```
 
+Note that when a single target framework is specified then the API is generated to standard output. To write to a file, you can either use shell redirection:
+
+```
+generate-public-api --target-frameworks net47 --package FluentAssertions --package-version 5.* > api.txt
+```
+
+or specify an output directory to force the generation of an API file:
+
+```
+generate-public-api --target-frameworks net47 --package FluentAssertions --package-version 5.* --output-directory .
+```
+
 Generate public API for fluent assertions 5.6.0 (exact version match) for runtime framework `net47`
 
 ```
@@ -160,6 +172,8 @@ The target framework in which the package will be restored. The target framework
 - `net47` to build a public API for `net47`
 
 It is not possible to use `netstandard2.0` because it is not a valid runtime framework.
+
+If only a single target framework is given then the API is generated to the standard output unless the `--output-directory` option is also specified.
 
 ```
 --package-name PackageName
