@@ -28,12 +28,25 @@ namespace PublicApiGenerator.Tool
         /// <param name="workingDirectory">The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.</param>
         /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
         /// <param name="verbose"></param>
-        /// <param name="leaveArtifacts"></param>
+        /// <param name="leaveArtifacts">Instructs to leave the temporary artifacts around for debugging and troubleshooting purposes.</param>
+        /// <param name="waitTimeInSeconds">The number of seconds to wait for the API generation process to end. If multiple target frameworks are used the wait time is applied per target framework.</param>
         /// <returns></returns>
-        static int Main(string targetFrameworks, string? assembly = null, string? projectPath = null, string? package = null, string? packageVersion = null, ICollection<string>? packageSource = null, string? generatorVersion = null, string? workingDirectory = null, string? outputDirectory = null, bool verbose = false, bool leaveArtifacts = false)
+        static int Main(string targetFrameworks,
+            string? assembly = null,
+            string? projectPath = null,
+            string? package = null,
+            string? packageVersion = null,
+            ICollection<string>? packageSource = null,
+            string? generatorVersion = null,
+            string? workingDirectory = null,
+            string? outputDirectory = null,
+            bool verbose = false,
+            bool leaveArtifacts = false,
+            int? waitTimeInSeconds = null)
         {
             var logError = Console.Error;
             var logVerbose = verbose ? Console.Error : TextWriter.Null;
+            var processWaitTimeInSeconds = waitTimeInSeconds ?? 60;
 
             var workingArea = !string.IsNullOrEmpty(workingDirectory)
                 ? Path.Combine(workingDirectory, Path.GetRandomFileName())
@@ -63,7 +76,7 @@ namespace PublicApiGenerator.Tool
 
                 foreach (var framework in frameworks)
                 {
-                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, logVerbose, logError);
+                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, processWaitTimeInSeconds, logVerbose, logError);
                 }
 
                 return 0;
@@ -87,7 +100,7 @@ namespace PublicApiGenerator.Tool
             }
         }
 
-        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, TextWriter logVerbose, TextWriter logError)
+        private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, int waitTimeInSeconds, TextWriter logVerbose, TextWriter logError)
         {
             var relativePath = Path.Combine(workingArea, "bin", "Release", framework);
             var name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
@@ -101,7 +114,7 @@ namespace PublicApiGenerator.Tool
             try
             {
                 // Because we run in different appdomain we can always unload
-                RunDotnet(workingArea, logVerbose,
+                RunDotnet(workingArea, waitTimeInSeconds, logVerbose,
                           apiFilePath != null ? null : Console.Out,
                           "run",
                           "--configuration", "Release",
@@ -132,7 +145,7 @@ namespace PublicApiGenerator.Tool
             Console.WriteLine(Path.GetFullPath(destinationFilePath));
         }
 
-        private static void RunDotnet(string workingArea, TextWriter logVerbose, TextWriter? stdout, params string[] arguments)
+        private static void RunDotnet(string workingArea, int waitTimeInSeconds, TextWriter logVerbose, TextWriter? stdout, params string[] arguments)
         {
             var psi = new ProcessStartInfo
             {
@@ -169,7 +182,7 @@ namespace PublicApiGenerator.Tool
                 logVerbose.WriteLine();
             }
 
-            if (!process.WaitForExit(10000))
+            if (!process.WaitForExit(waitTimeInSeconds * 1000))
             {
                 throw new TimeoutException($"Process \"{psi.FileName}\" ({process.Id}) took too long to run.");
             }

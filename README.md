@@ -219,7 +219,7 @@ The assembly name including the extension to generate a public API from in case 
 
 ```
 --project-path
-``` 
+```
 
 A path to a csproj file that contains the public API that needs to be built. By default a release build will be generated. When the project-path switch is used it is required to specify the `--assembly` switch to point to the output assembly that contains the public API. For example
 
@@ -256,3 +256,8 @@ leave-artifacts
 ```
 
 For troubleshooting purposes it might be necessary to look into the temporary work artifacts. By specifying this switch the temporary csproj files and all the temp folders are not deleted after a run. Be aware this might significantly decrease the available disk space because all artifacts including the compile time artifacts are not deleted.
+
+```
+wait-time-in-seconds
+```
+The number of seconds to wait for the API generation process to end (default 60 seconds). If multiple target frameworks are used the wait time is applied per target framework. If the process did not end in the allotted time a `TimeoutException` is thrown.
