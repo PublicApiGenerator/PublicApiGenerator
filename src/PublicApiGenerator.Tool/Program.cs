@@ -42,11 +42,10 @@ namespace PublicApiGenerator.Tool
             string? outputDirectory = null,
             bool verbose = false,
             bool leaveArtifacts = false,
-            int? waitTimeInSeconds = null)
+            int waitTimeInSeconds = 60)
         {
             var logError = Console.Error;
             var logVerbose = verbose ? Console.Error : TextWriter.Null;
-            var processWaitTimeInSeconds = waitTimeInSeconds ?? 60;
 
             var workingArea = !string.IsNullOrEmpty(workingDirectory)
                 ? Path.Combine(workingDirectory, Path.GetRandomFileName())
@@ -76,7 +75,7 @@ namespace PublicApiGenerator.Tool
 
                 foreach (var framework in frameworks)
                 {
-                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, processWaitTimeInSeconds, logVerbose, logError);
+                    GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, waitTimeInSeconds, logVerbose, logError);
                 }
 
                 return 0;
@@ -162,6 +161,7 @@ namespace PublicApiGenerator.Tool
                 psi.ArgumentList.Add(arg);
             }
             logVerbose.WriteLine();
+            logVerbose.WriteLine($"Proces timeout: '{waitTimeInSeconds}' seconds.");
 
             using var process = Process.Start(psi);
 
