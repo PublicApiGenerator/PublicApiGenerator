@@ -184,7 +184,7 @@ namespace PublicApiGenerator.Tool
 
             if (!process.WaitForExit(waitTimeInSeconds * 1000))
             {
-                throw new TimeoutException($"Process \"{psi.FileName}\" ({process.Id}) took too long to run.");
+                 throw new TimeoutException($"Process \"{psi.FileName}\" ({process.Id}) took too long to run (timeout exceeded {waitTimeInSeconds} seconds).");
             }
 
             if (process.ExitCode != 0)
