@@ -21,6 +21,48 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_abstract_read_only_indexer()
+        {
+            AssertPublicApi<ClassWithAbstractReadOnlyIndexer>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractReadOnlyIndexer
+    {
+        protected ClassWithAbstractReadOnlyIndexer() { }
+        public abstract int this[int x] { get; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_abstract_read_write_indexer()
+        {
+            AssertPublicApi<ClassWithAbstractReadWriteIndexer>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractReadWriteIndexer
+    {
+        protected ClassWithAbstractReadWriteIndexer() { }
+        public abstract int this[int x] { get; set; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_abstract_write_only_indexer()
+        {
+            AssertPublicApi<ClassWithAbstractWriteOnlyIndexer>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public abstract class ClassWithAbstractWriteOnlyIndexer
+    {
+        protected ClassWithAbstractWriteOnlyIndexer() { }
+        public abstract int this[int x] { set; }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_named_indexer()
         {
             AssertPublicApi<ClassWithNamedIndexer>(
@@ -89,6 +131,21 @@ namespace PublicApiGeneratorTests
         public class ClassWithIndexer
         {
             public int this[int x] => x;
+        }
+
+        public abstract class ClassWithAbstractReadOnlyIndexer
+        {
+            public abstract int this[int x] { get; }
+        }
+
+        public abstract class ClassWithAbstractReadWriteIndexer
+        {
+            public abstract int this[int x] { get; set; }
+        }
+
+        public abstract class ClassWithAbstractWriteOnlyIndexer
+        {
+            public abstract int this[int x] { set; }
         }
 
         public class ClassWithNamedIndexer
