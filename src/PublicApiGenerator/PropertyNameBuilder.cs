@@ -10,7 +10,7 @@ namespace PublicApiGenerator
             MemberAttributes getAccessorAttributes, MemberAttributes setAccessorAttributes)
         {
             string name = propertyDefinition.Name;
-            if (getAccessorAttributes != setAccessorAttributes || propertyDefinition.DeclaringType.IsInterface)
+            if (getAccessorAttributes != setAccessorAttributes || propertyDefinition.DeclaringType.IsInterface || propertyDefinition.HasParameters)
             {
                 return name;
             }
