@@ -1,5 +1,5 @@
-﻿using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
+using System;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -294,6 +294,20 @@ namespace PublicApiGeneratorTests
     }
 }", options);
         }
+
+        [Fact]
+        public void Should_include_Serializable_attribute()
+        {
+            AssertPublicApi<ClassWithSerializableAttribute>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    [System.SerializableAttribute]
+    public class ClassWithSerializableAttribute
+    {
+        public ClassWithSerializableAttribute() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -401,6 +415,11 @@ namespace PublicApiGeneratorTests
 
         [AttributeWhichIsInternal]
         public class ClassWithInternalAttribute
+        {
+        }
+
+        [Serializable]
+        public class ClassWithSerializableAttribute
         {
         }
     }
