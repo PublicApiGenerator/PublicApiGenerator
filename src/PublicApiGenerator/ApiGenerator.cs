@@ -441,6 +441,23 @@ namespace PublicApiGenerator
                 var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
                 attributes.Add(attribute);
             }
+
+            // so this is not very cool but at least all the attribute creation is in the same place
+            PopulateAttributesThatDontAppearInCustomAttributes(type, attributes);
+        }
+
+        static void PopulateAttributesThatDontAppearInCustomAttributes(ICustomAttributeProvider type,
+            CodeAttributeDeclarationCollection attributes)
+        {
+            if (type is TypeDefinition typeDefinition)
+            {
+                if (typeDefinition.Attributes.HasFlag(Mono.Cecil.TypeAttributes.Serializable))
+                {
+                    var attribute = new CodeAttributeDeclaration("System.SerializableAttribute");
+                    attribute.Name = AttributeNameBuilder.Get(attribute.Name);
+                    attributes.Add(attribute);
+                }
+            }
         }
 
         static CodeAttributeDeclaration GenerateCodeAttributeDeclaration(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
@@ -667,7 +684,7 @@ namespace PublicApiGenerator
                 // this seems right for default
                 return "default";
             }
-            
+
             return parameter.ParameterType.IsValueType ? "default" : "null";
         }
 
