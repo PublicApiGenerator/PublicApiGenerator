@@ -6,6 +6,8 @@ namespace PublicApiGenerator
     {
         static readonly IDictionary<string, string> OperatorNameMap = new Dictionary<string, string>
         {
+            { "op_False", "false" },
+            { "op_True", "true" },
             { "op_Addition", "+" },
             { "op_UnaryPlus", "+" },
             { "op_Subtraction", "-" },
@@ -32,7 +34,7 @@ namespace PublicApiGenerator
 
         public static string Get(string memberName)
         {
-            return OperatorNameMap.TryGetValue(memberName, out string mappedMemberName) ? mappedMemberName : memberName;
+            return OperatorNameMap.TryGetValue(memberName, out string mappedMemberName) ? "operator " + mappedMemberName : memberName;
         }
     }
 }
