@@ -14,7 +14,7 @@ namespace PublicApiGeneratorTests
     public class ClassWithOperator
     {
         public ClassWithOperator() { }
-        public static PublicApiGeneratorTests.Examples.ClassWithOperator +(PublicApiGeneratorTests.Examples.ClassWithOperator first, PublicApiGeneratorTests.Examples.ClassWithOperator second) { }
+        public static PublicApiGeneratorTests.Examples.ClassWithOperator operator +(PublicApiGeneratorTests.Examples.ClassWithOperator first, PublicApiGeneratorTests.Examples.ClassWithOperator second) { }
     }
 }");
         }
