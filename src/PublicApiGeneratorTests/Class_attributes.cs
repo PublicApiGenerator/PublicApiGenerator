@@ -301,7 +301,7 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<ClassWithSerializableAttribute>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
-    [System.SerializableAttribute]
+    [System.Serializable]
     public class ClassWithSerializableAttribute
     {
         public ClassWithSerializableAttribute() { }
