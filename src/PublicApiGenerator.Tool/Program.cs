@@ -66,7 +66,7 @@ namespace PublicApiGenerator.Tool
 
                 if (string.IsNullOrEmpty(generatorVersion))
                 {
-                    generatorVersion = $"{Assembly.GetEntryAssembly().GetName().Version.Major}.*";
+                    generatorVersion = $"{typeof(Program).Assembly.GetName().Version.Major}.*";
                 }
 
                 var project = CreateProject(targetFrameworks, projectPath, package, packageVersion, packageSource, generatorVersion!);
