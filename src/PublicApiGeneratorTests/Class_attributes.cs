@@ -308,6 +308,20 @@ namespace PublicApiGeneratorTests
     }
 }");
         }
+
+        [Fact]
+        public void Should_reproduce_AttributeTargets_value_correctly_on_AttributeUsage_attribute()
+        {
+            AssertPublicApi<ClassWithAttributeUsageAttribute>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    [System.AttributeUsage(System.AttributeTargets.Struct | System.AttributeTargets.Field)]
+    public class ClassWithAttributeUsageAttribute : System.Attribute
+    {
+        public ClassWithAttributeUsageAttribute() { }
+    }
+}");
+        }
     }
 
     // ReSharper disable UnusedMember.Global
@@ -420,6 +434,11 @@ namespace PublicApiGeneratorTests
 
         [Serializable]
         public class ClassWithSerializableAttribute
+        {
+        }
+
+        [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Field)]
+        public class ClassWithAttributeUsageAttribute : Attribute
         {
         }
     }

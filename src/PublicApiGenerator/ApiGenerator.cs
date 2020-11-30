@@ -536,7 +536,7 @@ namespace PublicApiGenerator
                     var flags = from f in type.Fields
                                 where f.Constant != null
                                 let v = Convert.ToInt64(f.Constant)
-                                where v == 0 || (originalValue & v) != 0
+                                where v == 0 || (originalValue & v) == v
                                 select type.FullName + "." + f.Name;
                     return new CodeSnippetExpression(flags.Aggregate((current, next) => current + " | " + next));
                 }
