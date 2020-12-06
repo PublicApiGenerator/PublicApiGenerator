@@ -22,3 +22,6 @@ src/PublicApiGenerator/results
 src/PublicApiGenerator.sln.ide/
 /nugets/*
 **/.vs/*
+
+# JetBrains Rider
+.idea/
