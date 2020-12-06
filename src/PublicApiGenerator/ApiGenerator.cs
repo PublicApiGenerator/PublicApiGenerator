@@ -45,7 +45,9 @@ namespace PublicApiGenerator
                 {
                     return CreatePublicApiForAssembly(
                         asm,
-                        typeDefinition => options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName),
+                        typeDefinition =>!typeDefinition.IsNested &&
+                                         ShouldIncludeType(typeDefinition) &&
+                                         (options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName)),
                         options.IncludeAssemblyAttributes,
                         options.WhitelistedNamespacePrefixes,
                         attributeFilter);
@@ -111,7 +113,7 @@ namespace PublicApiGenerator
                 }
 
                 var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
-                    .Where(t => !t.IsNested && ShouldIncludeType(t) && shouldIncludeType(t))
+                    .Where(shouldIncludeType)
                     .OrderBy(t => t.FullName, StringComparer.Ordinal);
                 foreach (var publicType in publicTypes)
                 {
