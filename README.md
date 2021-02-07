@@ -58,6 +58,8 @@ public void my_assembly_has_no_public_api_changes()
 
 ### Shouldly
 
+[Shouldly](https://github.com/shouldly/shouldly/)
+
 > Install-package Shouldly
 
 ``` csharp
@@ -72,6 +74,8 @@ public void my_assembly_has_no_public_api_changes()
 ```
 
 ### ApprovalTests
+
+[ApprovalTests](https://github.com/approvals/ApprovalTests.Net)
 
 > Install-package ApprovalTests
 
@@ -97,6 +101,60 @@ private class AssemblyPathNamer : UnitTestFrameworkNamer
     public override string Name
     {
         get { return name; }
+    }
+}
+```
+
+### Verify
+
+[Verify](https://github.com/VerifyTests/Verify)
+
+> Install-package Verify.Xunit
+
+``` csharp
+[UsesVerify]
+public class Tests
+{
+    [Fact]
+    public Task my_assembly_has_no_public_api_changes()
+    {
+        var publicApi = typeof(Library).Assembly.GeneratePublicApi();
+
+        return Verifier.Verify(publicApi);
+    }
+}
+```
+
+Or 
+
+> Install-package Verify.NUnit
+
+``` csharp
+[Test]
+public Task my_assembly_has_no_public_api_changes()
+{
+    var publicApi = typeof(Library).Assembly.GeneratePublicApi();
+
+    return Verifier.Verify(publicApi);
+}
+```
+
+Or
+
+> Install-package Verify.MSTest
+
+``` csharp
+
+[TestClass]
+public class VerifyObjectSamples :
+    VerifyBase
+{
+    [TestMethod]
+    public Task my_assembly_has_no_public_api_changes()
+    {
+        var publicApi = typeof(Library).Assembly.GeneratePublicApi();
+
+        return Verifier.Verify(publicApi);
     }
 }
 ```
