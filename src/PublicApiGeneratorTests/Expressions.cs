@@ -16,9 +16,9 @@ namespace PublicApiGeneratorTests
     public class ClassWithExpressions<TSourceType>
     {
         public ClassWithExpressions(params System.Linq.Expressions.Expression<System.Func<int, object>>[] expr1) { }
-        public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<int, object>> expr2) { }
-        public ClassWithExpressions(params System.Linq.Expressions.Expression<System.Func<TSourceType, object>>[] expr3) { }
-        public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<TSourceType, object>> expr4) { }
+        public ClassWithExpressions(params System.Linq.Expressions.Expression<System.Func<TSourceType, object?>>[] expr2) { }
+        public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<TSourceType, object>?> expr3) { }
+        public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<int, object>>? expr4) { }
     }
 }");
         }
@@ -29,9 +29,9 @@ namespace PublicApiGeneratorTests
         public class ClassWithExpressions<TSourceType>
         {
             public ClassWithExpressions(params Expression<Func<int, object>>[] expr1) { }
-            public ClassWithExpressions(Expression<Func<int, object>> expr2) { }
-            public ClassWithExpressions(params Expression<Func<TSourceType, object>>[] expr3) { }
-            public ClassWithExpressions(Expression<Func<TSourceType, object>> expr4) { }
+            public ClassWithExpressions(params Expression<Func<TSourceType, object?>>[] expr2) { }
+            public ClassWithExpressions(Expression<Func<TSourceType, object>?> expr3) { }
+            public ClassWithExpressions(Expression<Func<int, object>>? expr4) { }
         }
     }
 }
