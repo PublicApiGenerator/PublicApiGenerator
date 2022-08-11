@@ -12,10 +12,14 @@ jobs:
       fail-fast: false
       matrix:
         runs-on: [ubuntu-latest, windows-latest]
-        sdk: ["3.1.422", "5.0.408", "6.0.302", "6.0.303", "6.0.400"]
+        sdk: ["5.0.408", "6.0.302", "6.0.303", "6.0.400"]
     name: ${{ matrix.runs-on }}-${{ matrix.sdk }}
     runs-on: ${{ matrix.runs-on }}
     steps:
+    - name: Setup .NET Core 3.1 SDK # should always be installed for 3.1 runtime
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 3.1.422
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v2
       with:
