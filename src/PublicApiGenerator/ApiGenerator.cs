@@ -155,6 +155,11 @@ namespace PublicApiGenerator
 
         static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
         {
+            // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/245
+            bool isRecord = m.DeclaringType.GetMethods().Any(m => m.Name == "<Clone>$");
+            if (isRecord && m.Name == "EqualityContract")
+                return false;
+
             return !m.IsCompilerGenerated() && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
         }
 
