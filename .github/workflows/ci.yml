@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         runs-on: [ubuntu-latest, windows-latest]
-        sdk: ["5.0.408", "6.0.302", "6.0.303", "6.0.400"]
+        sdk: ["6.0.100", "6.0.302", "6.0.303", "6.0.400"]
     name: ${{ matrix.runs-on }}-${{ matrix.sdk }}
     runs-on: ${{ matrix.runs-on }}
     steps:
