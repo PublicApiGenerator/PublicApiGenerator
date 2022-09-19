@@ -22,38 +22,25 @@ namespace PublicApiGeneratorTests
         public void Attributes()
         {
 #if NET6_0
-            var api = @"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")]
-[assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello"")]
-[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
-[assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
-[assembly: PublicApiGeneratorTests.Examples.Simple]
-[assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.Runtime.InteropServices.Guid(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
-[assembly: System.Runtime.Versioning.TargetFramework("".NETCoreApp,Version=v6.0"", FrameworkDisplayName="""")]
-namespace PublicApiGeneratorTests.Examples
-{
-    public class NotImportant
-    {
-        public NotImportant() { }
-    }
-}";
+            const string TFM = ".NETCoreApp,Version=v6.0";
 #else
-            var api = @"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")]
+            const string TFM = ".NETCoreApp,Version=v3.1";
+#endif
+            var api = @$"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
 [assembly: PublicApiGeneratorTests.Examples.Simple]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.Runtime.InteropServices.Guid(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
-[assembly: System.Runtime.Versioning.TargetFramework("".NETCoreApp,Version=v3.1"", FrameworkDisplayName="""")]
+[assembly: System.Runtime.Versioning.TargetFramework(""{TFM}"", FrameworkDisplayName="""")]
 namespace PublicApiGeneratorTests.Examples
-{
+{{
     public class NotImportant
-    {
-        public NotImportant() { }
-    }
-}";
-#endif
+    {{
+        public NotImportant() {{ }}
+    }}
+}}";
 
             AssertPublicApi<NotImportant>(api, new ApiGeneratorOptions { IncludeAssemblyAttributes = true });
         }
