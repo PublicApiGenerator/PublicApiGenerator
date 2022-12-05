@@ -12,9 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [ubuntu-latest, windows-latest]
-    name: ${{ matrix.runs-on }}
-    runs-on: ${{ matrix.runs-on }}
+        os: [ubuntu-latest, windows-latest]
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -29,7 +29,6 @@ jobs:
         working-directory: src
         run: dotnet restore
       - name: Build solution [Release]
-        if: ${{ startsWith(matrix.os, 'ubuntu') }}
         working-directory: src
         run: dotnet build --no-restore -c Release
       - name: Build solution [Debug]
