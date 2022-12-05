@@ -38,9 +38,12 @@ jobs:
       - name: Test solution [Debug]
         working-directory: src
         run: dotnet test --no-restore --no-build
-      - name: Pack solution [Release]
+      - name: Pack Lib [Release]
         working-directory: src
-        run: dotnet pack --no-restore --no-build -c Release -o out
+        run: dotnet pack PublicApiGenerator/PublicApiGenerator.csproj --no-restore --no-build -c Release -o out
+      - name: Publish Tool [Release]
+        working-directory: src
+        run: dotnet publish PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj --no-restore --no-build -c Release -o out
       - name: Upload Nuget packages as workflow artifacts
         uses: actions/upload-artifact@v3
         with:
