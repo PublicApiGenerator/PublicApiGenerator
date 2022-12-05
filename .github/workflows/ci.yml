@@ -6,6 +6,7 @@ on:
     tags:
     - '**'
   pull_request:
+
 jobs:
   build:
     strategy:
@@ -15,13 +16,37 @@ jobs:
     name: ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
     steps:
-    - run: dotnet --info
-    - uses: actions/checkout@af513c7a016048ae468971c52ed77d9562c7c819
-    - if: contains(matrix.runs-on, 'windows')
-      run: ./build.cmd
-    - if: contains(matrix.runs-on, 'ubuntu')
-      run: ./build.sh
-    - uses: actions/upload-artifact@master
-      with:
-        name: nugets
-        path: nugets/  
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Setup .NET SDKs
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            3.1.x
+            6.0.x
+            7.0.x
+      - name: Install dependencies
+        working-directory: src
+        run: dotnet restore
+      - name: Build solution [Release]
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        working-directory: src
+        run: dotnet build --no-restore -c Release
+      - name: Build solution [Debug]
+        working-directory: src
+        run: dotnet build --no-restore -c Debug
+      - name: Test solution [Debug]
+        working-directory: src
+        run: dotnet test --no-restore --no-build
+      - name: Pack solution [Release]
+        working-directory: src
+        run: dotnet pack --no-restore --no-build -c Release -o out
+      - name: Upload Nuget packages as workflow artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Nuget packages
+          path: |
+            src/out/*
+      - name: Publish Nuget packages to Nuget registry
+        working-directory: src
+        run: dotnet nuget push "out/*" -k ${{secrets.NUGET_AUTH_TOKEN}}
