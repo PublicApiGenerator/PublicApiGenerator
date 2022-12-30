@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="System.CommandLine.DragonFruit" Version="0.2.0-alpha.19156.3" />
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.2.0-alpha.19174.3" />
+    <PackageReference Include="MinVer" Version="4.2.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

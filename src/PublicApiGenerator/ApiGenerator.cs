@@ -155,6 +155,11 @@ namespace PublicApiGenerator
 
         static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
         {
+            // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/245
+            bool isRecord = m.DeclaringType.GetMethods().Any(m => m.Name == "<Clone>$");
+            if (isRecord && m.Name == "EqualityContract")
+                return false;
+
             return !m.IsCompilerGenerated() && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
         }
 
@@ -755,6 +760,11 @@ namespace PublicApiGenerator
 
             // TODO: CodeDOM has no support for different access modifiers for getters and setters
             // TODO: CodeDOM has no support for attributes on setters or getters - promote to property?
+
+            if (hasSet && member.SetMethod?.ReturnType is RequiredModifierType reqmod && reqmod.ModifierType.FullName == "System.Runtime.CompilerServices.IsExternalInit")
+            {
+                property.Name = string.Format(CodeNormalizer.PropertyInitOnlySetterTemplate, property.Name);
+            }
 
             typeDeclaration.Members.Add(property);
         }
