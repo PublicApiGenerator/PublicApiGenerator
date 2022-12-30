@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -43,6 +43,34 @@ namespace PublicApiGeneratorTests
     {
         public PropertyWriteOnly() { }
         public string Value { set; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_getter_and_init_only_setter()
+        {
+            AssertPublicApi<PropertyReadInit>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class PropertyReadInit
+    {
+        public PropertyReadInit() { }
+        public string Value { get; init; }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_init_only_setter_only()
+        {
+            AssertPublicApi<PropertyInitOnly>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class PropertyInitOnly
+    {
+        public PropertyInitOnly() { }
+        public string Value { init; }
     }
 }");
         }
@@ -123,6 +151,16 @@ namespace PublicApiGeneratorTests
         public class PropertyWriteOnly
         {
             public string Value { set { } }
+        }
+
+        public class PropertyReadInit
+        {
+            public string Value { get; init; }
+        }
+
+        public class PropertyInitOnly
+        {
+            public string Value { init { } }
         }
 
         public class PropertyIndexer

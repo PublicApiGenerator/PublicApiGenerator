@@ -12,9 +12,16 @@ jobs:
       fail-fast: false
       matrix:
         runs-on: [ubuntu-latest, windows-latest]
-    name: ${{ matrix.runs-on }}
+        sdk: ["6.0.301", "6.0.302", "6.0.303", "6.0.400"]
+    name: ${{ matrix.runs-on }}-${{ matrix.sdk }}
     runs-on: ${{ matrix.runs-on }}
     steps:
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          3.1.422
+          ${{ matrix.sdk }}
     - run: dotnet --info
     - uses: actions/checkout@af513c7a016048ae468971c52ed77d9562c7c819
     - if: contains(matrix.runs-on, 'windows')
@@ -24,4 +31,4 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: nugets
-        path: nugets/  
+        path: nugets/

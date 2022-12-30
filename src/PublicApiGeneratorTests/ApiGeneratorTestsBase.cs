@@ -34,8 +34,19 @@ namespace PublicApiGeneratorTests
 
             var actualOutput = assembly.GeneratePublicApi(options);
             actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);
-            Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
-                ignoreWhiteSpaceDifferences: true);
+            try
+            {
+                Assert.Equal(expectedOutput, actualOutput, ignoreCase: false, ignoreLineEndingDifferences: true,
+                    ignoreWhiteSpaceDifferences: true);
+            }
+            catch
+            {
+                Console.WriteLine("Full expected output:");
+                Console.WriteLine(expectedOutput);
+                Console.WriteLine("Full actual output:");
+                Console.WriteLine(actualOutput);
+                throw;
+            }
         }
     }
 }

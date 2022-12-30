@@ -34,7 +34,12 @@ namespace PublicApiGenerator
         {
             // ReSharper disable once RedundantEnumerableCastCall
             var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
-            if (genericArgs == null) return null;
+            if (genericArgs == null)
+            {
+                return type is ArrayType arr
+                    ? CreateGenericArguments(arr.ElementType, nullabilityMap)
+                    : null;
+            }
 
             var genericArguments = new List<CodeTypeReference>();
             foreach (var argument in genericArgs)
