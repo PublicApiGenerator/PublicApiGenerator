@@ -185,6 +185,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_expand_enum_special_flags()
+        {
+            AssertPublicApi<ClassWithAttributeWithEnumWithSomeSpecialFlags>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumWithSomeSpecialFlags(PublicApiGeneratorTests.Examples.EnumWithSomeSpecialFlags.PublicConstructors)]
+    public class ClassWithAttributeWithEnumWithSomeSpecialFlags
+    {
+        public ClassWithAttributeWithEnumWithSomeSpecialFlags() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<ClassWithMultipleAttributes>(
@@ -395,6 +409,11 @@ namespace PublicApiGeneratorTests
 
         [AttributeWithEnumFlags(EnumWithFlags.One | EnumWithFlags.Two | EnumWithFlags.Three)]
         public class ClassWithAttributeWithEnumFlags
+        {
+        }
+
+        [AttributeWithEnumWithSomeSpecialFlags(EnumWithSomeSpecialFlags.PublicConstructors)]
+        public class ClassWithAttributeWithEnumWithSomeSpecialFlags
         {
         }
 
