@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable ClassNeverInstantiated.Global
@@ -39,6 +39,15 @@ namespace PublicApiGeneratorTests.Examples
         One,
         Two,
         Three
+    }
+
+    [Flags]
+    public enum EnumWithSomeSpecialFlags
+    {
+        None = 0,
+        PublicParameterlessConstructor = 1,
+        PublicConstructors = 3,
+        NonPublicConstructors = 4
     }
 
     public class Attribute_AA : Attribute
@@ -115,6 +124,13 @@ namespace PublicApiGeneratorTests.Examples
     public class AttributeWithEnumFlagsAttribute : Attribute
     {
         public AttributeWithEnumFlagsAttribute(EnumWithFlags value)
+        {
+        }
+    }
+
+    public class AttributeWithEnumWithSomeSpecialFlagsAttribute : Attribute
+    {
+        public AttributeWithEnumWithSomeSpecialFlagsAttribute(EnumWithSomeSpecialFlags value)
         {
         }
     }

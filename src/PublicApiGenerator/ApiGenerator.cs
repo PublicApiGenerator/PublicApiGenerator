@@ -538,6 +538,10 @@ namespace PublicApiGenerator
                     //    select (CodeExpression)new CodeFieldReferenceExpression(typeExpression, f.Name);
                     //return allFlags.Aggregate((current, next) => new CodeBinaryOperatorExpression(current, CodeBinaryOperatorType.BitwiseOr, next));
 
+                    var exactMatch = type.Fields.FirstOrDefault(f => Convert.ToInt64(f.Constant) == originalValue);
+                    if (exactMatch != null)
+                        return new CodeSnippetExpression(type.FullName + "." + exactMatch.Name);
+
                     // I'd rather use the above, as it's just using the CodeDOM, but it puts
                     // brackets around each CodeBinaryOperatorExpression
                     var flags = from f in type.Fields
