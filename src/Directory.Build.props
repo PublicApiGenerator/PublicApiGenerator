@@ -8,7 +8,6 @@
     <Nullable>enable</Nullable>
     <MinVerMinimumMajorMinor>10.0</MinVerMinimumMajorMinor>
     <NoWarn>$(NoWarn);NU5105</NoWarn>
-    <IsPackable>true</IsPackable>
     <DebugType>embedded</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>

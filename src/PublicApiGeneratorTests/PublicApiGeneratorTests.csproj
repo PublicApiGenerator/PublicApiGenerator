@@ -14,7 +14,6 @@
     IDE1006 Naming rule violation: These words must begin with upper case characters
     -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
