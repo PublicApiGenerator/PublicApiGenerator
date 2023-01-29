@@ -1,6 +1,5 @@
 using PublicApiGeneratorTests.Examples;
 using System.Linq.Expressions;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {

@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {

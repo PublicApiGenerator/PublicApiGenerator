@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {

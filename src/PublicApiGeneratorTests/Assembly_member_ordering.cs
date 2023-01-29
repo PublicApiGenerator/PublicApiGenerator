@@ -1,7 +1,6 @@
 ﻿using PublicApiGeneratorTests.Examples;
 using PublicApiGeneratorTests.Examples_AA;
 using PublicApiGeneratorTests.Examples_ZZ;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {

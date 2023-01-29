@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 using PublicApiGenerator;
-using Xunit;
 
 namespace PublicApiGeneratorTests;
 
