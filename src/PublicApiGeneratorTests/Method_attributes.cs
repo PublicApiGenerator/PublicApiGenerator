@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 

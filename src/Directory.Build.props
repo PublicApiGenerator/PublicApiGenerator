@@ -9,7 +9,10 @@
     <MinVerMinimumMajorMinor>10.0</MinVerMinimumMajorMinor>
     <NoWarn>$(NoWarn);NU5105</NoWarn>
     <DebugType>embedded</DebugType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
 </Project>

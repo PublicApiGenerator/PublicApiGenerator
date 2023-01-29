@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
@@ -14,8 +13,6 @@ using Xunit;
 
 namespace PublicApiGeneratorTests
 {
-    using NotInTestAssembly = Object;
-
     public class Assembly_attributes : ApiGeneratorTestsBase
     {
         [Fact]
@@ -54,7 +51,7 @@ namespace PublicApiGeneratorTests.Examples
     // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
-        public class NotImportant {}
+        public class NotImportant { }
     }
     // ReSharper restore ClassNeverInstantiated.Global
 }

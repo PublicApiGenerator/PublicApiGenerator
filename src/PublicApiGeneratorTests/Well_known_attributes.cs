@@ -1,5 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
 using PublicApiGeneratorTests.Examples;
-using System;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -34,8 +34,6 @@ namespace PublicApiGeneratorTests
     // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
-        using System.Diagnostics.CodeAnalysis;
-
         public class ClassWithInternalWellKnownAttributes
         {
             [AllowNull]
@@ -50,51 +48,9 @@ namespace PublicApiGeneratorTests
             public bool BoolReturningMethod([MaybeNullWhen(true)] object a, [NotNullWhen(true)] object b) => false;
 
             [DoesNotReturn]
-            public void MethodWithBoolParameter([DoesNotReturnIf(true)] bool a) { }
+            public void MethodWithBoolParameter([DoesNotReturnIf(true)] bool a) => throw null;
         }
     }
     // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore UnusedMember.Global
-}
-
-namespace System.Diagnostics.CodeAnalysis
-{
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property)]
-    internal sealed class AllowNullAttribute : Attribute { }
-
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property)]
-    internal sealed class DisallowNullAttribute : Attribute { }
-
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.ReturnValue)]
-    internal sealed class MaybeNullAttribute : Attribute { }
-
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.ReturnValue)]
-    internal sealed class NotNullAttribute : Attribute { }
-
-    [AttributeUsage(AttributeTargets.Parameter)]
-    internal sealed class MaybeNullWhenAttribute : Attribute
-    {
-        public MaybeNullWhenAttribute(bool returnValue) { }
-    }
-
-    [AttributeUsage(AttributeTargets.Parameter)]
-    internal sealed class NotNullWhenAttribute : Attribute
-    {
-        public NotNullWhenAttribute(bool returnValue) { }
-    }
-
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.ReturnValue, AllowMultiple = true)]
-    internal sealed class NotNullIfNotNullAttribute : Attribute
-    {
-        public NotNullIfNotNullAttribute(string parameterName) { }
-    }
-
-    [AttributeUsage(AttributeTargets.Method)]
-    internal sealed class DoesNotReturnAttribute : Attribute { }
-
-    [AttributeUsage(AttributeTargets.Parameter)]
-    internal sealed class DoesNotReturnIfAttribute : Attribute
-    {
-        public DoesNotReturnIfAttribute(bool parameterValue) { }
-    }
 }

@@ -1,7 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Xunit;
 
 namespace PublicApiGeneratorTests
@@ -346,7 +343,7 @@ namespace PublicApiGeneratorTests
         where U : class
     {
            public StringNullableList() { }
-           public int CompareTo(U other) { }
+           public int CompareTo(U? other) { }
     }
 }");
         }
@@ -575,15 +572,14 @@ namespace PublicApiGeneratorTests
 
             public void Print2<T>(T val) where T : class?
             {
-                if (val != null)
-                    val.ToString();
+                val?.ToString();
             }
 
             public static void Print3<T>() where T : Stream { }
             public static void Print4<T>() where T : IDisposable { }
         }
 
-        public class Constraints2<X, Y> where X: IComparable<X> where Y : class?
+        public class Constraints2<X, Y> where X : IComparable<X> where Y : class?
         {
             public T Convert<T>(T data) where T : IComparable<string?> => default;
             public static void Print1<T>() where T : Stream? { }
@@ -598,9 +594,9 @@ namespace PublicApiGeneratorTests
             }
         }
 
-        public class StringNullableList<T,U> : List<T?>, IComparable<U> where T : struct where U : class
+        public class StringNullableList<T, U> : List<T?>, IComparable<U> where T : struct where U : class
         {
-            public int CompareTo(U other) => 0;
+            public int CompareTo(U? other) => 0;
         }
 
         public interface IDoStuff1<TIn, TOut>

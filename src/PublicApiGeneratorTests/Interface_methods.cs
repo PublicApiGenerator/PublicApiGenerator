@@ -1,4 +1,3 @@
-using System;
 using PublicApiGeneratorTests.Examples;
 using Xunit;
 

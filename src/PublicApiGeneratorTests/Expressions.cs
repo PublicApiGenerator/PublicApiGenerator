@@ -1,5 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System;
 using System.Linq.Expressions;
 using Xunit;
 

@@ -1,12 +1,11 @@
 using PublicApiGenerator;
 
-namespace PublicApiGeneratorTests
+namespace PublicApiGeneratorTests;
+
+class DefaultApiGeneratorOptions : ApiGeneratorOptions
 {
-    class DefaultApiGeneratorOptions : ApiGeneratorOptions
+    public DefaultApiGeneratorOptions()
     {
-        public DefaultApiGeneratorOptions()
-        {
-            IncludeAssemblyAttributes = false;
-        }
+        IncludeAssemblyAttributes = false;
     }
 }

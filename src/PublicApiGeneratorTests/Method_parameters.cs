@@ -1,5 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System.Threading;
 using Xunit;
 
 namespace PublicApiGeneratorTests

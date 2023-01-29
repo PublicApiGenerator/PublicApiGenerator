@@ -14,6 +14,8 @@
     IDE1006 Naming rule violation: These words must begin with upper case characters
     -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--TODO: fix nullability warnings-->
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);CS8601;CS8625;CS8714</WarningsNotAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
