@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.1;net7</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-public-api</ToolCommandName>
     <Description>This tool generates your public API to a file. You can use this in approval style tests or for documentation.</Description>
