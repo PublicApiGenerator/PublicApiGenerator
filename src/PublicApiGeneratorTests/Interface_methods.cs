@@ -1,6 +1,4 @@
-using System;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {

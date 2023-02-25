@@ -1,6 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -294,7 +292,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                ExcludeAttributes = new[] {"PublicApiGeneratorTests.Examples.Attribute_MM"}
+                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_MM" }
             };
 
             AssertPublicApi<ClassWithMultipleAttributes>(

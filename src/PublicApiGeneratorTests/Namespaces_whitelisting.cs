@@ -1,7 +1,5 @@
 ﻿using Microsoft.Whitelisted;
 using System.Whitelisted;
-using PublicApiGenerator;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {

@@ -1,6 +1,4 @@
-﻿using System;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -9,7 +7,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_generic_type_parameters()
         {
-            AssertPublicApi(typeof(IWithGenericType<>), 
+            AssertPublicApi(typeof(IWithGenericType<>),
 @"namespace PublicApiGeneratorTests.Examples
 {
     public interface IWithGenericType<T> { }
