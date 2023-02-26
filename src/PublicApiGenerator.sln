@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.editorconfig = ..\.editorconfig
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
-		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
-		..\.github\dependabot.yml = ..\.github\dependabot.yml
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		..\LICENSE = ..\LICENSE
@@ -22,6 +20,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicApiGenerator.Tool", "PublicApiGenerator.Tool\PublicApiGenerator.Tool.csproj", "{EDD62C2E-4CCC-4069-8450-85514810008E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{FDD9792D-8E91-41C6-B42A-9E69831F61DF}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\dependabot.yml = ..\.github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1ED058E7-B50B-4C32-9B20-3C24F87724B5}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\cd-release.yml = ..\.github\workflows\cd-release.yml
+		..\.github\workflows\cd-preview.yml = ..\.github\workflows\cd-preview.yml
+		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +54,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1ED058E7-B50B-4C32-9B20-3C24F87724B5} = {FDD9792D-8E91-41C6-B42A-9E69831F61DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {897E3421-9C9A-4E5B-B816-164C2D897BCB}
