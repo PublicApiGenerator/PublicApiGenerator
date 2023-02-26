@@ -1,7 +1,6 @@
 <Project>
 
   <PropertyGroup Condition="'$(IsPackable)' == 'true'">
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <SignAssembly>true</SignAssembly>
     <EmbedAllSources>true</EmbedAllSources>
