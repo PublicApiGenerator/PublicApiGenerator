@@ -11,33 +11,33 @@ PublicApiGenerator supports C# 8 [Nullable Reference Types](https://docs.microso
 
 Public API of an assembly
 
-``` csharp
+```csharp
 var publicApi = typeof(Library).Assembly.GeneratePublicApi();
 ```
 
 Public API of multiple types
 
-``` csharp
+```csharp
 var myTypes = new[] { typeof(MyType), typeof(YetAnotherType) };
 var publicApi = typeof(myTypes).GeneratePublicApi();
 ```
 
 Public API of a type
 
-``` csharp
+```csharp
 var publicApi = typeof(MyType).GeneratePublicApi();
 ```
 
 More control over the API output
 
-``` csharp
+```csharp
 var options = new ApiGeneratorOptions { ... };
 var publicApi = typeof(Library).Assembly.GeneratePublicApi(options);
 ```
 
 ### Manual
 
-``` csharp
+```csharp
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
@@ -62,7 +62,7 @@ public void my_assembly_has_no_public_api_changes()
 
 > Install-package Shouldly
 
-``` csharp
+```csharp
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
@@ -79,7 +79,7 @@ public void my_assembly_has_no_public_api_changes()
 
 > Install-package ApprovalTests
 
-``` csharp
+```csharp
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
@@ -111,7 +111,7 @@ private class AssemblyPathNamer : UnitTestFrameworkNamer
 
 > Install-package Verify.Xunit
 
-``` csharp
+```csharp
 [UsesVerify]
 public class Tests
 {
@@ -129,7 +129,7 @@ Or
 
 > Install-package Verify.NUnit
 
-``` csharp
+```csharp
 [Test]
 public Task my_assembly_has_no_public_api_changes()
 {
@@ -143,7 +143,7 @@ Or
 
 > Install-package Verify.MSTest
 
-``` csharp
+```csharp
 
 [TestClass]
 public class VerifyObjectSamples :
