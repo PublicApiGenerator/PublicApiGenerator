@@ -13,7 +13,6 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <MinVerVerbosity>detailed</MinVerVerbosity>
     <MinVerDefaultPreReleaseIdentifiers>preview</MinVerDefaultPreReleaseIdentifiers>
   </PropertyGroup>
 
