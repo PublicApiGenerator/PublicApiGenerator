@@ -1,6 +1,21 @@
-_[![Build status](https://github.com/PublicApiGenerator/PublicApiGenerator/workflows/.github/workflows/ci.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions)_
-
 # PublicApiGenerator
+
+[![Run tests](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/ci.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/ci.yml)
+[![Publish preview](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-preview.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-preview.yml)
+[![Publish release](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-release.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-release.yml)
+
+[![License](https://img.shields.io/github/license/PublicApiGenerator/PublicApiGenerator)](LICENSE.md)
+[![codecov](https://codecov.io/gh/PublicApiGenerator/PublicApiGenerator/branch/master/graph/badge.svg?token=iXZo1jZvFo)](https://codecov.io/gh/PublicApiGenerator/PublicApiGenerator)
+[![Nuget](https://img.shields.io/nuget/dt/PublicApiGenerator)](https://www.nuget.org/packages/PublicApiGenerator)
+[![Nuget](https://img.shields.io/nuget/v/PublicApiGenerator)](https://www.nuget.org/packages/PublicApiGenerator)
+[![GitHub Release Date](https://img.shields.io/github/release-date/PublicApiGenerator/PublicApiGenerator?label=released)](https://github.com/PublicApiGenerator/PublicApiGenerator/releases)
+[![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/PublicApiGenerator/PublicApiGenerator/latest?label=new+commits)](https://github.com/PublicApiGenerator/PublicApiGenerator/commits/master)
+![Size](https://img.shields.io/github/repo-size/PublicApiGenerator/PublicApiGenerator)
+
+[![GitHub contributors](https://img.shields.io/github/contributors/PublicApiGenerator/PublicApiGenerator)](https://github.com/PublicApiGenerator/PublicApiGenerator/graphs/contributors)
+![Activity](https://img.shields.io/github/commit-activity/w/PublicApiGenerator/PublicApiGenerator)
+![Activity](https://img.shields.io/github/commit-activity/m/PublicApiGenerator/PublicApiGenerator)
+![Activity](https://img.shields.io/github/commit-activity/y/PublicApiGenerator/PublicApiGenerator)
 
 PublicApiGenerator has no dependencies and simply creates a string the represents the public API. Any approval library can be used to approve the generated public API.
 PublicApiGenerator supports C# 8 [Nullable Reference Types](https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references) from version 10.
