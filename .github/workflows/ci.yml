@@ -1,16 +1,27 @@
+name: Run tests
+
 on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - src/**
+      - .github/workflows/**
+  # Upload code coverage results when PRs are merged
   push:
     branches:
-    - master
-    - release-*
-    tags:
-    - '**'
-  pull_request:
+      - master
+    paths:
+      - src/**
+      - .github/workflows/**
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-  build:
+  test:
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
     name: ${{ matrix.os }}
@@ -29,25 +40,42 @@ jobs:
         working-directory: src
         run: dotnet restore
       - name: Build solution [Release]
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
         working-directory: src
         run: dotnet build --no-restore -c Release
       - name: Build solution [Debug]
         working-directory: src
         run: dotnet build --no-restore -c Debug
-      - name: Test solution [Debug]
+      - name: Test solution [Debug] with code coverage
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        working-directory: src
+        run: >
+          dotnet test
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Test solution [Debug] without code coverage
+        if: ${{ startsWith(matrix.os, 'windows') }}
         working-directory: src
         run: dotnet test --no-restore --no-build
-      - name: Publish Tool [Release]
-        working-directory: src
-        run: |
-          dotnet publish PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj --no-restore --no-build -c Release -f netcoreapp3.1 &&
-          dotnet publish PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj --no-restore --no-build -c Release -f net6
-      - name: Pack solution [Release]
-        working-directory: src
-        run: dotnet pack --no-restore --no-build -c Release -o out
-      - name: Upload Nuget packages as workflow artifacts
-        uses: actions/upload-artifact@v3
+      - name: Upload coverage to codecov
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        uses: codecov/codecov-action@v3
         with:
-          name: Nuget packages
-          path: |
-            src/out/*
+          files: 'src/.coverage/**/coverage.opencover.xml'
+
+  buildcheck:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Pass build check
+        if: ${{ needs.test.result == 'success' }}
+        run: exit 0
+      - name: Fail build check
+        if: ${{ needs.test.result != 'success' }}
+        run: exit 1
