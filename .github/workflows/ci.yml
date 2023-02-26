@@ -35,7 +35,7 @@ jobs:
           dotnet-version: |
             3.1.x
             6.0.x
-            7.0.x
+            7.0.201
       - name: Install dependencies
         working-directory: src
         run: dotnet restore
