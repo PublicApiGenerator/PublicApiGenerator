@@ -27,8 +27,7 @@ jobs:
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Setup .NET SDKs
         uses: actions/setup-dotnet@v3
         with:

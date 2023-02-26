@@ -5,6 +5,7 @@
     <Copyright>Copyright Jake Ginnivan 2010-$([System.DateTime]::UtcNow.ToString(yyyy)). All rights reserved.</Copyright>
     <PackageTags>semanticversioning versioning api</PackageTags>
     <LangVersion>latest</LangVersion>
+    <PackageIcon>icon.png</PackageIcon>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);NU5105</NoWarn>
     <DebugType>embedded</DebugType>
