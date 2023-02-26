@@ -26,6 +26,9 @@ jobs:
             3.1.x
             6.0.x
             7.0.201
+          source-url: https://nuget.pkg.github.com/PublicApiGenerator/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Install dependencies
         working-directory: src
         run: dotnet restore
