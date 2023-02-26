@@ -449,17 +449,14 @@ public static class ApiGenerator
         PopulateAttributesThatDontAppearInCustomAttributes(type, attributes);
     }
 
-    static void PopulateAttributesThatDontAppearInCustomAttributes(ICustomAttributeProvider type,
+    private static void PopulateAttributesThatDontAppearInCustomAttributes(ICustomAttributeProvider type,
         CodeAttributeDeclarationCollection attributes)
     {
-        if (type is TypeDefinition typeDefinition)
+        if (type is TypeDefinition typeDefinition && typeDefinition.Attributes.HasFlag(Mono.Cecil.TypeAttributes.Serializable))
         {
-            if (typeDefinition.Attributes.HasFlag(Mono.Cecil.TypeAttributes.Serializable))
-            {
-                var attribute = new CodeAttributeDeclaration("System.SerializableAttribute");
-                attribute.Name = AttributeNameBuilder.Get(attribute.Name);
-                attributes.Add(attribute);
-            }
+            var attribute = new CodeAttributeDeclaration("System.SerializableAttribute");
+            attribute.Name = AttributeNameBuilder.Get(attribute.Name);
+            attributes.Add(attribute);
         }
     }
 
@@ -565,8 +562,9 @@ public static class ApiGenerator
         {
             // CodeDOM outputs a verbatim string. Any string with \n is treated as such, so normalize
             // it to make it easier for comparisons
-            value = Regex.Replace(s, @"\n", "\\n");
-            value = Regex.Replace(s, @"\r\n|\r\\n", "\\r\\n");
+            s = Regex.Replace(s, @"\n", "\\n");
+            s = Regex.Replace(s, @"\r\n|\r\\n", "\\r\\n");
+            value = s;
         }
 
         return new CodePrimitiveExpression(value);

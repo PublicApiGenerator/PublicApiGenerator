@@ -138,10 +138,9 @@ internal static class CodeTypeReferenceBuilder
 
         if (type is ArrayType array)
         {
-            if (nullable)
-                return CSharpTypeKeyword.Get(GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested)) + "[]";
-            else
-                return GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested) + "[]";
+            return nullable
+                ? CSharpTypeKeyword.Get(GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested)) + "[]"
+                : GetTypeName(array.ElementType, nullabilityMap, NullableMode.Default, disableNested) + "[]";
         }
 
         if (type is PointerType pointer)
