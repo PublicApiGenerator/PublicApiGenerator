@@ -24,13 +24,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{FDD9792D-8E91-41C6-B42A-9E69831F61DF}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\dependabot.yml = ..\.github\dependabot.yml
+		..\.github\labeler.yml = ..\.github\labeler.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1ED058E7-B50B-4C32-9B20-3C24F87724B5}"
 	ProjectSection(SolutionItems) = preProject
-		..\.github\workflows\cd-release.yml = ..\.github\workflows\cd-release.yml
 		..\.github\workflows\cd-preview.yml = ..\.github\workflows\cd-preview.yml
+		..\.github\workflows\cd-release.yml = ..\.github\workflows\cd-release.yml
 		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
+		..\.github\workflows\label.yml = ..\.github\workflows\label.yml
 	EndProjectSection
 EndProject
 Global

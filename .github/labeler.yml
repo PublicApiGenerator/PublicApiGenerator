@@ -1,0 +1,11 @@
+test:
+  - src/PublicApiGeneratorTests/**/*
+
+CI:
+  - .github/**/*
+
+code style:
+  - .editorconfig
+
+documentation:
+  - README.md
