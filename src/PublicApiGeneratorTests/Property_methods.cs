@@ -139,12 +139,12 @@ namespace PublicApiGeneratorTests
     {
         public class PropertyReadWrite
         {
-            public string Value { get { return string.Empty; } set { } }
+            public string Value { get => string.Empty; set { } }
         }
 
         public class PropertyReadOnly
         {
-            public string Value { get { return string.Empty; } }
+            public string Value => string.Empty;
         }
 
         public class PropertyWriteOnly
@@ -166,17 +166,14 @@ namespace PublicApiGeneratorTests
         {
             public string this[int index]
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
 
         public class PropertyIndexerReadOnly
         {
-            public string this[int index]
-            {
-                get { return string.Empty; }
-            }
+            public string this[int index] => string.Empty;
         }
 
         public class PropertyIndexerWriteOnly
@@ -191,7 +188,7 @@ namespace PublicApiGeneratorTests
         {
             public string this[int index, int order]
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }

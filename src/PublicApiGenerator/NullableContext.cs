@@ -12,8 +12,7 @@ internal class NullableContext
     {
         get
         {
-            if (_nullableContextProviders == null)
-                _nullableContextProviders = new Stack<ICustomAttributeProvider>();
+            _nullableContextProviders ??= new Stack<ICustomAttributeProvider>();
             return _nullableContextProviders;
         }
     }
