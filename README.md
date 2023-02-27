@@ -88,6 +88,8 @@ public void my_assembly_has_no_public_api_changes()
 }
 ```
 
+ApiGenerator itself [uses](src/PublicApiGeneratorTests/SelfApiApprovalTests.cs) this approach to test API changes.
+
 ### ApprovalTests
 
 [ApprovalTests](https://github.com/approvals/ApprovalTests.Net)
