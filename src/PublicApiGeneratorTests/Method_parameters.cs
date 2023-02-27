@@ -392,17 +392,17 @@ namespace PublicApiGeneratorTests
             public void Method1(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default!)
             {
             }
-            public TType Method2<TType>(string name, TType defaultValue = null) where TType : class => default;
+            public TType Method2<TType>(string name, TType defaultValue = null!) where TType : class => default;
             public TType Method3<TType>(string name, TType defaultValue = default) where TType : struct => default;
-            public TType Method4<TType>(string name, TType defaultValue = default) => default;
+            public TType Method4<TType>(string name, TType defaultValue = default!) => default;
         }
 
         public interface InterfaceWithDefaultValues
         {
             void Method1(int value1 = 42, string value2 = "hello world", CancellationToken token = default, int value3 = default, string value4 = default!);
-            TType Method2<TType>(string name, TType defaultValue = null) where TType : class;
+            TType Method2<TType>(string name, TType defaultValue = null!) where TType : class;
             TType Method3<TType>(string name, TType defaultValue = default) where TType : struct;
-            TType Method4<TType>(string name, TType defaultValue = default);
+            TType Method4<TType>(string name, TType defaultValue = default!);
         }
 
         public class MethodWithDefaultThatLooksLikeAnAttribute

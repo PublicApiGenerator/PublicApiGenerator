@@ -3,7 +3,7 @@ using Mono.Cecil;
 
 namespace PublicApiGenerator;
 
-public static class PropertyNameBuilder
+internal static class PropertyNameBuilder
 {
     public static string AugmentPropertyNameWithPropertyModifierMarkerTemplate(PropertyDefinition propertyDefinition,
         MemberAttributes getAccessorAttributes, MemberAttributes setAccessorAttributes)
