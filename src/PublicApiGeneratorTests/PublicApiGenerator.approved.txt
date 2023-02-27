@@ -1,0 +1,36 @@
+namespace PublicApiGenerator
+{
+    public static class ApiGenerator
+    {
+        public static string GeneratePublicApi(this System.Reflection.Assembly assembly, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
+        public static string GeneratePublicApi(this System.Type type, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
+        public static string GeneratePublicApi(this System.Type[] types, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
+        [System.Obsolete("Use `GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = nul" +
+            "l)` instead. Will be removed in the next major.")]
+        public static string GeneratePublicApi(System.Reflection.Assembly assembly, System.Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null) { }
+    }
+    public class ApiGeneratorOptions
+    {
+        public ApiGeneratorOptions() { }
+        public string[]? ExcludeAttributes { get; set; }
+        public bool IncludeAssemblyAttributes { get; set; }
+        public System.Type[]? IncludeTypes { get; set; }
+        public string[] WhitelistedNamespacePrefixes { get; set; }
+    }
+    public static class AttributeNameBuilder
+    {
+        public static string Get(string name) { }
+    }
+    public static class EventNameBuilder
+    {
+        public static string AugmentEventNameWithEventModifierMarkerTemplate(Mono.Cecil.EventDefinition eventDefinition, System.CodeDom.MemberAttributes addAccessorAttributes, System.CodeDom.MemberAttributes removeAccessorAttributes) { }
+    }
+    public static class MethodNameBuilder
+    {
+        public static string AugmentMethodNameWithMethodModifierMarkerTemplate(Mono.Cecil.MethodDefinition methodDefinition, System.CodeDom.MemberAttributes attributes) { }
+    }
+    public static class PropertyNameBuilder
+    {
+        public static string AugmentPropertyNameWithPropertyModifierMarkerTemplate(Mono.Cecil.PropertyDefinition propertyDefinition, System.CodeDom.MemberAttributes getAccessorAttributes, System.CodeDom.MemberAttributes setAccessorAttributes) { }
+    }
+}
