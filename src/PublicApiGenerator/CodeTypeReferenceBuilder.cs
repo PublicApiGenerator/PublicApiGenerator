@@ -18,7 +18,9 @@ internal static class CodeTypeReferenceBuilder
         if (type.IsValueType && type.Name == "Nullable`1" && type.Namespace == "System")
         {
             // unwrap System.Nullable<Type> into Type? for readability
-            var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
+            var genericArgs = type is IGenericInstance instance
+                ? instance.GenericArguments
+                : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : throw new NotSupportedException(type.ToString());
             return CreateCodeTypeReferenceWithNullabilityMap(genericArgs.Single(), nullabilityMap, NullableMode.Force, disableNested);
         }
         else
