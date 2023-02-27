@@ -12,6 +12,9 @@ using TypeAttributes = System.Reflection.TypeAttributes;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace PublicApiGenerator;
 
+/// <summary>
+/// Extensions methods to generate a public API from provided assemblies or types.
+/// </summary>
 public static class ApiGenerator
 {
     /// <summary>
@@ -80,6 +83,9 @@ public static class ApiGenerator
         return type.Assembly.GeneratePublicApi(options);
     }
 
+    /// <summary>
+    /// Generates a public API from the specified assembly and provided options.
+    /// </summary>
     [Obsolete("Use `GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = null)` instead. Will be removed in the next major.")]
     public static string GeneratePublicApi(Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
     {
@@ -144,12 +150,12 @@ public static class ApiGenerator
         }
     }
 
-    static bool ShouldIncludeType(TypeDefinition t)
+    private static bool ShouldIncludeType(TypeDefinition t)
     {
         return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily || t.IsNestedFamilyOrAssembly) && !t.IsCompilerGenerated();
     }
 
-    static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
+    private static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
     {
         // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/245
         bool isRecord = m.DeclaringType.GetMethods().Any(m => m.Name == "<Clone>$");
@@ -173,7 +179,7 @@ public static class ApiGenerator
         }
     }
 
-    static bool IsDotNetTypeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
+    private static bool IsDotNetTypeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
     {
         if (m.DeclaringType?.FullName == null)
             return false;
@@ -480,7 +486,7 @@ public static class ApiGenerator
     }
 
     // Litee: This method is used for additional sorting of custom attributes when multiple values are allowed
-    static string ConvertAttributeToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
+    private static string ConvertAttributeToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
     {
         using (var provider = new CSharpCodeProvider())
         {
@@ -593,7 +599,8 @@ public static class ApiGenerator
         if (!ShouldIncludeMember(attributes))
             return;
 
-        if (member.IsSpecialName && !member.Name.StartsWith("op_")) return;
+        if (member.IsSpecialName && !member.Name.StartsWith("op_"))
+            return;
 
         var returnType = member.ReturnType.CreateCodeTypeReference(member.MethodReturnType);
 
@@ -614,7 +621,7 @@ public static class ApiGenerator
         typeDeclaration.Members.Add(method);
     }
 
-    static void PopulateMethodParameters(IMethodSignature member,
+    private static void PopulateMethodParameters(IMethodSignature member,
         CodeParameterDeclarationExpressionCollection parameters,
         AttributeFilter attributeFilter,
         bool isExtension = false)
@@ -667,7 +674,7 @@ public static class ApiGenerator
         }
     }
 
-    static object FormatParameterConstant(ParameterDefinition parameter)
+    private static object FormatParameterConstant(ParameterDefinition parameter)
     {
         if (parameter.Constant is string)
             return string.Format(CultureInfo.InvariantCulture, "\"{0}\"", parameter.Constant);
@@ -693,7 +700,7 @@ public static class ApiGenerator
         return parameter.ParameterType.IsValueType ? "default" : "null";
     }
 
-    static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition typeDeclarationInfo, PropertyDefinition member, AttributeFilter attributeFilter)
+    private static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition typeDeclarationInfo, PropertyDefinition member, AttributeFilter attributeFilter)
     {
         var getterAttributes = member.GetMethod?.GetMethodAttributes() ?? 0;
         var setterAttributes = member.SetMethod?.GetMethodAttributes() ?? 0;
@@ -734,7 +741,7 @@ public static class ApiGenerator
                 new CodeAttributeDeclaration(
                     AttributeNameBuilder.Get("System.Runtime.CompilerServices.IndexerNameAttribute"))
                 {
-                    Arguments = {new CodeAttributeArgument(new CodePrimitiveExpression(defaultMemberAttributeValue))}
+                    Arguments = { new CodeAttributeArgument(new CodePrimitiveExpression(defaultMemberAttributeValue)) }
                 });
         }
 
@@ -767,7 +774,7 @@ public static class ApiGenerator
         typeDeclaration.Members.Add(property);
     }
 
-    static void AddEventToTypeDeclaration(CodeTypeDeclaration typeDeclaration, EventDefinition eventDefinition, AttributeFilter attributeFilter)
+    private static void AddEventToTypeDeclaration(CodeTypeDeclaration typeDeclaration, EventDefinition eventDefinition, AttributeFilter attributeFilter)
     {
         var addAccessorAttributes = eventDefinition.AddMethod.GetMethodAttributes();
         var removeAccessorAttributes = eventDefinition.RemoveMethod.GetMethodAttributes();
@@ -786,7 +793,7 @@ public static class ApiGenerator
         typeDeclaration.Members.Add(@event);
     }
 
-    static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo, AttributeFilter attributeFilter)
+    private static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo, AttributeFilter attributeFilter)
     {
         if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsFamilyAndAssembly || memberInfo.IsSpecialName)
             return;
