@@ -1,6 +1,6 @@
 namespace PublicApiGenerator;
 
-public static class AttributeNameBuilder
+internal static class AttributeNameBuilder
 {
     public static string Get(string name)
     {

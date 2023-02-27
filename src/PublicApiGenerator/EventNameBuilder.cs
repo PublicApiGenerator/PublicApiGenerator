@@ -4,7 +4,7 @@ using static System.String;
 
 namespace PublicApiGenerator;
 
-public static class EventNameBuilder
+internal static class EventNameBuilder
 {
     public static string AugmentEventNameWithEventModifierMarkerTemplate(EventDefinition eventDefinition,
         MemberAttributes addAccessorAttributes, MemberAttributes removeAccessorAttributes)

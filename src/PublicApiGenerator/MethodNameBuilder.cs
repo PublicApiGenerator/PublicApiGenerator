@@ -3,7 +3,7 @@ using Mono.Cecil;
 
 namespace PublicApiGenerator;
 
-public static class MethodNameBuilder
+internal static class MethodNameBuilder
 {
     public static string AugmentMethodNameWithMethodModifierMarkerTemplate(MethodDefinition methodDefinition,
         MemberAttributes attributes)
@@ -24,16 +24,10 @@ public static class MethodNameBuilder
             CodeNormalizer.METHOD_MODIFIER_MARKER_TEMPLATE);
     }
 
-    class ParameterTypeComparer : IEqualityComparer<ParameterDefinition>
+    private sealed class ParameterTypeComparer : IEqualityComparer<ParameterDefinition>
     {
-        public bool Equals(ParameterDefinition x, ParameterDefinition y)
-        {
-            return x?.ParameterType == y?.ParameterType;
-        }
+        public bool Equals(ParameterDefinition x, ParameterDefinition y) => x?.ParameterType == y?.ParameterType;
 
-        public int GetHashCode(ParameterDefinition obj)
-        {
-            return obj.GetHashCode();
-        }
+        public int GetHashCode(ParameterDefinition obj) => obj.GetHashCode();
     }
 }
