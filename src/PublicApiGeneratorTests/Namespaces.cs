@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples1;
+using PublicApiGeneratorTests.Examples1;
 using PublicApiGeneratorTests.Examples2;
 
 namespace PublicApiGeneratorTests
@@ -8,7 +8,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_declare_one_namespace_for_multiple_classes()
         {
-            AssertPublicApi(new[] {typeof(Simple1), typeof(Simple2)},
+            AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
 @"namespace PublicApiGeneratorTests.Examples1
 {
     public class Simple1
@@ -25,7 +25,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_declare_new_namespace_for_classes_in_different_namespaces()
         {
-            AssertPublicApi(new[]{typeof(Simple1), typeof(OtherSimple1)},
+            AssertPublicApi(new[] { typeof(Simple1), typeof(OtherSimple1) },
 @"namespace PublicApiGeneratorTests.Examples1
 {
     public class Simple1

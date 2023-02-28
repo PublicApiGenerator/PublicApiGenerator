@@ -1,8 +1,8 @@
 namespace PublicApiGenerator;
 
-partial class AttributeFilter
+internal partial class AttributeFilter
 {
-    private static readonly HashSet<string> AttributesNotRelevantForThePublicApi = new HashSet<string>
+    private static readonly HashSet<string> _attributesNotRelevantForThePublicApi = new()
     {
         "System.CodeDom.Compiler.GeneratedCodeAttribute",
         "System.ComponentModel.EditorBrowsableAttribute",

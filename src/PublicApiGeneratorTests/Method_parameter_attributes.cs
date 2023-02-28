@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -188,7 +188,7 @@ namespace PublicApiGeneratorTests
 
         public class MethodParameterWithMultipleAttributes
         {
-            public void Method([Attribute_ZZ] [Attribute_MM] [Attribute_AA] int value)
+            public void Method([Attribute_ZZ][Attribute_MM][Attribute_AA] int value)
             {
             }
         }
