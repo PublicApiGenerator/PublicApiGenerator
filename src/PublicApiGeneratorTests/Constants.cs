@@ -13,7 +13,8 @@ namespace PublicApiGeneratorTests
 {
     public class MyConstants
     {
-        public const string MULTILINE = ""This\\r\\nIs\\r\\nMultiline\\r\\n"";
+        public const string MULTILINE1 = ""This\\r\\nIs\\r\\nMultiline\\r\\n"";
+        public const string MULTILINE2 = ""This\\nIs\\nMultiline\\n"";
         public const string SINGLELINE = ""ABC"";
         public MyConstants() { }
     }
@@ -26,10 +27,8 @@ namespace PublicApiGeneratorTests
         public class MyConstants
         {
             public const string SINGLELINE = "ABC";
-            public const string MULTILINE = @"This
-Is
-Multiline
-";
+            public const string MULTILINE1 = "This\r\nIs\r\nMultiline\r\n";
+            public const string MULTILINE2 = "This\nIs\nMultiline\n";
         }
     }
 }
