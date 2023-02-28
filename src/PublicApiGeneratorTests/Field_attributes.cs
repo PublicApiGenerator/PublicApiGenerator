@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -244,7 +244,7 @@ namespace PublicApiGeneratorTests
 
         public class FieldWithMultipleAttributes
         {
-            [Attribute_ZZ] [Attribute_MM] [Attribute_AA] public string Value;
+            [Attribute_ZZ][Attribute_MM][Attribute_AA] public string Value;
         }
     }
     // ReSharper restore ClassNeverInstantiated.Global

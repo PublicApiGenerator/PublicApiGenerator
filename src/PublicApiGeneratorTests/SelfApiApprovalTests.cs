@@ -1,3 +1,5 @@
+#if NET7_0
+
 using PublicApiGenerator;
 using Shouldly;
 
@@ -19,3 +21,5 @@ public class SelfApiApprovalTests
         publicApi.ShouldMatchApproved(options => options.WithFilenameGenerator((_, _, fileType, fileExtension) => $"{assembly.GetName().Name!}.{fileType}.{fileExtension}"));
     }
 }
+
+#endif
