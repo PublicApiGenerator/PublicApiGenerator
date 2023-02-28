@@ -12,9 +12,11 @@ namespace PublicApiGenerator
     public class ApiGeneratorOptions
     {
         public ApiGeneratorOptions() { }
+        public string[] BlacklistedNamespacePrefixes { get; set; }
         public string[]? ExcludeAttributes { get; set; }
         public bool IncludeAssemblyAttributes { get; set; }
         public System.Type[]? IncludeTypes { get; set; }
+        public bool UseBlacklistedNamespacePrefixesForExtensionMethods { get; set; }
         public string[] WhitelistedNamespacePrefixes { get; set; }
     }
 }
