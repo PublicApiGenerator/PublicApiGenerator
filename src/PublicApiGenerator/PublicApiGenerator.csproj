@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <IsPackable>true</IsPackable>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>This library simply returns your public API as a string. You can use this in approval style tests or for documentation.</Description>
   </PropertyGroup>

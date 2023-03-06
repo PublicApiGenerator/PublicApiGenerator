@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -107,7 +107,7 @@ namespace PublicApiGeneratorTests
         {
             public async Task<string> AsyncMethod()
             {
-                return await Task.FromResult("Hello world");
+                return await Task.FromResult("Hello world").ConfigureAwait(false);
             }
         }
 
