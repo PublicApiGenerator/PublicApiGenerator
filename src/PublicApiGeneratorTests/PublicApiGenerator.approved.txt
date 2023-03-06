@@ -5,25 +5,15 @@ namespace PublicApiGenerator
         public static string GeneratePublicApi(this System.Reflection.Assembly assembly, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
         public static string GeneratePublicApi(this System.Type type, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
         public static string GeneratePublicApi(this System.Type[] types, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
-        [System.Obsolete("Use `GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = nul" +
-            "l)` instead. Will be removed in the next major.")]
-        public static string GeneratePublicApi(System.Reflection.Assembly assembly, System.Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null) { }
     }
     public class ApiGeneratorOptions
     {
         public ApiGeneratorOptions() { }
         public string[] AllowNamespacePrefixes { get; set; }
-        [System.Obsolete("Use DenyNamespacePrefixes instead. Will be removed in the next major.")]
-        public string[] BlacklistedNamespacePrefixes { get; set; }
         public string[] DenyNamespacePrefixes { get; set; }
         public string[]? ExcludeAttributes { get; set; }
         public bool IncludeAssemblyAttributes { get; set; }
         public System.Type[]? IncludeTypes { get; set; }
-        [System.Obsolete("Use UseDenyNamespacePrefixesForExtensionMethods instead. Will be removed in the n" +
-            "ext major.")]
-        public bool UseBlacklistedNamespacePrefixesForExtensionMethods { get; set; }
         public bool UseDenyNamespacePrefixesForExtensionMethods { get; set; }
-        [System.Obsolete("Use AllowNamespacePrefixes instead. Will be removed in the next major.")]
-        public string[] WhitelistedNamespacePrefixes { get; set; }
     }
 }

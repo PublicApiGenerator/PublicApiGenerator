@@ -85,28 +85,9 @@ public static class ApiGenerator
         return type.Assembly.GeneratePublicApi(options);
     }
 
-    /// <summary>
-    /// Generates a public API from the specified assembly and provided options.
-    /// </summary>
-    [Obsolete("Use `GeneratePublicApi(this Assembly assembly, ApiGeneratorOptions? options = null)` instead. Will be removed in the next major.")]
-    public static string GeneratePublicApi(Assembly assembly, Type[]? includeTypes = null, bool shouldIncludeAssemblyAttributes = true, string[]? whitelistedNamespacePrefixes = null, string[]? excludeAttributes = null)
-    {
-        var options = new ApiGeneratorOptions
-        {
-            IncludeTypes = includeTypes,
-            IncludeAssemblyAttributes = shouldIncludeAssemblyAttributes,
-            ExcludeAttributes = excludeAttributes,
-        };
-        if (whitelistedNamespacePrefixes != null)
-        {
-            options.WhitelistedNamespacePrefixes = whitelistedNamespacePrefixes;
-        }
-        return GeneratePublicApi(assembly, options);
-    }
-
     // TODO: Assembly references?
     // TODO: Better handle namespaces - using statements? - requires non-qualified type names
-    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
+    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
     {
         using var provider = new CSharpCodeProvider();
 
@@ -130,7 +111,7 @@ public static class ApiGenerator
 
             using (NullableContext.Push(publicType))
             {
-                var typeDeclaration = CreateTypeDeclaration(publicType, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods, attributeFilter);
+                var typeDeclaration = CreateTypeDeclaration(publicType, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods, attributeFilter);
                 @namespace.Types.Add(typeDeclaration);
             }
         }
@@ -234,7 +215,7 @@ public static class ApiGenerator
         }
     }
 
-    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
+    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
     {
         if (publicType.IsDelegate())
             return CreateDelegateDeclaration(publicType, attributeFilter);
@@ -319,7 +300,7 @@ public static class ApiGenerator
             .Select(t => t.Reference))
             declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(@interface));
 
-        foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
+        foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
             AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
 
         // Fields should be in defined order for an enum
@@ -329,11 +310,11 @@ public static class ApiGenerator
         foreach (var field in fields)
             AddMemberToTypeDeclaration(declaration, publicType, field, attributeFilter);
 
-        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods)).OrderBy(t => t.FullName, StringComparer.Ordinal))
+        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(t => t.FullName, StringComparer.Ordinal))
         {
             using (NullableContext.Push(nestedType))
             {
-                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods, attributeFilter);
+                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods, attributeFilter);
                 declaration.Members.Add(nestedTypeDeclaration);
             }
         }
