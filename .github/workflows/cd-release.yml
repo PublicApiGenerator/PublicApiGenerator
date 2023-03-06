@@ -23,6 +23,9 @@ jobs:
             3.1.x
             6.0.x
             7.0.201
+          source-url: https://api.nuget.org/v3/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_AUTH_TOKEN}}
       - name: Install dependencies
         working-directory: src
         run: dotnet restore
