@@ -45,12 +45,12 @@ public static class ApiGenerator
                 return CreatePublicApiForAssembly(
                     asm,
                     typeDefinition => !typeDefinition.IsNested &&
-                                      ShouldIncludeType(typeDefinition, options.BlacklistedNamespacePrefixes, options.WhitelistedNamespacePrefixes, options.UseBlacklistedNamespacePrefixesForExtensionMethods) &&
+                                      ShouldIncludeType(typeDefinition, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods) &&
                                       (options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName)),
                     options.IncludeAssemblyAttributes,
-                    options.BlacklistedNamespacePrefixes,
-                    options.WhitelistedNamespacePrefixes,
-                    options.UseBlacklistedNamespacePrefixesForExtensionMethods,
+                    options.DenyNamespacePrefixes,
+                    options.AllowNamespacePrefixes,
+                    options.UseDenyNamespacePrefixesForExtensionMethods,
                     attributeFilter);
             }
         }
@@ -150,7 +150,7 @@ public static class ApiGenerator
         }
     }
 
-    private static bool ShouldIncludeType(TypeDefinition t, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods)
+    private static bool ShouldIncludeType(TypeDefinition t, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods)
     {
         if (t.IsCompilerGenerated())
             return false;
@@ -158,20 +158,20 @@ public static class ApiGenerator
         if (!t.IsPublic && !t.IsNestedPublic && !t.IsNestedFamily && !t.IsNestedFamilyOrAssembly)
             return false;
 
-        if (!useBlacklistedNamespacePrefixesForExtensionMethods)
+        if (!useDenyNamespacePrefixesForExtensionMethods)
         {
-            if (t.GetMembers().Any(m => ShouldIncludeMember(m, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods)))
+            if (t.GetMembers().Any(m => ShouldIncludeMember(m, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)))
                 return true;
         }
 
-        if (blacklistedNamespacePrefixes.Any(t.FullName.StartsWith)
-            && !whitelistedNamespacePrefixes.Any(t.FullName.StartsWith))
+        if (denyNamespacePrefixes.Any(t.FullName.StartsWith)
+            && !allowNamespacePrefixes.Any(t.FullName.StartsWith))
             return false;
 
         return true;
     }
 
-    private static bool ShouldIncludeMember(IMemberDefinition m, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods)
+    private static bool ShouldIncludeMember(IMemberDefinition m, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods)
     {
         // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/245
         bool isRecord = m.DeclaringType.GetMethods().Any(m => m.Name == "<Clone>$");
@@ -187,11 +187,11 @@ public static class ApiGenerator
         if (m.DeclaringType?.FullName == null)
             return false;
 
-        if (!useBlacklistedNamespacePrefixesForExtensionMethods && m is MethodDefinition md && md.IsExtensionMethod())
+        if (!useDenyNamespacePrefixesForExtensionMethods && m is MethodDefinition md && md.IsExtensionMethod())
             return true;
 
-        if (blacklistedNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith)
-            && !whitelistedNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
+        if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith)
+            && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
             return false;
 
         return true;
