@@ -568,7 +568,7 @@ namespace PublicApiGeneratorTests
             }
         }
 
-        public class ClassWithBaseMethodConstraint: ClassWithBaseMethod
+        public class ClassWithBaseMethodConstraint : ClassWithBaseMethod
         {
             public void SomeMethod(ClassWithBaseMethodConstraint input1, ClassWithBaseMethodConstraint input2)
             {

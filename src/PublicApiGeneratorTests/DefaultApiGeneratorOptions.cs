@@ -2,7 +2,7 @@ using PublicApiGenerator;
 
 namespace PublicApiGeneratorTests;
 
-class DefaultApiGeneratorOptions : ApiGeneratorOptions
+internal class DefaultApiGeneratorOptions : ApiGeneratorOptions
 {
     public DefaultApiGeneratorOptions()
     {

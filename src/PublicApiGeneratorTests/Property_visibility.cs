@@ -2,7 +2,7 @@ using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
-    public class Property_visibility :  ApiGeneratorTestsBase
+    public class Property_visibility : ApiGeneratorTestsBase
     {
         [Fact]
         public void Should_output_public_property()

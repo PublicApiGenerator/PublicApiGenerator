@@ -9,8 +9,8 @@ internal sealed partial class AttributeFilter
     public AttributeFilter(IEnumerable<string>? excludedAttributes)
     {
         _excludedAttributes = excludedAttributes is null
-            ? AttributesNotRelevantForThePublicApi
-            : new HashSet<string>(AttributesNotRelevantForThePublicApi.Concat(excludedAttributes));
+            ? _attributesNotRelevantForThePublicApi
+            : new HashSet<string>(_attributesNotRelevantForThePublicApi.Concat(excludedAttributes));
     }
 
     public bool ShouldIncludeAttribute(CustomAttribute attribute)
@@ -19,6 +19,6 @@ internal sealed partial class AttributeFilter
 
         return attributeTypeDefinition != null
                && !_excludedAttributes.Contains(attribute.AttributeType.FullName)
-               && (attributeTypeDefinition.IsPublic || InternalAttributesThatAffectCompilerOrRuntimeBehavior.Contains(attribute.AttributeType.FullName));
+               && (attributeTypeDefinition.IsPublic || _internalAttributesThatAffectCompilerOrRuntimeBehavior.Contains(attribute.AttributeType.FullName));
     }
 }

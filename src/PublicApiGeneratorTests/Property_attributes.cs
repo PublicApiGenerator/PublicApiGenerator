@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -270,8 +270,8 @@ namespace PublicApiGeneratorTests
         {
             public string Value
             {
-                [SimpleAttribute] get;
-                [SimpleAttribute] set;
+                [Simple] get;
+                [Simple] set;
             }
         }
     }

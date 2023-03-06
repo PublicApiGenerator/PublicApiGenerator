@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -152,7 +152,7 @@ namespace PublicApiGeneratorTests
         {
         }
 
-        public class ClassWithGenericTypeAttribute<[MyType]T>
+        public class ClassWithGenericTypeAttribute<[MyType] T>
         {
         }
 

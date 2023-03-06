@@ -1,11 +1,11 @@
 namespace PublicApiGenerator;
 
-partial class AttributeFilter
+internal partial class AttributeFilter
 {
     /// <summary>
     /// Contains attributes that are internal that influence the compiler or runtime behavior
     /// </summary>
-    private static readonly HashSet<string> InternalAttributesThatAffectCompilerOrRuntimeBehavior = new HashSet<string>
+    private static readonly HashSet<string> _internalAttributesThatAffectCompilerOrRuntimeBehavior = new()
     {
         // Nullability
         "System.Diagnostics.CodeAnalysis.AllowNullAttribute",
