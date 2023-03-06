@@ -19,6 +19,19 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_extension_methods_when_allowed()
+        {
+            AssertPublicApi(typeof(StringExtensionsInSystemNamespace),
+@"namespace System
+{
+    public static class StringExtensionsInSystemNamespace
+    {
+        public static bool CheckLength(this string value, int length) { }
+    }
+}", new PublicApiGenerator.ApiGeneratorOptions { UseBlacklistedNamespacePrefixesForExtensionMethods = false, IncludeAssemblyAttributes = false });
+        }
+
+        [Fact]
         public void Should_output_generic_extension_methods()
         {
             AssertPublicApi(typeof(GenericExtensions),
@@ -87,4 +100,20 @@ namespace PublicApiGeneratorTests
     }
     // ReSharper restore ClassNeverInstantiated.Global
     // ReSharper restore UnusedMember.Global
+}
+
+namespace System
+{
+    public static class StringExtensionsInSystemNamespace
+    {
+        public static bool CheckLength(this string value, int length)
+        {
+            return value.Length == length;
+        }
+
+        public static bool CheckLengthNotAsExtension(string value, int length)
+        {
+            return value.Length == length;
+        }
+    }
 }

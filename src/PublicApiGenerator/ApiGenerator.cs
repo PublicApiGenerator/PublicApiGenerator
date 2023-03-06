@@ -1,11 +1,11 @@
-using Microsoft.CSharp;
-using Mono.Cecil;
-using Mono.Cecil.Rocks;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.CSharp;
+using Mono.Cecil;
+using Mono.Cecil.Rocks;
 using ICustomAttributeProvider = Mono.Cecil.ICustomAttributeProvider;
 using TypeAttributes = System.Reflection.TypeAttributes;
 
@@ -45,10 +45,12 @@ public static class ApiGenerator
                 return CreatePublicApiForAssembly(
                     asm,
                     typeDefinition => !typeDefinition.IsNested &&
-                                      ShouldIncludeType(typeDefinition) &&
+                                      ShouldIncludeType(typeDefinition, options.BlacklistedNamespacePrefixes, options.WhitelistedNamespacePrefixes, options.UseBlacklistedNamespacePrefixesForExtensionMethods) &&
                                       (options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName)),
                     options.IncludeAssemblyAttributes,
+                    options.BlacklistedNamespacePrefixes,
                     options.WhitelistedNamespacePrefixes,
+                    options.UseBlacklistedNamespacePrefixesForExtensionMethods,
                     attributeFilter);
             }
         }
@@ -104,89 +106,104 @@ public static class ApiGenerator
 
     // TODO: Assembly references?
     // TODO: Better handle namespaces - using statements? - requires non-qualified type names
-    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] whitelistedNamespacePrefixes, AttributeFilter attributeFilter)
+    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
     {
-        using (var provider = new CSharpCodeProvider())
+        using var provider = new CSharpCodeProvider();
+
+        var compileUnit = new CodeCompileUnit();
+        if (shouldIncludeAssemblyAttributes && assembly.HasCustomAttributes)
         {
-            var compileUnit = new CodeCompileUnit();
-            if (shouldIncludeAssemblyAttributes && assembly.HasCustomAttributes)
+            PopulateCustomAttributes(assembly, compileUnit.AssemblyCustomAttributes, attributeFilter);
+        }
+
+        var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
+            .Where(shouldIncludeType)
+            .OrderBy(t => t.FullName, StringComparer.Ordinal);
+        foreach (var publicType in publicTypes)
+        {
+            var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>().FirstOrDefault(n => n.Name == publicType.Namespace);
+            if (@namespace == null)
             {
-                PopulateCustomAttributes(assembly, compileUnit.AssemblyCustomAttributes, attributeFilter);
+                @namespace = new CodeNamespace(publicType.Namespace);
+                compileUnit.Namespaces.Add(@namespace);
             }
 
-            var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
-                .Where(shouldIncludeType)
-                .OrderBy(t => t.FullName, StringComparer.Ordinal);
-            foreach (var publicType in publicTypes)
+            using (NullableContext.Push(publicType))
             {
-                var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>()
-                    .FirstOrDefault(n => n.Name == publicType.Namespace);
-                if (@namespace == null)
-                {
-                    @namespace = new CodeNamespace(publicType.Namespace);
-                    compileUnit.Namespaces.Add(@namespace);
-                }
-
-                using (NullableContext.Push(publicType))
-                {
-                    var typeDeclaration = CreateTypeDeclaration(publicType, whitelistedNamespacePrefixes, attributeFilter);
-                    @namespace.Types.Add(typeDeclaration);
-                }
+                var typeDeclaration = CreateTypeDeclaration(publicType, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods, attributeFilter);
+                @namespace.Types.Add(typeDeclaration);
             }
+        }
 
-            using (var writer = new StringWriter())
+        using (var writer = new StringWriter())
+        {
+            var cgo = new CodeGeneratorOptions
             {
-                var cgo = new CodeGeneratorOptions
-                {
-                    BracingStyle = "C",
-                    BlankLinesBetweenMembers = false,
-                    VerbatimOrder = false,
-                    IndentString = "    "
-                };
+                BracingStyle = "C",
+                BlankLinesBetweenMembers = false,
+                VerbatimOrder = false,
+                IndentString = "    "
+            };
 
-                provider.GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
-                return CodeNormalizer.NormalizeGeneratedCode(writer);
-            }
+            provider.GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
+            return CodeNormalizer.NormalizeGeneratedCode(writer);
         }
     }
 
-    private static bool ShouldIncludeType(TypeDefinition t)
+    private static bool ShouldIncludeType(TypeDefinition t, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods)
     {
-        return (t.IsPublic || t.IsNestedPublic || t.IsNestedFamily || t.IsNestedFamilyOrAssembly) && !t.IsCompilerGenerated();
+        if (t.IsCompilerGenerated())
+            return false;
+
+        if (!t.IsPublic && !t.IsNestedPublic && !t.IsNestedFamily && !t.IsNestedFamilyOrAssembly)
+            return false;
+
+        if (!useBlacklistedNamespacePrefixesForExtensionMethods)
+        {
+            if (t.GetMembers().Any(m => ShouldIncludeMember(m, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods)))
+                return true;
+        }
+
+        if (blacklistedNamespacePrefixes.Any(t.FullName.StartsWith)
+            && !whitelistedNamespacePrefixes.Any(t.FullName.StartsWith))
+            return false;
+
+        return true;
     }
 
-    private static bool ShouldIncludeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
+    private static bool ShouldIncludeMember(IMemberDefinition m, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods)
     {
         // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/245
         bool isRecord = m.DeclaringType.GetMethods().Any(m => m.Name == "<Clone>$");
         if (isRecord && m.Name == "EqualityContract")
             return false;
 
-        return !m.IsCompilerGenerated() && !IsDotNetTypeMember(m, whitelistedNamespacePrefixes) && !(m is FieldDefinition);
-    }
+        if (m.IsCompilerGenerated())
+            return false;
 
-    private static bool ShouldIncludeMember(MemberAttributes memberAttributes)
-    {
-        switch (memberAttributes & MemberAttributes.AccessMask)
-        {
-            case 0: // This represents no CodeDOM keyword being specified.
-            case MemberAttributes.Private:
-            case MemberAttributes.Assembly:
-            case MemberAttributes.FamilyAndAssembly:
-                return false;
-            default:
-                return true;
-        }
-    }
+        if (m is FieldDefinition)
+            return false;
 
-    private static bool IsDotNetTypeMember(IMemberDefinition m, string[] whitelistedNamespacePrefixes)
-    {
         if (m.DeclaringType?.FullName == null)
             return false;
 
-        return (m.DeclaringType.FullName.StartsWith("System") || m.DeclaringType.FullName.StartsWith("Microsoft"))
-            && !whitelistedNamespacePrefixes.Any(prefix => m.DeclaringType.FullName.StartsWith(prefix));
+        if (!useBlacklistedNamespacePrefixesForExtensionMethods && m is MethodDefinition md && md.IsExtensionMethod())
+            return true;
+
+        if (blacklistedNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith)
+            && !whitelistedNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
+            return false;
+
+        return true;
     }
+
+    private static bool ShouldIncludeMember(MemberAttributes memberAttributes)
+        => (memberAttributes & MemberAttributes.AccessMask) switch
+        {
+            // 0 represents no CodeDOM keyword being specified.
+            0 or MemberAttributes.Private or MemberAttributes.Assembly or MemberAttributes.FamilyAndAssembly => false,
+            _ => true,
+        };
 
     private static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration,
         IMemberDefinition typeDeclarationInfo,
@@ -217,7 +234,7 @@ public static class ApiGenerator
         }
     }
 
-    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] whitelistedNamespacePrefixes, AttributeFilter attributeFilter)
+    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] blacklistedNamespacePrefixes, string[] whitelistedNamespacePrefixes, bool useBlacklistedNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
     {
         if (publicType.IsDelegate())
             return CreateDelegateDeclaration(publicType, attributeFilter);
@@ -298,11 +315,11 @@ public static class ApiGenerator
         }
         foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
             .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
-            .Where(t => ShouldIncludeType(t.Definition))
+            .Where(t => ShouldIncludeType(t.Definition, Array.Empty<string>(), Array.Empty<string>(), true))
             .Select(t => t.Reference))
             declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(@interface));
 
-        foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, whitelistedNamespacePrefixes)).OrderBy(m => m.Name, StringComparer.Ordinal))
+        foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
             AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
 
         // Fields should be in defined order for an enum
@@ -312,11 +329,11 @@ public static class ApiGenerator
         foreach (var field in fields)
             AddMemberToTypeDeclaration(declaration, publicType, field, attributeFilter);
 
-        foreach (var nestedType in publicType.NestedTypes.Where(ShouldIncludeType).OrderBy(t => t.FullName, StringComparer.Ordinal))
+        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods)).OrderBy(t => t.FullName, StringComparer.Ordinal))
         {
             using (NullableContext.Push(nestedType))
             {
-                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, whitelistedNamespacePrefixes, attributeFilter);
+                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, blacklistedNamespacePrefixes, whitelistedNamespacePrefixes, useBlacklistedNamespacePrefixesForExtensionMethods, attributeFilter);
                 declaration.Members.Add(nestedTypeDeclaration);
             }
         }
@@ -488,24 +505,23 @@ public static class ApiGenerator
     // Litee: This method is used for additional sorting of custom attributes when multiple values are allowed
     private static string ConvertAttributeToCode(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
     {
-        using (var provider = new CSharpCodeProvider())
+        using var provider = new CSharpCodeProvider();
+
+        var cgo = new CodeGeneratorOptions
         {
-            var cgo = new CodeGeneratorOptions
-            {
-                BracingStyle = "C",
-                BlankLinesBetweenMembers = false,
-                VerbatimOrder = false
-            };
-            var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
-            var declaration = new CodeTypeDeclaration("DummyClass")
-            {
-                CustomAttributes = new CodeAttributeDeclarationCollection(new[] { attribute }),
-            };
-            using (var writer = new StringWriter())
-            {
-                provider.GenerateCodeFromType(declaration, writer, cgo);
-                return writer.ToString();
-            }
+            BracingStyle = "C",
+            BlankLinesBetweenMembers = false,
+            VerbatimOrder = false
+        };
+        var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
+        var declaration = new CodeTypeDeclaration("DummyClass")
+        {
+            CustomAttributes = new CodeAttributeDeclarationCollection(new[] { attribute }),
+        };
+        using (var writer = new StringWriter())
+        {
+            provider.GenerateCodeFromType(declaration, writer, cgo);
+            return writer.ToString();
         }
     }
 

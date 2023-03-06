@@ -1,4 +1,4 @@
-﻿using Microsoft.Whitelisted;
+using Microsoft.Whitelisted;
 using System.Whitelisted;
 
 namespace PublicApiGeneratorTests
@@ -10,7 +10,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                WhitelistedNamespacePrefixes = new[] {"Microsoft.Whitelisted"}
+                WhitelistedNamespacePrefixes = new[] { "Microsoft.Whitelisted" }
             };
 
             AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
@@ -32,12 +32,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_filter_microsoft_namespace()
         {
-            AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
-                @"namespace Microsoft.Whitelisted
-{
-    public class Simple1 { }
-    public class Simple2 { }
-}");
+            AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) }, "");
         }
 
         [Fact]
@@ -48,7 +43,7 @@ namespace PublicApiGeneratorTests
                 WhitelistedNamespacePrefixes = new[] { "System.Whitelisted" }
             };
 
-            AssertPublicApi(new[] { typeof(System1), typeof(System2)},
+            AssertPublicApi(new[] { typeof(System1), typeof(System2) },
                 @"namespace System.Whitelisted
 {
     public class System1
@@ -67,12 +62,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_filter_system_namespace()
         {
-            AssertPublicApi(new[] { typeof(System1), typeof(System2) },
-                @"namespace System.Whitelisted
-{
-    public class System1 { }
-    public class System2 { }
-}");
+            AssertPublicApi(new[] { typeof(System1), typeof(System2) }, "");
         }
     }
 }
