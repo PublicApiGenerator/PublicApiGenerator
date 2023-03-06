@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -18,7 +18,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public interface IInterfaceWithImplementedList : IDisposable, ICloneable
@@ -26,5 +25,4 @@ namespace PublicApiGeneratorTests
             void Method();
         }
     }
-    // ReSharper restore UnusedMember.Global
 }

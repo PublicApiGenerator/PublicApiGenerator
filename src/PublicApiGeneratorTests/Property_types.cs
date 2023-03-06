@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -75,8 +75,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class PropertyWithPrimitiveType
@@ -104,6 +102,4 @@ namespace PublicApiGeneratorTests
             public T Value { get; set; }
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

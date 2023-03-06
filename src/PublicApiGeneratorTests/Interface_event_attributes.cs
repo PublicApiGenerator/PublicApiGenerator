@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -37,9 +37,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable EventNeverSubscribedTo.Global
-    // ReSharper disable EventNeverInvoked
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public interface IInterfaceWithEventWithAttribute
@@ -48,7 +45,4 @@ namespace PublicApiGeneratorTests
             event EventHandler OnClicked;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore EventNeverInvoked
-    // ReSharper restore EventNeverSubscribedTo.Global
 }

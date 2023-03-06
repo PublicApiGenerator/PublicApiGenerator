@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -104,10 +104,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable EventNeverInvoked
-    // ReSharper disable EventNeverSubscribedTo.Global
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassMemberOrder
@@ -202,8 +198,4 @@ namespace PublicApiGeneratorTests
             public void IMethod1() { }
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore EventNeverSubscribedTo.Global
-    // ReSharper restore EventNeverInvoked
 }

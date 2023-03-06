@@ -131,10 +131,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ValueParameterNotUsed
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedParameter.Global
     namespace Examples
     {
         public class PropertyReadWrite
@@ -193,8 +189,4 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-    // ReSharper restore UnusedParameter.Global
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore ValueParameterNotUsed
 }

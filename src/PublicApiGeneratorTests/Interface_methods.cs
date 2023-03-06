@@ -74,7 +74,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public interface IVoidMethod
@@ -106,5 +105,4 @@ namespace PublicApiGeneratorTests
             new void Method();
         }
     }
-    // ReSharper restore UnusedMember.Global
 }

@@ -41,7 +41,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public abstract class AbstractClass
@@ -56,5 +55,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
 }

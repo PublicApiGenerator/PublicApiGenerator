@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -34,7 +34,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable InconsistentNaming
     namespace Examples
     {
         public class MM_Class
@@ -57,5 +56,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore InconsistentNaming
 }

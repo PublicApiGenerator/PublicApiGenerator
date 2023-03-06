@@ -31,7 +31,6 @@ internal static class CodeTypeReferenceBuilder
 
     private static CodeTypeReference[] CreateGenericArguments(TypeReference type, IEnumerator<bool?> nullabilityMap)
     {
-        // ReSharper disable once RedundantEnumerableCastCall
         var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
         if (genericArgs == null)
         {
@@ -93,7 +92,6 @@ internal static class CodeTypeReferenceBuilder
         if (!type.IsValueType)
             return true;
 
-        // ReSharper disable once RedundantEnumerableCastCall
         var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
         if (genericArgs == null)
             return false;

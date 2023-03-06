@@ -109,7 +109,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public interface IPropertyWithPrimitiveType
@@ -152,5 +151,4 @@ namespace PublicApiGeneratorTests
             T Value { get; set; }
         }
     }
-    // ReSharper restore UnusedMember.Global
 }

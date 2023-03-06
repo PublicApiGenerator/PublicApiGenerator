@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -21,7 +21,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public struct PublicStruct
@@ -32,5 +31,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
 }

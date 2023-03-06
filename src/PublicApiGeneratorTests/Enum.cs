@@ -73,7 +73,6 @@ namespace PublicApiGeneratorTests
         // Not supported by Cecil?
     }
 
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         internal enum InternalEnum
@@ -106,5 +105,4 @@ namespace PublicApiGeneratorTests
             Three = 3
         }
     }
-    // ReSharper restore UnusedMember.Global
 }

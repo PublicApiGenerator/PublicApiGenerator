@@ -9,7 +9,6 @@ using Mono.Cecil.Rocks;
 using ICustomAttributeProvider = Mono.Cecil.ICustomAttributeProvider;
 using TypeAttributes = System.Reflection.TypeAttributes;
 
-// ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 namespace PublicApiGenerator;
 
 /// <summary>

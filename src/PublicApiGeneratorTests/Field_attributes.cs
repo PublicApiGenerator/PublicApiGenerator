@@ -178,8 +178,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class FieldWithSimpleAttribute
@@ -247,6 +245,4 @@ namespace PublicApiGeneratorTests
             [Attribute_ZZ][Attribute_MM][Attribute_AA] public string Value;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

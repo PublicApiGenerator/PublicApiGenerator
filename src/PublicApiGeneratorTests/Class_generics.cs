@@ -145,7 +145,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedTypeParameter
     namespace Examples
     {
         public class ClassWithGenericType<T>
@@ -200,5 +199,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore UnusedTypeParameter
 }

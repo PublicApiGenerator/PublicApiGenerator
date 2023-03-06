@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -19,10 +19,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable EventNeverSubscribedTo.Global
-    // ReSharper disable EventNeverInvoked
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class ClassWithEvent
@@ -30,8 +26,4 @@ namespace PublicApiGeneratorTests
             public event EventHandler<EventArgs> OnClicked;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore EventNeverInvoked
-    // ReSharper restore EventNeverSubscribedTo.Global
 }
