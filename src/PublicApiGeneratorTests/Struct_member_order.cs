@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -110,10 +110,7 @@ namespace PublicApiGeneratorTests
 }", options);
         }
     }
-    // ReSharper disable EventNeverInvoked
-    // ReSharper disable EventNeverSubscribedTo.Global
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
+
     namespace Examples
     {
         public struct StructMemberOrder
@@ -208,8 +205,4 @@ namespace PublicApiGeneratorTests
             public void iMethod1() { }
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore EventNeverSubscribedTo.Global
-    // ReSharper restore EventNeverInvoked
 }

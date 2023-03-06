@@ -65,8 +65,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public static class StringExtensions
@@ -98,8 +96,6 @@ namespace PublicApiGeneratorTests
             public static long? Long(this object @object, long? @value = null) => null;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }
 
 namespace System

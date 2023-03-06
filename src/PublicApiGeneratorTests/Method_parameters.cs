@@ -312,9 +312,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedParameter.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class MethodWithNoParameters
@@ -465,7 +462,4 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedParameter.Global
-    // ReSharper restore UnusedMember.Global
 }

@@ -39,9 +39,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable EventNeverSubscribedTo.Global
-    // ReSharper disable EventNeverInvoked
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class ClassWithEventWithAttribute
@@ -50,7 +47,4 @@ namespace PublicApiGeneratorTests
             public event EventHandler OnClicked;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore EventNeverInvoked
-    // ReSharper restore EventNeverSubscribedTo.Global
 }

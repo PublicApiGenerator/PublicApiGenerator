@@ -29,8 +29,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class ClassWithInternalWellKnownAttributes
@@ -50,6 +48,4 @@ namespace PublicApiGeneratorTests
             public void MethodWithBoolParameter([DoesNotReturnIf(true)] bool a) => throw null;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

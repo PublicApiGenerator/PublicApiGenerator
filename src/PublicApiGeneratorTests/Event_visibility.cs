@@ -100,10 +100,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedMember.Local
-    // ReSharper disable UnusedAutoEventAccessor.Local
     namespace Examples
     {
         public class ClassWithPublicEvent
@@ -146,7 +142,4 @@ namespace PublicApiGeneratorTests
             event EventHandler Event;
         }
     }
-    // ReSharper restore UnusedMember.Local
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

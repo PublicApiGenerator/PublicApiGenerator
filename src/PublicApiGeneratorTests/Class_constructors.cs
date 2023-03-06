@@ -188,9 +188,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedParameter.Local
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassWithDefaultConstructor
@@ -290,7 +287,4 @@ namespace PublicApiGeneratorTests
             private AbstractClassWithPrivateCtor(int i) { }
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore UnusedParameter.Local
-    // ReSharper restore ClassNeverInstantiated.Global
 }

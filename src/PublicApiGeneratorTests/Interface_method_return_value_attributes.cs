@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -144,8 +144,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public interface IMethodReturnValueWithSimpleAttribute
@@ -208,6 +206,4 @@ namespace PublicApiGeneratorTests
             void Method();
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

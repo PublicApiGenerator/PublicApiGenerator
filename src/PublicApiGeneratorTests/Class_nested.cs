@@ -237,9 +237,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Local
     namespace Examples
     {
         public class ClassWithNestedClass
@@ -391,7 +388,4 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-    // ReSharper restore UnusedMember.Local
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

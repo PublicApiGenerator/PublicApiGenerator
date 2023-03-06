@@ -87,8 +87,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassWithStaticFields
@@ -123,6 +121,4 @@ namespace PublicApiGeneratorTests
             protected unsafe void* UnsafeProtectedField;
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

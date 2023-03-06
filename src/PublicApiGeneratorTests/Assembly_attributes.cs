@@ -48,10 +48,8 @@ namespace PublicApiGeneratorTests.Examples
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class NotImportant { }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
 }

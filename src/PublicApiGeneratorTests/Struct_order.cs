@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -19,7 +19,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable InconsistentNaming
     namespace Examples
     {
         public struct ZZ_Struct
@@ -42,5 +41,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore InconsistentNaming
 }

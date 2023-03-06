@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 using PublicApiGeneratorTests.Examples_AA;
 using PublicApiGeneratorTests.Examples_ZZ;
 
@@ -94,8 +94,6 @@ namespace PublicApiGeneratorTests.Examples_i
         }
     }
 
-    // ReSharper disable InconsistentNaming
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class AssemblyMember_Class2
@@ -163,6 +161,4 @@ namespace PublicApiGeneratorTests.Examples_i
         {
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore InconsistentNaming
 }

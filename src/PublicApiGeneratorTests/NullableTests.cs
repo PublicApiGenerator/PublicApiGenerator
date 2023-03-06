@@ -436,7 +436,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class ReturnType
@@ -638,6 +637,4 @@ namespace PublicApiGeneratorTests
             TOut DoStuff(TIn input);
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

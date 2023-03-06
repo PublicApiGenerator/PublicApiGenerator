@@ -1,4 +1,4 @@
-﻿using System.CodeDom.Compiler;
+using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -175,8 +175,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class MethodWithSimpleAttribute
@@ -277,6 +275,4 @@ namespace PublicApiGeneratorTests
         }
 
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

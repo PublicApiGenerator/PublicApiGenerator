@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -105,8 +105,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class FieldWithComplexType
@@ -146,6 +144,4 @@ namespace PublicApiGeneratorTests
             public readonly int? NullableInt;
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

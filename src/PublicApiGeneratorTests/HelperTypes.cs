@@ -1,11 +1,3 @@
-// ReSharper disable once CheckNamespace
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedTypeParameter
-// ReSharper disable InconsistentNaming
-// ReSharper disable UnusedParameter.Local
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable NotAccessedField.Global
 namespace PublicApiGeneratorTests.Examples;
 
 public class ComplexType
@@ -183,10 +175,3 @@ public class AttributeWithStringArrayInitialiser : Attribute
 internal class AttributeWhichIsInternal : Attribute
 {
 }
-// ReSharper restore UnusedMember.Global
-// ReSharper restore UnusedAutoPropertyAccessor.Global
-// ReSharper restore UnusedParameter.Local
-// ReSharper restore InconsistentNaming
-// ReSharper restore UnusedTypeParameter
-// ReSharper restore ClassNeverInstantiated.Global
-// ReSharper restore NotAccessedField.Global
