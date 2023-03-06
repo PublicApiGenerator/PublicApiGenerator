@@ -28,7 +28,7 @@ namespace PublicApiGeneratorTests
     {
         public static bool CheckLength(this string value, int length) { }
     }
-}", new PublicApiGenerator.ApiGeneratorOptions { UseBlacklistedNamespacePrefixesForExtensionMethods = false, IncludeAssemblyAttributes = false });
+}", new PublicApiGenerator.ApiGeneratorOptions { UseDenyNamespacePrefixesForExtensionMethods = false, IncludeAssemblyAttributes = false });
         }
 
         [Fact]
