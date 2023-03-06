@@ -2,9 +2,9 @@
 
   <PropertyGroup Condition="'$(IsPackable)' == 'true'">
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>See https://github.com/PublicApiGenerator/PublicApiGenerator/releases</PackageReleaseNotes>
     <SignAssembly>true</SignAssembly>
     <EmbedAllSources>true</EmbedAllSources>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsPackable)' != 'true'">

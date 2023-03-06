@@ -20,6 +20,7 @@ public class GenericTypeExtra<T, T2, T3>
 {
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class SimpleAttribute : Attribute
 {
 }
@@ -60,6 +61,7 @@ public class Attribute_ZZ : Attribute
 {
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithPositionalParameters1Attribute : Attribute
 {
     public AttributeWithPositionalParameters1Attribute(string value)
@@ -67,6 +69,7 @@ public class AttributeWithPositionalParameters1Attribute : Attribute
     }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithPositionalParameters2Attribute : Attribute
 {
     public AttributeWithPositionalParameters2Attribute(int value)
@@ -74,6 +77,7 @@ public class AttributeWithPositionalParameters2Attribute : Attribute
     }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithMultiplePositionalParametersAttribute : Attribute
 {
     public AttributeWithMultiplePositionalParametersAttribute(int value, string value2)
@@ -81,18 +85,21 @@ public class AttributeWithMultiplePositionalParametersAttribute : Attribute
     }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithNamedParameterAttribute : Attribute
 {
     public string StringValue { get; set; }
     public int IntValue { get; set; }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithNamedFieldAttribute : Attribute
 {
     public string StringValue;
     public int IntValue;
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithNamedAndPositionalParameterAttribute : Attribute
 {
     public AttributeWithNamedAndPositionalParameterAttribute(int value1, string value2)
@@ -103,6 +110,7 @@ public class AttributeWithNamedAndPositionalParameterAttribute : Attribute
     public string StringValue { get; set; }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithNamedParameterAndFieldAttribute : Attribute
 {
     public int IntField;
@@ -112,6 +120,7 @@ public class AttributeWithNamedParameterAndFieldAttribute : Attribute
     public string StringProperty { get; set; }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithSimpleEnumAttribute : Attribute
 {
     public AttributeWithSimpleEnumAttribute(SimpleEnum value)
@@ -119,6 +128,7 @@ public class AttributeWithSimpleEnumAttribute : Attribute
     }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithEnumFlagsAttribute : Attribute
 {
     public AttributeWithEnumFlagsAttribute(EnumWithFlags value)
@@ -126,6 +136,7 @@ public class AttributeWithEnumFlagsAttribute : Attribute
     }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithEnumWithSomeSpecialFlagsAttribute : Attribute
 {
     public AttributeWithEnumWithSomeSpecialFlagsAttribute(EnumWithSomeSpecialFlags value)
@@ -133,6 +144,7 @@ public class AttributeWithEnumWithSomeSpecialFlagsAttribute : Attribute
     }
 }
 
+[AttributeUsage(AttributeTargets.All)]
 public class AttributeWithTypeParameterAttribute : Attribute
 {
     public AttributeWithTypeParameterAttribute(Type type)
