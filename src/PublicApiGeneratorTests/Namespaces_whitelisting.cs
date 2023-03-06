@@ -10,7 +10,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                WhitelistedNamespacePrefixes = new[] { "Microsoft.Whitelisted" }
+                AllowNamespacePrefixes = new[] { "Microsoft.Whitelisted" }
             };
 
             AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
@@ -40,7 +40,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                WhitelistedNamespacePrefixes = new[] { "System.Whitelisted" }
+                AllowNamespacePrefixes = new[] { "System.Whitelisted" }
             };
 
             AssertPublicApi(new[] { typeof(System1), typeof(System2) },
