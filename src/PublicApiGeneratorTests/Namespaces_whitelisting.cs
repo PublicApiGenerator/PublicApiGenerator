@@ -8,11 +8,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_allow_microsoft_namespace_whitelisting()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                AllowNamespacePrefixes = new[] { "Microsoft.Whitelisted" }
-            };
-
             AssertPublicApi(new[] { typeof(Simple1), typeof(Simple2) },
                 @"namespace Microsoft.Whitelisted
 {
@@ -26,7 +21,7 @@ namespace PublicApiGeneratorTests
         public Simple2() { }
         public void Simple() { }
     }
-}", options);
+}", opt => opt.AllowNamespacePrefixes = new[] { "Microsoft.Whitelisted" });
         }
 
         [Fact]
@@ -38,10 +33,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_allow_system_namespace_whitelisting()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                AllowNamespacePrefixes = new[] { "System.Whitelisted" }
-            };
 
             AssertPublicApi(new[] { typeof(System1), typeof(System2) },
                 @"namespace System.Whitelisted
@@ -56,7 +47,7 @@ namespace PublicApiGeneratorTests
         public System2() { }
         public void System() { }
     }
-}", options);
+}", opt => opt.AllowNamespacePrefixes = new[] { "System.Whitelisted" });
         }
 
         [Fact]

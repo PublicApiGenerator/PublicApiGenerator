@@ -71,4 +71,14 @@ public class ApiGeneratorOptions
     private static readonly string[] _defaultAllowNamespacePrefixes = Array.Empty<string>();
 
     private static readonly string[] _defaultDenyNamespacePrefixes = new[] { "System", "Microsoft" };
+
+    /// <summary>
+    /// Indentation string. Defaults to 4 whitespace.
+    /// </summary>
+    public string IndentString { get; set; } = "    ";
+
+    /// <summary>
+    /// Style for braces. Available values: C, Block. Defaults to C.
+    /// </summary>
+    public string BracingStyle { get; set; } = "C";
 }

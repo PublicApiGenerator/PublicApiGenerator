@@ -177,11 +177,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attributes()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" }
-            };
-
             AssertPublicApi<PropertyWithSimpleAttributeOnGetterAndSetter>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -190,7 +185,7 @@ namespace PublicApiGeneratorTests
         public PropertyWithSimpleAttributeOnGetterAndSetter() { }
         public string Value { get; set; }
     }
-}", options);
+}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
         }
     }
 

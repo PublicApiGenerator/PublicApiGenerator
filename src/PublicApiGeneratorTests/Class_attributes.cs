@@ -290,11 +290,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_MM" }
-            };
-
             AssertPublicApi<ClassWithMultipleAttributes>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -304,7 +299,7 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithMultipleAttributes() { }
     }
-}", options);
+}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_MM" });
         }
 
         [Fact]

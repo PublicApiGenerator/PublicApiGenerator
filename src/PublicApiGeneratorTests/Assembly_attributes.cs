@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
 
 [assembly: Guid("3B8D506A-5247-47FF-B053-D29A51A97C33")]
@@ -44,7 +43,7 @@ namespace PublicApiGeneratorTests.Examples
     }}
 }}";
 
-            AssertPublicApi<NotImportant>(api, new ApiGeneratorOptions { IncludeAssemblyAttributes = true });
+            AssertPublicApi<NotImportant>(api, opt => opt.IncludeAssemblyAttributes = true);
         }
     }
 

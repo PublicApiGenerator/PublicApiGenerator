@@ -1,4 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -214,18 +214,13 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_ZZ" }
-            };
-
             AssertPublicApi<DelegateWithMultipleAttributes>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.Attribute_AA]
     [PublicApiGeneratorTests.Examples.Attribute_MM]
     public delegate void DelegateWithMultipleAttributes();
-}", options);
+}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_ZZ" });
         }
     }
 
