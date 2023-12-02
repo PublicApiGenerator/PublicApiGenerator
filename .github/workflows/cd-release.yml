@@ -36,7 +36,7 @@ jobs:
         working-directory: src
         run: |
           dotnet publish PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj --no-restore --no-build -c Release -f netcoreapp3.1 &&
-          dotnet publish PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj --no-restore --no-build -c Release -f net6
+          dotnet publish PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj --no-restore --no-build -c Release -f net6.0
       - name: Pack solution [Release]
         working-directory: src
         run: dotnet pack --no-restore --no-build -c Release -o out
