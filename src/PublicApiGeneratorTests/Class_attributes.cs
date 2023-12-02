@@ -292,7 +292,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_MM" }
+                ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM"]
             };
 
             AssertPublicApi<ClassWithMultipleAttributes>(

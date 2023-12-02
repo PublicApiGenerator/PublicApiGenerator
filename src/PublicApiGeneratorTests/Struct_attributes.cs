@@ -107,7 +107,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" }
+                ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]
             };
 
             AssertPublicApi<StructWithSimpleAttribute>(

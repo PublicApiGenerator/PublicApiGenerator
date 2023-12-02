@@ -9,8 +9,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_in_known_order_and_alphabetically()
         {
-            AssertPublicApi(new[]
-            {
+            AssertPublicApi(
+            [
                 typeof(AssemblyMember_Delegate2),
                 typeof(AssemblyMember_IDelegate2),
                 typeof(AssemblyMember_ClassI),
@@ -23,7 +23,7 @@ namespace PublicApiGeneratorTests
                 typeof(AssemblyMember_Class1),
                 typeof(AssemblyMember_Delegate1),
                 typeof(AssemblyMember_iDelegate1)
-            },
+            ],
 @"namespace PublicApiGeneratorTests.Examples
 {
     public class AssemblyMember_Class1
@@ -56,13 +56,13 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_order_namespaces_alphabetically()
         {
-            AssertPublicApi(new[]
-            {
+            AssertPublicApi(
+            [
                 typeof(AssemblyOrdering_1),
                 typeof(AssemblyOrdering_2),
                 typeof(Examples_I.AssemblyOrdering_2),
                 typeof(Examples_i.AssemblyOrdering_1),
-            },
+            ],
 @"namespace PublicApiGeneratorTests.Examples_AA
 {
     public class AssemblyOrdering_2
