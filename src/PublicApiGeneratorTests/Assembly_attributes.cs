@@ -32,7 +32,7 @@ namespace PublicApiGeneratorTests
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
 [assembly: PublicApiGeneratorTests.Examples.Simple]
-[assembly: System.Reflection.AssemblyMetadata(""RepositoryUrl"", ""https://github.com/PublicApiGenerator/PublicApiGenerator.git"")]
+[assembly: System.Reflection.AssemblyMetadata(""RepositoryUrl"", ""https://github.com/PublicApiGenerator/PublicApiGenerator"")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.Runtime.InteropServices.Guid(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
 [assembly: System.Runtime.Versioning.TargetFramework(""{TFM}"", FrameworkDisplayName=""{TFMNAME}"")]
