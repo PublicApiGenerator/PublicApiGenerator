@@ -17,7 +17,10 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Attributes()
         {
-#if NET7_0
+#if NET8_0
+            const string TFM = ".NETCoreApp,Version=v8.0";
+            const string TFMNAME = ".NET 8.0";
+#elif NET7_0
             const string TFM = ".NETCoreApp,Version=v7.0";
             const string TFMNAME = ".NET 7.0";
 #elif NET6_0
