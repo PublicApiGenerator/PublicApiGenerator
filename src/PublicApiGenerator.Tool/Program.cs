@@ -158,10 +158,7 @@ public static class Program
         logVerbose.WriteLine();
         logVerbose.WriteLine($"Process timeout: '{waitTimeInSeconds}' seconds.");
 
-        using var process = Process.Start(psi);
-
-        if (process == null)
-            throw new Exception("No process resource is started.");
+        using var process = Process.Start(psi) ?? throw new Exception("No process resource is started.");
 
         if (stdout == null)
         {
@@ -234,14 +231,9 @@ public static class Program
         }
     }
 
-    private static string GetManifestResourceText(this Type type, string name,
-                                                  Encoding? encoding = null)
+    private static string GetManifestResourceText(this Type type, string name, Encoding? encoding = null)
     {
-        using var stream = type.Assembly.GetManifestResourceStream(type, name);
-        if (stream == null)
-        {
-            throw new Exception($"Resource named \"{type.Namespace}.{name}\" not found.");
-        }
+        using var stream = type.Assembly.GetManifestResourceStream(type, name) ?? throw new Exception($"Resource named \"{type.Namespace}.{name}\" not found.");
 
         using var reader = encoding == null ? new StreamReader(stream)
                                             : new StreamReader(stream, encoding);

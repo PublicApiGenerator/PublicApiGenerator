@@ -15,7 +15,7 @@ public abstract class ApiGeneratorTestsBase
 
     protected void AssertPublicApi(Type type, string expectedOutput, ApiGeneratorOptions? options = null)
     {
-        AssertPublicApi(new[] { type }, expectedOutput, options);
+        AssertPublicApi([type], expectedOutput, options);
     }
 
     protected void AssertPublicApi(Type[] types, string expectedOutput, ApiGeneratorOptions? options = null)

@@ -110,7 +110,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute" }
+                ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute"]
             };
 
             AssertPublicApi<MethodParameterWithAttributeWithPositionalParameters>(

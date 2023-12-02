@@ -9,7 +9,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" }
+                ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]
             };
 
             // Fields, properties, events, methods, nested type (inc. delegates)
@@ -47,7 +47,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" }
+                ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]
             };
 
             // Fields, properties, events, methods

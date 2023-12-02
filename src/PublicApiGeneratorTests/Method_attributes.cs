@@ -160,7 +160,7 @@ namespace PublicApiGeneratorTests
         {
             var options = new DefaultApiGeneratorOptions
             {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" }
+                ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]
             };
 
             AssertPublicApi<MethodWithAttributeWithMultipleNamedParameters>(

@@ -36,7 +36,7 @@ internal static class CodeTypeReferenceBuilder
         {
             return type is ArrayType arr
                 ? CreateGenericArguments(arr.ElementType, nullabilityMap)
-                : Array.Empty<CodeTypeReference>();
+                : [];
         }
 
         var genericArguments = new List<CodeTypeReference>();

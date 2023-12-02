@@ -60,7 +60,7 @@ public static class ApiGenerator
     /// </summary>
     /// <param name="types">The types to generate an API from.</param>
     /// <param name="options">The options to control the API output.</param>
-    /// <remarks>This method assumes all the types belong to the same assembly. The assembly of the first type <code>types[0].Assembly</code> is used.</remarks>
+    /// <remarks>This method assumes all the types belong to the same assembly. The assembly of the first type <c>types[0].Assembly</c> is used.</remarks>
     /// <returns>The API output.</returns>
     public static string GeneratePublicApi(this Type[] types, ApiGeneratorOptions? options = null)
     {
@@ -80,7 +80,7 @@ public static class ApiGenerator
     /// <returns>The API output.</returns>
     public static string GeneratePublicApi(this Type type, ApiGeneratorOptions? options = null)
     {
-        (options ??= new ApiGeneratorOptions()).IncludeTypes = new Type[] { type };
+        (options ??= new ApiGeneratorOptions()).IncludeTypes = [type];
         return type.Assembly.GeneratePublicApi(options);
     }
 
@@ -144,8 +144,7 @@ public static class ApiGenerator
                 return true;
         }
 
-        if (denyNamespacePrefixes.Any(t.FullName.StartsWith)
-            && !allowNamespacePrefixes.Any(t.FullName.StartsWith))
+        if (denyNamespacePrefixes.Any(t.FullName.StartsWith) && !allowNamespacePrefixes.Any(t.FullName.StartsWith))
             return false;
 
         return true;
@@ -170,8 +169,7 @@ public static class ApiGenerator
         if (!useDenyNamespacePrefixesForExtensionMethods && m is MethodDefinition md && md.IsExtensionMethod())
             return true;
 
-        if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith)
-            && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
+        if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith) && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
             return false;
 
         return true;
@@ -291,13 +289,17 @@ public static class ApiGenerator
                     declaration.BaseTypes.Add(underlyingType.CreateCodeTypeReference());
             }
             else
+            {
                 declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(publicType));
+            }
         }
         foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
             .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
-            .Where(t => ShouldIncludeType(t.Definition, Array.Empty<string>(), Array.Empty<string>(), true))
+            .Where(t => ShouldIncludeType(t.Definition, [], [], true))
             .Select(t => t.Reference))
+        {
             declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(@interface));
+        }
 
         foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
             AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
@@ -321,7 +323,7 @@ public static class ApiGenerator
         return declaration.Sort();
     }
 
-    private static CodeTypeDeclaration CreateDelegateDeclaration(TypeDefinition publicType, AttributeFilter attributeFilter)
+    private static CodeTypeDelegate CreateDelegateDeclaration(TypeDefinition publicType, AttributeFilter attributeFilter)
     {
         var invokeMethod = publicType.Methods.Single(m => m.Name == "Invoke");
         using (NullableContext.Push(invokeMethod)) // for delegates NullableContextAttribute is stored on Invoke method
@@ -408,7 +410,7 @@ public static class ApiGenerator
             parameters.Add(typeParameter);
         }
 
-        bool IsSpecialConstraint(GenericParameterConstraint constraint)
+        static bool IsSpecialConstraint(GenericParameterConstraint constraint)
         {
             // struct
             if (constraint.ConstraintType is TypeReference reference && reference.FullName == "System.ValueType")
