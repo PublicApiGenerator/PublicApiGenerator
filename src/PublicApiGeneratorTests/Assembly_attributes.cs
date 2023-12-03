@@ -6,8 +6,8 @@ using PublicApiGeneratorTests.Examples;
 [assembly: AttributeWithPositionalParameters1("Hello")]
 [assembly: AttributeWithPositionalParameters2(42)]
 [assembly: AttributeWithMultiplePositionalParameters(42, "Hello")]
-[assembly: AttributeWithNamedParameterAttribute(StringValue = "Hello", IntValue = 42)]
-[assembly: ComVisibleAttribute(false)]
+[assembly: AttributeWithNamedParameter(StringValue = "Hello", IntValue = 42)]
+[assembly: ComVisible(false)]
 
 namespace PublicApiGeneratorTests
 {
@@ -16,7 +16,10 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Attributes()
         {
-#if NET8_0
+#if NET472
+            const string TFM = ".NETFramework,Version=v4.7.2";
+            const string TFMNAME = ".NET Framework 4.7.2";
+#elif NET8_0
             const string TFM = ".NETCoreApp,Version=v8.0";
             const string TFMNAME = ".NET 8.0";
 #elif NET7_0

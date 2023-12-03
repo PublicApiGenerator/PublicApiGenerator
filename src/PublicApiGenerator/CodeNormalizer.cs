@@ -65,6 +65,7 @@ internal static class CodeNormalizer
         gennedClass = gennedClass.Replace("struct " + READONLY_MARKER, "readonly struct ");
         gennedClass = gennedClass.Replace(READONLY_MARKER, string.Empty); // remove magic marker from readonly struct ctor
         gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
+        gennedClass = Regex.Replace(gennedClass, @$"{Environment.NewLine}\s+;{Environment.NewLine}", ";" + Environment.NewLine); // bug-fix for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
 
         gennedClass = RemoveUnnecessaryWhiteSpace(gennedClass);
         return gennedClass;
