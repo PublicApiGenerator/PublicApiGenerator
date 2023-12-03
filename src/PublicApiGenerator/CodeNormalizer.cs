@@ -43,7 +43,6 @@ internal static class CodeNormalizer
         gennedClass = Regex.Replace(gennedClass, SET, " { set; }", RegexOptions.IgnorePatternWhitespace);
         gennedClass = Regex.Replace(gennedClass, @"\s+{\s+}", " { }", RegexOptions.IgnorePatternWhitespace);
         gennedClass = Regex.Replace(gennedClass, @"\)\s+;", ");", RegexOptions.IgnorePatternWhitespace);
-        gennedClass = Regex.Replace(gennedClass, @"\r\n\s+;\r\n", ";" + Environment.NewLine); // bug-fix for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
         var attributeMarkerEscaped = Regex.Escape(ATTRIBUTE_MARKER);
         gennedClass = Regex.Replace(gennedClass, $@"
                 (Attribute)?                               # Delete this if present. Would create a clash for Attribute1, Attribute1Attribute but that is a very rare edge case
@@ -66,6 +65,7 @@ internal static class CodeNormalizer
         gennedClass = gennedClass.Replace("struct " + READONLY_MARKER, "readonly struct ");
         gennedClass = gennedClass.Replace(READONLY_MARKER, string.Empty); // remove magic marker from readonly struct ctor
         gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
+        gennedClass = Regex.Replace(gennedClass, @$"{Environment.NewLine}\s+;{Environment.NewLine}", ";" + Environment.NewLine); // bug-fix for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
 
         gennedClass = RemoveUnnecessaryWhiteSpace(gennedClass);
         return gennedClass;
