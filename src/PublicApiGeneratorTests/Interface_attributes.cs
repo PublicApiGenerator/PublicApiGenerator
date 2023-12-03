@@ -153,16 +153,11 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]
-            };
-
             AssertPublicApi<IInterfaceWithSimpleAttribute>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
     public interface IInterfaceWithSimpleAttribute { }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 

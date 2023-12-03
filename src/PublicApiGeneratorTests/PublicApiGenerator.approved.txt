@@ -10,10 +10,12 @@ namespace PublicApiGenerator
     {
         public ApiGeneratorOptions() { }
         public string[] AllowNamespacePrefixes { get; set; }
+        public string BracingStyle { get; set; }
         public string[] DenyNamespacePrefixes { get; set; }
         public string[]? ExcludeAttributes { get; set; }
         public bool IncludeAssemblyAttributes { get; set; }
         public System.Type[]? IncludeTypes { get; set; }
+        public string IndentString { get; set; }
         public bool UseDenyNamespacePrefixesForExtensionMethods { get; set; }
     }
 }

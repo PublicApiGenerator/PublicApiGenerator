@@ -21,11 +21,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]
-            };
-
             AssertPublicApi<IInterfaceWithEventWithAttribute>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -33,7 +28,7 @@ namespace PublicApiGeneratorTests
     {
         event System.EventHandler OnClicked;
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 

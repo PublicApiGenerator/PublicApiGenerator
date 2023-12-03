@@ -128,11 +128,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]
-            };
-
             AssertPublicApi<IMethodReturnValueWithAttributeWithMultipleNamedParameters>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -140,7 +135,7 @@ namespace PublicApiGeneratorTests
     {
         void Method();
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]);
         }
     }
 

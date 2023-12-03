@@ -26,8 +26,6 @@ public static class ApiGenerator
     {
         options ??= new ApiGeneratorOptions();
 
-        var attributeFilter = new AttributeFilter(options.ExcludeAttributes);
-
         using (var assemblyResolver = new DefaultAssemblyResolver())
         {
             var assemblyPath = assembly.Location;
@@ -43,14 +41,11 @@ public static class ApiGenerator
             {
                 return CreatePublicApiForAssembly(
                     asm,
+                    options,
                     typeDefinition => !typeDefinition.IsNested &&
                                       ShouldIncludeType(typeDefinition, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods) &&
-                                      (options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName)),
-                    options.IncludeAssemblyAttributes,
-                    options.DenyNamespacePrefixes,
-                    options.AllowNamespacePrefixes,
-                    options.UseDenyNamespacePrefixesForExtensionMethods,
-                    attributeFilter);
+                                      (options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName))
+                );
             }
         }
     }
@@ -86,12 +81,14 @@ public static class ApiGenerator
 
     // TODO: Assembly references?
     // TODO: Better handle namespaces - using statements? - requires non-qualified type names
-    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, Func<TypeDefinition, bool> shouldIncludeType, bool shouldIncludeAssemblyAttributes, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
+    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, ApiGeneratorOptions options, Func<TypeDefinition, bool> shouldIncludeType)
     {
+        var attributeFilter = new AttributeFilter(options.ExcludeAttributes);
+
         using var provider = new CSharpCodeProvider();
 
         var compileUnit = new CodeCompileUnit();
-        if (shouldIncludeAssemblyAttributes && assembly.HasCustomAttributes)
+        if (options.IncludeAssemblyAttributes && assembly.HasCustomAttributes)
         {
             PopulateCustomAttributes(assembly, compileUnit.AssemblyCustomAttributes, attributeFilter);
         }
@@ -110,7 +107,7 @@ public static class ApiGenerator
 
             using (NullableContext.Push(publicType))
             {
-                var typeDeclaration = CreateTypeDeclaration(publicType, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods, attributeFilter);
+                var typeDeclaration = CreateTypeDeclaration(publicType, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods, attributeFilter);
                 @namespace.Types.Add(typeDeclaration);
             }
         }
@@ -119,10 +116,10 @@ public static class ApiGenerator
         {
             var cgo = new CodeGeneratorOptions
             {
-                BracingStyle = "C",
+                BracingStyle = options.BracingStyle,
                 BlankLinesBetweenMembers = false,
                 VerbatimOrder = false,
-                IndentString = "    "
+                IndentString = options.IndentString
             };
 
             provider.GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
