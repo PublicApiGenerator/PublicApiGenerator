@@ -1,6 +1,21 @@
-_[![Build status](https://github.com/PublicApiGenerator/PublicApiGenerator/workflows/.github/workflows/ci.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions)_
-
 # PublicApiGenerator
+
+[![Run tests](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/ci.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/ci.yml)
+[![Publish preview](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-preview.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-preview.yml)
+[![Publish release](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-release.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-release.yml)
+
+[![License](https://img.shields.io/github/license/PublicApiGenerator/PublicApiGenerator)](LICENSE.md)
+[![codecov](https://codecov.io/gh/PublicApiGenerator/PublicApiGenerator/branch/master/graph/badge.svg?token=iXZo1jZvFo)](https://codecov.io/gh/PublicApiGenerator/PublicApiGenerator)
+[![Nuget](https://img.shields.io/nuget/dt/PublicApiGenerator)](https://www.nuget.org/packages/PublicApiGenerator)
+[![Nuget](https://img.shields.io/nuget/v/PublicApiGenerator)](https://www.nuget.org/packages/PublicApiGenerator)
+[![GitHub Release Date](https://img.shields.io/github/release-date/PublicApiGenerator/PublicApiGenerator?label=released)](https://github.com/PublicApiGenerator/PublicApiGenerator/releases)
+[![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/PublicApiGenerator/PublicApiGenerator/latest?label=new+commits)](https://github.com/PublicApiGenerator/PublicApiGenerator/commits/master)
+![Size](https://img.shields.io/github/repo-size/PublicApiGenerator/PublicApiGenerator)
+
+[![GitHub contributors](https://img.shields.io/github/contributors/PublicApiGenerator/PublicApiGenerator)](https://github.com/PublicApiGenerator/PublicApiGenerator/graphs/contributors)
+![Activity](https://img.shields.io/github/commit-activity/w/PublicApiGenerator/PublicApiGenerator)
+![Activity](https://img.shields.io/github/commit-activity/m/PublicApiGenerator/PublicApiGenerator)
+![Activity](https://img.shields.io/github/commit-activity/y/PublicApiGenerator/PublicApiGenerator)
 
 PublicApiGenerator has no dependencies and simply creates a string the represents the public API. Any approval library can be used to approve the generated public API.
 PublicApiGenerator supports C# 8 [Nullable Reference Types](https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references) from version 10.
@@ -11,33 +26,33 @@ PublicApiGenerator supports C# 8 [Nullable Reference Types](https://docs.microso
 
 Public API of an assembly
 
-``` csharp
+```csharp
 var publicApi = typeof(Library).Assembly.GeneratePublicApi();
 ```
 
 Public API of multiple types
 
-``` csharp
+```csharp
 var myTypes = new[] { typeof(MyType), typeof(YetAnotherType) };
 var publicApi = typeof(myTypes).GeneratePublicApi();
 ```
 
 Public API of a type
 
-``` csharp
+```csharp
 var publicApi = typeof(MyType).GeneratePublicApi();
 ```
 
 More control over the API output
 
-``` csharp
+```csharp
 var options = new ApiGeneratorOptions { ... };
 var publicApi = typeof(Library).Assembly.GeneratePublicApi(options);
 ```
 
 ### Manual
 
-``` csharp
+```csharp
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
@@ -62,7 +77,7 @@ public void my_assembly_has_no_public_api_changes()
 
 > Install-package Shouldly
 
-``` csharp
+```csharp
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
@@ -73,13 +88,15 @@ public void my_assembly_has_no_public_api_changes()
 }
 ```
 
+ApiGenerator itself [uses](src/PublicApiGeneratorTests/SelfApiApprovalTests.cs) this approach to test API changes.
+
 ### ApprovalTests
 
 [ApprovalTests](https://github.com/approvals/ApprovalTests.Net)
 
 > Install-package ApprovalTests
 
-``` csharp
+```csharp
 [Fact]
 public void my_assembly_has_no_public_api_changes()
 {
@@ -111,7 +128,7 @@ private class AssemblyPathNamer : UnitTestFrameworkNamer
 
 > Install-package Verify.Xunit
 
-``` csharp
+```csharp
 [UsesVerify]
 public class Tests
 {
@@ -129,7 +146,7 @@ Or
 
 > Install-package Verify.NUnit
 
-``` csharp
+```csharp
 [Test]
 public Task my_assembly_has_no_public_api_changes()
 {
@@ -143,7 +160,7 @@ Or
 
 > Install-package Verify.MSTest
 
-``` csharp
+```csharp
 
 [TestClass]
 public class VerifyObjectSamples :

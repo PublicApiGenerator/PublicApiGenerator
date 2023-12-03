@@ -1,6 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using System;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -287,9 +285,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable ValueParameterNotUsed
     namespace Examples
     {
         public abstract class ClassWithAbstractEvent
@@ -319,17 +314,17 @@ namespace PublicApiGeneratorTests
 
         public class ClassWithStaticNewEvent : ClassWithStaticEvent
         {
-            public new static event EventHandler Event;
+            public static new event EventHandler Event;
         }
 
         public class ClassWithProtectedStaticNewEvent : ClassWithProtectedStaticEvent
         {
-            protected new static event EventHandler Event;
+            protected static new event EventHandler Event;
         }
 
         public class ClassWithPublicStaticNewEvent : ClassWithProtectedStaticEvent
         {
-            public new static event EventHandler Event;
+            public static new event EventHandler Event;
         }
 
         public class ClassWithVirtualEvent
@@ -404,7 +399,4 @@ namespace PublicApiGeneratorTests
             protected virtual event EventHandler Event;
         }
     }
-    // ReSharper restore ValueParameterNotUsed
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

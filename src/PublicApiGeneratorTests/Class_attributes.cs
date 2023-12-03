@@ -1,6 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -185,6 +183,20 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_expand_enum_special_flags()
+        {
+            AssertPublicApi<ClassWithAttributeWithEnumWithSomeSpecialFlags>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    [PublicApiGeneratorTests.Examples.AttributeWithEnumWithSomeSpecialFlags(PublicApiGeneratorTests.Examples.EnumWithSomeSpecialFlags.PublicConstructors)]
+    public class ClassWithAttributeWithEnumWithSomeSpecialFlags
+    {
+        public ClassWithAttributeWithEnumWithSomeSpecialFlags() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
             AssertPublicApi<ClassWithMultipleAttributes>(
@@ -278,11 +290,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] {"PublicApiGeneratorTests.Examples.Attribute_MM"}
-            };
-
             AssertPublicApi<ClassWithMultipleAttributes>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -292,7 +299,7 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithMultipleAttributes() { }
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM"]);
         }
 
         [Fact]
@@ -324,8 +331,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         [SimpleAttribute]
@@ -398,6 +403,11 @@ namespace PublicApiGeneratorTests
         {
         }
 
+        [AttributeWithEnumWithSomeSpecialFlags(EnumWithSomeSpecialFlags.PublicConstructors)]
+        public class ClassWithAttributeWithEnumWithSomeSpecialFlags
+        {
+        }
+
         [Attribute_ZZ]
         [Attribute_MM]
         [Attribute_AA]
@@ -442,6 +452,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

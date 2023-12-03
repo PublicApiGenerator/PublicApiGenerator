@@ -1,6 +1,4 @@
-﻿using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -107,21 +105,14 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" }
-            };
-
             AssertPublicApi<StructWithSimpleAttribute>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
     public struct StructWithSimpleAttribute { }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         [SimpleAttribute]
@@ -176,6 +167,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

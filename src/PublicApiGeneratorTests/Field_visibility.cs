@@ -1,5 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -24,15 +23,11 @@ namespace PublicApiGeneratorTests
 
 #pragma warning disable 169, 649
 
-    // ReSharper disable InconsistentNaming
-    // ReSharper disable UnusedField.Compiler
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassWithFields
         {
-            private int privateFieldNotVisible;
+            private readonly int privateFieldNotVisible;
             internal int internalFieldNotVisible;
             private protected int privateProtectedFieldNotVisible;
 
@@ -41,10 +36,6 @@ namespace PublicApiGeneratorTests
             public int publicFieldIsVisible;
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore InconsistentNaming
-    // ReSharper restore UnusedField.Compiler
 
 #pragma warning restore 169, 649
 }

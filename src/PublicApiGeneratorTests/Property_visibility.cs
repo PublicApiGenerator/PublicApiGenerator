@@ -1,9 +1,8 @@
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
-    public class Property_visibility :  ApiGeneratorTestsBase
+    public class Property_visibility : ApiGeneratorTestsBase
     {
         [Fact]
         public void Should_output_public_property()
@@ -277,10 +276,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedMember.Local
-    // ReSharper disable UnusedAutoPropertyAccessor.Local
     namespace Examples
     {
         public class ClassWithPublicProperty
@@ -358,8 +353,4 @@ namespace PublicApiGeneratorTests
             public string Value1 { protected internal get; set; }
         }
     }
-    // ReSharper restore UnusedAutoPropertyAccessor.Local
-    // ReSharper restore UnusedMember.Local
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

@@ -1,5 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -8,7 +7,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_structs_in_alphabetical_order()
         {
-            AssertPublicApi(new[] { typeof(ZZ_Struct), typeof(AA_Struct), typeof(MM_Struct), typeof(I_Struct), typeof(i_Struct) },
+            AssertPublicApi([typeof(ZZ_Struct), typeof(AA_Struct), typeof(MM_Struct), typeof(I_Struct), typeof(i_Struct)],
 @"namespace PublicApiGeneratorTests.Examples
 {
     public struct AA_Struct { }
@@ -20,7 +19,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable InconsistentNaming
     namespace Examples
     {
         public struct ZZ_Struct
@@ -43,5 +41,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore InconsistentNaming
 }

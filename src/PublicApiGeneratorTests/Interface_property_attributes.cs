@@ -1,5 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -164,8 +163,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public interface IPropertyWithSimpleAttribute
@@ -240,13 +237,11 @@ namespace PublicApiGeneratorTests
         {
             string Value
             {
-                [SimpleAttribute]
+                [Simple]
                 get;
-                [SimpleAttribute]
+                [Simple]
                 set;
             }
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

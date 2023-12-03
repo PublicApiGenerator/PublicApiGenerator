@@ -1,5 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -32,7 +31,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public interface IInterfaceWithContravariance<in T>
@@ -45,5 +43,4 @@ namespace PublicApiGeneratorTests
             T Method();
         }
     }
-    // ReSharper restore UnusedMember.Global
 }

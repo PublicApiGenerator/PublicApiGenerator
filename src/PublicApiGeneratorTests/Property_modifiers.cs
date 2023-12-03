@@ -1,6 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -316,16 +314,13 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable ValueParameterNotUsed
     namespace Examples
     {
         public class ClassWithProperty
         {
             public string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -344,7 +339,7 @@ namespace PublicApiGeneratorTests
         {
             public static string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -353,34 +348,34 @@ namespace PublicApiGeneratorTests
         {
             protected static string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
 
         public class ClassWithStaticNewProperty : ClassWithStaticProperty
         {
-            public new static string Value
+            public static new string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
 
         public class ClassWithProtectedStaticNewProperty : ClassWithProtectedStaticProperty
         {
-            protected new static string Value
+            protected static new string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
 
         public class ClassWithPublicStaticNewProperty : ClassWithProtectedStaticProperty
         {
-            public new static string Value
+            public static new string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -389,7 +384,7 @@ namespace PublicApiGeneratorTests
         {
             public virtual string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -398,7 +393,7 @@ namespace PublicApiGeneratorTests
         {
             protected virtual string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -407,7 +402,7 @@ namespace PublicApiGeneratorTests
         {
             public override string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -416,7 +411,7 @@ namespace PublicApiGeneratorTests
         {
             protected override string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -430,7 +425,7 @@ namespace PublicApiGeneratorTests
         {
             public sealed override string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -439,7 +434,7 @@ namespace PublicApiGeneratorTests
         {
             protected sealed override string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -448,7 +443,7 @@ namespace PublicApiGeneratorTests
         {
             public new string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -457,7 +452,7 @@ namespace PublicApiGeneratorTests
         {
             protected new string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -466,7 +461,7 @@ namespace PublicApiGeneratorTests
         {
             public new string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
@@ -514,7 +509,4 @@ namespace PublicApiGeneratorTests
             public new ClassWithPropertyExtensions<T> Extension { get; set; }
         }
     }
-    // ReSharper restore ValueParameterNotUsed
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

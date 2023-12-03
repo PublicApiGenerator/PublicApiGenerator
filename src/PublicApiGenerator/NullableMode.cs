@@ -1,9 +1,8 @@
-namespace PublicApiGenerator
+namespace PublicApiGenerator;
+
+internal enum NullableMode
 {
-    enum NullableMode
-    {
-        Default,
-        Force,
-        Disable
-    }
+    Default,
+    Force,
+    Disable
 }

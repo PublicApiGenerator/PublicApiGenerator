@@ -1,7 +1,4 @@
-using System;
-using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -25,11 +22,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" }
-            };
-
             AssertPublicApi<ClassWithEventWithAttribute>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -38,22 +30,16 @@ namespace PublicApiGeneratorTests
         public ClassWithEventWithAttribute() { }
         public event System.EventHandler OnClicked;
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 
-    // ReSharper disable EventNeverSubscribedTo.Global
-    // ReSharper disable EventNeverInvoked
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class ClassWithEventWithAttribute
         {
-            [SimpleAttribute]
+            [Simple]
             public event EventHandler OnClicked;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore EventNeverInvoked
-    // ReSharper restore EventNeverSubscribedTo.Global
 }

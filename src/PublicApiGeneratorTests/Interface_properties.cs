@@ -1,5 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -86,7 +85,7 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_use_interface_generic_type()
         {
-            AssertPublicApi(typeof (IPropertyWithInterfaceGeneric<>),
+            AssertPublicApi(typeof(IPropertyWithInterfaceGeneric<>),
 @"namespace PublicApiGeneratorTests.Examples
 {
     public interface IPropertyWithInterfaceGeneric<T>
@@ -110,7 +109,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public interface IPropertyWithPrimitiveType
@@ -153,5 +151,4 @@ namespace PublicApiGeneratorTests
             T Value { get; set; }
         }
     }
-    // ReSharper restore UnusedMember.Global
 }

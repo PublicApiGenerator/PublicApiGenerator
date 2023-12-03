@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -200,10 +197,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedTypeParameter
-    // ReSharper disable UnusedParameter.Global
     namespace Examples
     {
         public class MethodWithTypeParameter
@@ -305,8 +298,4 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-    // ReSharper restore UnusedParameter.Global
-    // ReSharper restore UnusedTypeParameter
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

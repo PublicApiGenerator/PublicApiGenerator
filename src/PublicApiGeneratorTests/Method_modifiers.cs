@@ -1,5 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -356,12 +355,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedMemberHierarchy.Global
-    // ReSharper disable MemberCanBeProtected.Global
-    // ReSharper disable RedundantOverridenMember
-    // ReSharper disable ClassWithVirtualMembersNeverInherited.Global
     namespace Examples
     {
         public class ClassWithStaticMethod
@@ -380,21 +373,21 @@ namespace PublicApiGeneratorTests
 
         public class ClassWithStaticNewMethod : ClassWithStaticMethod
         {
-            public new static void DoSomething()
+            public static new void DoSomething()
             {
             }
         }
 
         public class ClassWithProtectedStaticNewMethod : ClassWithProtectedStaticMethod
         {
-            protected new static void DoSomething()
+            protected static new void DoSomething()
             {
             }
         }
 
         public class ClassWithPublicStaticNewMethod : ClassWithProtectedStaticMethod
         {
-            public new static void DoSomething()
+            public static new void DoSomething()
             {
             }
         }
@@ -569,17 +562,11 @@ namespace PublicApiGeneratorTests
             }
         }
 
-        public class ClassWithBaseMethodConstraint: ClassWithBaseMethod
+        public class ClassWithBaseMethodConstraint : ClassWithBaseMethod
         {
             public void SomeMethod(ClassWithBaseMethodConstraint input1, ClassWithBaseMethodConstraint input2)
             {
             }
         }
     }
-    // ReSharper restore ClassWithVirtualMembersNeverInherited.Global
-    // ReSharper restore RedundantOverridenMember
-    // ReSharper restore MemberCanBeProtected.Global
-    // ReSharper restore UnusedMemberHierarchy.Global
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

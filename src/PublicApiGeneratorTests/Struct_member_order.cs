@@ -1,7 +1,4 @@
-﻿using System;
-using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -10,11 +7,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_in_known_order_and_alphabetically()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" }
-            };
-
             // Fields, properties, events, methods, nested type (inc. delegates)
             AssertPublicApi<StructMemberOrder>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -42,17 +34,12 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
         }
 
         [Fact]
         public void Should_output_in_known_order_with_nested_class()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" }
-            };
-
             // Fields, properties, events, methods
             AssertPublicApi<StructMemberOrderAndNestedClass>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -110,13 +97,10 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
         }
     }
-    // ReSharper disable EventNeverInvoked
-    // ReSharper disable EventNeverSubscribedTo.Global
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
+
     namespace Examples
     {
         public struct StructMemberOrder
@@ -211,8 +195,4 @@ namespace PublicApiGeneratorTests
             public void iMethod1() { }
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore EventNeverSubscribedTo.Global
-    // ReSharper restore EventNeverInvoked
 }

@@ -1,6 +1,4 @@
-﻿using System;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -89,7 +87,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class BaseClass
@@ -132,5 +129,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
 }

@@ -1,6 +1,4 @@
-﻿using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -179,11 +177,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attributes()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" }
-            };
-
             AssertPublicApi<PropertyWithSimpleAttributeOnGetterAndSetter>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -192,12 +185,10 @@ namespace PublicApiGeneratorTests
         public PropertyWithSimpleAttributeOnGetterAndSetter() { }
         public string Value { get; set; }
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class PropertyWithSimpleAttribute
@@ -272,11 +263,9 @@ namespace PublicApiGeneratorTests
         {
             public string Value
             {
-                [SimpleAttribute] get;
-                [SimpleAttribute] set;
+                [Simple] get;
+                [Simple] set;
             }
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

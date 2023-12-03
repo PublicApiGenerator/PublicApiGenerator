@@ -1,5 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -24,9 +23,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable InconsistentNaming
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class FieldOrderExample
@@ -38,7 +34,4 @@ namespace PublicApiGeneratorTests
             public int I_Field;
         }
     }
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore InconsistentNaming
 }

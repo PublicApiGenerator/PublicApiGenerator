@@ -1,6 +1,4 @@
-﻿using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -110,11 +108,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute" }
-            };
-
             AssertPublicApi<MethodParameterWithAttributeWithPositionalParameters>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -125,13 +118,10 @@ namespace PublicApiGeneratorTests
         public void Method2(int value) { }
         public void Method3([PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")] int value) { }
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute"]);
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedParameter.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public class MethodParameterWithSimpleAttribute
@@ -190,12 +180,9 @@ namespace PublicApiGeneratorTests
 
         public class MethodParameterWithMultipleAttributes
         {
-            public void Method([Attribute_ZZ] [Attribute_MM] [Attribute_AA] int value)
+            public void Method([Attribute_ZZ][Attribute_MM][Attribute_AA] int value)
             {
             }
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedParameter.Global
-    // ReSharper restore UnusedMember.Global
 }

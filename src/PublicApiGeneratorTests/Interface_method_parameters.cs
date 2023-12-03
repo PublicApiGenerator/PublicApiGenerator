@@ -1,12 +1,11 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
     public class Interface_method_parameters : ApiGeneratorTestsBase
     {
         [Fact]
-        void Should_handle_no_parameters()
+        public void Should_handle_no_parameters()
         {
             AssertPublicApi<IMethodWithNoParameters>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -19,7 +18,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_parameter_name()
+        public void Should_output_parameter_name()
         {
             AssertPublicApi<IMethodWithSingleParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -32,7 +31,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_primitive_parameter()
+        public void Should_output_primitive_parameter()
         {
             AssertPublicApi<IMethodWithSingleParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -45,7 +44,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_use_fully_qualified_type_name_for_parameter()
+        public void Should_use_fully_qualified_type_name_for_parameter()
         {
             AssertPublicApi<IMethodWithComplexTypeParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -58,7 +57,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_generic_type()
+        public void Should_output_generic_type()
         {
             AssertPublicApi<IMethodWithGenericTypeParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -71,7 +70,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_fully_qualified_type_name_for_generic_parameter()
+        public void Should_output_fully_qualified_type_name_for_generic_parameter()
         {
             AssertPublicApi<IMethodWithGenericTypeOfComplexTypeParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -84,7 +83,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_generic_type_of_generic_type()
+        public void Should_output_generic_type_of_generic_type()
         {
             AssertPublicApi<IMethodWithGenericTypeOfGenericTypeParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -97,7 +96,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_generic_with_multiple_type_parameters()
+        public void Should_output_generic_with_multiple_type_parameters()
         {
             AssertPublicApi<IMethodWithGenericTypeWithMultipleTypeArgumentsParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -110,7 +109,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_handle_multiple_parameters()
+        public void Should_handle_multiple_parameters()
         {
             AssertPublicApi<IMethodWithMultipleParameters>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -123,7 +122,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_default_values()
+        public void Should_output_default_values()
         {
             AssertPublicApi<IMethodWithDefaultValues>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -136,7 +135,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_ref_parameters()
+        public void Should_output_ref_parameters()
         {
             AssertPublicApi<IMethodWithRefParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -149,7 +148,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_in_parameters()
+        public void Should_output_in_parameters()
         {
             AssertPublicApi<IMethodWithInParameter>(
                 @"namespace PublicApiGeneratorTests.Examples
@@ -162,7 +161,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_out_parameters()
+        public void Should_output_out_parameters()
         {
             AssertPublicApi<IMethodWithOutParameter>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -175,7 +174,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        void Should_output_params_keyword()
+        public void Should_output_params_keyword()
         {
             AssertPublicApi<IMethodWithParams>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -188,9 +187,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedParameter.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public interface IMethodWithNoParameters
@@ -258,7 +254,4 @@ namespace PublicApiGeneratorTests
             void Method(string format, params object[] values);
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedParameter.Global
-    // ReSharper restore UnusedMember.Global
 }

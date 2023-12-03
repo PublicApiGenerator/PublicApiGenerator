@@ -1,7 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System;
-using System.Collections.Generic;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -19,6 +16,19 @@ namespace PublicApiGeneratorTests
         public static bool CheckLength(this string value, int length) { }
     }
 }");
+        }
+
+        [Fact]
+        public void Should_output_extension_methods_when_allowed()
+        {
+            AssertPublicApi(typeof(StringExtensionsInSystemNamespace),
+@"namespace System
+{
+    public static class StringExtensionsInSystemNamespace
+    {
+        public static bool CheckLength(this string value, int length) { }
+    }
+}", opt => { opt.UseDenyNamespacePrefixesForExtensionMethods = false; opt.IncludeAssemblyAttributes = false; });
         }
 
         [Fact]
@@ -55,8 +65,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public static class StringExtensions
@@ -88,6 +96,20 @@ namespace PublicApiGeneratorTests
             public static long? Long(this object @object, long? @value = null) => null;
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
+}
+
+namespace System
+{
+    public static class StringExtensionsInSystemNamespace
+    {
+        public static bool CheckLength(this string value, int length)
+        {
+            return value.Length == length;
+        }
+
+        public static bool CheckLengthNotAsExtension(string value, int length)
+        {
+            return value.Length == length;
+        }
+    }
 }

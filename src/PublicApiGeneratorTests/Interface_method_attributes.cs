@@ -1,6 +1,4 @@
-﻿using PublicApiGenerator;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -133,11 +131,6 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            var options = new DefaultApiGeneratorOptions
-            {
-                ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" }
-            };
-
             AssertPublicApi<IMethodsWithAttributeWithNamedParameters>(
                 @"namespace PublicApiGeneratorTests.Examples
 {
@@ -146,12 +139,10 @@ namespace PublicApiGeneratorTests
         void Method1();
         void Method2();
     }
-}", options);
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]);
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ClassNeverInstantiated.Global
     namespace Examples
     {
         public interface IMethodWithSimpleAttribute
@@ -217,6 +208,4 @@ namespace PublicApiGeneratorTests
             void Method();
         }
     }
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore UnusedMember.Global
 }

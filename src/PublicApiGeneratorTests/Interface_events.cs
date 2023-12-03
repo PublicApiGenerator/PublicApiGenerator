@@ -1,6 +1,4 @@
-﻿using System;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -46,7 +44,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable EventNeverSubscribedTo.Global
     namespace Examples
     {
         public interface ISimpleEvent
@@ -64,5 +61,4 @@ namespace PublicApiGeneratorTests
             new event EventHandler Event;
         }
     }
-    // ReSharper restore EventNeverSubscribedTo.Global
 }

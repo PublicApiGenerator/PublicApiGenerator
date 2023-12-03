@@ -1,7 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using System;
-using System.Collections.Generic;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -27,7 +24,6 @@ namespace PublicApiGeneratorTests
         // Not supported by Cecil?
     }
 
-    // ReSharper disable UnusedMember.Global
     namespace Examples
     {
         public class ClassWithDynamic : List<dynamic>
@@ -39,5 +35,4 @@ namespace PublicApiGeneratorTests
             public dynamic? DoIt2(dynamic? p) { throw null; }
         }
     }
-    // ReSharper restore UnusedMember.Global
 }

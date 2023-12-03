@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -122,10 +121,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ValueParameterNotUsed
     namespace Examples
     {
         public class ClassWithIndexer
@@ -181,7 +176,4 @@ namespace PublicApiGeneratorTests
             object this[string key] { get; }
         }
     }
-    // ReSharper restore ValueParameterNotUsed
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

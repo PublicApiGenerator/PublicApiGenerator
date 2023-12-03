@@ -1,34 +1,81 @@
+name: Run tests
+
 on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - src/**
+      - .github/workflows/**
+  # Upload code coverage results when PRs are merged
   push:
     branches:
-    - master
-    - release-*
-    tags:
-    - '**'
-  pull_request:
+      - master
+    paths:
+      - src/**
+      - .github/workflows/**
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
 jobs:
-  build:
+  test:
     strategy:
-      fail-fast: false
       matrix:
-        runs-on: [ubuntu-latest, windows-latest]
-        sdk: ["6.0.301", "6.0.302", "6.0.303", "6.0.400"]
-    name: ${{ matrix.runs-on }}-${{ matrix.sdk }}
-    runs-on: ${{ matrix.runs-on }}
+        os: [ubuntu-latest, windows-latest]
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: |
-          3.1.422
-          ${{ matrix.sdk }}
-    - run: dotnet --info
-    - uses: actions/checkout@af513c7a016048ae468971c52ed77d9562c7c819
-    - if: contains(matrix.runs-on, 'windows')
-      run: ./build.cmd
-    - if: contains(matrix.runs-on, 'ubuntu')
-      run: ./build.sh
-    - uses: actions/upload-artifact@master
-      with:
-        name: nugets
-        path: nugets/
+      - uses: actions/checkout@v4
+      - name: Setup .NET SDKs
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            3.1.x
+            6.0.x
+            7.0.x
+            8.0.x
+      - name: Install dependencies
+        working-directory: src
+        run: dotnet restore
+      - name: Build solution [Release]
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        working-directory: src
+        run: dotnet build --no-restore -c Release
+      - name: Build solution [Debug]
+        working-directory: src
+        run: dotnet build --no-restore -c Debug
+      - name: Test solution [Debug] with code coverage
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        working-directory: src
+        run: >
+          dotnet test
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Test solution [Debug] without code coverage
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        working-directory: src
+        run: dotnet test --no-restore --no-build
+      - name: Upload coverage to codecov
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        uses: codecov/codecov-action@v3
+        with:
+          files: 'src/.coverage/**/coverage.opencover.xml'
+
+  buildcheck:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Pass build check
+        if: ${{ needs.test.result == 'success' }}
+        run: exit 0
+      - name: Fail build check
+        if: ${{ needs.test.result != 'success' }}
+        run: exit 1

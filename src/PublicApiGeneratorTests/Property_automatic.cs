@@ -1,5 +1,4 @@
-﻿using PublicApiGeneratorTests.Examples;
-using Xunit;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
@@ -34,9 +33,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable ValueParameterNotUsed
     namespace Examples
     {
         public class ClassWithAutomaticProperty
@@ -48,12 +44,9 @@ namespace PublicApiGeneratorTests
         {
             public string Value
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
     }
-    // ReSharper restore ValueParameterNotUsed
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
 }

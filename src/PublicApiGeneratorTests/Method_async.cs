@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -77,9 +75,6 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable CSharpWarnings::CS1998
-    // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable 1998
     namespace Examples
     {
@@ -109,7 +104,7 @@ namespace PublicApiGeneratorTests
         {
             public async Task<string> AsyncMethod()
             {
-                return await Task.FromResult("Hello world");
+                return await Task.FromResult("Hello world").ConfigureAwait(false);
             }
         }
 
@@ -122,7 +117,4 @@ namespace PublicApiGeneratorTests
         }
     }
 #pragma warning restore 1998
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore CSharpWarnings::CS1998
-    // ReSharper restore UnusedMember.Global
 }

@@ -1,5 +1,4 @@
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -132,20 +131,16 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable ValueParameterNotUsed
-    // ReSharper disable ClassNeverInstantiated.Global
-    // ReSharper disable UnusedMember.Global
-    // ReSharper disable UnusedParameter.Global
     namespace Examples
     {
         public class PropertyReadWrite
         {
-            public string Value { get { return string.Empty; } set { } }
+            public string Value { get => string.Empty; set { } }
         }
 
         public class PropertyReadOnly
         {
-            public string Value { get { return string.Empty; } }
+            public string Value => string.Empty;
         }
 
         public class PropertyWriteOnly
@@ -167,17 +162,14 @@ namespace PublicApiGeneratorTests
         {
             public string this[int index]
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
 
         public class PropertyIndexerReadOnly
         {
-            public string this[int index]
-            {
-                get { return string.Empty; }
-            }
+            public string this[int index] => string.Empty;
         }
 
         public class PropertyIndexerWriteOnly
@@ -192,13 +184,9 @@ namespace PublicApiGeneratorTests
         {
             public string this[int index, int order]
             {
-                get { return string.Empty; }
+                get => string.Empty;
                 set { }
             }
         }
     }
-    // ReSharper restore UnusedParameter.Global
-    // ReSharper restore UnusedMember.Global
-    // ReSharper restore ClassNeverInstantiated.Global
-    // ReSharper restore ValueParameterNotUsed
 }

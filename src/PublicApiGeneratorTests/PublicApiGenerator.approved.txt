@@ -1,0 +1,21 @@
+namespace PublicApiGenerator
+{
+    public static class ApiGenerator
+    {
+        public static string GeneratePublicApi(this System.Reflection.Assembly assembly, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
+        public static string GeneratePublicApi(this System.Type type, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
+        public static string GeneratePublicApi(this System.Type[] types, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
+    }
+    public class ApiGeneratorOptions
+    {
+        public ApiGeneratorOptions() { }
+        public string[] AllowNamespacePrefixes { get; set; }
+        public string BracingStyle { get; set; }
+        public string[] DenyNamespacePrefixes { get; set; }
+        public string[]? ExcludeAttributes { get; set; }
+        public bool IncludeAssemblyAttributes { get; set; }
+        public System.Type[]? IncludeTypes { get; set; }
+        public string IndentString { get; set; }
+        public bool UseDenyNamespacePrefixesForExtensionMethods { get; set; }
+    }
+}

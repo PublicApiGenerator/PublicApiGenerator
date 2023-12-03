@@ -1,6 +1,4 @@
-﻿using System;
 using PublicApiGeneratorTests.Examples;
-using Xunit;
 
 namespace PublicApiGeneratorTests
 {
@@ -147,14 +145,13 @@ namespace PublicApiGeneratorTests
         }
     }
 
-    // ReSharper disable UnusedTypeParameter
     namespace Examples
     {
         public class ClassWithGenericType<T>
         {
         }
 
-        public class ClassWithGenericTypeAttribute<[MyType]T>
+        public class ClassWithGenericTypeAttribute<[MyType] T>
         {
         }
 
@@ -202,5 +199,4 @@ namespace PublicApiGeneratorTests
         {
         }
     }
-    // ReSharper restore UnusedTypeParameter
 }
