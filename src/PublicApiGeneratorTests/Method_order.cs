@@ -71,7 +71,10 @@ namespace PublicApiGeneratorTests
 }", opt => opt.IndentString = " ");
         }
 
-        [Fact]
+#if NET472
+#else
+        [Fact] // TODO: ignored for NET472 since CodeDom has issues with not-whitespaced indentation strings
+#endif
         public void Should_be_alphabetical_order_with_custom_indent_string2()
         {
             AssertPublicApi<MethodOrdering>(
