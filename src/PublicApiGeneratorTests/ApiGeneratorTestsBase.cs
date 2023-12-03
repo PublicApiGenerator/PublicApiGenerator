@@ -22,7 +22,7 @@ public abstract class ApiGeneratorTestsBase
 
     protected void AssertPublicApi(Type type, string expectedOutput, Action<ApiGeneratorOptions> configure)
     {
-        AssertPublicApi(new[] { type }, expectedOutput, configure);
+        AssertPublicApi([type], expectedOutput, configure);
     }
 
     protected void AssertPublicApi(Type[] types, string expectedOutput)

@@ -28,7 +28,7 @@ namespace PublicApiGeneratorTests
     {
         event System.EventHandler OnClicked;
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 

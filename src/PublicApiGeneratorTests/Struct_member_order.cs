@@ -34,7 +34,7 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", opt => opt.ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" });
+}", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", opt => opt.ExcludeAttributes = new[] { "System.Runtime.CompilerServices.IsReadOnlyAttribute" });
+}", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
         }
     }
 

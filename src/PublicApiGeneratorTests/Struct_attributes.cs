@@ -109,7 +109,7 @@ namespace PublicApiGeneratorTests
                 @"namespace PublicApiGeneratorTests.Examples
 {
     public struct StructWithSimpleAttribute { }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 

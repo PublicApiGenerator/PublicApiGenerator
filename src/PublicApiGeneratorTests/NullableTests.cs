@@ -516,9 +516,9 @@ namespace PublicApiGeneratorTests
 
         public class SkeetExamplesClass
         {
-            public Dictionary<List<string?>, string[]?> SkeetExample = new Dictionary<List<string?>, string[]?>();
-            public Dictionary<List<string?>, string?[]> SkeetExample2 = new Dictionary<List<string?>, string?[]>();
-            public Dictionary<List<string?>, string?[]?> SkeetExample3 = new Dictionary<List<string?>, string?[]?>();
+            public Dictionary<List<string?>, string[]?> SkeetExample = [];
+            public Dictionary<List<string?>, string?[]> SkeetExample2 = [];
+            public Dictionary<List<string?>, string?[]?> SkeetExample3 = [];
         }
 
         public class ByRefClass
@@ -528,7 +528,7 @@ namespace PublicApiGeneratorTests
 
         public class NullableApi
         {
-            public ReturnType NonNullField = new ReturnType();
+            public ReturnType NonNullField = new();
             public ReturnType? NullableField;
             public ReturnType NonNullProperty { get; protected set; } = new ReturnType();
             public ReturnType? NullableProperty { get; set; }

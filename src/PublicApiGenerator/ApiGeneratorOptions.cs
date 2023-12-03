@@ -68,9 +68,9 @@ public class ApiGeneratorOptions
     /// </example>
     public string[]? ExcludeAttributes { get; set; }
 
-    private static readonly string[] _defaultAllowNamespacePrefixes = Array.Empty<string>();
+    private static readonly string[] _defaultAllowNamespacePrefixes = [];
 
-    private static readonly string[] _defaultDenyNamespacePrefixes = new[] { "System", "Microsoft" };
+    private static readonly string[] _defaultDenyNamespacePrefixes = ["System", "Microsoft"];
 
     /// <summary>
     /// Indentation string. Defaults to 4 whitespace.

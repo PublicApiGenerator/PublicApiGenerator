@@ -169,7 +169,7 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithMultipleAttributes() { }
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_MM", "PublicApiGeneratorTests.Examples.Attribute_ZZ" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM", "PublicApiGeneratorTests.Examples.Attribute_ZZ"]);
         }
     }
 

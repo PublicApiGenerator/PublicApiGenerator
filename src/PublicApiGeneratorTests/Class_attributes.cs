@@ -299,7 +299,7 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithMultipleAttributes() { }
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_MM" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM"]);
         }
 
         [Fact]

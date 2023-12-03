@@ -157,7 +157,7 @@ namespace PublicApiGeneratorTests
                 @"namespace PublicApiGeneratorTests.Examples
 {
     public interface IInterfaceWithSimpleAttribute { }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 

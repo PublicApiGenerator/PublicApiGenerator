@@ -220,7 +220,7 @@ namespace PublicApiGeneratorTests
     [PublicApiGeneratorTests.Examples.Attribute_AA]
     [PublicApiGeneratorTests.Examples.Attribute_MM]
     public delegate void DelegateWithMultipleAttributes();
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.Attribute_ZZ" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_ZZ"]);
         }
     }
 

@@ -135,7 +135,7 @@ namespace PublicApiGeneratorTests
     {
         void Method();
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]);
         }
     }
 

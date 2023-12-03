@@ -30,7 +30,7 @@ namespace PublicApiGeneratorTests
         public ClassWithEventWithAttribute() { }
         public event System.EventHandler OnClicked;
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 
@@ -38,7 +38,7 @@ namespace PublicApiGeneratorTests
     {
         public class ClassWithEventWithAttribute
         {
-            [SimpleAttribute]
+            [Simple]
             public event EventHandler OnClicked;
         }
     }

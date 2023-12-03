@@ -185,7 +185,7 @@ namespace PublicApiGeneratorTests
         public PropertyWithSimpleAttributeOnGetterAndSetter() { }
         public string Value { get; set; }
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.SimpleAttribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.SimpleAttribute"]);
         }
     }
 

@@ -144,7 +144,7 @@ namespace PublicApiGeneratorTests
         public MethodReturnValueWithAttributeWithMultipleNamedParameters() { }
         public void Method() { }
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]);
         }
     }
 

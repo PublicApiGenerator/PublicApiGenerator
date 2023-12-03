@@ -118,7 +118,7 @@ namespace PublicApiGeneratorTests
         public void Method2(int value) { }
         public void Method3([PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")] int value) { }
     }
-}", opt => opt.ExcludeAttributes = new[] { "PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute" });
+}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2Attribute"]);
         }
     }
 
