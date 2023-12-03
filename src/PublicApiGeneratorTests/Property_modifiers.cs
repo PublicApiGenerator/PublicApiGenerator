@@ -257,6 +257,21 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_output_public_new_modifier_for_generic()
+        {
+            AssertPublicApi(typeof(ClassWithPublicPropertyHidingGeneric<>),
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    public class ClassWithPublicPropertyHidingGeneric<T> : PublicApiGeneratorTests.Examples.BaseForGeneric
+    where T : System.IComparable
+    {
+        public ClassWithPublicPropertyHidingGeneric() { }
+        public new T Value { get; set; }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_output_unsafe_modifier()
         {
             AssertPublicApi<ClassWithUnsafeProperty>(
@@ -449,6 +464,17 @@ namespace PublicApiGeneratorTests
                 get => string.Empty;
                 set { }
             }
+        }
+
+        public class ClassWithPublicPropertyHidingGeneric<T> : BaseForGeneric
+            where T : IComparable
+        {
+            public new T Value { get; }
+        }
+
+        public class BaseForGeneric
+        {
+            public IComparable Value { get; }
         }
 
         public class ClassWithUnsafeProperty
