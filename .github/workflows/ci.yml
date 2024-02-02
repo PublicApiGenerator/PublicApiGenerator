@@ -63,8 +63,9 @@ jobs:
         run: dotnet test --no-restore --no-build
       - name: Upload coverage to codecov
         if: ${{ startsWith(matrix.os, 'ubuntu') }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: 'src/.coverage/**/coverage.opencover.xml'
 
   buildcheck:
