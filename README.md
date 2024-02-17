@@ -129,7 +129,6 @@ private class AssemblyPathNamer : UnitTestFrameworkNamer
 > Install-package Verify.Xunit
 
 ```csharp
-[UsesVerify]
 public class Tests
 {
     [Fact]
