@@ -96,7 +96,7 @@ public static class ApiGenerator
 
         var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
             .Where(shouldIncludeType)
-            .OrderBy(t => t.FullName, StringComparer.Ordinal);
+            .OrderBy(t => t, new TypeReferenceComparer());
         foreach (var publicType in publicTypes)
         {
             var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>().FirstOrDefault(n => n.Name == publicType.Namespace);
@@ -291,7 +291,7 @@ public static class ApiGenerator
                 declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(publicType));
             }
         }
-        foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType.FullName, StringComparer.Ordinal)
+        foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType, new TypeReferenceComparer())
             .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
             .Where(t => ShouldIncludeType(t.Definition, [], [], true))
             .Select(t => t.Reference))
@@ -309,7 +309,7 @@ public static class ApiGenerator
         foreach (var field in fields)
             AddMemberToTypeDeclaration(declaration, publicType, field, attributeFilter);
 
-        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(t => t.FullName, StringComparer.Ordinal))
+        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(t => t, new TypeReferenceComparer()))
         {
             using (NullableContext.Push(nestedType))
             {
@@ -442,7 +442,7 @@ public static class ApiGenerator
         Func<CodeTypeReference, CodeTypeReference> codeTypeModifier,
         AttributeFilter attributeFilter)
     {
-        foreach (var customAttribute in type.CustomAttributes.Where(attributeFilter.ShouldIncludeAttribute).OrderBy(a => a.AttributeType.FullName, StringComparer.Ordinal).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a), StringComparer.Ordinal))
+        foreach (var customAttribute in type.CustomAttributes.Where(attributeFilter.ShouldIncludeAttribute).OrderBy(a => a.AttributeType, new TypeReferenceComparer()).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a), StringComparer.Ordinal))
         {
             var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
             attributes.Add(attribute);
