@@ -17,7 +17,7 @@
 ![Activity](https://img.shields.io/github/commit-activity/m/PublicApiGenerator/PublicApiGenerator)
 ![Activity](https://img.shields.io/github/commit-activity/y/PublicApiGenerator/PublicApiGenerator)
 
-PublicApiGenerator has no dependencies and simply creates a string the represents the public API. Any approval library can be used to approve
+PublicApiGenerator has no dependencies and simply creates a string that represents the public API. Any approval library can be used to approve
 the generated public API. Public API approval is often used as an auxiliary tool (often as automated test as shown in the examples below) for
 tracking intentional and unforeseen changes in public API. At first, public API as string is stored into a text file in VCS. Then the current
 generated string is compared with one preserved earlier. If they are different, the test ends with an error, indicating the need to make a decision.
