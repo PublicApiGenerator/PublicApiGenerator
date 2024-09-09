@@ -17,7 +17,13 @@
 ![Activity](https://img.shields.io/github/commit-activity/m/PublicApiGenerator/PublicApiGenerator)
 ![Activity](https://img.shields.io/github/commit-activity/y/PublicApiGenerator/PublicApiGenerator)
 
-PublicApiGenerator has no dependencies and simply creates a string the represents the public API. Any approval library can be used to approve the generated public API.
+PublicApiGenerator has no dependencies and simply creates a string the represents the public API. Any approval library can be used to approve
+the generated public API. Public API approval is often used as an auxiliary tool (often as automated test as shown in the examples below) for
+tracking intentional and unforeseen changes in public API. At first, public API as string is stored into a text file in VCS. Then the current
+generated string is compared with one preserved earlier. If they are different, the test ends with an error, indicating the need to make a decision.
+As a rule, the text file in VCS is updated with a new generated value, while accordingly changing project version - major or minor. Also note that
+it is normal that sometimes changes in public API do not require changes in minor or major version at all.
+
 PublicApiGenerator supports C# 8 [Nullable Reference Types](https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references) from version 10.
 
 ## How do I use it
