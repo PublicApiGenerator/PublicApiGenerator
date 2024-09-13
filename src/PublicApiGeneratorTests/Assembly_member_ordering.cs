@@ -92,6 +92,30 @@ namespace PublicApiGeneratorTests.Examples_i
     }
 }");
         }
+
+        [Fact]
+        public void Should_order_namespaces_alphabetically2()
+        {
+            AssertPublicApi(
+            [
+                typeof(A.D),
+                typeof(A.C.B),
+            ],
+@"namespace PublicApiGeneratorTests.A
+{
+    public class D
+    {
+        public D() { }
+    }
+}
+namespace PublicApiGeneratorTests.A.C
+{
+    public class B
+    {
+        public B() { }
+    }
+}");
+        }
     }
 
     namespace Examples
@@ -160,5 +184,15 @@ namespace PublicApiGeneratorTests.Examples_i
         public class AssemblyOrdering_1
         {
         }
+    }
+
+    namespace A
+    {
+        public class D;
+    }
+
+    namespace A.C
+    {
+        public class B;
     }
 }
