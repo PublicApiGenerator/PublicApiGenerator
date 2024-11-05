@@ -135,19 +135,19 @@ private class AssemblyPathNamer : UnitTestFrameworkNamer
 > Install-package Verify.Xunit
 
 ```csharp
-public class Tests
+[Fact]
+public Task my_assembly_has_no_public_api_changes()
 {
-    [Fact]
-    public Task my_assembly_has_no_public_api_changes()
-    {
-        var publicApi = typeof(Library).Assembly.GeneratePublicApi();
+    var publicApi = typeof(Library).Assembly.GeneratePublicApi();
 
-        return Verifier.Verify(publicApi);
-    }
+    return Verifier.Verify(publicApi);
+
+    // Or, if the public api is different based on the target frameworks:
+    // return Verifier.Verify(publicApi).UniqueForTargetFrameworkAndVersion();
 }
 ```
 
-Or 
+Or
 
 > Install-package Verify.NUnit
 
