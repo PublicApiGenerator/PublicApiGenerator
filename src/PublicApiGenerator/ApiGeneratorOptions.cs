@@ -12,6 +12,11 @@ public class ApiGeneratorOptions
     public Type[]? IncludeTypes { get; set; }
 
     /// <summary>
+    /// Allows to control which types of the generated assembly should be explicitly excluded.
+    /// </summary>
+    public Type[]? ExcludeTypes { get; set; }
+
+    /// <summary>
     /// Instructs the generator to include assembly level attributes.
     /// </summary>
     /// <remarks>Defaults to <see langword="true"/>.</remarks>

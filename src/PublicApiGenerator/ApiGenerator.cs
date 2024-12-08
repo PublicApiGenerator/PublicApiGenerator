@@ -43,6 +43,7 @@ public static class ApiGenerator
                     asm,
                     options,
                     typeDefinition => !typeDefinition.IsNested &&
+                                      (options.ExcludeTypes == null || !options.ExcludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName)) &&
                                       ShouldIncludeType(typeDefinition, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods) &&
                                       (options.IncludeTypes == null || options.IncludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName))
                 );

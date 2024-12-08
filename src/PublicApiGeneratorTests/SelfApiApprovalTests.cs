@@ -18,7 +18,7 @@ public class SelfApiApprovalTests
                 ExcludeAttributes = ["System.Diagnostics.DebuggerDisplayAttribute"],
             });
 
-        publicApi.ShouldMatchApproved(options => options.WithFilenameGenerator((_, _, fileType, fileExtension) => $"{assembly.GetName().Name!}.{fileType}.{fileExtension}"));
+        publicApi.ShouldMatchApproved(options => options.NoDiff().WithFilenameGenerator((_, _, fileType, fileExtension) => $"{assembly.GetName().Name!}.{fileType}.{fileExtension}"));
     }
 }
 
