@@ -92,9 +92,9 @@ public class ApiGeneratorOptions
         get => TypeComparer is FullNameComparer ? OrderMode.FullName : OrderMode.NamespaceThenFullName;
         set
         {
-            TypeComparer = value == OrderMode.NamespaceThenFullName
-                ? new NamespaceThenFullNameComparer()
-                : new FullNameComparer();
+            TypeComparer = value == OrderMode.FullName
+                ? new FullNameComparer()
+                : new NamespaceThenFullNameComparer();
         }
     }
 
