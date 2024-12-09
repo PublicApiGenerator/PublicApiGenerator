@@ -89,17 +89,14 @@ public class ApiGeneratorOptions
     /// </summary>
     public string BracingStyle { get; set; } = "C";
 
-    private OrderMode _orderBy = OrderMode.FullName;
-
     /// <summary>
     /// Instructs the generator how to order types. Defaults to <see cref="OrderMode.FullName"/>
     /// </summary>
     public OrderMode OrderBy
     {
-        get => _orderBy;
+        get => TypeComparer is FullNameComparer ? OrderMode.FullName : OrderMode.NamespaceThenFullName;
         set
         {
-            _orderBy = value;
             TypeComparer = value == OrderMode.NamespaceThenFullName
                 ? new NamespaceThenFullNameComparer()
                 : new FullNameComparer();
