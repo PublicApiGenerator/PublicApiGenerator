@@ -42,7 +42,7 @@ public abstract class ApiGeneratorTestsBase
         AssertPublicApi(types[0].Assembly, expectedOutput, options);
     }
 
-    private static void AssertPublicApi(Assembly assembly, string expectedOutput, ApiGeneratorOptions options)
+    protected static void AssertPublicApi(Assembly assembly, string expectedOutput, ApiGeneratorOptions options)
     {
         string actualOutput = assembly.GeneratePublicApi(options);
         actualOutput = StripEmptyLines.Replace(actualOutput, string.Empty);

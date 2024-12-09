@@ -13,6 +13,7 @@ namespace PublicApiGenerator
         public string BracingStyle { get; set; }
         public string[] DenyNamespacePrefixes { get; set; }
         public string[]? ExcludeAttributes { get; set; }
+        public System.Type[]? ExcludeTypes { get; set; }
         public bool IncludeAssemblyAttributes { get; set; }
         public System.Type[]? IncludeTypes { get; set; }
         public string IndentString { get; set; }
