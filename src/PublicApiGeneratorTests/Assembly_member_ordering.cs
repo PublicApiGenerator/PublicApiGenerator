@@ -94,7 +94,7 @@ namespace PublicApiGeneratorTests.Examples_i
         }
 
         [Fact]
-        public void Should_order_namespaces_alphabetically2()
+        public void Should_order_by_namespaces_and_then_by_fullname()
         {
             AssertPublicApi(
             [
