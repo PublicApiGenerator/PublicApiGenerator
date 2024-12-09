@@ -2,7 +2,7 @@ using Mono.Cecil;
 
 namespace PublicApiGenerator;
 
-internal sealed class TypeReferenceComparer : Comparer<TypeReference>
+internal sealed class NamespaceThenFullNameComparer : Comparer<TypeReference>
 {
     public override int Compare(TypeReference x, TypeReference y)
     {

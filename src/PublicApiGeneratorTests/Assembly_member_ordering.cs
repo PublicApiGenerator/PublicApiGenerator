@@ -114,7 +114,7 @@ namespace PublicApiGeneratorTests.A.C
     {
         public B() { }
     }
-}");
+}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
         }
     }
 

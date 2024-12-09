@@ -91,12 +91,12 @@ public static class ApiGenerator
         var compileUnit = new CodeCompileUnit();
         if (options.IncludeAssemblyAttributes && assembly.HasCustomAttributes)
         {
-            PopulateCustomAttributes(assembly, compileUnit.AssemblyCustomAttributes, attributeFilter);
+            PopulateCustomAttributes(assembly, compileUnit.AssemblyCustomAttributes, attributeFilter, options.TypeComparer);
         }
 
         var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
             .Where(shouldIncludeType)
-            .OrderBy(t => t, new TypeReferenceComparer());
+            .OrderBy(t => t, options.TypeComparer);
         foreach (var publicType in publicTypes)
         {
             var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>().FirstOrDefault(n => n.Name == publicType.Namespace);
@@ -108,7 +108,7 @@ public static class ApiGenerator
 
             using (NullableContext.Push(publicType))
             {
-                var typeDeclaration = CreateTypeDeclaration(publicType, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods, attributeFilter);
+                var typeDeclaration = CreateTypeDeclaration(publicType, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods, attributeFilter, options.TypeComparer);
                 @namespace.Types.Add(typeDeclaration);
             }
         }
@@ -184,36 +184,37 @@ public static class ApiGenerator
     private static void AddMemberToTypeDeclaration(CodeTypeDeclaration typeDeclaration,
         IMemberDefinition typeDeclarationInfo,
         IMemberDefinition memberInfo,
-        AttributeFilter attributeFilter)
+        AttributeFilter attributeFilter,
+        Comparer<TypeReference> typeComparer)
     {
         using (NullableContext.Push(memberInfo))
         {
             if (memberInfo is MethodDefinition methodDefinition)
             {
                 if (methodDefinition.IsConstructor)
-                    AddCtorToTypeDeclaration(typeDeclaration, methodDefinition, attributeFilter);
+                    AddCtorToTypeDeclaration(typeDeclaration, methodDefinition, attributeFilter, typeComparer);
                 else
-                    AddMethodToTypeDeclaration(typeDeclaration, methodDefinition, attributeFilter);
+                    AddMethodToTypeDeclaration(typeDeclaration, methodDefinition, attributeFilter, typeComparer);
             }
             else if (memberInfo is PropertyDefinition propertyDefinition)
             {
-                AddPropertyToTypeDeclaration(typeDeclaration, typeDeclarationInfo, propertyDefinition, attributeFilter);
+                AddPropertyToTypeDeclaration(typeDeclaration, typeDeclarationInfo, propertyDefinition, attributeFilter, typeComparer);
             }
             else if (memberInfo is EventDefinition eventDefinition)
             {
-                AddEventToTypeDeclaration(typeDeclaration, eventDefinition, attributeFilter);
+                AddEventToTypeDeclaration(typeDeclaration, eventDefinition, attributeFilter, typeComparer);
             }
             else if (memberInfo is FieldDefinition fieldDefinition)
             {
-                AddFieldToTypeDeclaration(typeDeclaration, fieldDefinition, attributeFilter);
+                AddFieldToTypeDeclaration(typeDeclaration, fieldDefinition, attributeFilter, typeComparer);
             }
         }
     }
 
-    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
+    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         if (publicType.IsDelegate())
-            return CreateDelegateDeclaration(publicType, attributeFilter);
+            return CreateDelegateDeclaration(publicType, attributeFilter, typeComparer);
 
         var @static = false;
         TypeAttributes attributes = 0;
@@ -251,7 +252,7 @@ public static class ApiGenerator
 
         var declaration = new CodeTypeDeclaration(declarationName)
         {
-            CustomAttributes = CreateCustomAttributes(publicType, attributeFilter),
+            CustomAttributes = CreateCustomAttributes(publicType, attributeFilter, typeComparer),
             // TypeAttributes must be specified before the IsXXX as they manipulate TypeAttributes!
             TypeAttributes = attributes,
             IsClass = publicType.IsClass,
@@ -263,7 +264,7 @@ public static class ApiGenerator
         if (declaration.IsInterface && publicType.BaseType != null)
             throw new NotImplementedException("Base types for interfaces needs testing");
 
-        PopulateGenericParameters(publicType, declaration.TypeParameters, attributeFilter, parameter =>
+        PopulateGenericParameters(publicType, declaration.TypeParameters, attributeFilter, typeComparer, parameter =>
         {
             var declaringType = publicType.DeclaringType;
 
@@ -291,7 +292,7 @@ public static class ApiGenerator
                 declaration.BaseTypes.Add(publicType.BaseType.CreateCodeTypeReference(publicType));
             }
         }
-        foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType, new TypeReferenceComparer())
+        foreach (var @interface in publicType.Interfaces.OrderBy(i => i.InterfaceType, typeComparer)
             .Select(t => new { Reference = t, Definition = t.InterfaceType.Resolve() })
             .Where(t => ShouldIncludeType(t.Definition, [], [], true))
             .Select(t => t.Reference))
@@ -300,20 +301,20 @@ public static class ApiGenerator
         }
 
         foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
-            AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
+            AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter, typeComparer);
 
         // Fields should be in defined order for an enum
         var fields = !publicType.IsEnum
             ? publicType.Fields.OrderBy(f => f.Name, StringComparer.Ordinal)
             : (IEnumerable<FieldDefinition>)publicType.Fields;
         foreach (var field in fields)
-            AddMemberToTypeDeclaration(declaration, publicType, field, attributeFilter);
+            AddMemberToTypeDeclaration(declaration, publicType, field, attributeFilter, typeComparer);
 
-        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(t => t, new TypeReferenceComparer()))
+        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(t => t, typeComparer))
         {
             using (NullableContext.Push(nestedType))
             {
-                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods, attributeFilter);
+                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods, attributeFilter, typeComparer);
                 declaration.Members.Add(nestedTypeDeclaration);
             }
         }
@@ -321,7 +322,7 @@ public static class ApiGenerator
         return declaration.Sort();
     }
 
-    private static CodeTypeDelegate CreateDelegateDeclaration(TypeDefinition publicType, AttributeFilter attributeFilter)
+    private static CodeTypeDelegate CreateDelegateDeclaration(TypeDefinition publicType, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         var invokeMethod = publicType.Methods.Single(m => m.Name == "Invoke");
         using (NullableContext.Push(invokeMethod)) // for delegates NullableContextAttribute is stored on Invoke method
@@ -333,14 +334,14 @@ public static class ApiGenerator
             var declaration = new CodeTypeDelegate(name)
             {
                 Attributes = MemberAttributes.Public,
-                CustomAttributes = CreateCustomAttributes(publicType, attributeFilter),
+                CustomAttributes = CreateCustomAttributes(publicType, attributeFilter, typeComparer),
                 ReturnType = invokeMethod.ReturnType.CreateCodeTypeReference(invokeMethod.MethodReturnType),
             };
 
             // CodeDOM. No support. Return type attributes.
-            PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => type.MakeReturn(), attributeFilter);
-            PopulateGenericParameters(publicType, declaration.TypeParameters, attributeFilter, _ => true);
-            PopulateMethodParameters(invokeMethod, declaration.Parameters, attributeFilter);
+            PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => type.MakeReturn(), attributeFilter, typeComparer);
+            PopulateGenericParameters(publicType, declaration.TypeParameters, attributeFilter, typeComparer, _ => true);
+            PopulateMethodParameters(invokeMethod, declaration.Parameters, attributeFilter, typeComparer);
 
             // Of course, CodeDOM doesn't support generic type parameters for delegates. Of course.
             if (declaration.TypeParameters.Count > 0)
@@ -359,7 +360,7 @@ public static class ApiGenerator
         return publicType.BaseType.FullName != "System.Object" && publicType.BaseType.FullName != "System.ValueType";
     }
 
-    private static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters, AttributeFilter attributeFilter, Func<GenericParameter, bool> shouldUseParameter)
+    private static void PopulateGenericParameters(IGenericParameterProvider publicType, CodeTypeParameterCollection parameters, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer, Func<GenericParameter, bool> shouldUseParameter)
     {
         foreach (var parameter in publicType.GenericParameters.Where(shouldUseParameter))
         {
@@ -374,7 +375,7 @@ public static class ApiGenerator
             var attributeCollection = new CodeAttributeDeclarationCollection();
             if (parameter.HasCustomAttributes)
             {
-                PopulateCustomAttributes(parameter, attributeCollection, attributeFilter);
+                PopulateCustomAttributes(parameter, attributeCollection, attributeFilter, typeComparer);
             }
 
             var typeParameter = new CodeTypeParameter(name)
@@ -423,26 +424,28 @@ public static class ApiGenerator
     }
 
     private static CodeAttributeDeclarationCollection CreateCustomAttributes(ICustomAttributeProvider type,
-        AttributeFilter attributeFilter)
+        AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         var attributes = new CodeAttributeDeclarationCollection();
-        PopulateCustomAttributes(type, attributes, attributeFilter);
+        PopulateCustomAttributes(type, attributes, attributeFilter, typeComparer);
         return attributes;
     }
 
     private static void PopulateCustomAttributes(ICustomAttributeProvider type,
         CodeAttributeDeclarationCollection attributes,
-        AttributeFilter attributeFilter)
+        AttributeFilter attributeFilter,
+        Comparer<TypeReference> typeComparer)
     {
-        PopulateCustomAttributes(type, attributes, ctr => ctr, attributeFilter);
+        PopulateCustomAttributes(type, attributes, ctr => ctr, attributeFilter, typeComparer);
     }
 
     private static void PopulateCustomAttributes(ICustomAttributeProvider type,
         CodeAttributeDeclarationCollection attributes,
         Func<CodeTypeReference, CodeTypeReference> codeTypeModifier,
-        AttributeFilter attributeFilter)
+        AttributeFilter attributeFilter,
+        Comparer<TypeReference> typeComparer)
     {
-        foreach (var customAttribute in type.CustomAttributes.Where(attributeFilter.ShouldIncludeAttribute).OrderBy(a => a.AttributeType, new TypeReferenceComparer()).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a), StringComparer.Ordinal))
+        foreach (var customAttribute in type.CustomAttributes.Where(attributeFilter.ShouldIncludeAttribute).OrderBy(a => a.AttributeType, typeComparer).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a), StringComparer.Ordinal))
         {
             var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
             attributes.Add(attribute);
@@ -566,7 +569,7 @@ public static class ApiGenerator
         return new CodePrimitiveExpression(value);
     }
 
-    private static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
+    private static void AddCtorToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         var attributes = member.GetMethodAttributes();
         if (!ShouldIncludeMember(attributes))
@@ -574,16 +577,16 @@ public static class ApiGenerator
 
         var method = new CodeConstructor
         {
-            CustomAttributes = CreateCustomAttributes(member, attributeFilter),
+            CustomAttributes = CreateCustomAttributes(member, attributeFilter, typeComparer),
             Name = member.Name,
             Attributes = attributes
         };
-        PopulateMethodParameters(member, method.Parameters, attributeFilter);
+        PopulateMethodParameters(member, method.Parameters, attributeFilter, typeComparer);
 
         typeDeclaration.Members.Add(method);
     }
 
-    private static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter)
+    private static void AddMethodToTypeDeclaration(CodeTypeDeclaration typeDeclaration, MethodDefinition member, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         var attributes = member.GetMethodAttributes();
         if (!ShouldIncludeMember(attributes))
@@ -601,12 +604,12 @@ public static class ApiGenerator
         {
             Name = MethodNameBuilder.AugmentMethodNameWithMethodModifierMarkerTemplate(member, attributes),
             Attributes = attributes,
-            CustomAttributes = CreateCustomAttributes(member, attributeFilter),
+            CustomAttributes = CreateCustomAttributes(member, attributeFilter, typeComparer),
             ReturnType = returnType,
         };
-        PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, attributeFilter);
-        PopulateGenericParameters(member, method.TypeParameters, attributeFilter, _ => true);
-        PopulateMethodParameters(member, method.Parameters, attributeFilter, member.IsExtensionMethod());
+        PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, attributeFilter, typeComparer);
+        PopulateGenericParameters(member, method.TypeParameters, attributeFilter, typeComparer, _ => true);
+        PopulateMethodParameters(member, method.Parameters, attributeFilter, typeComparer, member.IsExtensionMethod());
 
         typeDeclaration.Members.Add(method);
     }
@@ -614,6 +617,7 @@ public static class ApiGenerator
     private static void PopulateMethodParameters(IMethodSignature member,
         CodeParameterDeclarationExpressionCollection parameters,
         AttributeFilter attributeFilter,
+        Comparer<TypeReference> typeComparer,
         bool isExtension = false)
     {
         foreach (var parameter in member.Parameters)
@@ -658,7 +662,7 @@ public static class ApiGenerator
             var expression = new CodeParameterDeclarationExpression(type, name)
             {
                 Direction = direction,
-                CustomAttributes = CreateCustomAttributes(parameter, attributeFilter)
+                CustomAttributes = CreateCustomAttributes(parameter, attributeFilter, typeComparer)
             };
             parameters.Add(expression);
         }
@@ -690,7 +694,7 @@ public static class ApiGenerator
         return parameter.ParameterType.IsValueType ? "default" : "null";
     }
 
-    private static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition typeDeclarationInfo, PropertyDefinition member, AttributeFilter attributeFilter)
+    private static void AddPropertyToTypeDeclaration(CodeTypeDeclaration typeDeclaration, IMemberDefinition typeDeclarationInfo, PropertyDefinition member, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         var getterAttributes = member.GetMethod?.GetMethodAttributes() ?? 0;
         var setterAttributes = member.SetMethod?.GetMethodAttributes() ?? 0;
@@ -715,7 +719,7 @@ public static class ApiGenerator
             Name = PropertyNameBuilder.AugmentPropertyNameWithPropertyModifierMarkerTemplate(member, getterAttributes, setterAttributes),
             Type = propertyType,
             Attributes = propertyAttributes,
-            CustomAttributes = CreateCustomAttributes(member, attributeFilter),
+            CustomAttributes = CreateCustomAttributes(member, attributeFilter, typeComparer),
             HasGet = hasGet,
             HasSet = hasSet
         };
@@ -739,11 +743,11 @@ public static class ApiGenerator
         // attributes on getters or setters
         if (member.GetMethod != null && member.GetMethod.HasCustomAttributes)
         {
-            PopulateCustomAttributes(member.GetMethod, property.CustomAttributes, type => type.MakeGet(), attributeFilter);
+            PopulateCustomAttributes(member.GetMethod, property.CustomAttributes, type => type.MakeGet(), attributeFilter, typeComparer);
         }
         if (member.SetMethod != null && member.SetMethod.HasCustomAttributes)
         {
-            PopulateCustomAttributes(member.SetMethod, property.CustomAttributes, type => type.MakeSet(), attributeFilter);
+            PopulateCustomAttributes(member.SetMethod, property.CustomAttributes, type => type.MakeSet(), attributeFilter, typeComparer);
         }
 
         foreach (var parameter in member.Parameters)
@@ -764,7 +768,7 @@ public static class ApiGenerator
         typeDeclaration.Members.Add(property);
     }
 
-    private static void AddEventToTypeDeclaration(CodeTypeDeclaration typeDeclaration, EventDefinition eventDefinition, AttributeFilter attributeFilter)
+    private static void AddEventToTypeDeclaration(CodeTypeDeclaration typeDeclaration, EventDefinition eventDefinition, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         var addAccessorAttributes = eventDefinition.AddMethod.GetMethodAttributes();
         var removeAccessorAttributes = eventDefinition.RemoveMethod.GetMethodAttributes();
@@ -776,14 +780,14 @@ public static class ApiGenerator
         {
             Name = EventNameBuilder.AugmentEventNameWithEventModifierMarkerTemplate(eventDefinition, addAccessorAttributes, removeAccessorAttributes),
             Attributes = CecilEx.CombineAccessorAttributes(addAccessorAttributes, removeAccessorAttributes),
-            CustomAttributes = CreateCustomAttributes(eventDefinition, attributeFilter),
+            CustomAttributes = CreateCustomAttributes(eventDefinition, attributeFilter, typeComparer),
             Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)
         };
 
         typeDeclaration.Members.Add(@event);
     }
 
-    private static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo, AttributeFilter attributeFilter)
+    private static void AddFieldToTypeDeclaration(CodeTypeDeclaration typeDeclaration, FieldDefinition memberInfo, AttributeFilter attributeFilter, Comparer<TypeReference> typeComparer)
     {
         if (memberInfo.IsPrivate || memberInfo.IsAssembly || memberInfo.IsFamilyAndAssembly || memberInfo.IsSpecialName)
             return;
@@ -810,7 +814,7 @@ public static class ApiGenerator
         var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
         {
             Attributes = attributes,
-            CustomAttributes = CreateCustomAttributes(memberInfo, attributeFilter)
+            CustomAttributes = CreateCustomAttributes(memberInfo, attributeFilter, typeComparer)
         };
 
         if (memberInfo.HasConstant)

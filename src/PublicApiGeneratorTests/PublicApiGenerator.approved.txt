@@ -17,6 +17,12 @@ namespace PublicApiGenerator
         public bool IncludeAssemblyAttributes { get; set; }
         public System.Type[]? IncludeTypes { get; set; }
         public string IndentString { get; set; }
+        public PublicApiGenerator.OrderMode OrderBy { get; set; }
         public bool UseDenyNamespacePrefixesForExtensionMethods { get; set; }
+    }
+    public enum OrderMode
+    {
+        FullName = 0,
+        NamespaceThenFullName = 1,
     }
 }
