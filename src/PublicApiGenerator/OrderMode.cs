@@ -9,6 +9,7 @@ public enum OrderMode
     /// Order types by <see cref="Type.FullName"/>
     /// </summary>
     FullName = 0,
+
     /// <summary>
     /// Order types by <see cref="Type.Namespace"/> and then by <see cref="Type.FullName"/>
     /// </summary>
