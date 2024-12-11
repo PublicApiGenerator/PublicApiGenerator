@@ -1,3 +1,5 @@
+using Mono.Cecil;
+
 namespace PublicApiGenerator;
 
 /// <summary>
@@ -86,4 +88,20 @@ public class ApiGeneratorOptions
     /// Style for braces. Available values: C, Block. Defaults to C.
     /// </summary>
     public string BracingStyle { get; set; } = "C";
+
+    /// <summary>
+    /// Instructs the generator how to order types. Defaults to <see cref="OrderMode.FullName"/>
+    /// </summary>
+    public OrderMode OrderBy
+    {
+        get => TypeComparer is FullNameComparer ? OrderMode.FullName : OrderMode.NamespaceThenFullName;
+        set
+        {
+            TypeComparer = value == OrderMode.FullName
+                ? new FullNameComparer()
+                : new NamespaceThenFullNameComparer();
+        }
+    }
+
+    internal Comparer<TypeReference> TypeComparer { get; private set; } = new FullNameComparer();
 }
