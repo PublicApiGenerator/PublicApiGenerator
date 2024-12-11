@@ -75,7 +75,7 @@ public class ApiGeneratorOptions
 
     private static readonly string[] _defaultAllowNamespacePrefixes = [];
 
-    private static readonly string[] _defaultDenyNamespacePrefixes = ["System", "Microsoft"];
+    private static readonly string[] _defaultDenyNamespacePrefixes = ["System", "Microsoft", "XamlGeneratedNamespace"];
 
     /// <summary>
     /// Indentation string. Defaults to 4 whitespace.
