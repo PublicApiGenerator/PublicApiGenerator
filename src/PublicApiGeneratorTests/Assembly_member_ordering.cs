@@ -6,8 +6,10 @@ namespace PublicApiGeneratorTests
 {
     public class Assembly_member_ordering : ApiGeneratorTestsBase
     {
-        [Fact]
-        public void Should_output_in_known_order_and_alphabetically()
+        [Theory]
+        [InlineData(PublicApiGenerator.OrderMode.FullName)]
+        [InlineData(PublicApiGenerator.OrderMode.NamespaceThenFullName)]
+        public void Should_output_in_known_order_and_alphabetically(PublicApiGenerator.OrderMode orderMode)
         {
             AssertPublicApi(
             [
@@ -50,11 +52,13 @@ namespace PublicApiGeneratorTests
     public interface IAssemblyMember_Interface2 { }
     public interface IAssemblyMember_interface1 { }
     public interface IAssemblyMember_interface2 { }
-}");
+}", opt => opt.OrderBy = orderMode);
         }
 
-        [Fact]
-        public void Should_order_namespaces_alphabetically()
+        [Theory]
+        [InlineData(PublicApiGenerator.OrderMode.FullName)]
+        [InlineData(PublicApiGenerator.OrderMode.NamespaceThenFullName)]
+        public void Should_order_namespaces_alphabetically(PublicApiGenerator.OrderMode orderMode)
         {
             AssertPublicApi(
             [
@@ -90,11 +94,59 @@ namespace PublicApiGeneratorTests.Examples_i
     {
         public AssemblyOrdering_1() { }
     }
+}", opt => opt.OrderBy = orderMode);
+        }
+
+        [Fact]
+        public void Should_order_by_fullname_by_default()
+        {
+            AssertPublicApi(
+            [
+                typeof(A.D),
+                typeof(A.C.B),
+            ],
+@"namespace PublicApiGeneratorTests.A.C
+{
+    public class B
+    {
+        public B() { }
+    }
+}
+namespace PublicApiGeneratorTests.A
+{
+    public class D
+    {
+        public D() { }
+    }
 }");
         }
 
         [Fact]
-        public void Should_order_by_namespaces_and_then_by_fullname()
+        public void Should_order_by_fullname_when_specifying_order_mode()
+        {
+            AssertPublicApi(
+            [
+                typeof(A.D),
+                typeof(A.C.B),
+            ],
+@"namespace PublicApiGeneratorTests.A.C
+{
+    public class B
+    {
+        public B() { }
+    }
+}
+namespace PublicApiGeneratorTests.A
+{
+    public class D
+    {
+        public D() { }
+    }
+}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.FullName);
+        }
+
+        [Fact]
+        public void Should_order_by_namespaces_and_then_by_fullname_when_specifying_order_mode()
         {
             AssertPublicApi(
             [
