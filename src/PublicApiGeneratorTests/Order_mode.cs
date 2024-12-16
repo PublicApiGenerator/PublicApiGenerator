@@ -2,7 +2,7 @@ using PublicApiGenerator;
 
 namespace PublicApiGeneratorTests;
 
-public class TypeComparer
+public class Order_mode
 {
     [Theory]
     [InlineData(OrderMode.FullName)]
