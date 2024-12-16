@@ -6,10 +6,8 @@ namespace PublicApiGeneratorTests
 {
     public class Assembly_member_ordering : ApiGeneratorTestsBase
     {
-        [Theory]
-        [InlineData(PublicApiGenerator.OrderMode.FullName)]
-        [InlineData(PublicApiGenerator.OrderMode.NamespaceThenFullName)]
-        public void Should_output_in_known_order_and_alphabetically(PublicApiGenerator.OrderMode orderMode)
+        [Fact]
+        public void Should_output_in_known_order_and_alphabetically()
         {
             AssertPublicApi(
             [
@@ -52,13 +50,11 @@ namespace PublicApiGeneratorTests
     public interface IAssemblyMember_Interface2 { }
     public interface IAssemblyMember_interface1 { }
     public interface IAssemblyMember_interface2 { }
-}", opt => opt.OrderBy = orderMode);
+}");
         }
 
-        [Theory]
-        [InlineData(PublicApiGenerator.OrderMode.FullName)]
-        [InlineData(PublicApiGenerator.OrderMode.NamespaceThenFullName)]
-        public void Should_order_namespaces_alphabetically(PublicApiGenerator.OrderMode orderMode)
+        [Fact]
+        public void Should_order_namespaces_alphabetically()
         {
             AssertPublicApi(
             [
@@ -94,7 +90,7 @@ namespace PublicApiGeneratorTests.Examples_i
     {
         public AssemblyOrdering_1() { }
     }
-}", opt => opt.OrderBy = orderMode);
+}");
         }
 
         [Fact]
@@ -165,6 +161,27 @@ namespace PublicApiGeneratorTests.A.C
     public class B
     {
         public B() { }
+    }
+}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
+        }
+
+        [Fact]
+        public void Should_order_by_fullname_when_namespaces_equal()
+        {
+            AssertPublicApi(
+            [
+                typeof(AssemblyMember_Class1),
+                typeof(AssemblyMember_Class2),
+            ],
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class AssemblyMember_Class1
+    {
+        public AssemblyMember_Class1() { }
+    }
+    public class AssemblyMember_Class2
+    {
+        public AssemblyMember_Class2() { }
     }
 }", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
         }
@@ -240,11 +257,13 @@ namespace PublicApiGeneratorTests.A.C
 
     namespace A
     {
+        public class B;
         public class D;
     }
 
     namespace A.C
     {
         public class B;
+        public class D;
     }
 }
