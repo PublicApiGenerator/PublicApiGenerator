@@ -16,6 +16,6 @@ public class ExcludeTypes : ApiGeneratorTestsBase
         public static string GeneratePublicApi(this System.Type type, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
         public static string GeneratePublicApi(this System.Type[] types, PublicApiGenerator.ApiGeneratorOptions? options = null) { }
     }
-}", new() { IncludeAssemblyAttributes = false, ExcludeTypes = [typeof(ApiGeneratorOptions)] });
+}", new() { IncludeAssemblyAttributes = false, ExcludeTypes = [typeof(ApiGeneratorOptions), typeof(OrderMode)] });
     }
 }
