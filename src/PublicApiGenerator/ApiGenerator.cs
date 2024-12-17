@@ -96,7 +96,7 @@ public static class ApiGenerator
 
         var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
             .Where(shouldIncludeType)
-            .OrderBy(t => t.FullName, StringComparer.Ordinal);
+            .OrderBy(t => t, options.TypeComparer);
         foreach (var publicType in publicTypes)
         {
             var @namespace = compileUnit.Namespaces.Cast<CodeNamespace>().FirstOrDefault(n => n.Name == publicType.Namespace);
