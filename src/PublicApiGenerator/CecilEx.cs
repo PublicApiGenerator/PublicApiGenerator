@@ -1,7 +1,6 @@
-using System.CodeDom;
-using System.Reflection;
 using Microsoft.CSharp;
 using Mono.Cecil;
+using System.CodeDom;
 using Mono.Collections.Generic;
 
 namespace PublicApiGenerator;
