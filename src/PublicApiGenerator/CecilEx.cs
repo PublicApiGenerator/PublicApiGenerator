@@ -1,11 +1,12 @@
+using System.CodeDom;
+using System.Reflection;
 using Microsoft.CSharp;
 using Mono.Cecil;
-using System.CodeDom;
 using Mono.Collections.Generic;
 
 namespace PublicApiGenerator;
 
-internal static class CecilEx
+internal static partial class CecilEx
 {
     public static IEnumerable<IMemberDefinition> GetMembers(this TypeDefinition type)
     {
@@ -132,7 +133,9 @@ internal static class CecilEx
         }
 
         // If we're not an interface, find a base method that isn't virtual
-        return !method.IsVirtual && GetBaseTypes(typeDefinition).Any(d => MetadataResolver.GetMethod(d.Methods, method) != null);
+        // https://github.com/PublicApiGenerator/PublicApiGenerator/pull/226#issuecomment-873645565
+        // return !method.IsVirtual && GetBaseTypes(typeDefinition).Any(d => MetadataResolver.GetMethod(d.Methods, method) != null);
+        return !method.IsVirtual && GetBaseTypes(typeDefinition).Any(d => GetMethodIgnoringReturnType(d.Methods, method) != null);
     }
 
     private static IEnumerable<TypeDefinition> GetBaseTypes(TypeDefinition type)
