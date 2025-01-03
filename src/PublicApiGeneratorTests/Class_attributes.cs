@@ -275,6 +275,22 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_handle_attribute_with_long_string_initialiser()
+        {
+            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    [PublicApiGeneratorTests.Examples.AttributeWithStringInitialiser(""This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
+        ""eeeeeeery long string that will be surrounded by parenthesis due to how it\'s han"" +
+        ""dled by Microsoft.CodeDom"")]
+    public class ClassWithAttributeWithLongStringInitialiser
+    {
+        public ClassWithAttributeWithLongStringInitialiser() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_not_output_internal_attributes()
         {
             AssertPublicApi<ClassWithInternalAttribute>(
@@ -434,6 +450,11 @@ namespace PublicApiGeneratorTests
         [AttributeWithMultipleUsagesSupport(IntValue = 1, StringValue = "MMM")]
         [AttributeWithMultipleUsagesSupport(IntValue = 2, StringValue = "AAA")]
         public class ClassWithAttributeWithMultipleUsagesSupport
+        {
+        }
+
+        [AttributeWithStringInitialiser("This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it's handled by Microsoft.CodeDom")]
+        public class ClassWithAttributeWithLongStringInitialiser()
         {
         }
 

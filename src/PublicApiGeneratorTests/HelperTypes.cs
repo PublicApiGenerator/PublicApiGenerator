@@ -158,6 +158,14 @@ public class AttributeWithMultipleUsagesSupport : Attribute
     public int IntValue;
 }
 
+[AttributeUsage(AttributeTargets.All)]
+public class AttributeWithStringInitialiser : Attribute
+{
+    public AttributeWithStringInitialiser(string value)
+    {
+    }
+}
+
 public class AttributeWithObjectArrayInitialiser : Attribute
 {
     public AttributeWithObjectArrayInitialiser(params object[] values)
