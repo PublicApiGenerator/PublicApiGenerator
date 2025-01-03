@@ -266,7 +266,7 @@ namespace PublicApiGeneratorTests
     where T : System.IComparable
     {
         public ClassWithPublicPropertyHidingGeneric() { }
-        public new T Value { get; set; }
+        public new T Value { get; }
     }
 }");
         }
