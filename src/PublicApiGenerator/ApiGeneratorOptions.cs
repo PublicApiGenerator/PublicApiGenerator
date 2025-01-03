@@ -1,3 +1,5 @@
+using Mono.Cecil;
+
 namespace PublicApiGenerator;
 
 /// <summary>
@@ -10,6 +12,11 @@ public class ApiGeneratorOptions
     /// If this option is specified all other types found in the assembly that are not present here will be excluded.
     /// </summary>
     public Type[]? IncludeTypes { get; set; }
+
+    /// <summary>
+    /// Allows to control which types of the generated assembly should be explicitly excluded.
+    /// </summary>
+    public Type[]? ExcludeTypes { get; set; }
 
     /// <summary>
     /// Instructs the generator to include assembly level attributes.
@@ -70,7 +77,7 @@ public class ApiGeneratorOptions
 
     private static readonly string[] _defaultAllowNamespacePrefixes = [];
 
-    private static readonly string[] _defaultDenyNamespacePrefixes = ["System", "Microsoft"];
+    private static readonly string[] _defaultDenyNamespacePrefixes = ["System", "Microsoft", "XamlGeneratedNamespace"];
 
     /// <summary>
     /// Indentation string. Defaults to 4 whitespace.
@@ -81,4 +88,20 @@ public class ApiGeneratorOptions
     /// Style for braces. Available values: C, Block. Defaults to C.
     /// </summary>
     public string BracingStyle { get; set; } = "C";
+
+    /// <summary>
+    /// Instructs the generator how to order types. Defaults to <see cref="OrderMode.FullName"/>
+    /// </summary>
+    public OrderMode OrderBy
+    {
+        get => TypeComparer is FullNameComparer ? OrderMode.FullName : OrderMode.NamespaceThenFullName;
+        set
+        {
+            TypeComparer = value == OrderMode.FullName
+                ? new FullNameComparer()
+                : new NamespaceThenFullNameComparer();
+        }
+    }
+
+    internal Comparer<TypeReference> TypeComparer { get; private set; } = new FullNameComparer();
 }

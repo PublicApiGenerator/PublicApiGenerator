@@ -92,6 +92,99 @@ namespace PublicApiGeneratorTests.Examples_i
     }
 }");
         }
+
+        [Fact]
+        public void Should_order_by_fullname_by_default()
+        {
+            AssertPublicApi(
+            [
+                typeof(A.D),
+                typeof(A.C.B),
+            ],
+@"namespace PublicApiGeneratorTests.A.C
+{
+    public class B
+    {
+        public B() { }
+    }
+}
+namespace PublicApiGeneratorTests.A
+{
+    public class D
+    {
+        public D() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_order_by_fullname_when_specifying_order_mode()
+        {
+            AssertPublicApi(
+            [
+                typeof(A.D),
+                typeof(A.C.B),
+            ],
+@"namespace PublicApiGeneratorTests.A.C
+{
+    public class B
+    {
+        public B() { }
+    }
+}
+namespace PublicApiGeneratorTests.A
+{
+    public class D
+    {
+        public D() { }
+    }
+}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.FullName);
+        }
+
+        [Fact]
+        public void Should_order_by_namespaces_and_then_by_fullname_when_specifying_order_mode()
+        {
+            AssertPublicApi(
+            [
+                typeof(A.D),
+                typeof(A.C.B),
+            ],
+@"namespace PublicApiGeneratorTests.A
+{
+    public class D
+    {
+        public D() { }
+    }
+}
+namespace PublicApiGeneratorTests.A.C
+{
+    public class B
+    {
+        public B() { }
+    }
+}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
+        }
+
+        [Fact]
+        public void Should_order_by_fullname_when_namespaces_equal()
+        {
+            AssertPublicApi(
+            [
+                typeof(AssemblyMember_Class1),
+                typeof(AssemblyMember_Class2),
+            ],
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class AssemblyMember_Class1
+    {
+        public AssemblyMember_Class1() { }
+    }
+    public class AssemblyMember_Class2
+    {
+        public AssemblyMember_Class2() { }
+    }
+}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
+        }
     }
 
     namespace Examples
@@ -160,5 +253,17 @@ namespace PublicApiGeneratorTests.Examples_i
         public class AssemblyOrdering_1
         {
         }
+    }
+
+    namespace A
+    {
+        public class B;
+        public class D;
+    }
+
+    namespace A.C
+    {
+        public class B;
+        public class D;
     }
 }
