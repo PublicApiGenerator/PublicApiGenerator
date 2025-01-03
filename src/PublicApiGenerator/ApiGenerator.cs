@@ -496,7 +496,7 @@ public static class ApiGenerator
         var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
         var declaration = new CodeTypeDeclaration("DummyClass")
         {
-            CustomAttributes = new CodeAttributeDeclarationCollection([attribute]),
+            CustomAttributes = new CodeAttributeDeclarationCollection(new[] { attribute }),
         };
         using (var writer = new StringWriter())
         {
