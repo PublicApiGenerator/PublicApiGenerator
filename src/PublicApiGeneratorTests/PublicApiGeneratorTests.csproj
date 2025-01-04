@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net6.0;net7.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net48;net472</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618;CS0067;CS8597;CS8603;CS8618;CS8653;IDE0051;IDE0060;IDE1006</NoWarn>
     <!--
     CS0618 Class obsolete
