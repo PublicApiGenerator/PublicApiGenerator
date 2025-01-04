@@ -86,7 +86,7 @@ public static class ApiGenerator
     {
         var attributeFilter = new AttributeFilter(options.ExcludeAttributes);
 
-        using var provider = new CSharpCodeProvider();
+        using var provider = new CSharpCodeProviderFixed();
 
         var compileUnit = new CodeCompileUnit();
         if (options.IncludeAssemblyAttributes && assembly.HasCustomAttributes)

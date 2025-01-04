@@ -291,6 +291,42 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
+        public void Should_handle_attribute_with_long_string_initialiser2()
+        {
+            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser2>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    [System.Obsolete(""This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
+        ""eeeeeeery long string that will be surrounded by parenthesis due to how it\'s han"" +
+        ""dled by Microsoft.CodeDom"", false)]
+    public class ClassWithAttributeWithLongStringInitialiser2
+    {
+        public ClassWithAttributeWithLongStringInitialiser2() { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_handle_attribute_with_long_string_initialiser3()
+        {
+            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser3>(
+                @"namespace PublicApiGeneratorTests.Examples
+{
+    [PublicApiGeneratorTests.Examples.SomeStringParams(""This is first veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
+        ""eeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'s"" +
+        "" handled by Microsoft.CodeDom"", 42, ""This is second veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
+        ""eeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'"" +
+        ""s handled by Microsoft.CodeDom"", true, ""This is third veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
+        ""eeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'s"" +
+        "" handled by Microsoft.CodeDom"")]
+    public class ClassWithAttributeWithLongStringInitialiser3
+    {
+        public ClassWithAttributeWithLongStringInitialiser3() { }
+    }
+}");
+        }
+
+        [Fact]
         public void Should_not_output_internal_attributes()
         {
             AssertPublicApi<ClassWithInternalAttribute>(
@@ -458,6 +494,21 @@ namespace PublicApiGeneratorTests
         {
         }
 
+        [Obsolete("This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it's handled by Microsoft.CodeDom", false)]
+        public class ClassWithAttributeWithLongStringInitialiser2()
+        {
+        }
+
+        [SomeStringParams(
+            "This is first veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it's handled by Microsoft.CodeDom",
+            42,
+            "This is second veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it's handled by Microsoft.CodeDom",
+            true,
+            "This is third veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it's handled by Microsoft.CodeDom")]
+        public class ClassWithAttributeWithLongStringInitialiser3()
+        {
+        }
+
         [AttributeWhichIsInternal]
         public class ClassWithInternalAttribute
         {
@@ -471,6 +522,14 @@ namespace PublicApiGeneratorTests
         [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Field)]
         public class ClassWithAttributeUsageAttribute : Attribute
         {
+        }
+
+        [AttributeUsage(AttributeTargets.All)]
+        public class SomeStringParamsAttribute : Attribute
+        {
+            public SomeStringParamsAttribute(string a, int b, string c, bool d, string e)
+            {
+            }
         }
     }
 }
