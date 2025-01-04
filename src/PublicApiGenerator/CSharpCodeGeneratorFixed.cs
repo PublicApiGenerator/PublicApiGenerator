@@ -5,13 +5,15 @@
 // We can hope that in the following versions of System.CodeDom it will
 // be fixed so it will be possible to delete the entire file.
 
+using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
 
-namespace System.CodeDom.Compiler;
+namespace PublicApiGenerator;
 
 internal sealed class CSharpCodeProviderFixed : CodeDomProvider
 {
