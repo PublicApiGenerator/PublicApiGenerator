@@ -16,9 +16,15 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Attributes()
         {
-#if NET472
+#if NET48
+            const string TFM = ".NETFramework,Version=v4.8";
+            const string TFMNAME = ".NET Framework 4.8";
+#elif NET472
             const string TFM = ".NETFramework,Version=v4.7.2";
             const string TFMNAME = ".NET Framework 4.7.2";
+#elif NET9_0
+            const string TFM = ".NETCoreApp,Version=v9.0";
+            const string TFMNAME = ".NET 9.0";
 #elif NET8_0
             const string TFM = ".NETCoreApp,Version=v8.0";
             const string TFMNAME = ".NET 8.0";
@@ -28,9 +34,11 @@ namespace PublicApiGeneratorTests
 #elif NET6_0
             const string TFM = ".NETCoreApp,Version=v6.0";
             const string TFMNAME = ".NET 6.0";
-#else
+#elif NETCOREAPP3_1
             const string TFM = ".NETCoreApp,Version=v3.1";
             const string TFMNAME = ".NET Core 3.1";
+#else
+#error Unknown TFM, need to add.
 #endif
             string suffix = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true" // TODO: WHY?
                 ? ""
