@@ -2,3 +2,4 @@
 .idea/
 obj/
 bin/
+*.user
