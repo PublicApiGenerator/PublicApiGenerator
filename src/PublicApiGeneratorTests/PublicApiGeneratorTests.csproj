@@ -3,21 +3,27 @@
   <PropertyGroup>
     <TargetFrameworks>net9.0;net8.0;net7.0;net6.0;netcoreapp3.1</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net48;net472</TargetFrameworks>
-    <NoWarn>$(NoWarn);CS0618;CS0067;CS8597;CS8603;CS8618;CS8653;IDE0051;IDE0060;IDE1006</NoWarn>
     <!--
     CS0618 Class obsolete
-    CS0067  The event 'event' is never used
+    CS0067 The event 'event' is never used
     CS8597 Thrown value may be null
-    CS8603  Possible null reference return.
+    CS8603 Possible null reference return.
     CS8618 Non-nullable field 'Data' is uninitialized. Consider declaring the field as nullable.
     IDE0051 Private member 'SomeTest.Should_XXX' is unused.
     IDE0060 Remove unused parameter 'name' if it is not part of a shipped public API
     IDE1006 Naming rule violation: These words must begin with upper case characters
     -->
+    <NoWarn>$(NoWarn);CS0618;CS0067;CS8597;CS8603;CS8618;IDE0051;IDE0060;IDE1006</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!--TODO: fix nullability warnings-->
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);CS8601;CS8625;CS8714</WarningsNotAsErrors>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);VSSpell001</WarningsNotAsErrors>
     <IsPackable>false</IsPackable>
+    <!--
+    System.CodeDom 8.0.0 doesn't support netcoreapp3.1 and has not been tested with it.
+    Consider upgrading your TargetFramework to net6.0 or later. You may also set
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings> in the project
+    file to ignore this warning and attempt to run in this unsupported configuration at your own risk.
+    -->
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
   <ItemGroup>

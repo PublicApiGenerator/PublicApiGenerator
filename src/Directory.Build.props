@@ -12,7 +12,6 @@
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
     <Nullable>enable</Nullable>
-    <NoWarn>$(NoWarn);NU5105</NoWarn>
     <DebugType>embedded</DebugType>
     <ImplicitUsings>enable</ImplicitUsings>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>

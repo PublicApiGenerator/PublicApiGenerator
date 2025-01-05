@@ -436,6 +436,8 @@ namespace PublicApiGeneratorTests
         }
     }
 
+#pragma warning disable CS8714
+
     namespace Examples
     {
         public class ReturnType

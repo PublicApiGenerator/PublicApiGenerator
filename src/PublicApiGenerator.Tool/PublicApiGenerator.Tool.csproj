@@ -6,6 +6,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-public-api</ToolCommandName>
     <Description>This tool generates your public API to a file. You can use this in approval style tests or for documentation.</Description>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
