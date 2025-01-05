@@ -15,27 +15,6 @@ using System.Text;
 
 namespace PublicApiGenerator;
 
-internal sealed class CSharpCodeProviderFixed : CodeDomProvider
-{
-    private readonly CSharpCodeGeneratorFixed _generator = new CSharpCodeGeneratorFixed();
-
-    public override string FileExtension => "cs";
-
-    [Obsolete("ICodeGenerator has been deprecated. Use the methods directly on the CodeDomProvider class instead.")]
-    public override ICodeGenerator CreateGenerator() => _generator;
-
-    [Obsolete("ICodeCompiler has been deprecated. Use the methods directly on the CodeDomProvider class instead.")]
-    public override ICodeCompiler CreateCompiler() => _generator;
-
-    public override TypeConverter GetConverter(Type type) =>
-        type == typeof(MemberAttributes) ? CSharpMemberAttributeConverter.Default :
-        type == typeof(TypeAttributes) ? CSharpTypeAttributeConverter.Default :
-        base.GetConverter(type);
-
-    public override void GenerateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options) =>
-        _generator.GenerateCodeFromMember(member, writer, options);
-}
-
 internal sealed partial class CSharpCodeGeneratorFixed : ICodeCompiler, ICodeGenerator
 {
     private static readonly char[] s_periodArray = new char[] { '.' };
@@ -77,6 +56,12 @@ internal sealed partial class CSharpCodeGeneratorFixed : ICodeCompiler, ICodeGen
                                                      GeneratorSupport.DeclareIndexerProperties;
 
     private bool _generatingForLoop;
+    private readonly ApiGeneratorOptions _apiGeneratorOptions;
+
+    public CSharpCodeGeneratorFixed(ApiGeneratorOptions options)
+    {
+        _apiGeneratorOptions = options;
+    }
 
     private string CurrentTypeName => _currentClass != null ? _currentClass.Name : "<% unknown %>";
 
@@ -2239,6 +2224,9 @@ internal sealed partial class CSharpCodeGeneratorFixed : ICodeCompiler, ICodeGen
     {
         bool first = true;
         bool multiline = parameters.Count > ParameterMultilineThreshold;
+        // Next two lines were added to implement https://github.com/PublicApiGenerator/PublicApiGenerator/issues/153.
+        if (_apiGeneratorOptions.SplitMethodParametersAcrossLines != null)
+            multiline = _apiGeneratorOptions.SplitMethodParametersAcrossLines(parameters.Count);
         if (multiline)
         {
             Indent += 3;
@@ -3025,7 +3013,7 @@ internal sealed partial class CSharpCodeGeneratorFixed : ICodeCompiler, ICodeGen
         }
     }
 
-    void ICodeGenerator.GenerateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o)
+    public void GenerateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o)
     {
         bool setLocal = false;
         if (_output != null && w != _output.InnerWriter)

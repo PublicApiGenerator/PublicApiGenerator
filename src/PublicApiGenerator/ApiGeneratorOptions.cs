@@ -90,6 +90,13 @@ public class ApiGeneratorOptions
     public string BracingStyle { get; set; } = "C";
 
     /// <summary>
+    /// Allows to split method parameters across lines depending on their count.
+    /// If delegate is not specified, i.e. has <see langword="null"/> as default
+    /// value then all parameters are printed on single line until their number reaches 16.
+    /// </summary>
+    public Func<int, bool>? SplitMethodParametersAcrossLines { get; set; }
+
+    /// <summary>
     /// Instructs the generator how to order types. Defaults to <see cref="OrderMode.FullName"/>
     /// </summary>
     public OrderMode OrderBy

@@ -312,12 +312,12 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_methods_with_many_parameters()
         {
-            AssertPublicApi<MethodsWithManyParams>(
+            AssertPublicApi<MethodsWithManyParams1>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-    public class MethodsWithManyParams
+    public class MethodsWithManyParams1
     {
-        public MethodsWithManyParams() { }
+        public MethodsWithManyParams1() { }
         public void MethodWith15Params(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15) { }
         public void MethodWith16Params(
                     int a1,
@@ -338,6 +338,24 @@ namespace PublicApiGeneratorTests
                     int a16) { }
     }
 }");
+        }
+
+        [Fact]
+        public void Should_output_methods_with_many_parameters_special_configured()
+        {
+            AssertPublicApi<MethodsWithManyParams2>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodsWithManyParams2
+    {
+        public MethodsWithManyParams2() { }
+        public void MethodWith16Params(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15, int a16) { }
+        public void MethodWith3Params(
+                    int a1,
+                    int a2,
+                    int a3) { }
+    }
+}", opt => opt.SplitMethodParametersAcrossLines = count => count == 3);
         }
     }
 
@@ -491,9 +509,20 @@ namespace PublicApiGeneratorTests
             }
         }
 
-        public class MethodsWithManyParams
+        public class MethodsWithManyParams1
         {
             public void MethodWith15Params(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15)
+            {
+            }
+
+            public void MethodWith16Params(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15, int a16)
+            {
+            }
+        }
+
+        public class MethodsWithManyParams2
+        {
+            public void MethodWith3Params(int a1, int a2, int a3)
             {
             }
 
