@@ -295,8 +295,6 @@ namespace PublicApiGeneratorTests
 }");
         }
 
-        //
-
         [Fact]
         public void Should_output_params_keyword()
         {
@@ -307,6 +305,37 @@ namespace PublicApiGeneratorTests
     {
         public MethodWithParams() { }
         public void Method(string format, params object[] values) { }
+    }
+}");
+        }
+
+        [Fact]
+        public void Should_output_methods_with_many_parameters()
+        {
+            AssertPublicApi<MethodsWithManyParams>(
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public class MethodsWithManyParams
+    {
+        public MethodsWithManyParams() { }
+        public void MethodWith15Params(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15) { }
+        public void MethodWith16Params(
+                    int a1,
+                    int a2,
+                    int a3,
+                    int a4,
+                    int a5,
+                    int a6,
+                    int a7,
+                    int a8,
+                    int a9,
+                    int a10,
+                    int a11,
+                    int a12,
+                    int a13,
+                    int a14,
+                    int a15,
+                    int a16) { }
     }
 }");
         }
@@ -458,6 +487,17 @@ namespace PublicApiGeneratorTests
         public class MethodWithParams
         {
             public void Method(string format, params object[] values)
+            {
+            }
+        }
+
+        public class MethodsWithManyParams
+        {
+            public void MethodWith15Params(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15)
+            {
+            }
+
+            public void MethodWith16Params(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15, int a16)
             {
             }
         }
