@@ -121,7 +121,7 @@ public static class ApiGenerator
                 IndentString = options.IndentString
             };
 
-            new CSharpCodeGeneratorFixed(options).GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
+            new CSharpCodeGenerator(options).GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
             return CodeNormalizer.NormalizeGeneratedCode(writer);
         }
     }
