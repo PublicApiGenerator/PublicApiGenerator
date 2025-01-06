@@ -10,4 +10,8 @@
     <PackageReference Include="System.CodeDom" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+	<Compile Remove="System.CodeDom/*.*" />
+  </ItemGroup>
+
 </Project>
