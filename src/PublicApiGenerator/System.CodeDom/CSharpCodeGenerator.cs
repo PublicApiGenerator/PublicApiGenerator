@@ -595,7 +595,7 @@ namespace Microsoft.CSharp
             }
             else
             {
-                throw new ArgumentException(string.Format("Element type {0} is not supported.", e.GetType().FullName), nameof(e));
+                throw new ArgumentException(SR.Format(SR.InvalidElementType, e.GetType().FullName), nameof(e));
             }
 
             if (e.LinePragma != null)
@@ -1221,7 +1221,7 @@ namespace Microsoft.CSharp
                 }
                 else
                 {
-                    throw new ArgumentException(string.Format("Element type {0} is not supported.", e.GetType().FullName), nameof(e));
+                    throw new ArgumentException(SR.Format(SR.InvalidElementType, e.GetType().FullName), nameof(e));
                 }
             }
         }
