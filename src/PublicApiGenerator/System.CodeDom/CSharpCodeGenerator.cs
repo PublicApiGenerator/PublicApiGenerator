@@ -254,6 +254,8 @@ namespace Microsoft.CSharp
             }
         }
 
+        // This method was added because CodeTypeReference.NestedArrayDepth property is internal
+        // internal int NestedArrayDepth => ArrayElementType == null ? 0 : 1 + ArrayElementType.NestedArrayDepth;
         private static int NestedArrayDepth(CodeTypeReference r) => r.ArrayElementType == null ? 0 : 1 + NestedArrayDepth(r.ArrayElementType);
 
         private void GenerateBaseReferenceExpression() => Output.Write("base");
