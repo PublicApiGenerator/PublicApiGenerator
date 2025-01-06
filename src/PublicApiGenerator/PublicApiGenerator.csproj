@@ -11,14 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="System.CodeDom/*.*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="System.CodeDom\SR.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="System.CodeDom\SR.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>False</AutoGen>

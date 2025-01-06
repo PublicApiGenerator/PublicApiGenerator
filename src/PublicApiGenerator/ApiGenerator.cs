@@ -86,6 +86,8 @@ public static class ApiGenerator
     {
         var attributeFilter = new AttributeFilter(options.ExcludeAttributes);
 
+        using var provider = new CSharpCodeProvider();
+
         var compileUnit = new CodeCompileUnit();
         if (options.IncludeAssemblyAttributes && assembly.HasCustomAttributes)
         {
@@ -121,7 +123,7 @@ public static class ApiGenerator
                 IndentString = options.IndentString
             };
 
-            new CSharpCodeProvider().GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
+            provider.GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
             return CodeNormalizer.NormalizeGeneratedCode(writer);
         }
     }
