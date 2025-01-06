@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using PublicApiGenerator;
 
 namespace Microsoft.CSharp
 {
@@ -21,6 +22,7 @@ namespace Microsoft.CSharp
 
         private ExposedTabStringIndentedTextWriter _output;
         private CodeGeneratorOptions _options;
+        private readonly ApiGeneratorOptions _apiGeneratorOptions;
         private CodeTypeDeclaration _currentClass;
         private CodeTypeMember _currentMember;
         private bool _inNestedBinary;
@@ -60,6 +62,11 @@ namespace Microsoft.CSharp
         internal CSharpCodeGenerator(IDictionary<string, string> providerOptions)
         {
             _provOptions = providerOptions;
+        }
+
+        public CSharpCodeGenerator(ApiGeneratorOptions options)
+        {
+            _apiGeneratorOptions = options;
         }
 
         private bool _generatingForLoop;
@@ -2184,6 +2191,9 @@ namespace Microsoft.CSharp
         {
             bool first = true;
             bool multiline = parameters.Count > ParameterMultilineThreshold;
+            // Next two lines were added to implement https://github.com/PublicApiGenerator/PublicApiGenerator/issues/153.
+            if (_apiGeneratorOptions.SplitMethodParametersAcrossLines != null)
+                multiline = _apiGeneratorOptions.SplitMethodParametersAcrossLines(parameters.Count);
             if (multiline)
             {
                 Indent += 3;
@@ -2970,7 +2980,7 @@ namespace Microsoft.CSharp
             }
         }
 
-        void ICodeGenerator.GenerateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o)
+        public void GenerateCodeFromCompileUnit(CodeCompileUnit e, TextWriter w, CodeGeneratorOptions o)
         {
             bool setLocal = false;
             if (_output != null && w != _output.InnerWriter)
