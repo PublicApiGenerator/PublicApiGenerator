@@ -2371,6 +2371,11 @@ namespace Microsoft.CSharp
                             Output.Write("partial ");
                         }
 
+                        if (e is CodeTypeDeclarationEx { IsStatic: true})
+                        {
+                            Output.Write("static ");
+                        }
+
                         Output.Write("class ");
 
                         break;

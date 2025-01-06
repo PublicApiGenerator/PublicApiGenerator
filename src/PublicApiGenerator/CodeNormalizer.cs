@@ -14,7 +14,6 @@ internal static class CodeNormalizer
     private const string SET = @"\s+{\s+set;\s+}";
 
     // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/80
-    internal const string STATIC_MARKER = "static_C91E2709_C00B-4CAB_8BBC_B2B11DC75E50 ";
     internal const string READONLY_MARKER = "readonly_79D3ED2A_0B60_4C3B_8432_941FE471A38B ";
     internal const string ATTRIBUTE_MARKER = "_attribute_292C96C3_C42E_4C07_BEED_73F5DAA0A6DF_";
     internal const string EVENT_MODIFIER_MARKER_TEMPLATE = "_{0}_292C96C3C42E4C07BEED73F5DAA0A6DF_";
@@ -61,7 +60,6 @@ internal static class CodeNormalizer
         gennedClass = Regex.Replace(gennedClass, @"(public|protected)( abstract | static | new static | virtual | override | new | unsafe | )(.*) _(.*)_5DB9F56043FF464997155541DA321AD4_(.*)", PropertyModifierMatcher);
         gennedClass = Regex.Replace(gennedClass, @"_(.*)_156783F107B3427090B5486DC33EE6A9_(.*)", PropertyInitOnlySetterMatcher);
         gennedClass = Regex.Replace(gennedClass, @"(public|protected)( abstract | static | new static | virtual | override | new | unsafe | )(.*) _(.*)_3C0D97CD952D40AA8B6E1ECB98FFC79F_(.*)", MethodModifierMatcher);
-        gennedClass = gennedClass.Replace("class " + STATIC_MARKER, "static class ");
         gennedClass = gennedClass.Replace("struct " + READONLY_MARKER, "readonly struct ");
         gennedClass = gennedClass.Replace(READONLY_MARKER, string.Empty); // remove magic marker from readonly struct ctor
         gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
