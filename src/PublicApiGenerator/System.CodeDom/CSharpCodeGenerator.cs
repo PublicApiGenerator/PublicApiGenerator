@@ -732,7 +732,7 @@ namespace Microsoft.CSharp
             }
             else
             {
-                throw new ArgumentException(string.Format("Invalid Primitive Type: {0}. Consider using CodeObjectCreateExpression.", e.Value.GetType()), nameof(e));
+                throw new ArgumentException(SR.Format(SR.InvalidPrimitiveType, e.Value.GetType()), nameof(e));
             }
         }
 
@@ -3039,7 +3039,7 @@ namespace Microsoft.CSharp
             bool setLocal = false;
             if (_output != null && w != _output.InnerWriter)
             {
-                throw new InvalidOperationException("The output writer for code generation and the writer supplied don't match and cannot be used. This is generally caused by a bad implementation of a CodeGenerator derived class.");
+                throw new InvalidOperationException(SR.CodeGenOutputWriter);
             }
             if (_output == null)
             {
