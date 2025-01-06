@@ -22,9 +22,11 @@ namespace Microsoft.CSharp
 
         private ExposedTabStringIndentedTextWriter _output;
         private CodeGeneratorOptions _options;
+        private readonly ApiGeneratorOptions _apiGeneratorOptions;
         private CodeTypeDeclaration _currentClass;
         private CodeTypeMember _currentMember;
         private bool _inNestedBinary;
+        private readonly IDictionary<string, string> _provOptions;
 
         private const int ParameterMultilineThreshold = 15;
         private const int MaxLineLength = 80;
@@ -55,10 +57,16 @@ namespace Microsoft.CSharp
                                                          GeneratorSupport.GenericTypeDeclaration |
                                                          GeneratorSupport.DeclareIndexerProperties;
 
-        private readonly ApiGeneratorOptions _apiGeneratorOptions;
+        internal CSharpCodeGenerator() { }
 
-        public CSharpCodeGenerator(ApiGeneratorOptions options)
+        internal CSharpCodeGenerator(IDictionary<string, string> providerOptions)
         {
+            _provOptions = providerOptions;
+        }
+
+        public CSharpCodeGenerator(IDictionary<string, string> providerOptions, ApiGeneratorOptions options)
+        {
+            _provOptions = providerOptions;
             _apiGeneratorOptions = options;
         }
 
