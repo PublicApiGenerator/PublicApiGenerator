@@ -239,13 +239,7 @@ public static class ApiGenerator
         if (index != -1)
             name = name.Substring(0, index);
 
-        var declarationName = string.Empty;
-        if (@readonly)
-            declarationName += CodeNormalizer.READONLY_MARKER;
-
-        declarationName += name;
-
-        var declaration = new CodeTypeDeclarationEx(declarationName)
+        var declaration = new CodeTypeDeclarationEx(name)
         {
             CustomAttributes = CreateCustomAttributes(publicType, attributeFilter),
             // TypeAttributes must be specified before the IsXXX as they manipulate TypeAttributes!
@@ -255,6 +249,7 @@ public static class ApiGenerator
             IsInterface = publicType.IsInterface,
             IsStruct = isStruct,
             IsStatic = @static,
+            IsReadonly = @readonly,
         };
 
         if (declaration.IsInterface && publicType.BaseType != null)
