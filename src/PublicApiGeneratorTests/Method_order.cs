@@ -71,9 +71,7 @@ namespace PublicApiGeneratorTests
 }", opt => opt.IndentString = " ");
         }
 
-#if NET472 || NET48
-#else
-        [Fact] // TODO: ignored for NET472 and NET48 since CodeDom has issues with not-whitespaced indentation strings
+        [Fact]
         public void Should_be_alphabetical_order_with_custom_indent_string2()
         {
             AssertPublicApi<MethodOrdering>(
@@ -118,7 +116,6 @@ ____}
 __}
 }", opt => opt.IndentString = "__");
         }
-#endif
     }
 
     namespace Examples
