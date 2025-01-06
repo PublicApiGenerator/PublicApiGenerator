@@ -297,29 +297,6 @@ namespace Microsoft.CSharp
             Output.Write("))");
         }
 
-        public void GenerateCodeFromMember(CodeTypeMember member, TextWriter writer, CodeGeneratorOptions options)
-        {
-            if (_output != null)
-            {
-                throw new InvalidOperationException(SR.CodeGenReentrance);
-            }
-            _options = options ?? new CodeGeneratorOptions();
-            _output = new ExposedTabStringIndentedTextWriter(writer, _options.IndentString);
-
-            try
-            {
-                CodeTypeDeclaration dummyClass = new CodeTypeDeclaration();
-                _currentClass = dummyClass;
-                GenerateTypeMember(member, dummyClass);
-            }
-            finally
-            {
-                _currentClass = null;
-                _output = null;
-                _options = null;
-            }
-        }
-
         private void GenerateDefaultValueExpression(CodeDefaultValueExpression e)
         {
             Output.Write("default(");
@@ -2902,256 +2879,32 @@ namespace Microsoft.CSharp
 
         CompilerResults ICodeCompiler.CompileAssemblyFromDom(CompilerParameters options, CodeCompileUnit e)
         {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            try
-            {
-                return FromDom(options, e);
-            }
-            finally
-            {
-                options.TempFiles.SafeDelete();
-            }
+            throw new NotImplementedException("REMOVED");
         }
 
         CompilerResults ICodeCompiler.CompileAssemblyFromFile(CompilerParameters options, string fileName)
         {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            try
-            {
-                return FromFile(options, fileName);
-            }
-            finally
-            {
-                options.TempFiles.SafeDelete();
-            }
+            throw new NotImplementedException("REMOVED");
         }
 
         CompilerResults ICodeCompiler.CompileAssemblyFromSource(CompilerParameters options, string source)
         {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            try
-            {
-                return FromSource(options, source);
-            }
-            finally
-            {
-                options.TempFiles.SafeDelete();
-            }
+            throw new NotImplementedException("REMOVED");
         }
 
         CompilerResults ICodeCompiler.CompileAssemblyFromSourceBatch(CompilerParameters options, string[] sources)
         {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            try
-            {
-                return FromSourceBatch(options, sources);
-            }
-            finally
-            {
-                options.TempFiles.SafeDelete();
-            }
+            throw new NotImplementedException("REMOVED");
         }
 
         CompilerResults ICodeCompiler.CompileAssemblyFromFileBatch(CompilerParameters options, string[] fileNames)
         {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-            if (fileNames is null)
-            {
-                throw new ArgumentNullException(nameof(fileNames));
-            }
-
-            try
-            {
-                // Try opening the files to make sure they exists.  This will throw an exception
-                // if it doesn't
-                foreach (string fileName in fileNames)
-                {
-                    File.OpenRead(fileName).Dispose();
-                }
-
-                return FromFileBatch(options, fileNames);
-            }
-            finally
-            {
-                options.TempFiles.SafeDelete();
-            }
+            throw new NotImplementedException("REMOVED");
         }
 
         CompilerResults ICodeCompiler.CompileAssemblyFromDomBatch(CompilerParameters options, CodeCompileUnit[] ea)
         {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            try
-            {
-                return FromDomBatch(options, ea);
-            }
-            finally
-            {
-                options.TempFiles.SafeDelete();
-            }
-        }
-
-        private CompilerResults FromDom(CompilerParameters options, CodeCompileUnit e)
-        {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            return FromDomBatch(options, new CodeCompileUnit[1] { e });
-        }
-
-
-        private static CompilerResults FromFile(CompilerParameters options, string fileName)
-        {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-            if (fileName is null)
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-
-            // Try opening the file to make sure it exists.  This will throw an exception
-            // if it doesn't
-            File.OpenRead(fileName).Dispose();
-
-            return FromFileBatch(options, new string[1] { fileName });
-        }
-
-        private static CompilerResults FromSource(CompilerParameters options, string source)
-        {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            return FromSourceBatch(options, new string[1] { source });
-        }
-
-        private CompilerResults FromDomBatch(CompilerParameters options, CodeCompileUnit[] ea)
-        {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-            if (ea is null)
-            {
-                throw new ArgumentNullException(nameof(ea));
-            }
-
-            string[] filenames = new string[ea.Length];
-
-            for (int i = 0; i < ea.Length; i++)
-            {
-                if (ea[i] == null)
-                {
-                    continue;       // the other two batch methods just work if one element is null, so we'll match that.
-                }
-
-                ResolveReferencedAssemblies(options, ea[i]);
-                filenames[i] = options.TempFiles.AddExtension(i + FileExtension);
-                using (var fs = new FileStream(filenames[i], FileMode.Create, FileAccess.Write, FileShare.Read))
-                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-                {
-                    ((ICodeGenerator)this).GenerateCodeFromCompileUnit(ea[i], sw, _options);
-                    sw.Flush();
-                }
-            }
-
-            return FromFileBatch(options, filenames);
-        }
-
-        private static void ResolveReferencedAssemblies(CompilerParameters options, CodeCompileUnit e)
-        {
-            if (e.ReferencedAssemblies.Count > 0)
-            {
-                foreach (string assemblyName in e.ReferencedAssemblies)
-                {
-                    if (!options.ReferencedAssemblies.Contains(assemblyName))
-                    {
-                        options.ReferencedAssemblies.Add(assemblyName);
-                    }
-                }
-            }
-        }
-
-        private static CompilerResults FromSourceBatch(CompilerParameters options, string[] sources)
-        {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-            if (sources is null)
-            {
-                throw new ArgumentNullException(nameof(sources));
-            }
-
-            string[] filenames = new string[sources.Length];
-
-            for (int i = 0; i < sources.Length; i++)
-            {
-                string name = options.TempFiles.AddExtension(i + FileExtension);
-                using (var fs = new FileStream(name, FileMode.Create, FileAccess.Write, FileShare.Read))
-                using (var sw = new StreamWriter(fs, Encoding.UTF8))
-                {
-                    sw.Write(sources[i]);
-                    sw.Flush();
-                }
-                filenames[i] = name;
-            }
-
-            return FromFileBatch(options, filenames);
-        }
-
-        private static string JoinStringArray(string[] sa, string separator)
-        {
-            if (sa == null || sa.Length == 0)
-            {
-                return string.Empty;
-            }
-
-            if (sa.Length == 1)
-            {
-                return "\"" + sa[0] + "\"";
-            }
-
-            var sb = new StringBuilder();
-            for (int i = 0; i < sa.Length - 1; i++)
-            {
-                sb.Append('\"');
-                sb.Append(sa[i]);
-                sb.Append('\"');
-                sb.Append(separator);
-            }
-            sb.Append('\"');
-            sb.Append(sa[sa.Length - 1]);
-            sb.Append('\"');
-
-            return sb.ToString();
+            throw new NotImplementedException("REMOVED");
         }
 
         void ICodeGenerator.GenerateCodeFromType(CodeTypeDeclaration e, TextWriter w, CodeGeneratorOptions o)
