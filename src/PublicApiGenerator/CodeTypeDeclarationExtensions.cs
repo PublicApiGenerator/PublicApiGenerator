@@ -4,25 +4,25 @@ namespace PublicApiGenerator;
 
 internal static class CodeTypeDeclarationExtensions
 {
-    public static CodeTypeDeclaration Sort(this CodeTypeDeclaration original)
+    public static CodeTypeDeclarationEx Sort(this CodeTypeDeclarationEx original)
     {
         if (original.IsEnum)
         {
             return original;
         }
 
-        var sorted = new CodeTypeDeclaration(original.Name)
+        var sorted = new CodeTypeDeclarationEx(original.Name)
         {
             Attributes = original.Attributes,
             CustomAttributes = original.CustomAttributes,
+            TypeAttributes = original.TypeAttributes,
             IsClass = original.IsClass,
             IsEnum = original.IsEnum,
             IsInterface = original.IsInterface,
             IsPartial = original.IsPartial,
             IsStruct = original.IsStruct,
+            IsStatic = original.IsStatic,
             LinePragma = original.LinePragma,
-            Name = original.Name,
-            TypeAttributes = original.TypeAttributes,
         };
 
         sorted.BaseTypes.AddRange(original.BaseTypes);

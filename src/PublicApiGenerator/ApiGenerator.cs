@@ -242,12 +242,10 @@ public static class ApiGenerator
         var declarationName = string.Empty;
         if (@readonly)
             declarationName += CodeNormalizer.READONLY_MARKER;
-        if (@static)
-            declarationName += CodeNormalizer.STATIC_MARKER;
 
         declarationName += name;
 
-        var declaration = new CodeTypeDeclaration(declarationName)
+        var declaration = new CodeTypeDeclarationEx(declarationName)
         {
             CustomAttributes = CreateCustomAttributes(publicType, attributeFilter),
             // TypeAttributes must be specified before the IsXXX as they manipulate TypeAttributes!
@@ -256,6 +254,7 @@ public static class ApiGenerator
             IsEnum = publicType.IsEnum,
             IsInterface = publicType.IsInterface,
             IsStruct = isStruct,
+            IsStatic = @static,
         };
 
         if (declaration.IsInterface && publicType.BaseType != null)
