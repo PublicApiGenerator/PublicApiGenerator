@@ -163,8 +163,9 @@ namespace Microsoft.CSharp
 
             if (isStringMultiline)
             {
-                b.Insert(0, '(');
-                b.Append(')');
+                // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/410
+                // b.Insert(0, '(');
+                // b.Append(')');
             }
 
             return b.ToString();
