@@ -163,8 +163,9 @@ namespace Microsoft.CSharp
 
             if (isStringMultiline)
             {
-                b.Insert(0, '(');
-                b.Append(')');
+                // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/410
+                // b.Insert(0, '(');
+                // b.Append(')');
             }
 
             return b.ToString();
@@ -245,13 +246,17 @@ namespace Microsoft.CSharp
                 }
                 Output.Write(']');
 
-                int nestedArrayDepth = e.CreateType.NestedArrayDepth;
+                int nestedArrayDepth = NestedArrayDepth(e.CreateType);
                 for (int i = 0; i < nestedArrayDepth - 1; i++)
                 {
                     Output.Write("[]");
                 }
             }
         }
+
+        // This method was added because CodeTypeReference.NestedArrayDepth property is internal
+        // internal int NestedArrayDepth => ArrayElementType == null ? 0 : 1 + ArrayElementType.NestedArrayDepth;
+        private static int NestedArrayDepth(CodeTypeReference r) => r.ArrayElementType == null ? 0 : 1 + NestedArrayDepth(r.ArrayElementType);
 
         private void GenerateBaseReferenceExpression() => Output.Write("base");
 
