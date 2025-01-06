@@ -64,9 +64,8 @@ namespace Microsoft.CSharp
             _provOptions = providerOptions;
         }
 
-        public CSharpCodeGenerator(IDictionary<string, string> providerOptions, ApiGeneratorOptions options)
+        public CSharpCodeGenerator(ApiGeneratorOptions options)
         {
-            _provOptions = providerOptions;
             _apiGeneratorOptions = options;
         }
 
