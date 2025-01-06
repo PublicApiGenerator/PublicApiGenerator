@@ -9,4 +9,6 @@ internal class CodeTypeDeclarationEx : CodeTypeDeclaration
     }
 
     public bool IsStatic { get; set; }
+
+    public bool IsReadonly { get; set; }
 }

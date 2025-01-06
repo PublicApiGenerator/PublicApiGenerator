@@ -2347,6 +2347,12 @@ namespace Microsoft.CSharp
                 {
                     Output.Write("partial ");
                 }
+
+                if (e is CodeTypeDeclarationEx { IsReadonly: true })
+                {
+                    Output.Write("readonly ");
+                }
+
                 Output.Write("struct ");
             }
             else if (e.IsEnum)
