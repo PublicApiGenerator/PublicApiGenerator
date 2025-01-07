@@ -1108,7 +1108,24 @@ namespace Microsoft.CSharp
 
             if (e.PrivateImplementationType == null)
             {
-                OutputMemberAccessModifier(e.Attributes);
+                bool? isNew = null;
+                bool printMemberAccessAndScopeModifiers = false;
+                if (e is CodeMemberEventEx cmeex)
+                {
+                    isNew = cmeex.EventDefinition.IsNew(typeDef => typeDef?.Events, e => e.Name.Equals(cmeex.EventDefinition.Name, StringComparison.Ordinal));
+                    if (!cmeex.EventDefinition.DeclaringType.IsInterface)
+                        printMemberAccessAndScopeModifiers = true;
+                }
+
+                if (printMemberAccessAndScopeModifiers)
+                {
+                    OutputMemberAccessModifier(e.Attributes);
+                }
+                OutputVTableModifier(e.Attributes, isNew);
+                if (printMemberAccessAndScopeModifiers)
+                {
+                    OutputMemberScopeModifier(e.Attributes);
+                }
             }
             Output.Write("event ");
             string name = e.Name;
