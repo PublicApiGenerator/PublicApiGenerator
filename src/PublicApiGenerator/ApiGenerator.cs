@@ -766,9 +766,10 @@ public static class ApiGenerator
         if (!(ShouldIncludeMember(addAccessorAttributes) || ShouldIncludeMember(removeAccessorAttributes)))
             return;
 
-        var @event = new CodeMemberEvent
+        var @event = new CodeMemberEventEx
         {
-            Name = EventNameBuilder.AugmentEventNameWithEventModifierMarkerTemplate(eventDefinition, addAccessorAttributes, removeAccessorAttributes),
+            EventDefinition = eventDefinition,
+            Name = eventDefinition.Name,
             Attributes = CecilEx.CombineAccessorAttributes(addAccessorAttributes, removeAccessorAttributes),
             CustomAttributes = CreateCustomAttributes(eventDefinition, attributeFilter),
             Type = eventDefinition.EventType.CreateCodeTypeReference(eventDefinition)

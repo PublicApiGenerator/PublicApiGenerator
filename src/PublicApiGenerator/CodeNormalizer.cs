@@ -1,4 +1,3 @@
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace PublicApiGenerator;
@@ -15,7 +14,6 @@ internal static class CodeNormalizer
 
     // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/80
     internal const string ATTRIBUTE_MARKER = "_attribute_292C96C3_C42E_4C07_BEED_73F5DAA0A6DF_";
-    internal const string EVENT_MODIFIER_MARKER_TEMPLATE = "_{0}_292C96C3C42E4C07BEED73F5DAA0A6DF_";
     internal const string EVENT_REMOVE_PUBLIC_MARKER = "removepublic";
     internal const string PROPERTY_INIT_ONLY_SETTER_TEMPLATE = "_{0}_156783F107B3427090B5486DC33EE6A9_";
 
@@ -48,34 +46,12 @@ internal static class CodeNormalizer
             RegexOptions.Singleline |
             RegexOptions.IgnorePatternWhitespace); // SingleLine is required for multi line params arrays
 
-        gennedClass = Regex.Replace(gennedClass, @"(public|protected) (.*) _(.*)_292C96C3C42E4C07BEED73F5DAA0A6DF_(.*)", EventModifierMatcher);
         gennedClass = Regex.Replace(gennedClass, @"_(.*)_156783F107B3427090B5486DC33EE6A9_(.*)", PropertyInitOnlySetterMatcher);
         gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
         gennedClass = Regex.Replace(gennedClass, @$"{Environment.NewLine}\s+;{Environment.NewLine}", ";" + Environment.NewLine); // bug-fix for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
 
         gennedClass = RemoveUnnecessaryWhiteSpace(gennedClass);
         return gennedClass;
-    }
-
-    private static string EventModifierMatcher(Match match)
-    {
-        var visibility = match.Groups[1].Value;
-        var modifier = match.Groups[3].Value;
-
-        var replacementBuilder = new StringBuilder();
-        if (modifier.EndsWith(EVENT_REMOVE_PUBLIC_MARKER))
-        {
-            replacementBuilder.Append(modifier == EVENT_REMOVE_PUBLIC_MARKER
-                ? "event "
-                : $"{modifier.Replace(EVENT_REMOVE_PUBLIC_MARKER, string.Empty)} event ");
-        }
-        else
-        {
-            replacementBuilder.Append($"{visibility} {modifier} event ");
-        }
-
-        return match.ToString().Replace(string.Format(EVENT_MODIFIER_MARKER_TEMPLATE, modifier), string.Empty)
-            .Replace($"{visibility} event ", replacementBuilder.ToString());
     }
 
     private static string PropertyInitOnlySetterMatcher(Match match)
