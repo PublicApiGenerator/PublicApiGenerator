@@ -200,7 +200,7 @@ internal static partial class CecilEx
 
     internal sealed class ParameterTypeComparer : IEqualityComparer<ParameterDefinition>
     {
-        public static ParameterTypeComparer Instance = new();
+        public static readonly ParameterTypeComparer Instance = new();
 
         public bool Equals(ParameterDefinition x, ParameterDefinition y) => x?.ParameterType == y?.ParameterType;
 
