@@ -1520,11 +1520,6 @@ namespace Microsoft.CSharp
             }
             if (e.HasSet)
             {
-                if (e.HasGet)
-                {
-                    Output.Write(" ");
-                }
-
                 if (e is CodeMemberPropertyEx cmpex && cmpex.PropertyDefinition.SetMethod?.ReturnType is Mono.Cecil.RequiredModifierType reqmod && reqmod.ModifierType.FullName == "System.Runtime.CompilerServices.IsExternalInit")
                 {
                     Output.Write("init; ");

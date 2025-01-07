@@ -4,13 +4,6 @@ namespace PublicApiGenerator;
 
 internal static class CodeNormalizer
 {
-    private const string EMPTY_GET_SET = @"\s+{\s+get\s+{\s+}\s+set\s+{\s+}\s+}";
-    private const string EMPTY_GET = @"\s+{\s+get\s+{\s+}\s+}";
-    private const string EMPTY_SET = @"\s+{\s+set\s+{\s+}\s+}";
-    private const string GET_SET = @"\s+{\s+get;\s+set;\s+}";
-    private const string GET = @"\s+{\s+get;\s+}";
-    private const string SET = @"\s+{\s+set;\s+}";
-
     // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/80
     internal const string ATTRIBUTE_MARKER = "_attribute_292C96C3_C42E_4C07_BEED_73F5DAA0A6DF_";
 
@@ -18,13 +11,6 @@ internal static class CodeNormalizer
     {
         var gennedClass = writer.ToString();
 
-        gennedClass = Regex.Replace(gennedClass, EMPTY_GET_SET, " { get; set; }",
-            RegexOptions.IgnorePatternWhitespace);
-        gennedClass = Regex.Replace(gennedClass, GET_SET, " { get; set; }", RegexOptions.IgnorePatternWhitespace);
-        gennedClass = Regex.Replace(gennedClass, EMPTY_GET, " { get; }", RegexOptions.IgnorePatternWhitespace);
-        gennedClass = Regex.Replace(gennedClass, EMPTY_SET, " { set; }", RegexOptions.IgnorePatternWhitespace);
-        gennedClass = Regex.Replace(gennedClass, GET, " { get; }", RegexOptions.IgnorePatternWhitespace);
-        gennedClass = Regex.Replace(gennedClass, SET, " { set; }", RegexOptions.IgnorePatternWhitespace);
         gennedClass = Regex.Replace(gennedClass, @"\s+{\s+}", " { }", RegexOptions.IgnorePatternWhitespace);
         gennedClass = Regex.Replace(gennedClass, @"\)\s+;", ");", RegexOptions.IgnorePatternWhitespace);
         var attributeMarkerEscaped = Regex.Escape(ATTRIBUTE_MARKER);
