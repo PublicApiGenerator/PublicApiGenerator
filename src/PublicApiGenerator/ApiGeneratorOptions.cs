@@ -85,9 +85,9 @@ public class ApiGeneratorOptions
     public string IndentString { get; set; } = "    ";
 
     /// <summary>
-    /// Style for braces. Available values: C, Block. Defaults to C.
+    /// Style for braces. Available values: C, Block. Defaults to Block.
     /// </summary>
-    public string BracingStyle { get; set; } = "C";
+    public string BracingStyle { get; set; } = "Block";
 
     /// <summary>
     /// Allows to split method parameters across lines depending on their count.

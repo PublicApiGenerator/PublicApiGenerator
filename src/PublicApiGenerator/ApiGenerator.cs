@@ -747,14 +747,6 @@ public static class ApiGenerator
                     parameter.Name));
         }
 
-        // TODO: CodeDOM has no support for different access modifiers for getters and setters
-        // TODO: CodeDOM has no support for attributes on setters or getters - promote to property?
-
-        if (hasSet && member.SetMethod?.ReturnType is RequiredModifierType reqmod && reqmod.ModifierType.FullName == "System.Runtime.CompilerServices.IsExternalInit")
-        {
-            property.Name = string.Format(CodeNormalizer.PROPERTY_INIT_ONLY_SETTER_TEMPLATE, property.Name);
-        }
-
         typeDeclaration.Members.Add(property);
     }
 

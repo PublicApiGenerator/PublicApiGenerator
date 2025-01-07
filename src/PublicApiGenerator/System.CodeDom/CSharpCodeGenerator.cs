@@ -1493,11 +1493,16 @@ namespace Microsoft.CSharp
                 OutputIdentifier(e.Name);
             }
 
+            /*
             OutputStartingBrace();
             Indent++;
+            */
+            Output.Write(" { ");
 
             if (e.HasGet)
             {
+                Output.Write("get; ");
+                /*
                 if (IsCurrentInterface || (e.Attributes & MemberAttributes.ScopeMask) == MemberAttributes.Abstract)
                 {
                     Output.WriteLine("get;");
@@ -1511,9 +1516,24 @@ namespace Microsoft.CSharp
                     Indent--;
                     Output.WriteLine('}');
                 }
+                */
             }
             if (e.HasSet)
             {
+                if (e.HasGet)
+                {
+                    Output.Write(" ");
+                }
+
+                if (e is CodeMemberPropertyEx cmpex && cmpex.PropertyDefinition.SetMethod?.ReturnType is Mono.Cecil.RequiredModifierType reqmod && reqmod.ModifierType.FullName == "System.Runtime.CompilerServices.IsExternalInit")
+                {
+                    Output.Write("init; ");
+                }
+                else
+                {
+                    Output.Write("set; ");
+                }
+                /*
                 if (IsCurrentInterface || (e.Attributes & MemberAttributes.ScopeMask) == MemberAttributes.Abstract)
                 {
                     Output.WriteLine("set;");
@@ -1527,9 +1547,12 @@ namespace Microsoft.CSharp
                     Indent--;
                     Output.WriteLine('}');
                 }
+                */
             }
 
+            /*
             Indent--;
+            */
             Output.WriteLine('}');
         }
 
@@ -2945,7 +2968,7 @@ namespace Microsoft.CSharp
 
         private void OutputStartingBrace()
         {
-            if (_options.BracingStyle == "C")
+            if (_options.BracingStyle == "Block")
             {
                 Output.WriteLine();
                 Output.WriteLine('{');
