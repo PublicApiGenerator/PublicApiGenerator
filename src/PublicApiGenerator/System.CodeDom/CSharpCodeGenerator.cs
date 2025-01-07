@@ -2547,7 +2547,9 @@ namespace Microsoft.CSharp
             if (e.AssemblyCustomAttributes.Count > 0)
             {
                 GenerateAttributes(e.AssemblyCustomAttributes, "assembly: ");
+                /*
                 Output.WriteLine();
+                */
             }
         }
 
