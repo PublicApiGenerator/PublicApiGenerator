@@ -28,18 +28,9 @@ internal static class CodeNormalizer
         gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
         gennedClass = Regex.Replace(gennedClass, @$"{Environment.NewLine}\s+;{Environment.NewLine}", ";" + Environment.NewLine); // bug-fix for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
 
-        gennedClass = RemoveUnnecessaryWhiteSpace(gennedClass);
-        return gennedClass;
-    }
+        if (gennedClass.EndsWith(Environment.NewLine))
+            gennedClass = gennedClass.Substring(0, gennedClass.Length - Environment.NewLine.Length);
 
-    private static string RemoveUnnecessaryWhiteSpace(string publicApi)
-    {
-        return string.Join(Environment.NewLine, publicApi.Split(new[]
-            {
-                Environment.NewLine
-            }, StringSplitOptions.RemoveEmptyEntries)
-            .Where(l => !string.IsNullOrWhiteSpace(l))
-            .Select(l => l.TrimEnd())
-        );
+        return gennedClass;
     }
 }
