@@ -514,7 +514,9 @@ namespace Microsoft.CSharp
                 GenerateNamespaceImports(e);
             }
 
+            /*
             Output.WriteLine();
+            */
 
             GenerateTypes(e);
             GenerateNamespaceEnd(e);
@@ -2273,6 +2275,10 @@ namespace Microsoft.CSharp
                 {
                     first = false;
                 }
+                else if (multiline)
+                {
+                    Output.Write(",");
+                }
                 else
                 {
                     Output.Write(", ");
@@ -2541,7 +2547,9 @@ namespace Microsoft.CSharp
             if (e.AssemblyCustomAttributes.Count > 0)
             {
                 GenerateAttributes(e.AssemblyCustomAttributes, "assembly: ");
+                /*
                 Output.WriteLine();
+                */
             }
         }
 

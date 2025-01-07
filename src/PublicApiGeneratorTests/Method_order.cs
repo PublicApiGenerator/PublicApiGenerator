@@ -77,7 +77,6 @@ namespace PublicApiGeneratorTests
             AssertPublicApi<MethodOrdering>(
 @"namespace PublicApiGeneratorTests.Examples
 {
-__
 __public class MethodOrdering
 __{
 ____public MethodOrdering() { }
