@@ -80,39 +80,17 @@ namespace PublicApiGeneratorTests
 __
 __public class MethodOrdering
 __{
-____public MethodOrdering()
-____{
-____}
-____public void Method_AA()
-____{
-____}
-____public void Method_AA<T>()
-____{
-____}
-____public void Method_AA<T, U>()
-____{
-____}
-____public void Method_BB(int foo)
-____{
-____}
-____public void Method_BB(string bar)
-____{
-____}
-____public void Method_BB(int foo, string bar)
-____{
-____}
-____public void Method_I()
-____{
-____}
-____public void Method_I(string arg)
-____{
-____}
-____public void Method_i()
-____{
-____}
-____public static void Method_CC()
-____{
-____}
+____public MethodOrdering() { }
+____public void Method_AA() { }
+____public void Method_AA<T>() { }
+____public void Method_AA<T, U>() { }
+____public void Method_BB(int foo) { }
+____public void Method_BB(string bar) { }
+____public void Method_BB(int foo, string bar) { }
+____public void Method_I() { }
+____public void Method_I(string arg) { }
+____public void Method_i() { }
+____public static void Method_CC() { }
 __}
 }", opt => opt.IndentString = "__");
         }
