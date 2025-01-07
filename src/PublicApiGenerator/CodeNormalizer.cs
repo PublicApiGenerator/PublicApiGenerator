@@ -17,14 +17,7 @@ internal static class CodeNormalizer
     internal const string ATTRIBUTE_MARKER = "_attribute_292C96C3_C42E_4C07_BEED_73F5DAA0A6DF_";
     internal const string EVENT_MODIFIER_MARKER_TEMPLATE = "_{0}_292C96C3C42E4C07BEED73F5DAA0A6DF_";
     internal const string EVENT_REMOVE_PUBLIC_MARKER = "removepublic";
-    internal const string METHOD_MODIFIER_MARKER_TEMPLATE = "_{0}_3C0D97CD952D40AA8B6E1ECB98FFC79F_";
-    internal const string PROPERTY_MODIFIER_MARKER_TEMPLATE = "_{0}_5DB9F56043FF464997155541DA321AD4_";
     internal const string PROPERTY_INIT_ONLY_SETTER_TEMPLATE = "_{0}_156783F107B3427090B5486DC33EE6A9_";
-
-    public static string NormalizeMethodName(string methodName)
-    {
-        return Regex.Replace(methodName, @"(_(.*)_3C0D97CD952D40AA8B6E1ECB98FFC79F_)?", string.Empty);
-    }
 
     public static string NormalizeGeneratedCode(StringWriter writer)
     {
@@ -56,9 +49,7 @@ internal static class CodeNormalizer
             RegexOptions.IgnorePatternWhitespace); // SingleLine is required for multi line params arrays
 
         gennedClass = Regex.Replace(gennedClass, @"(public|protected) (.*) _(.*)_292C96C3C42E4C07BEED73F5DAA0A6DF_(.*)", EventModifierMatcher);
-        gennedClass = Regex.Replace(gennedClass, @"(public|protected)( abstract | static | new static | virtual | override | new | unsafe | )(.*) _(.*)_5DB9F56043FF464997155541DA321AD4_(.*)", PropertyModifierMatcher);
         gennedClass = Regex.Replace(gennedClass, @"_(.*)_156783F107B3427090B5486DC33EE6A9_(.*)", PropertyInitOnlySetterMatcher);
-        gennedClass = Regex.Replace(gennedClass, @"(public|protected)( abstract | static | new static | virtual | override | new | unsafe | )(.*) _(.*)_3C0D97CD952D40AA8B6E1ECB98FFC79F_(.*)", MethodModifierMatcher);
         gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
         gennedClass = Regex.Replace(gennedClass, @$"{Environment.NewLine}\s+;{Environment.NewLine}", ";" + Environment.NewLine); // bug-fix for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
 
@@ -87,29 +78,11 @@ internal static class CodeNormalizer
             .Replace($"{visibility} event ", replacementBuilder.ToString());
     }
 
-    private static string PropertyModifierMatcher(Match match)
-    {
-        var oldModifier = match.Groups[2].Value;
-        var modifier = match.Groups[4].Value;
-
-        var s = match.ToString().Replace(string.Format(PROPERTY_MODIFIER_MARKER_TEMPLATE, modifier), string.Empty);
-        return string.IsNullOrWhiteSpace(oldModifier) ? s.Insert(s.IndexOf(oldModifier, StringComparison.Ordinal), modifier.Substring(0, modifier.Length - 1)) : s.Replace(oldModifier, modifier);
-    }
-
     private static string PropertyInitOnlySetterMatcher(Match match)
     {
         var name = match.Groups[1].Value;
         var tail = match.Groups[2].Value;
         return name + tail.Replace("set;", "init;");
-    }
-
-    private static string MethodModifierMatcher(Match match)
-    {
-        var oldModifier = match.Groups[2].Value;
-        var modifier = match.Groups[4].Value;
-
-        var s = match.ToString().Replace(string.Format(METHOD_MODIFIER_MARKER_TEMPLATE, modifier), string.Empty);
-        return string.IsNullOrWhiteSpace(oldModifier) ? s.Insert(s.IndexOf(oldModifier, StringComparison.Ordinal), modifier.Substring(0, modifier.Length - 1)) : s.Replace(oldModifier, modifier);
     }
 
     private static string RemoveUnnecessaryWhiteSpace(string publicApi)

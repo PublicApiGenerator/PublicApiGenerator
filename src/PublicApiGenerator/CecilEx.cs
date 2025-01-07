@@ -197,4 +197,13 @@ internal static partial class CecilEx
 
         return isNew;
     }
+
+    internal sealed class ParameterTypeComparer : IEqualityComparer<ParameterDefinition>
+    {
+        public static readonly ParameterTypeComparer Instance = new();
+
+        public bool Equals(ParameterDefinition x, ParameterDefinition y) => x?.ParameterType == y?.ParameterType;
+
+        public int GetHashCode(ParameterDefinition obj) => obj.GetHashCode();
+    }
 }

@@ -1360,7 +1360,8 @@ namespace Microsoft.CSharp
                 if (e.PrivateImplementationType == null)
                 {
                     OutputMemberAccessModifier(e.Attributes);
-                    OutputVTableModifier(e.Attributes);
+                    bool? isNew = e is CodeMemberMethodEx cmmex ? cmmex.MethodDefinition.IsNew(typeDef => typeDef?.Methods, e => e.Name.Equals(cmmex.MethodDefinition.Name, StringComparison.Ordinal) && e.Parameters.Count == cmmex.MethodDefinition.Parameters.Count && e.Parameters.SequenceEqual(cmmex.MethodDefinition.Parameters, CecilEx.ParameterTypeComparer.Instance)) : null;
+                    OutputVTableModifier(e.Attributes, isNew);
                     OutputMemberScopeModifier(e.Attributes);
                 }
             }
@@ -1446,7 +1447,8 @@ namespace Microsoft.CSharp
                 if (e.PrivateImplementationType == null)
                 {
                     OutputMemberAccessModifier(e.Attributes);
-                    OutputVTableModifier(e.Attributes);
+                    bool? isNew = e is CodeMemberPropertyEx cmpex ? cmpex.PropertyDefinition.IsNew(typeDef => typeDef?.Properties, e => e.Name.Equals(cmpex.PropertyDefinition.Name, StringComparison.Ordinal)) : null;
+                    OutputVTableModifier(e.Attributes, isNew);
                     OutputMemberScopeModifier(e.Attributes);
                 }
             }
@@ -1563,8 +1565,22 @@ namespace Microsoft.CSharp
             Output.Write('m');
         }
 
-        private void OutputVTableModifier(MemberAttributes attributes)
+        private void OutputVTableModifier(MemberAttributes attributes, bool? isNew = null)
         {
+            // BEGIN SPECIAL CASES
+
+            if (isNew == true)
+            {
+                var scope = attributes & MemberAttributes.ScopeMask;
+                if (scope != MemberAttributes.Const && scope != MemberAttributes.Override && scope != (MemberAttributes.Final | MemberAttributes.Override))
+                {
+                    Output.Write("new ");
+                }
+                return;
+            }
+
+            // END SPECIAL CASES
+
             switch (attributes & MemberAttributes.VTableMask)
             {
                 case MemberAttributes.New:
@@ -1600,6 +1616,24 @@ namespace Microsoft.CSharp
 
         private void OutputMemberScopeModifier(MemberAttributes attributes)
         {
+            // BEGIN SPECIAL CASES
+
+            var scope = attributes & MemberAttributes.ScopeMask;
+
+            if (scope == MemberAttributes.Const)
+            {
+                Output.Write("abstract override ");
+                return;
+            }
+
+            if (scope == (MemberAttributes.Final | MemberAttributes.Override))
+            {
+                Output.Write("override sealed ");
+                return;
+            }
+
+            // END SPECIAL CASES
+
             switch (attributes & MemberAttributes.ScopeMask)
             {
                 case MemberAttributes.Abstract:
