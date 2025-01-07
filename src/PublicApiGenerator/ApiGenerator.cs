@@ -589,9 +589,10 @@ public static class ApiGenerator
         if (member.ReturnType.IsUnsafeSignatureType() || member.Parameters.Any(p => p.ParameterType.IsUnsafeSignatureType()))
             returnType = returnType.MakeUnsafe();
 
-        var method = new CodeMemberMethod
+        var method = new CodeMemberMethodEx
         {
-            Name = MethodNameBuilder.AugmentMethodNameWithMethodModifierMarkerTemplate(member, attributes),
+            MethodDefinition = member,
+            Name = CSharpOperatorKeyword.Get(member.Name),
             Attributes = attributes,
             CustomAttributes = CreateCustomAttributes(member, attributeFilter),
             ReturnType = returnType,
@@ -702,9 +703,10 @@ public static class ApiGenerator
         if (member.PropertyType.IsUnsafeSignatureType())
             propertyType = propertyType.MakeUnsafe();
 
-        var property = new CodeMemberProperty
+        var property = new CodeMemberPropertyEx
         {
-            Name = PropertyNameBuilder.AugmentPropertyNameWithPropertyModifierMarkerTemplate(member, getterAttributes, setterAttributes),
+            PropertyDefinition = member,
+            Name = member.Name,
             Type = propertyType,
             Attributes = propertyAttributes,
             CustomAttributes = CreateCustomAttributes(member, attributeFilter),
