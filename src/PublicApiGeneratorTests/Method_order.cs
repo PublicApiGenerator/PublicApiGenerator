@@ -45,7 +45,7 @@ namespace PublicApiGeneratorTests
         public void Method_i() { }
         public static void Method_CC() { }
     }
-}", opt => opt.BracingStyle = "Block");
+}", opt => opt.BracingStyle = "C");
         }
 
         [Fact]
