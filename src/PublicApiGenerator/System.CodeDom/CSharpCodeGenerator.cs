@@ -2488,21 +2488,6 @@ namespace Microsoft.CSharp
                 GenerateDirectives(e.StartDirectives);
             }
 
-            Output.WriteLine("//------------------------------------------------------------------------------");
-            Output.Write("// <");
-            Output.WriteLine(SR.AutoGen_Comment_Line1);
-            Output.Write("//     ");
-            Output.WriteLine(SR.AutoGen_Comment_Line2);
-            Output.WriteLine("//");
-            Output.Write("//     ");
-            Output.WriteLine(SR.AutoGen_Comment_Line4);
-            Output.Write("//     ");
-            Output.WriteLine(SR.AutoGen_Comment_Line5);
-            Output.Write("// </");
-            Output.WriteLine(SR.AutoGen_Comment_Line1);
-            Output.WriteLine("//------------------------------------------------------------------------------");
-            Output.WriteLine();
-
             // CSharp needs to put assembly attributes after using statements.
             // Since we need to create an empty namespace even if we don't need it,
             // using will generated after assembly attributes.
