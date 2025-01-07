@@ -4,7 +4,6 @@ namespace PublicApiGenerator;
 
 internal static class CodeNormalizer
 {
-    private const string AUTO_GENERATED_HEADER = @"^//-+\s*$.*^//-+\s*$";
     private const string EMPTY_GET_SET = @"\s+{\s+get\s+{\s+}\s+set\s+{\s+}\s+}";
     private const string EMPTY_GET = @"\s+{\s+get\s+{\s+}\s+}";
     private const string EMPTY_SET = @"\s+{\s+set\s+{\s+}\s+}";
@@ -21,8 +20,6 @@ internal static class CodeNormalizer
     {
         var gennedClass = writer.ToString();
 
-        gennedClass = Regex.Replace(gennedClass, AUTO_GENERATED_HEADER, string.Empty,
-            RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline | RegexOptions.Singleline);
         gennedClass = Regex.Replace(gennedClass, EMPTY_GET_SET, " { get; set; }",
             RegexOptions.IgnorePatternWhitespace);
         gennedClass = Regex.Replace(gennedClass, GET_SET, " { get; set; }", RegexOptions.IgnorePatternWhitespace);
