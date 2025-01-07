@@ -25,9 +25,6 @@ internal static class CodeNormalizer
             RegexOptions.Singleline |
             RegexOptions.IgnorePatternWhitespace); // SingleLine is required for multi line params arrays
 
-        gennedClass = Regex.Replace(gennedClass, @"\r\n|\n\r|\r|\n", Environment.NewLine);
-        gennedClass = Regex.Replace(gennedClass, @$"{Environment.NewLine}\s+;{Environment.NewLine}", ";" + Environment.NewLine); // bug-fix for https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
-
         if (gennedClass.EndsWith(Environment.NewLine))
             gennedClass = gennedClass.Substring(0, gennedClass.Length - Environment.NewLine.Length);
 
