@@ -11,8 +11,6 @@ internal static class CodeNormalizer
     {
         var gennedClass = writer.ToString();
 
-        gennedClass = Regex.Replace(gennedClass, @"\s+{\s+}", " { }", RegexOptions.IgnorePatternWhitespace);
-        gennedClass = Regex.Replace(gennedClass, @"\)\s+;", ");", RegexOptions.IgnorePatternWhitespace);
         var attributeMarkerEscaped = Regex.Escape(ATTRIBUTE_MARKER);
         gennedClass = Regex.Replace(gennedClass, $@"
                 (Attribute)?                               # Delete this if present. Would create a clash for Attribute1, Attribute1Attribute but that is a very rare edge case

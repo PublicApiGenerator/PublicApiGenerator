@@ -1407,7 +1407,7 @@ namespace Microsoft.CSharp
             if (!IsCurrentInterface
                 && (e.Attributes & MemberAttributes.ScopeMask) != MemberAttributes.Abstract)
             {
-                OutputStartingBrace();
+                OutputStartingBrace(forceSingleLine: true);
                 Indent++;
 
                 GenerateStatements(e.Statements);
@@ -1855,7 +1855,7 @@ namespace Microsoft.CSharp
                 Indent--;
             }
 
-            OutputStartingBrace();
+            OutputStartingBrace(forceSingleLine: true);
             Indent++;
             GenerateStatements(e.Statements);
             Indent--;
@@ -2006,7 +2006,7 @@ namespace Microsoft.CSharp
 
                 OutputTypeParameterConstraints(e.TypeParameters);
 
-                OutputStartingBrace();
+                OutputStartingBrace(forceSingleLine: e.Members.Count == 0);
                 Indent++;
             }
         }
@@ -2946,12 +2946,16 @@ namespace Microsoft.CSharp
             return s;
         }
 
-        private void OutputStartingBrace()
+        private void OutputStartingBrace(bool forceSingleLine = false)
         {
-            if (_options.BracingStyle == "Block")
+            if (_options.BracingStyle == "Block" && !forceSingleLine)
             {
                 Output.WriteLine();
                 Output.WriteLine('{');
+            }
+            else if (forceSingleLine)
+            {
+                Output.Write(" { ");
             }
             else
             {
