@@ -195,7 +195,7 @@ namespace PublicApiGeneratorTests
         public PublicApiGeneratorTests.Examples.ReturnType? NullableField;
         public NullableApi() { }
         public System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<int, int?>?>>? ComplicatedDictionary { get; set; }
-        public PublicApiGeneratorTests.Examples.ReturnType NonNullProperty { get; set; }
+        public PublicApiGeneratorTests.Examples.ReturnType NonNullProperty { get; protected set; }
         public PublicApiGeneratorTests.Examples.ReturnType? NullableProperty { get; set; }
         public string? Convert(string source) { }
         public override bool Equals(object? obj) { }

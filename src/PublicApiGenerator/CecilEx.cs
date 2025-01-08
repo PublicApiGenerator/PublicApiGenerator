@@ -7,6 +7,28 @@ namespace PublicApiGenerator;
 
 internal static partial class CecilEx
 {
+    public static MemberAttributes ToMemberAccessAttributes(this MethodAttributes attributes)
+    {
+        // Do not use internal access modifier since it does not really matter for diffing APIs.
+
+        var result = (MemberAttributes)0;
+        if (attributes.HasFlag(MethodAttributes.Public))
+        {
+            result |= MemberAttributes.Public;
+        }
+        else
+        {
+            if (attributes.HasFlag(MethodAttributes.FamANDAssem))
+                result |= MemberAttributes.Family;
+            if (attributes.HasFlag(MethodAttributes.FamORAssem))
+                result |= MemberAttributes.Family;
+            if (attributes.HasFlag(MethodAttributes.Family))
+                result |= MemberAttributes.Family;
+        }
+
+        return result;
+    }
+
     public static IEnumerable<IMemberDefinition> GetMembers(this TypeDefinition type)
     {
         return type.Fields.Cast<IMemberDefinition>()

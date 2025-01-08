@@ -1502,8 +1502,14 @@ namespace Microsoft.CSharp
             */
             Output.Write(" { ");
 
+            var propertyAccessAttributes = e.Attributes & MemberAttributes.AccessMask;
             if (e.HasGet)
             {
+                var getAccessAttributes = ((CodeMemberPropertyEx)e).PropertyDefinition.GetMethod.Attributes.ToMemberAccessAttributes();
+                if (getAccessAttributes != propertyAccessAttributes)
+                {
+                    OutputMemberAccessModifier(getAccessAttributes);
+                }
                 Output.Write("get; ");
                 /*
                 if (IsCurrentInterface || (e.Attributes & MemberAttributes.ScopeMask) == MemberAttributes.Abstract)
@@ -1523,7 +1529,12 @@ namespace Microsoft.CSharp
             }
             if (e.HasSet)
             {
-                if (e is CodeMemberPropertyEx cmpex && cmpex.PropertyDefinition.SetMethod?.ReturnType is Mono.Cecil.RequiredModifierType reqmod && reqmod.ModifierType.FullName == "System.Runtime.CompilerServices.IsExternalInit")
+                var setAccessAttributes = ((CodeMemberPropertyEx)e).PropertyDefinition.SetMethod.Attributes.ToMemberAccessAttributes();
+                if (setAccessAttributes != propertyAccessAttributes)
+                {
+                    OutputMemberAccessModifier(setAccessAttributes);
+                }
+                if (((CodeMemberPropertyEx)e).PropertyDefinition.SetMethod?.ReturnType is Mono.Cecil.RequiredModifierType reqmod && reqmod.ModifierType.FullName == "System.Runtime.CompilerServices.IsExternalInit")
                 {
                     Output.Write("init; ");
                 }
