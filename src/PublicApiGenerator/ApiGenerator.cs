@@ -122,7 +122,7 @@ public static class ApiGenerator
             };
 
             new CSharpCodeGenerator(options).GenerateCodeFromCompileUnit(compileUnit, writer, cgo);
-            return CodeNormalizer.NormalizeGeneratedCode(writer);
+            return writer.ToString();
         }
     }
 
