@@ -216,7 +216,7 @@ namespace Microsoft.CSharp
 
         private void OutputIdentifier(string ident) => Output.Write(CreateEscapedIdentifier(ident));
 
-        private void OutputType(CodeTypeReference typeRef) => Output.Write(GetTypeOutput(typeRef));
+        private void OutputType(CodeTypeReference typeRef, DynamicContext dynamicContext = null) => Output.Write(GetTypeOutput(typeRef, dynamicContext));
 
         private void GenerateArrayCreateExpression(CodeArrayCreateExpression e)
         {
@@ -1305,7 +1305,7 @@ namespace Microsoft.CSharp
             }
 
             OutputDirection(e.Direction);
-            OutputTypeNamePair(e.Type, e.Name);
+            OutputTypeNamePair(e.Type, e.Name, new DynamicContext(e.CustomAttributes));
         }
 
         private void GenerateEntryPointMethod(CodeEntryPointMethod e)
@@ -1390,7 +1390,7 @@ namespace Microsoft.CSharp
                 // interfaces still need "new"
                 OutputVTableModifier(e.Attributes);
             }
-            OutputType(e.ReturnType);
+            OutputType(e.ReturnType, new DynamicContext(e.ReturnTypeCustomAttributes));
             Output.Write(' ');
             if (e.PrivateImplementationType != null)
             {
@@ -1989,7 +1989,7 @@ namespace Microsoft.CSharp
 
                 CodeTypeDelegate del = (CodeTypeDelegate)e;
                 Output.Write("delegate ");
-                OutputType(del.ReturnType);
+                OutputType(del.ReturnType, new DynamicContext(del.CustomAttributes));
                 Output.Write(' ');
                 OutputIdentifier(e.Name);
                 Output.Write('(');
@@ -2004,6 +2004,7 @@ namespace Microsoft.CSharp
                 OutputTypeParameters(e.TypeParameters);
 
                 bool first = true;
+                var dynamicContext = new DynamicContext(e.CustomAttributes);
                 foreach (CodeTypeReference typeRef in e.BaseTypes)
                 {
                     if (first)
@@ -2015,7 +2016,7 @@ namespace Microsoft.CSharp
                     {
                         Output.Write(", ");
                     }
-                    OutputType(typeRef);
+                    OutputType(typeRef, dynamicContext);
                 }
 
                 OutputTypeParameterConstraints(e.TypeParameters);
@@ -2309,9 +2310,9 @@ namespace Microsoft.CSharp
             }
         }
 
-        private void OutputTypeNamePair(CodeTypeReference typeRef, string name)
+        private void OutputTypeNamePair(CodeTypeReference typeRef, string name, DynamicContext dynamicContext = null)
         {
-            OutputType(typeRef);
+            OutputType(typeRef, dynamicContext);
             Output.Write(' ');
             OutputIdentifier(name);
         }
@@ -2682,6 +2683,18 @@ namespace Microsoft.CSharp
                     continue;
                 }
 
+                // Do not print DynamicAttribute, use dynamic keyword instead of object.
+                if (current.Name.Equals("System.Runtime.CompilerServices.DynamicAttribute"))
+                {
+                    continue;
+                }
+
+                // Workaround for CecilEx.MakeReturn.
+                if (current.Name.Equals("return: System.Runtime.CompilerServices.DynamicAttribute"))
+                {
+                    continue;
+                }
+
                 GenerateAttributeDeclarationsStart();
                 if (prefix != null)
                 {
@@ -2820,7 +2833,7 @@ namespace Microsoft.CSharp
         }
 
         // returns the type name without any array declaration.
-        private string GetBaseTypeOutput(CodeTypeReference typeRef, bool preferBuiltInTypes = true)
+        private string GetBaseTypeOutput(CodeTypeReference typeRef, bool preferBuiltInTypes = true, DynamicContext dynamicContext = null)
         {
             string s = typeRef.BaseType;
 
@@ -2844,7 +2857,9 @@ namespace Microsoft.CSharp
                     case "system.string":
                         return "string";
                     case "system.object":
-                        return "object";
+                        return dynamicContext?.IsDynamic == true ? "dynamic" : "object";
+                    case "object?":
+                        return dynamicContext?.IsDynamic == true ? "dynamic?" : "object?";
                     case "system.boolean":
                         return "bool";
                     case "system.void":
@@ -2904,7 +2919,7 @@ namespace Microsoft.CSharp
                             i++;
                         }
 
-                        GetTypeArgumentsOutput(typeRef.TypeArguments, currentTypeArgStart, numTypeArgs, sb);
+                        GetTypeArgumentsOutput(typeRef.TypeArguments, currentTypeArgStart, numTypeArgs, sb, dynamicContext);
                         currentTypeArgStart += numTypeArgs;
 
                         // Arity can be in the middle of a nested type name, so we might have a . or + after it.
@@ -2929,11 +2944,11 @@ namespace Microsoft.CSharp
         private string GetTypeArgumentsOutput(CodeTypeReferenceCollection typeArguments)
         {
             var sb = new StringBuilder(128);
-            GetTypeArgumentsOutput(typeArguments, 0, typeArguments.Count, sb);
+            GetTypeArgumentsOutput(typeArguments, 0, typeArguments.Count, sb, null);
             return sb.ToString();
         }
 
-        private void GetTypeArgumentsOutput(CodeTypeReferenceCollection typeArguments, int start, int length, StringBuilder sb)
+        private void GetTypeArgumentsOutput(CodeTypeReferenceCollection typeArguments, int start, int length, StringBuilder sb, DynamicContext dynamicContext)
         {
             sb.Append('<');
             bool first = true;
@@ -2951,12 +2966,17 @@ namespace Microsoft.CSharp
                 // it's possible that we call GetTypeArgumentsOutput with an empty typeArguments collection.  This is the case
                 // for open types, so we want to just output the brackets and commas.
                 if (i < typeArguments.Count)
-                    sb.Append(GetTypeOutput(typeArguments[i]));
+                {
+                    dynamicContext?.Move();
+                    sb.Append(GetTypeOutput(typeArguments[i], dynamicContext));
+                }
             }
             sb.Append('>');
         }
 
-        public string GetTypeOutput(CodeTypeReference typeRef)
+        public string GetTypeOutput(CodeTypeReference typeRef) => GetTypeOutput(typeRef, null);
+
+        public string GetTypeOutput(CodeTypeReference typeRef, DynamicContext dynamicContext)
         {
             string s = string.Empty;
 
@@ -2965,7 +2985,7 @@ namespace Microsoft.CSharp
             {
                 baseTypeRef = baseTypeRef.ArrayElementType;
             }
-            s += GetBaseTypeOutput(baseTypeRef);
+            s += GetBaseTypeOutput(baseTypeRef, dynamicContext: dynamicContext);
 
             while (typeRef != null && typeRef.ArrayRank > 0)
             {
