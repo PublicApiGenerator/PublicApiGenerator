@@ -450,7 +450,6 @@ public static class ApiGenerator
         if (type is TypeDefinition typeDefinition && typeDefinition.Attributes.HasFlag(Mono.Cecil.TypeAttributes.Serializable))
         {
             var attribute = new CodeAttributeDeclaration("System.SerializableAttribute");
-            attribute.Name = AttributeNameBuilder.Get(attribute.Name);
             attributes.Add(attribute);
         }
     }
@@ -458,7 +457,6 @@ public static class ApiGenerator
     private static CodeAttributeDeclaration GenerateCodeAttributeDeclaration(Func<CodeTypeReference, CodeTypeReference> codeTypeModifier, CustomAttribute customAttribute)
     {
         var attribute = new CodeAttributeDeclaration(codeTypeModifier(customAttribute.AttributeType.CreateCodeTypeReference(mode: NullableMode.Disable)));
-        attribute.Name = AttributeNameBuilder.Get(attribute.Name);
         foreach (var arg in customAttribute.ConstructorArguments)
         {
             attribute.Arguments.Add(new CodeAttributeArgument(CreateInitialiserExpression(arg)));
@@ -722,8 +720,7 @@ public static class ApiGenerator
         {
             property.Name = "Item";
             property.CustomAttributes.Add(
-                new CodeAttributeDeclaration(
-                    AttributeNameBuilder.Get("System.Runtime.CompilerServices.IndexerNameAttribute"))
+                new CodeAttributeDeclaration("System.Runtime.CompilerServices.IndexerNameAttribute")
                 {
                     Arguments = { new CodeAttributeArgument(new CodePrimitiveExpression(defaultMemberAttributeValue)) }
                 });

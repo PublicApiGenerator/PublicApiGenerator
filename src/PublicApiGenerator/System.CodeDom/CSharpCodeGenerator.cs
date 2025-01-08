@@ -2669,26 +2669,34 @@ namespace Microsoft.CSharp
 
                 if (current.AttributeType != null)
                 {
-                    Output.Write(GetTypeOutput(current.AttributeType));
+                    var output = GetTypeOutput(current.AttributeType);
+                    if (output.EndsWith("Attribute") && output.Length > "Attribute".Length)
+                    {
+                        output = output.Substring(0, output.Length - "Attribute".Length);
+                    }
+                    Output.Write(output);
                 }
-                Output.Write('(');
-
-                bool firstArg = true;
-                foreach (CodeAttributeArgument arg in current.Arguments)
+                if (current.Arguments.Count > 0)
                 {
-                    if (firstArg)
+                    Output.Write('(');
+
+                    bool firstArg = true;
+                    foreach (CodeAttributeArgument arg in current.Arguments)
                     {
-                        firstArg = false;
-                    }
-                    else
-                    {
-                        Output.Write(", ");
+                        if (firstArg)
+                        {
+                            firstArg = false;
+                        }
+                        else
+                        {
+                            Output.Write(", ");
+                        }
+
+                        OutputAttributeArgument(arg);
                     }
 
-                    OutputAttributeArgument(arg);
+                    Output.Write(')');
                 }
-
-                Output.Write(')');
                 GenerateAttributeDeclarationsEnd();
                 if (inLine)
                 {
