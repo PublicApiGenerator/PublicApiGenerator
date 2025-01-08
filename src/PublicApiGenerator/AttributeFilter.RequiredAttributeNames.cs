@@ -3,7 +3,7 @@ namespace PublicApiGenerator;
 internal partial class AttributeFilter
 {
     /// <summary>
-    /// Contains attributes that are internal that influence the compiler or runtime behavior
+    /// Contains attributes that are internal that influence the compiler or runtime behavior.
     /// </summary>
     private static readonly HashSet<string> _internalAttributesThatAffectCompilerOrRuntimeBehavior = new()
     {

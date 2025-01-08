@@ -235,6 +235,9 @@ public static class ApiGenerator
         var @readonly = isStruct && publicType.CustomAttributes.Any(a =>
                              a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute");
 
+        var byRefLike = isStruct && publicType.CustomAttributes.Any(a =>
+                            a.AttributeType.FullName == "System.Runtime.CompilerServices.IsByRefLikeAttribute");
+
         var index = name.IndexOf('`');
         if (index != -1)
             name = name.Substring(0, index);
@@ -250,6 +253,7 @@ public static class ApiGenerator
             IsStruct = isStruct,
             IsStatic = @static,
             IsReadonly = @readonly,
+            IsByRefLike = byRefLike,
         };
 
         if (declaration.IsInterface && publicType.BaseType != null)
@@ -434,7 +438,7 @@ public static class ApiGenerator
         Func<CodeTypeReference, CodeTypeReference> codeTypeModifier,
         AttributeFilter attributeFilter)
     {
-        foreach (var customAttribute in type.CustomAttributes.Where(attributeFilter.ShouldIncludeAttribute).OrderBy(a => a.AttributeType.FullName, StringComparer.Ordinal).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a), StringComparer.Ordinal))
+        foreach (var customAttribute in type.CustomAttributes.Where(attr => attributeFilter.ShouldIncludeAttribute(attr, type)).OrderBy(a => a.AttributeType.FullName, StringComparer.Ordinal).ThenBy(a => ConvertAttributeToCode(codeTypeModifier, a), StringComparer.Ordinal))
         {
             var attribute = GenerateCodeAttributeDeclaration(codeTypeModifier, customAttribute);
             attributes.Add(attribute);

@@ -13,12 +13,25 @@ internal sealed partial class AttributeFilter
             : new HashSet<string>(_attributesNotRelevantForThePublicApi.Concat(excludedAttributes));
     }
 
-    public bool ShouldIncludeAttribute(CustomAttribute attribute)
+    public bool ShouldIncludeAttribute(CustomAttribute attribute, ICustomAttributeProvider parent)
     {
         var attributeTypeDefinition = attribute.AttributeType.Resolve();
 
-        return attributeTypeDefinition != null
+        var should = attributeTypeDefinition != null
                && !_excludedAttributes.Contains(attribute.AttributeType.FullName)
                && (attributeTypeDefinition.IsPublic || _internalAttributesThatAffectCompilerOrRuntimeBehavior.Contains(attribute.AttributeType.FullName));
+
+        // Do not print compiler-generated ObsoleteAttribute for readonly ref struct, see https://github.com/PublicApiGenerator/PublicApiGenerator/issues/104
+        if (should
+            && parent is TypeDefinition def
+            && def.IsValueType
+            && attributeTypeDefinition?.Name == "ObsoleteAttribute"
+            && attribute.ConstructorArguments.Count > 0
+            && (string)attribute.ConstructorArguments[0].Value == "Types with embedded references are not supported in this version of your compiler.")
+        {
+            should = false;
+        }
+
+        return should;
     }
 }

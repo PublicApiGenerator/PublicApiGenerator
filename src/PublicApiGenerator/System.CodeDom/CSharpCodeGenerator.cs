@@ -2442,6 +2442,11 @@ namespace Microsoft.CSharp
                     Output.Write("readonly ");
                 }
 
+                if (e is CodeTypeDeclarationEx { IsByRefLike: true })
+                {
+                    Output.Write("ref ");
+                }
+
                 Output.Write("struct ");
             }
             else if (e.IsEnum)
