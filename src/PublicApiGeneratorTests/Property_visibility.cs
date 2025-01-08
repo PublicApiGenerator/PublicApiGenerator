@@ -122,13 +122,12 @@ namespace PublicApiGeneratorTests
     public class ClassWithPublicGetterProtectedSetter
     {
         public ClassWithPublicGetterProtectedSetter() { }
-        public string Value1 { get; set; }
+        public string Value1 { get; protected set; }
     }
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
+        [Fact]
         public void Should_output_protected_setter_for_public_property_with_correct_modifier()
         {
             AssertPublicApi<ClassWithPublicGetterProtectedSetter>(
@@ -146,12 +145,12 @@ namespace PublicApiGeneratorTests
         public void Should_output_protected_internal_setter_for_public_property()
         {
             AssertPublicApi<ClassWithPublicGetterProtectedInternalSetter>(
-                @"namespace PublicApiGeneratorTests.Examples
+@"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedInternalSetter
     {
         public ClassWithPublicGetterProtectedInternalSetter() { }
-        public string Value1 { get; set; }
+        public string Value1 { get; protected set; }
     }
 }");
         }
@@ -166,21 +165,6 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithPublicGetterPrivateProtectedSetter() { }
         public string Value1 { get; }
-    }
-}");
-        }
-
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
-        public void Should_output_protected_internal_setter_for_public_property_with_correct_modifier()
-        {
-            AssertPublicApi<ClassWithPublicGetterProtectedInternalSetter>(
-@"namespace PublicApiGeneratorTests.Examples
-{
-    public class ClassWithPublicGetterProtectedInternalSetter
-    {
-        public ClassWithPublicGetterProtectedInternalSetter() { }
-        public string Value1 { get; protected internal set; }
     }
 }");
         }
@@ -216,21 +200,18 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_protected_getter_for_public_property()
         {
-            // TODO: CodeDOM doesn't support access modifiers on setters or getters
-            // Doesn't really matter for diffing APIs, though
             AssertPublicApi<ClassWithProtectedGetterPublicSetter>(
 @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedGetterPublicSetter
     {
         public ClassWithProtectedGetterPublicSetter() { }
-        public string Value1 { get; set; }
+        public string Value1 { protected get; set; }
     }
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
+        [Fact]
         public void Should_output_protected_getter_for_public_property_with_correct_modifier()
         {
             AssertPublicApi<ClassWithProtectedGetterPublicSetter>(
@@ -247,21 +228,18 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_protected_internal_getter_for_public_property()
         {
-            // TODO: CodeDOM doesn't support access modifiers on setters or getters
-            // Doesn't really matter for diffing APIs, though
             AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>(
 @"namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalGetterPublicSetter
     {
         public ClassWithProtectedInternalGetterPublicSetter() { }
-        public string Value1 { get; set; }
+        public string Value1 { protected get; set; }
     }
 }");
         }
 
-        [Fact(Skip = "Not supported by CodeDOM")]
-        [Trait("TODO", "Property method modifiers not supported by CodeDOM")]
+        [Fact]
         public void Should_output_protected_internal_getter_for_public_property_with_correct_modifier()
         {
             AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>(
