@@ -1505,10 +1505,10 @@ namespace Microsoft.CSharp
             var propertyAccessAttributes = e.Attributes & MemberAttributes.AccessMask;
             if (e.HasGet)
             {
-                var getAccessAttrs = ((CodeMemberPropertyEx)e).PropertyDefinition.GetMethod.Attributes.ToMemberAccessAttributes();
-                if (getAccessAttrs != propertyAccessAttributes)
+                var getAccessAttributes = ((CodeMemberPropertyEx)e).PropertyDefinition.GetMethod.Attributes.ToMemberAccessAttributes();
+                if (getAccessAttributes != propertyAccessAttributes)
                 {
-                    OutputMemberAccessModifier(getAccessAttrs);
+                    OutputMemberAccessModifier(getAccessAttributes);
                 }
                 Output.Write("get; ");
                 /*
@@ -1529,10 +1529,10 @@ namespace Microsoft.CSharp
             }
             if (e.HasSet)
             {
-                var setAccessAttrs = ((CodeMemberPropertyEx)e).PropertyDefinition.SetMethod.Attributes.ToMemberAccessAttributes();
-                if (setAccessAttrs != propertyAccessAttributes)
+                var setAccessAttributes = ((CodeMemberPropertyEx)e).PropertyDefinition.SetMethod.Attributes.ToMemberAccessAttributes();
+                if (setAccessAttributes != propertyAccessAttributes)
                 {
-                    OutputMemberAccessModifier(setAccessAttrs);
+                    OutputMemberAccessModifier(setAccessAttributes);
                 }
                 if (((CodeMemberPropertyEx)e).PropertyDefinition.SetMethod?.ReturnType is Mono.Cecil.RequiredModifierType reqmod && reqmod.ModifierType.FullName == "System.Runtime.CompilerServices.IsExternalInit")
                 {
