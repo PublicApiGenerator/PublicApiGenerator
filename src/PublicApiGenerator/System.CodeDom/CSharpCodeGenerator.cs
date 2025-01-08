@@ -25,6 +25,7 @@ namespace Microsoft.CSharp
         private readonly ApiGeneratorOptions _apiGeneratorOptions;
         private CodeTypeDeclaration _currentClass;
         private CodeTypeMember _currentMember;
+        private string _lastNamespace;
         private bool _inNestedBinary;
         private readonly IDictionary<string, string> _provOptions;
 
@@ -2200,10 +2201,12 @@ namespace Microsoft.CSharp
 
         private void GenerateNamespaces(CodeCompileUnit e)
         {
+            _lastNamespace = e.Namespaces.Count > 0 ? e.Namespaces[e.Namespaces.Count - 1].Name : null;
             foreach (CodeNamespace n in e.Namespaces)
             {
                 ((ICodeGenerator)this).GenerateCodeFromNamespace(n, _output.InnerWriter, _options);
             }
+            _lastNamespace = null;
         }
 
         private void OutputAttributeArgument(CodeAttributeArgument arg)
@@ -2618,7 +2621,14 @@ namespace Microsoft.CSharp
             if (!string.IsNullOrEmpty(e.Name))
             {
                 Indent--;
-                Output.WriteLine('}');
+                if (e.Name == _lastNamespace)
+                {
+                    Output.Write('}');
+                }
+                else
+                {
+                    Output.WriteLine('}');
+                }
             }
         }
 
