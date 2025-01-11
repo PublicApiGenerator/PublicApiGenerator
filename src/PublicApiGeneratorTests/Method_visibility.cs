@@ -7,82 +7,88 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_show_public_methods()
         {
-            AssertPublicApi<ClassWithPublicMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicMethod
     {
         public ClassWithPublicMethod() { }
         public void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_show_protected_methods()
         {
-            AssertPublicApi<ClassWithProtectedMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedMethod
     {
         public ClassWithProtectedMethod() { }
         protected void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_show_internal_methods()
         {
-            AssertPublicApi<ClassWithInternalMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithInternalMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalMethod
     {
         public ClassWithInternalMethod() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_show_protected_internal_methods()
         {
-            AssertPublicApi<ClassWithProtectedInternalMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedInternalMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalMethod
     {
         public ClassWithProtectedInternalMethod() { }
         protected void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_show_private_protected_methods()
         {
-            AssertPublicApi<ClassWithPrivateProtectedMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateProtectedMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateProtectedMethod
     {
         public ClassWithPrivateProtectedMethod() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_show_private_methods()
         {
-            AssertPublicApi<ClassWithPrivateMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateMethod
     {
         public ClassWithPrivateMethod() { }
     }
-}");
+}
+""");
         }
     }
 

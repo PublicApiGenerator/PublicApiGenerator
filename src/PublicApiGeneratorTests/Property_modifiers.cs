@@ -7,260 +7,278 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_abstract_modifier()
         {
-            AssertPublicApi<ClassWithAbstractProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAbstractProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractProperty
     {
         protected ClassWithAbstractProperty() { }
         public abstract string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_abstract_new_modifier()
         {
-            AssertPublicApi<ClassWithAbstractNewProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAbstractNewProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractNewProperty : PublicApiGeneratorTests.Examples.ClassWithProperty
     {
         protected ClassWithAbstractNewProperty() { }
         public new abstract string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_static_modifier()
         {
-            AssertPublicApi<ClassWithStaticProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStaticProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticProperty
     {
         public ClassWithStaticProperty() { }
         public static string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_static_modifier()
         {
-            AssertPublicApi<ClassWithProtectedStaticProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedStaticProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedStaticProperty
     {
         public ClassWithProtectedStaticProperty() { }
         protected static string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_static_new_modifier()
         {
-            AssertPublicApi<ClassWithStaticNewProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStaticNewProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticNewProperty : PublicApiGeneratorTests.Examples.ClassWithStaticProperty
     {
         public ClassWithStaticNewProperty() { }
         public new static string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_static_new_modifier()
         {
-            AssertPublicApi<ClassWithProtectedStaticNewProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedStaticNewProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedStaticNewProperty : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticProperty
     {
         public ClassWithProtectedStaticNewProperty() { }
         protected new static string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_public_static_new_modifier()
         {
-            AssertPublicApi<ClassWithPublicStaticNewProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicStaticNewProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicStaticNewProperty : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticProperty
     {
         public ClassWithPublicStaticNewProperty() { }
         public new static string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_virtual_modifier()
         {
-            AssertPublicApi<ClassWithVirtualProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithVirtualProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithVirtualProperty
     {
         public ClassWithVirtualProperty() { }
         public virtual string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_virtual_modifier()
         {
-            AssertPublicApi<ClassWithVirtualProtectedProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithVirtualProtectedProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithVirtualProtectedProperty
     {
         public ClassWithVirtualProtectedProperty() { }
         protected virtual string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_override_modifier()
         {
-            AssertPublicApi<ClassWithOverridingProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithOverridingProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
     {
         public ClassWithOverridingProperty() { }
         public override string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_override_modifier()
         {
-            AssertPublicApi<ClassWithOverridingProtectedProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithOverridingProtectedProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithOverridingProtectedProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProtectedProperty
     {
         public ClassWithOverridingProtectedProperty() { }
         protected override string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_abstract_override_modifier()
         {
-            AssertPublicApi<ClassWithAbstractOverridingProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAbstractOverridingProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
     {
         protected ClassWithAbstractOverridingProperty() { }
         public abstract override string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_sealed_modifier()
         {
-            AssertPublicApi<ClassWithSealedOverridingProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithSealedOverridingProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithSealedOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProperty
     {
         public ClassWithSealedOverridingProperty() { }
         public override sealed string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_sealed_modifier()
         {
-            AssertPublicApi<ClassWithProtectedSealedOverridingProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedSealedOverridingProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedSealedOverridingProperty : PublicApiGeneratorTests.Examples.ClassWithVirtualProtectedProperty
     {
         public ClassWithProtectedSealedOverridingProperty() { }
         protected override sealed string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_modifier()
         {
-            AssertPublicApi<ClassWithPropertyHiding>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPropertyHiding>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPropertyHiding : PublicApiGeneratorTests.Examples.ClassWithProperty
     {
         public ClassWithPropertyHiding() { }
         public new string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_modifier_for_generics()
         {
-            AssertPublicApi(typeof(ClassWithPropertyExtensions<>),
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(ClassWithPropertyExtensions<>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPropertyExtensions<T> : PublicApiGeneratorTests.Examples.ClassWithPropertyExtensions
     {
         public ClassWithPropertyExtensions() { }
         public new PublicApiGeneratorTests.Examples.ClassWithPropertyExtensions<T> Extension { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_new_modifier()
         {
-            AssertPublicApi<ClassWithProtectedPropertyHiding>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedPropertyHiding>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedPropertyHiding : PublicApiGeneratorTests.Examples.ClassWithProtectedProperty
     {
         public ClassWithProtectedPropertyHiding() { }
         protected new string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_public_new_modifier()
         {
-            AssertPublicApi<ClassWithPublicPropertyHiding>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicPropertyHiding>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicPropertyHiding : PublicApiGeneratorTests.Examples.ClassWithProtectedProperty
     {
         public ClassWithPublicPropertyHiding() { }
         public new string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_public_new_modifier_for_generic()
         {
-            AssertPublicApi(typeof(ClassWithPublicPropertyHidingGeneric<>),
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(ClassWithPublicPropertyHidingGeneric<>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicPropertyHidingGeneric<T> : PublicApiGeneratorTests.Examples.BaseForGeneric
     where T : System.IComparable
@@ -268,49 +286,53 @@ namespace PublicApiGeneratorTests
         public ClassWithPublicPropertyHidingGeneric() { }
         public new T Value { get; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_unsafe_modifier()
         {
-            AssertPublicApi<ClassWithUnsafeProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithUnsafeProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithUnsafeProperty
     {
         public ClassWithUnsafeProperty() { }
         public unsafe int* Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_unsafe_virtual_modifier()
         {
-            AssertPublicApi<ClassWithUnsafeVirtualProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithUnsafeVirtualProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithUnsafeVirtualProperty
     {
         public ClassWithUnsafeVirtualProperty() { }
         public virtual unsafe int* Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_modifier_even_under_evil_circumstances()
         {
-            AssertPublicApi<AbstractClassRedeclaringAbstractProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<AbstractClassRedeclaringAbstractProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class AbstractClassRedeclaringAbstractProperty : PublicApiGeneratorTests.Examples.ClassInheritingVirtualProperty
     {
         protected AbstractClassRedeclaringAbstractProperty() { }
         public new abstract string Value { get; set; }
     }
-}");
+}
+""");
         }
     }
 

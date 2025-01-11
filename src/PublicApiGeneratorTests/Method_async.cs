@@ -7,71 +7,76 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_async_void_method()
         {
-            AssertPublicApi<MethodAsyncVoid>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodAsyncVoid>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncVoid
     {
         public MethodAsyncVoid() { }
         public void AsyncMethod() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_async_method()
         {
-            AssertPublicApi<MethodAsync>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodAsync>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsync
     {
         public MethodAsync() { }
         public System.Threading.Tasks.Task AsyncMethod() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_async_method_without_keyword()
         {
-            AssertPublicApi<MethodAsyncWithoutAsyncKeyword>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodAsyncWithoutAsyncKeyword>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncWithoutAsyncKeyword
     {
         public MethodAsyncWithoutAsyncKeyword() { }
         public System.Threading.Tasks.Task AsyncMethod() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_async_method_with_return_value()
         {
-            AssertPublicApi<MethodAsyncReturnValue>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodAsyncReturnValue>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncReturnValue
     {
         public MethodAsyncReturnValue() { }
         public System.Threading.Tasks.Task<string> AsyncMethod() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_async_method_without_keyword_with_return_value()
         {
-            AssertPublicApi<MethodAsyncReturnValueWithoutAsyncKeyword>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodAsyncReturnValueWithoutAsyncKeyword>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class MethodAsyncReturnValueWithoutAsyncKeyword
     {
         public MethodAsyncReturnValueWithoutAsyncKeyword() { }
         public System.Threading.Tasks.Task<string> AsyncMethod() { }
     }
-}");
+}
+""");
         }
     }
 

@@ -7,11 +7,12 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_public_interface()
         {
-            AssertPublicApi<IPublicInterface>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IPublicInterface>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IPublicInterface { }
-}");
+}
+""");
         }
 
         [Fact]

@@ -8,8 +8,8 @@ namespace PublicApiGeneratorTests
         public void Should_output_in_known_order_and_alphabetically()
         {
             // Yes, CodeDOM inserts public for events...
-            AssertPublicApi<IInterfaceMemberOrder>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IInterfaceMemberOrder>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IInterfaceMemberOrder
     {
@@ -26,7 +26,8 @@ namespace PublicApiGeneratorTests
         void Method2();
         void iMethod2();
     }
-}");
+}
+""");
         }
     }
 

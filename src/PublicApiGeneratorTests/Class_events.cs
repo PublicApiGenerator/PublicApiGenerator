@@ -7,15 +7,16 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_event()
         {
-            AssertPublicApi<ClassWithEvent>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithEvent>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithEvent
     {
         public ClassWithEvent() { }
         public event System.EventHandler<System.EventArgs> OnClicked;
     }
-}");
+}
+""");
         }
     }
 

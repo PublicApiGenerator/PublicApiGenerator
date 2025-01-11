@@ -8,8 +8,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void NotNullIfNotNullAttribute()
         {
-            AssertPublicApi<ClassWithInternalWellKnownAttributes>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithInternalWellKnownAttributes>("""
+namespace PublicApiGeneratorTests.Examples
 {
      public class ClassWithInternalWellKnownAttributes
     {
@@ -20,12 +20,13 @@ namespace PublicApiGeneratorTests
         public object Field;
         public ClassWithInternalWellKnownAttributes() { }
         public bool BoolReturningMethod([System.Diagnostics.CodeAnalysis.MaybeNullWhen(true)] object a, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] object b) { }
-        [return: System.Diagnostics.CodeAnalysis.NotNullIfNotNull(""a"")]
+        [return: System.Diagnostics.CodeAnalysis.NotNullIfNotNull("a")]
         public object C(object a) { }
         [System.Diagnostics.CodeAnalysis.DoesNotReturn]
         public void MethodWithBoolParameter([System.Diagnostics.CodeAnalysis.DoesNotReturnIf(true)] bool a) { }
     }
-}");
+}
+""");
         }
     }
 

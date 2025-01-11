@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_simple_record()
         {
-            AssertPublicApi<User>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<User>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class User : System.IEquatable<PublicApiGeneratorTests.Examples.User>
     {
@@ -16,7 +16,8 @@ namespace PublicApiGeneratorTests
         public string login { get; init; }
         public string password { get; init; }
     }
-}");
+}
+""");
         }
     }
 

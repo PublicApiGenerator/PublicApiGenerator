@@ -8,8 +8,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_allow_microsoft_namespace_whitelisting()
         {
-            AssertPublicApi([typeof(Simple1), typeof(Simple2)],
-                @"namespace Microsoft.Whitelisted
+            AssertPublicApi([typeof(Simple1), typeof(Simple2)], """
+namespace Microsoft.Whitelisted
 {
     public class Simple1
     {
@@ -21,7 +21,8 @@ namespace PublicApiGeneratorTests
         public Simple2() { }
         public void Simple() { }
     }
-}", opt => opt.AllowNamespacePrefixes = ["Microsoft.Whitelisted"]);
+}
+""", opt => opt.AllowNamespacePrefixes = ["Microsoft.Whitelisted"]);
         }
 
         [Fact]
@@ -34,8 +35,8 @@ namespace PublicApiGeneratorTests
         public void Should_allow_system_namespace_whitelisting()
         {
 
-            AssertPublicApi([typeof(System1), typeof(System2)],
-                @"namespace System.Whitelisted
+            AssertPublicApi([typeof(System1), typeof(System2)], """
+namespace System.Whitelisted
 {
     public class System1
     {
@@ -47,7 +48,8 @@ namespace PublicApiGeneratorTests
         public System2() { }
         public void System() { }
     }
-}", opt => opt.AllowNamespacePrefixes = ["System.Whitelisted"]);
+}
+""", opt => opt.AllowNamespacePrefixes = ["System.Whitelisted"]);
         }
 
         [Fact]

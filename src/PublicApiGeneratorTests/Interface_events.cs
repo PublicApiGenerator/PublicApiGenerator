@@ -7,40 +7,43 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_event()
         {
-            AssertPublicApi<ISimpleEvent>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ISimpleEvent>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface ISimpleEvent
     {
         event System.EventHandler Event;
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_event_redeclaration()
         {
-            AssertPublicApi<IInheritedEvent>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IInheritedEvent>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IInheritedEvent : PublicApiGeneratorTests.Examples.ISimpleEvent
     {
         new event System.EventHandler Event;
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_event_with_generics()
         {
-            AssertPublicApi<IGenericEventHandler>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IGenericEventHandler>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IGenericEventHandler
     {
         event System.EventHandler<System.EventArgs> Event;
     }
-}");
+}
+""");
         }
     }
 

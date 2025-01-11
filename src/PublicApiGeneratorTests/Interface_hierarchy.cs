@@ -7,14 +7,15 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_implemented_interfaces_in_alphabetical_order()
         {
-            AssertPublicApi<IInterfaceWithImplementedList>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IInterfaceWithImplementedList>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IInterfaceWithImplementedList : System.ICloneable, System.IDisposable
     {
         void Method();
     }
-}");
+}
+""");
         }
     }
 

@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Include_static_fields()
         {
-            AssertPublicApi<ClassWithStaticFields>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStaticFields>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticFields
     {
@@ -16,29 +16,31 @@ namespace PublicApiGeneratorTests
         public static int StaticPublicField;
         public ClassWithStaticFields() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Include_Volatile_field_Without_modreq()
         {
-            AssertPublicApi<ClassWithVolatileField>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithVolatileField>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithVolatileField
     {
         public static volatile int StaticVolatilePublicField;
         public ClassWithVolatileField() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Include_readonly_fields_without_constant_values()
         {
             // TODO: Initializing values are set in the constructor. Very tricky to get
-            AssertPublicApi<ClassWithReadonlyFields>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithReadonlyFields>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithReadonlyFields
     {
@@ -46,7 +48,8 @@ namespace PublicApiGeneratorTests
         public readonly int ReadonlyPublicField;
         public ClassWithReadonlyFields() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
@@ -54,16 +57,17 @@ namespace PublicApiGeneratorTests
         {
             // Have to include the ctor - I can't figure out how to hide it
             // when values are initialized
-            AssertPublicApi<ClassWithConstFields>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithConstFields>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithConstFields
     {
-        protected const string ConstProtectedField = ""hello world"";
+        protected const string ConstProtectedField = "hello world";
         public const int ConstPublicField = 42;
         public ClassWithConstFields() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
@@ -71,8 +75,8 @@ namespace PublicApiGeneratorTests
         {
             // Have to include the ctor - I can't figure out how to hide it
             // when values are initialized
-            AssertPublicApi<ClassWithUnsafeFields>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithUnsafeFields>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithUnsafeFields
     {
@@ -83,7 +87,8 @@ namespace PublicApiGeneratorTests
         public unsafe long* UnsafePublicLongField;
         public ClassWithUnsafeFields() { }
     }
-}");
+}
+""");
         }
     }
 

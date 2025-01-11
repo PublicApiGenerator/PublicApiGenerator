@@ -23,8 +23,8 @@ namespace PublicApiGeneratorTests
                 typeof(AssemblyMember_Class1),
                 typeof(AssemblyMember_Delegate1),
                 typeof(AssemblyMember_iDelegate1)
-            ],
-@"namespace PublicApiGeneratorTests.Examples
+            ], """
+namespace PublicApiGeneratorTests.Examples
 {
     public class AssemblyMember_Class1
     {
@@ -50,7 +50,8 @@ namespace PublicApiGeneratorTests
     public interface IAssemblyMember_Interface2 { }
     public interface IAssemblyMember_interface1 { }
     public interface IAssemblyMember_interface2 { }
-}");
+}
+""");
         }
 
         [Fact]
@@ -62,8 +63,8 @@ namespace PublicApiGeneratorTests
                 typeof(AssemblyOrdering_2),
                 typeof(Examples_I.AssemblyOrdering_2),
                 typeof(Examples_i.AssemblyOrdering_1),
-            ],
-@"namespace PublicApiGeneratorTests.Examples_AA
+            ], """
+namespace PublicApiGeneratorTests.Examples_AA
 {
     public class AssemblyOrdering_2
     {
@@ -90,7 +91,8 @@ namespace PublicApiGeneratorTests.Examples_i
     {
         public AssemblyOrdering_1() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
@@ -100,8 +102,8 @@ namespace PublicApiGeneratorTests.Examples_i
             [
                 typeof(A.D),
                 typeof(A.C.B),
-            ],
-@"namespace PublicApiGeneratorTests.A.C
+            ], """
+namespace PublicApiGeneratorTests.A.C
 {
     public class B
     {
@@ -114,7 +116,8 @@ namespace PublicApiGeneratorTests.A
     {
         public D() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
@@ -124,8 +127,8 @@ namespace PublicApiGeneratorTests.A
             [
                 typeof(A.D),
                 typeof(A.C.B),
-            ],
-@"namespace PublicApiGeneratorTests.A.C
+            ], """
+namespace PublicApiGeneratorTests.A.C
 {
     public class B
     {
@@ -138,7 +141,8 @@ namespace PublicApiGeneratorTests.A
     {
         public D() { }
     }
-}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.FullName);
+}
+""", opt => opt.OrderBy = PublicApiGenerator.OrderMode.FullName);
         }
 
         [Fact]
@@ -148,8 +152,8 @@ namespace PublicApiGeneratorTests.A
             [
                 typeof(A.D),
                 typeof(A.C.B),
-            ],
-@"namespace PublicApiGeneratorTests.A
+            ], """
+namespace PublicApiGeneratorTests.A
 {
     public class D
     {
@@ -162,7 +166,8 @@ namespace PublicApiGeneratorTests.A.C
     {
         public B() { }
     }
-}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
+}
+""", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
         }
 
         [Fact]
@@ -172,8 +177,8 @@ namespace PublicApiGeneratorTests.A.C
             [
                 typeof(AssemblyMember_Class1),
                 typeof(AssemblyMember_Class2),
-            ],
-@"namespace PublicApiGeneratorTests.Examples
+            ], """
+namespace PublicApiGeneratorTests.Examples
 {
     public class AssemblyMember_Class1
     {
@@ -183,7 +188,8 @@ namespace PublicApiGeneratorTests.A.C
     {
         public AssemblyMember_Class2() { }
     }
-}", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
+}
+""", opt => opt.OrderBy = PublicApiGenerator.OrderMode.NamespaceThenFullName);
         }
     }
 

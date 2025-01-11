@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_add_attribute_with_no_parameters()
         {
-            AssertPublicApi<FieldWithSimpleAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithSimpleAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithSimpleAttribute
     {
@@ -16,24 +16,26 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithSimpleAttribute() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_positional_parameters()
         {
-            AssertPublicApi<FieldWithAttributeWithStringPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithAttributeWithStringPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithAttributeWithStringPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1("Hello")]
         public string Value;
         public FieldWithAttributeWithStringPositionalParameters() { }
     }
-}");
-            AssertPublicApi<FieldWithAttributeWithIntPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+}
+""");
+            AssertPublicApi<FieldWithAttributeWithIntPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithAttributeWithIntPositionalParameters
     {
@@ -41,24 +43,26 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithAttributeWithIntPositionalParameters() { }
     }
-}");
-            AssertPublicApi<FieldWithAttributeWithMultiplePositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+}
+""");
+            AssertPublicApi<FieldWithAttributeWithMultiplePositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithAttributeWithMultiplePositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, "Hello world")]
         public string Value;
         public FieldWithAttributeWithMultiplePositionalParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_named_parameters()
         {
-            AssertPublicApi<FieldWithIntNamedParameterAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithIntNamedParameterAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithIntNamedParameterAttribute
     {
@@ -66,55 +70,59 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithIntNamedParameterAttribute() { }
     }
-}");
+}
+""");
 
-            AssertPublicApi<FieldWithStringNamedParameterAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithStringNamedParameterAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithStringNamedParameterAttribute
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue="Hello")]
         public string Value;
         public FieldWithStringNamedParameterAttribute() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
-            AssertPublicApi<FieldWithAttributeWithMultipleNamedParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithAttributeWithMultipleNamedParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithAttributeWithMultipleNamedParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue="Hello world")]
         public string Value;
         public FieldWithAttributeWithMultipleNamedParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
-            AssertPublicApi<FieldWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithAttributeWithBothNamedAndPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithAttributeWithBothNamedAndPositionalParameters
     {
-        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, "Hello world", IntValue=13, StringValue="Thingy")]
         public string Value;
         public FieldWithAttributeWithBothNamedAndPositionalParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_enum_value()
         {
-            AssertPublicApi<FieldWithAttributeWithSimpleEnum>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithAttributeWithSimpleEnum>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithAttributeWithSimpleEnum
     {
@@ -122,14 +130,15 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithAttributeWithSimpleEnum() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_expand_enum_flags()
         {
-            AssertPublicApi<FieldWithAttributeWithEnumFlags>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithAttributeWithEnumFlags>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithAttributeWithEnumFlags
     {
@@ -137,14 +146,15 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithAttributeWithEnumFlags() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
-            AssertPublicApi<FieldWithMultipleAttributes>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithMultipleAttributes>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithMultipleAttributes
     {
@@ -154,14 +164,15 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithMultipleAttributes() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_skip_excluded_attributes()
         {
-            AssertPublicApi<FieldWithMultipleAttributes>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithMultipleAttributes>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithMultipleAttributes
     {
@@ -169,7 +180,8 @@ namespace PublicApiGeneratorTests
         public string Value;
         public FieldWithMultipleAttributes() { }
     }
-}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM", "PublicApiGeneratorTests.Examples.Attribute_ZZ"]);
+}
+""", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM", "PublicApiGeneratorTests.Examples.Attribute_ZZ"]);
         }
     }
 

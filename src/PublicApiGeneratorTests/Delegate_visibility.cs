@@ -13,11 +13,12 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_public_delegate()
         {
-            AssertPublicApi<PublicDelegate>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<PublicDelegate>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public delegate void PublicDelegate();
-}");
+}
+""");
         }
     }
 

@@ -8,34 +8,36 @@ namespace PublicApiGeneratorTests
         public void Should_output_extension_methods()
         {
             // Note the class static reverse order hack
-            AssertPublicApi(typeof(StringExtensions),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(StringExtensions), """
+namespace PublicApiGeneratorTests.Examples
 {
     public static class StringExtensions
     {
         public static bool CheckLength(this string value, int length) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_extension_methods_when_allowed()
         {
-            AssertPublicApi(typeof(StringExtensionsInSystemNamespace),
-@"namespace System
+            AssertPublicApi(typeof(StringExtensionsInSystemNamespace), """
+namespace System
 {
     public static class StringExtensionsInSystemNamespace
     {
         public static bool CheckLength(this string value, int length) { }
     }
-}", opt => { opt.UseDenyNamespacePrefixesForExtensionMethods = false; opt.IncludeAssemblyAttributes = false; });
+}
+""", opt => { opt.UseDenyNamespacePrefixesForExtensionMethods = false; opt.IncludeAssemblyAttributes = false; });
         }
 
         [Fact]
         public void Should_output_generic_extension_methods()
         {
-            AssertPublicApi(typeof(GenericExtensions),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(GenericExtensions), """
+namespace PublicApiGeneratorTests.Examples
 {
     public static class GenericExtensions
     {
@@ -46,14 +48,15 @@ namespace PublicApiGeneratorTests
         public static void Add<T, U>(this string s)
             where U :  class, System.Collections.Generic.IComparer<T>, System.Collections.Generic.IEnumerable<U> { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_extension_methods_with_nullable()
         {
-            AssertPublicApi(typeof(ExtensionMethodWithNullable),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(ExtensionMethodWithNullable), """
+namespace PublicApiGeneratorTests.Examples
 {
     public static class ExtensionMethodWithNullable
     {
@@ -61,7 +64,8 @@ namespace PublicApiGeneratorTests
             public static long? Long(this object @object, long? value = default) { }
             public static System.TimeSpan? Time(this object @object, System.TimeSpan? timeSpan = default) { }
     }
-}");
+}
+""");
         }
     }
 

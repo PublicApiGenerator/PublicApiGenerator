@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Only_public_and_protected_fields_visible()
         {
-            AssertPublicApi<ClassWithFields>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithFields>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithFields
     {
@@ -17,7 +17,8 @@ namespace PublicApiGeneratorTests
         public int publicFieldIsVisible;
         public ClassWithFields() { }
     }
-}");
+}
+""");
         }
     }
 

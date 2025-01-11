@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_classes_in_alphabetical_order()
         {
-            AssertPublicApi([typeof(MM_Class), typeof(ZZ_Class), typeof(AA_Class), typeof(I_Class), typeof(i_Class)],
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi([typeof(MM_Class), typeof(ZZ_Class), typeof(AA_Class), typeof(I_Class), typeof(i_Class)], """
+namespace PublicApiGeneratorTests.Examples
 {
    public class AA_Class
     {
@@ -30,7 +30,8 @@ namespace PublicApiGeneratorTests
     {
         public i_Class() { }
     }
-}");
+}
+""");
         }
     }
 

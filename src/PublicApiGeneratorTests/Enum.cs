@@ -13,8 +13,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_enum_names_in_defined_order()
         {
-            AssertPublicApi<PublicEnum>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<PublicEnum>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public enum PublicEnum
     {
@@ -22,14 +22,15 @@ namespace PublicApiGeneratorTests
         Two = 1,
         Three = 2,
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_enum_values()
         {
-            AssertPublicApi<EnumWithValues>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<EnumWithValues>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public enum EnumWithValues
     {
@@ -37,27 +38,29 @@ namespace PublicApiGeneratorTests
         Two = 200,
         Three = 300,
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_enum_base_type()
         {
-            AssertPublicApi<EnumWithBaseType>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<EnumWithBaseType>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public enum EnumWithBaseType : short
     {
         One = 0,
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_enum_attributes()
         {
-            AssertPublicApi<EnumWithFlagsAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<EnumWithFlagsAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [System.Flags]
     public enum EnumWithFlagsAttribute
@@ -66,7 +69,8 @@ namespace PublicApiGeneratorTests
         Two = 2,
         Three = 3,
     }
-}");
+}
+""");
         }
 
         // TODO: Enum with flags + undefined value

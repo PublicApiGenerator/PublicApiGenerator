@@ -7,11 +7,12 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_public_struct()
         {
-            AssertPublicApi<PublicStruct>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<PublicStruct>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public struct PublicStruct { }
-}");
+}
+""");
         }
 
         [Fact]

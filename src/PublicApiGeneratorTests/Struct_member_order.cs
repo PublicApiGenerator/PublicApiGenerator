@@ -8,8 +8,8 @@ namespace PublicApiGeneratorTests
         public void Should_output_in_known_order_and_alphabetically()
         {
             // Fields, properties, events, methods, nested type (inc. delegates)
-            AssertPublicApi<StructMemberOrder>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<StructMemberOrder>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public struct StructMemberOrder
     {
@@ -34,15 +34,16 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
+}
+""", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
         }
 
         [Fact]
         public void Should_output_in_known_order_with_nested_class()
         {
             // Fields, properties, events, methods
-            AssertPublicApi<StructMemberOrderAndNestedClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<StructMemberOrderAndNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public struct StructMemberOrderAndNestedClass
     {
@@ -97,7 +98,8 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate2();
         public delegate System.EventHandler iDelegate1();
     }
-}", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
+}
+""", opt => opt.ExcludeAttributes = ["System.Runtime.CompilerServices.IsReadOnlyAttribute"]);
         }
     }
 
