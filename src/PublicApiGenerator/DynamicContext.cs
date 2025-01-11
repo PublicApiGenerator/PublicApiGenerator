@@ -1,4 +1,4 @@
-﻿using System.CodeDom;
+using System.CodeDom;
 
 namespace PublicApiGenerator;
 
@@ -19,12 +19,11 @@ internal sealed class DynamicContext
                 {
                     // https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.dynamicattribute.-ctor
                     var expression = (CodeArrayCreateExpression)attribute.Arguments[0].Value;
-                    var flags = new bool[expression.Initializers.Count];
-                    for (int j = 0; j < flags.Length; ++j)
+                    _transformFlags = new bool[expression.Initializers.Count];
+                    for (int j = 0; j < _transformFlags.Length; ++j)
                     {
-                        flags[j] = (bool)((CodePrimitiveExpression)expression.Initializers[j]).Value;
+                        _transformFlags[j] = (bool)((CodePrimitiveExpression)expression.Initializers[j]).Value;
                     }
-                    _transformFlags = flags;
                 }
                 else
                 {
