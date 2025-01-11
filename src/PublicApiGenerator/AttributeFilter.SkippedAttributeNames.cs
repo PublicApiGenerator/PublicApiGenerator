@@ -13,6 +13,8 @@ internal partial class AttributeFilter
         "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
         "System.Runtime.CompilerServices.IteratorStateMachineAttribute",
         "System.Runtime.CompilerServices.IsReadOnlyAttribute",
+        "System.Runtime.CompilerServices.IsByRefLikeAttribute",
+        "System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute",
         "System.Runtime.CompilerServices.NullableAttribute",
         "System.Runtime.CompilerServices.NullableContextAttribute",
         "System.Runtime.CompilerServices.IsUnmanagedAttribute",

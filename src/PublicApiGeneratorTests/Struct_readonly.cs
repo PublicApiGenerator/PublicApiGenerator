@@ -5,7 +5,7 @@ namespace PublicApiGeneratorTests
     public class Struct_readonly : ApiGeneratorTestsBase
     {
         [Fact]
-        public void Should_output()
+        public void Should_output_readonly_struct()
         {
             AssertPublicApi<ReadonlyStruct>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -15,7 +15,7 @@ namespace PublicApiGeneratorTests
         }
 
         [Fact]
-        public void Should_output_with_ctor()
+        public void Should_output_readonly_struct_with_ctor()
         {
             AssertPublicApi<ReadonlyStructWithCtor>(
 @"namespace PublicApiGeneratorTests.Examples
@@ -24,6 +24,16 @@ namespace PublicApiGeneratorTests
     {
         public ReadonlyStructWithCtor(int parameter) { }
     }
+}");
+        }
+
+        [Fact]
+        public void Should_output_readonly_ref_struct()
+        {
+            AssertPublicApi(typeof(ReadonlyRefStruct),
+@"namespace PublicApiGeneratorTests.Examples
+{
+    public readonly ref struct ReadonlyRefStruct { }
 }");
         }
     }
@@ -39,6 +49,10 @@ namespace PublicApiGeneratorTests
             public ReadonlyStructWithCtor(int parameter)
             {
             }
+        }
+
+        public readonly ref struct ReadonlyRefStruct
+        {
         }
     }
 }
