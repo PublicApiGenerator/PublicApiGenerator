@@ -23,6 +23,7 @@ internal static class CodeTypeDeclarationExtensions
             IsStruct = original.IsStruct,
             IsStatic = original.IsStatic,
             IsReadonly = original.IsReadonly,
+            IsByRefLike = original.IsByRefLike,
             LinePragma = original.LinePragma,
         };
 
