@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_fields_in_alphabetical_order()
         {
-            AssertPublicApi<FieldOrderExample>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldOrderExample>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldOrderExample
     {
@@ -19,7 +19,8 @@ namespace PublicApiGeneratorTests
         public int i_Field;
         public FieldOrderExample() { }
     }
-}");
+}
+""");
         }
     }
 

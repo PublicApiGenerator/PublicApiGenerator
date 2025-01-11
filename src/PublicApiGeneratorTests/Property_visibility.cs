@@ -7,250 +7,268 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_public_property()
         {
-            AssertPublicApi<ClassWithPublicProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicProperty
     {
         public ClassWithPublicProperty() { }
         public string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_property()
         {
-            AssertPublicApi<ClassWithProtectedProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedProperty
     {
         public ClassWithProtectedProperty() { }
         protected string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_internal_property()
         {
-            AssertPublicApi<ClassWithProtectedInternalProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedInternalProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalProperty
     {
         public ClassWithProtectedInternalProperty() { }
         protected string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_protected_property()
         {
-            AssertPublicApi<ClassWithPrivateProtectedProperty>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateProtectedProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateProtectedProperty
     {
         public ClassWithPrivateProtectedProperty() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_property()
         {
-            AssertPublicApi<ClassWithPrivateProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateProperty
     {
         public ClassWithPrivateProperty() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_internal_property()
         {
-            AssertPublicApi<ClassWithInternalProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithInternalProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalProperty
     {
         public ClassWithInternalProperty() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_setter_for_public_property()
         {
-            AssertPublicApi<ClassWithPublicGetterPrivateSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicGetterPrivateSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterPrivateSetter
     {
         public ClassWithPublicGetterPrivateSetter() { }
         public string Value1 { get; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_internal_setter_for_public_property()
         {
-            AssertPublicApi<ClassWithPublicGetterInternalSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicGetterInternalSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterInternalSetter
     {
         public ClassWithPublicGetterInternalSetter() { }
         public string Value1 { get; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_setter_for_public_property()
         {
-            AssertPublicApi<ClassWithPublicGetterProtectedSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicGetterProtectedSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedSetter
     {
         public ClassWithPublicGetterProtectedSetter() { }
         public string Value1 { get; protected set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_setter_for_public_property_with_correct_modifier()
         {
-            AssertPublicApi<ClassWithPublicGetterProtectedSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicGetterProtectedSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedSetter
     {
         public ClassWithPublicGetterProtectedSetter() { }
         public string Value1 { get; protected set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_internal_setter_for_public_property()
         {
-            AssertPublicApi<ClassWithPublicGetterProtectedInternalSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicGetterProtectedInternalSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterProtectedInternalSetter
     {
         public ClassWithPublicGetterProtectedInternalSetter() { }
         public string Value1 { get; protected set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_protected_setter_for_public_property()
         {
-            AssertPublicApi<ClassWithPublicGetterPrivateProtectedSetter>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicGetterPrivateProtectedSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicGetterPrivateProtectedSetter
     {
         public ClassWithPublicGetterPrivateProtectedSetter() { }
         public string Value1 { get; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_getter_for_public_property()
         {
-            AssertPublicApi<ClassWithPrivateGetterPublicSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateGetterPublicSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateGetterPublicSetter
     {
         public ClassWithPrivateGetterPublicSetter() { }
         public string Value1 { set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_internal_getter_for_public_property()
         {
-            AssertPublicApi<ClassWithInternalGetterPublicSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithInternalGetterPublicSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalGetterPublicSetter
     {
         public ClassWithInternalGetterPublicSetter() { }
         public string Value1 { set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_getter_for_public_property()
         {
-            AssertPublicApi<ClassWithProtectedGetterPublicSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedGetterPublicSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedGetterPublicSetter
     {
         public ClassWithProtectedGetterPublicSetter() { }
         public string Value1 { protected get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_getter_for_public_property_with_correct_modifier()
         {
-            AssertPublicApi<ClassWithProtectedGetterPublicSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedGetterPublicSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedGetterPublicSetter
     {
         public ClassWithProtectedGetterPublicSetter() { }
         public string Value1 { protected get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_internal_getter_for_public_property()
         {
-            AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalGetterPublicSetter
     {
         public ClassWithProtectedInternalGetterPublicSetter() { }
         public string Value1 { protected get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_internal_getter_for_public_property_with_correct_modifier()
         {
-            AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedInternalGetterPublicSetter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalGetterPublicSetter
     {
         public ClassWithProtectedInternalGetterPublicSetter() { }
         public string Value1 { protected get; set; }
     }
-}");
+}
+""");
         }
     }
 

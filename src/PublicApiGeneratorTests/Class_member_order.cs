@@ -8,8 +8,8 @@ namespace PublicApiGeneratorTests
         public void Should_output_in_known_order_and_alphabetically()
         {
             // Fields, properties, events, methods, nested type (inc. delegates)
-            AssertPublicApi<ClassMemberOrder>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassMemberOrder>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassMemberOrder
     {
@@ -35,15 +35,16 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler IDelegate1();
         public delegate System.EventHandler iDelegate2();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_in_known_order_with_nested_class()
         {
             // Fields, properties, events, methods
-            AssertPublicApi<ClassMemberOrderAndNestedClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassMemberOrderAndNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
         public class ClassMemberOrderAndNestedClass
     {
@@ -100,7 +101,8 @@ namespace PublicApiGeneratorTests
         public delegate System.EventHandler iDelegate1();
         public delegate System.EventHandler iDelegate2();
     }
-}");
+}
+""");
         }
     }
 

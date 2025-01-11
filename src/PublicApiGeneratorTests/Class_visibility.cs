@@ -7,14 +7,15 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Public_class_is_visible()
         {
-            AssertPublicApi<PublicClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<PublicClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class PublicClass
     {
         public PublicClass() { }
     }
-}");
+}
+""");
         }
 
         [Fact]

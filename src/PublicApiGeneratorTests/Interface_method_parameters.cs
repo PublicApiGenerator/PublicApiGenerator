@@ -7,183 +7,197 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_handle_no_parameters()
         {
-            AssertPublicApi<IMethodWithNoParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithNoParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithNoParameters
     {
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_parameter_name()
         {
-            AssertPublicApi<IMethodWithSingleParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithSingleParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithSingleParameter
     {
         void Method(int value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_primitive_parameter()
         {
-            AssertPublicApi<IMethodWithSingleParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithSingleParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithSingleParameter
     {
         void Method(int value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_use_fully_qualified_type_name_for_parameter()
         {
-            AssertPublicApi<IMethodWithComplexTypeParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithComplexTypeParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithComplexTypeParameter
     {
         void Method(PublicApiGeneratorTests.Examples.ComplexType value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_generic_type()
         {
-            AssertPublicApi<IMethodWithGenericTypeParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithGenericTypeParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithGenericTypeParameter
     {
         void Method(PublicApiGeneratorTests.Examples.GenericType<int> value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_fully_qualified_type_name_for_generic_parameter()
         {
-            AssertPublicApi<IMethodWithGenericTypeOfComplexTypeParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithGenericTypeOfComplexTypeParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithGenericTypeOfComplexTypeParameter
     {
         void Method(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_generic_type_of_generic_type()
         {
-            AssertPublicApi<IMethodWithGenericTypeOfGenericTypeParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithGenericTypeOfGenericTypeParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithGenericTypeOfGenericTypeParameter
     {
         void Method(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.GenericType<int>> value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_generic_with_multiple_type_parameters()
         {
-            AssertPublicApi<IMethodWithGenericTypeWithMultipleTypeArgumentsParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithGenericTypeWithMultipleTypeArgumentsParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithGenericTypeWithMultipleTypeArgumentsParameter
     {
         void Method(PublicApiGeneratorTests.Examples.GenericTypeExtra<int, string, PublicApiGeneratorTests.Examples.ComplexType> value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_multiple_parameters()
         {
-            AssertPublicApi<IMethodWithMultipleParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithMultipleParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithMultipleParameters
     {
         void Method(int value1, string value2, PublicApiGeneratorTests.Examples.ComplexType value3);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_default_values()
         {
-            AssertPublicApi<IMethodWithDefaultValues>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithDefaultValues>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithDefaultValues
     {
-        void Method(int value1 = 42, string value2 = ""hello world"");
+        void Method(int value1 = 42, string value2 = "hello world");
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_ref_parameters()
         {
-            AssertPublicApi<IMethodWithRefParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithRefParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithRefParameter
     {
         void Method(ref string value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_in_parameters()
         {
-            AssertPublicApi<IMethodWithInParameter>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithInParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithInParameter
     {
         void Method(in string value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_out_parameters()
         {
-            AssertPublicApi<IMethodWithOutParameter>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithOutParameter>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithOutParameter
     {
         void Method(out string value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_params_keyword()
         {
-            AssertPublicApi<IMethodWithParams>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithParams>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithParams
     {
         void Method(string format, params object[] values);
     }
-}");
+}
+""");
         }
     }
 

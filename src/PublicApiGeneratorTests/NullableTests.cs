@@ -10,93 +10,99 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_Annotate_ReturnType()
         {
-            AssertPublicApi<ReturnType>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ReturnType>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ReturnType
     {
         public ReturnType() { }
         public string? ReturnProperty { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_VoidReturn()
         {
-            AssertPublicApi(typeof(VoidReturn),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(VoidReturn), """
+namespace PublicApiGeneratorTests.Examples
 {
     public static class VoidReturn
     {
         public static void ShouldBeEquivalentTo(this object? actual, object? expected) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Derived_ReturnType()
         {
-            AssertPublicApi<ReturnArgs>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ReturnArgs>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ReturnArgs : System.EventArgs
     {
         public ReturnArgs() { }
         public string? Target { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Ctor_Args()
         {
-            AssertPublicApi<NullableCtor>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<NullableCtor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class NullableCtor
     {
         public NullableCtor(string? nullableLabel, string nope) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Not_Annotate_Obsolete_Attribute()
         {
-            AssertPublicApi<ClassWithObsolete>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithObsolete>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [System.Obsolete(""Foo"")]
+    [System.Obsolete("Foo")]
     public class ClassWithObsolete
     {
-        [System.Obsolete(""Bar"")]
+        [System.Obsolete("Bar")]
         public ClassWithObsolete(string? nullableLabel) { }
-        [System.Obsolete(""Bar"")]
+        [System.Obsolete("Bar")]
         public ClassWithObsolete(string? nullableLabel, string? nullableLabel2) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Generic_Event()
         {
-            AssertPublicApi<GenericEvent>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<GenericEvent>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class GenericEvent
     {
            public GenericEvent() { }
            public event System.EventHandler<PublicApiGeneratorTests.Examples.ReturnArgs?> ReturnEvent;
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Delegate_Declaration()
         {
-            AssertPublicApi<DelegateDeclaration>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<DelegateDeclaration>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class DelegateDeclaration
     {
@@ -104,14 +110,15 @@ namespace PublicApiGeneratorTests
            public delegate string? OnNullableReturn(object sender, PublicApiGeneratorTests.Examples.ReturnArgs? args);
            public delegate string OnReturn(object sender, PublicApiGeneratorTests.Examples.ReturnArgs? args);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Nullable_Array()
         {
-            AssertPublicApi<NullableArray>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<NullableArray>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class NullableArray
     {
@@ -119,28 +126,30 @@ namespace PublicApiGeneratorTests
         public PublicApiGeneratorTests.Examples.ReturnType[]? NullableMethod1() { }
         public PublicApiGeneratorTests.Examples.ReturnType[]?[]? NullableMethod2() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Nullable_Enumerable()
         {
-            AssertPublicApi<NullableEnumerable>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<NullableEnumerable>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class NullableEnumerable
     {
         public NullableEnumerable() { }
         public System.Collections.Generic.IEnumerable<PublicApiGeneratorTests.Examples.ReturnType?>? Enumerable() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Generic_Method()
         {
-            AssertPublicApi<GenericMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<GenericMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class GenericMethod
     {
@@ -150,14 +159,15 @@ namespace PublicApiGeneratorTests
             where T2 :  class
             where T3 :  class { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Skeet_Examples()
         {
-            AssertPublicApi<SkeetExamplesClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<SkeetExamplesClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class SkeetExamplesClass
     {
@@ -166,28 +176,30 @@ namespace PublicApiGeneratorTests
         public System.Collections.Generic.Dictionary<System.Collections.Generic.List<string?>, string?[]?> SkeetExample3;
         public SkeetExamplesClass() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_By_Ref()
         {
-            AssertPublicApi<ByRefClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ByRefClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ByRefClass
     {
         public ByRefClass() { }
         public bool ByRefNullableReferenceParam(PublicApiGeneratorTests.Examples.ReturnType rt1, ref PublicApiGeneratorTests.Examples.ReturnType? rt2, PublicApiGeneratorTests.Examples.ReturnType rt3, PublicApiGeneratorTests.Examples.ReturnType? rt4, out PublicApiGeneratorTests.Examples.ReturnType? rt5, PublicApiGeneratorTests.Examples.ReturnType rt6) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Different_API()
         {
-            AssertPublicApi<NullableApi>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<NullableApi>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class NullableApi
     {
@@ -208,14 +220,15 @@ namespace PublicApiGeneratorTests
         public PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?> NullableStruct4(PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?> param) { }
         public PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?>? NullableStruct5(PublicApiGeneratorTests.Examples.Data<System.Collections.Generic.KeyValuePair<string, string?>?>? param) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_System_Nullable()
         {
-            AssertPublicApi<SystemNullable>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<SystemNullable>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class SystemNullable
     {
@@ -225,14 +238,15 @@ namespace PublicApiGeneratorTests
         public float? Calc(double? first, decimal? second) { }
         public System.Collections.Generic.List<System.Guid?> GetSecrets(System.Collections.Generic.Dictionary<int?, System.Collections.Generic.Dictionary<bool?, byte?>> data) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Generics()
         {
-            AssertPublicApi<Generics>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<Generics>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class Generics
     {
@@ -243,28 +257,30 @@ namespace PublicApiGeneratorTests
            public System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string?, System.Collections.Generic.List<int>?>>> GetSecretData3(System.Collections.Generic.Dictionary<int?, System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, System.Collections.Generic.List<int?>>>>? value) { }
            public System.Collections.Generic.Dictionary<int?, string>? GetSecretData4(System.Collections.Generic.Dictionary<int?, string>? value) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Structs()
         {
-            AssertPublicApi<Structs>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<Structs>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class Structs
     {
            public System.Collections.Generic.KeyValuePair<string?, int?> field;
            public Structs() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Tuples()
         {
-            AssertPublicApi<Tuples>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<Tuples>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class Tuples
     {
@@ -272,14 +288,15 @@ namespace PublicApiGeneratorTests
            public System.Tuple<string, string?, int, int?> Tuple1(System.Tuple<string, string?, int, int?>? tuple) { }
            public System.ValueTuple<string, string?, int, int?> Tuple2(System.ValueTuple<string, string?, int, int?>? tuple) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Constraints()
         {
-            AssertPublicApi<Constraints>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<Constraints>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class Constraints
     {
@@ -293,14 +310,15 @@ namespace PublicApiGeneratorTests
            public static void Print4<T>()
                 where T : System.IDisposable { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Nullable_Constraints()
         {
-            AssertPublicApi(typeof(Constraints2<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(Constraints2<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class Constraints2<X, Y>
         where X : System.IComparable<X>
@@ -314,28 +332,30 @@ namespace PublicApiGeneratorTests
            public static void Print2<T>()
                 where T : System.IDisposable? { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_BaseType()
         {
-            AssertPublicApi<NullableComparable>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<NullableComparable>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class NullableComparable : System.Collections.Generic.List<string?>, System.IComparable<string?>
     {
            public NullableComparable() { }
            public int CompareTo(string? other) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_OpenGeneric()
         {
-            AssertPublicApi(typeof(StringNullableList<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(StringNullableList<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class StringNullableList<T, U> : System.Collections.Generic.List<T?>, System.IComparable<U>
         where T : struct
@@ -344,14 +364,15 @@ namespace PublicApiGeneratorTests
            public StringNullableList() { }
            public int CompareTo(U? other) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_NotNull_Constraint()
         {
-            AssertPublicApi(typeof(IDoStuff1<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(IDoStuff1<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IDoStuff1<TIn, TOut>
          where TIn : notnull
@@ -359,14 +380,15 @@ namespace PublicApiGeneratorTests
     {
            TOut DoStuff(TIn input);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_NotNull_And_Null_Constraint()
         {
-            AssertPublicApi(typeof(IDoStuff2<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(IDoStuff2<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IDoStuff2<TIn, TOut>
          where TIn : class?
@@ -374,27 +396,29 @@ namespace PublicApiGeneratorTests
     {
            TOut DoStuff(TIn input);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Without_Explicit_Constraints()
         {
-            AssertPublicApi(typeof(IDoStuff3<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(IDoStuff3<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IDoStuff3<TIn, TOut>
     {
            TOut DoStuff(TIn input);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_NotNull_And_Null_Class_Constraint()
         {
-            AssertPublicApi(typeof(IDoStuff4<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(IDoStuff4<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IDoStuff4<TIn, TOut>
          where TIn : class?
@@ -402,14 +426,15 @@ namespace PublicApiGeneratorTests
     {
            TOut DoStuff(TIn input);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Nullable_Class_And_Struct_Constraint()
         {
-            AssertPublicApi(typeof(IDoStuff5<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(IDoStuff5<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IDoStuff5<TIn, TOut>
          where TIn : class?
@@ -417,14 +442,15 @@ namespace PublicApiGeneratorTests
     {
            TOut DoStuff(TIn input);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Annotate_Unmanaged_Constraint()
         {
-            AssertPublicApi(typeof(IDoStuff6<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(IDoStuff6<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IDoStuff6<TIn, TOut>
          where TIn : notnull
@@ -432,7 +458,8 @@ namespace PublicApiGeneratorTests
     {
            TOut DoStuff(TIn input);
     }
-}");
+}
+""");
         }
     }
 

@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_dynamic()
         {
-            AssertPublicApi<ClassWithDynamic>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithDynamic>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithDynamic : System.Collections.Generic.List<dynamic>
     {
@@ -29,7 +29,8 @@ namespace PublicApiGeneratorTests
             public ClassWithDynamic4() { }
         }
     }
-}");
+}
+""");
         }
     }
 

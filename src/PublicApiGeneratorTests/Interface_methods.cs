@@ -7,21 +7,22 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_void_method()
         {
-            AssertPublicApi<IVoidMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IVoidMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IVoidMethod
     {
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_method_parameters()
         {
-            AssertPublicApi<IMethodsWithParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodsWithParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodsWithParameters
     {
@@ -29,40 +30,43 @@ namespace PublicApiGeneratorTests
         PublicApiGeneratorTests.Examples.ComplexType Method2(PublicApiGeneratorTests.Examples.ComplexType value);
         PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> Method3(PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> value);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_methods_with_default_values()
         {
-            AssertPublicApi<IMethodsWithDefaultParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodsWithDefaultParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodsWithDefaultParameters
     {
-        void Method1(int intValue = 42, string stringValue = ""hello world"", System.Type typeValue = null, bool canThrow = false, bool needHelp = true);
+        void Method1(int intValue = 42, string stringValue = "hello world", System.Type typeValue = null, bool canThrow = false, bool needHelp = true);
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_modifier()
         {
-            AssertPublicApi<IMethodHiding>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodHiding>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodHiding : PublicApiGeneratorTests.Examples.IVoidMethod
     {
         new void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_methods_in_alphabetical_order()
         {
-            AssertPublicApi<IMultipleMethods>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMultipleMethods>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMultipleMethods
     {
@@ -70,7 +74,8 @@ namespace PublicApiGeneratorTests
         void MM_Method();
         void ZZ_Method();
     }
-}");
+}
+""");
         }
     }
 

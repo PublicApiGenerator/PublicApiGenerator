@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_sort_unary_operators()
         {
-            AssertPublicApi<ClassWithUnaryOperators>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithUnaryOperators>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithUnaryOperators
     {
@@ -22,14 +22,15 @@ namespace PublicApiGeneratorTests
         public static bool operator true(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
         public static PublicApiGeneratorTests.Examples.ClassWithUnaryOperators operator ~(PublicApiGeneratorTests.Examples.ClassWithUnaryOperators first) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_sort_binary_operators()
         {
-            AssertPublicApi<ClassWithBinaryOperators>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithBinaryOperators>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithBinaryOperators
     {
@@ -45,14 +46,15 @@ namespace PublicApiGeneratorTests
         public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators operator ^(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
         public static PublicApiGeneratorTests.Examples.ClassWithBinaryOperators operator |(PublicApiGeneratorTests.Examples.ClassWithBinaryOperators first, PublicApiGeneratorTests.Examples.ClassWithBinaryOperators second) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_sort_comparison_operators()
         {
-            AssertPublicApi<ClassWithComparisonOperators>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithComparisonOperators>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithComparisonOperators
     {
@@ -64,7 +66,8 @@ namespace PublicApiGeneratorTests
         public static bool operator >(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
         public static bool operator >=(PublicApiGeneratorTests.Examples.ClassWithComparisonOperators first, PublicApiGeneratorTests.Examples.ClassWithComparisonOperators second) { }
     }
-}");
+}
+""");
         }
     }
 

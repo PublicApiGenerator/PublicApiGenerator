@@ -8,8 +8,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_write_expression()
         {
-            AssertPublicApi(typeof(ClassWithExpressions<>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(ClassWithExpressions<>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithExpressions<TSourceType>
     {
@@ -18,7 +18,8 @@ namespace PublicApiGeneratorTests
         public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<TSourceType, object>?> expr3) { }
         public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<int, object>>? expr4) { }
     }
-}");
+}
+""");
         }
     }
 

@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_nested_classes()
         {
-            AssertPublicApi<ClassWithNestedClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithNestedClass
     {
@@ -20,56 +20,60 @@ namespace PublicApiGeneratorTests
             public void Method() { }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_ignore_private_nested_class()
         {
-            AssertPublicApi<ClassWithPrivateNestedClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateNestedClass
     {
         public ClassWithPrivateNestedClass() { }
         public void Method() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_ignore_internal_nested_class()
         {
-            AssertPublicApi<ClassWithInternalNestedClass>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithInternalNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalNestedClass
     {
         public ClassWithInternalNestedClass() { }
         public void Method() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_ignore_private_protected_nested_class()
         {
-            AssertPublicApi<ClassWithPrivateProtectedNestedClass>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateProtectedNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateProtectedNestedClass
     {
         public ClassWithPrivateProtectedNestedClass() { }
         public void Method() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_nested_class()
         {
-            AssertPublicApi<ClassWithProtectedNestedClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedNestedClass
     {
@@ -81,14 +85,15 @@ namespace PublicApiGeneratorTests
             public void Method() { }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_internal_nested_class()
         {
-            AssertPublicApi<ClassWithProtectedInternalNestedClass>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedInternalNestedClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalNestedClass
     {
@@ -100,14 +105,15 @@ namespace PublicApiGeneratorTests
             public void Method() { }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_multiple_nested_classes()
         {
-            AssertPublicApi<ClassWithDeeplyNestedClasses>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithDeeplyNestedClasses>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithDeeplyNestedClasses
     {
@@ -124,14 +130,15 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_nested_structs()
         {
-            AssertPublicApi<StructWithNestedStruct>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<StructWithNestedStruct>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public struct StructWithNestedStruct
     {
@@ -141,14 +148,15 @@ namespace PublicApiGeneratorTests
             public void Method() { }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_multiple_nested_classes_and_structs()
         {
-            AssertPublicApi<ClassWithDeeplyNestedStructs>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithDeeplyNestedStructs>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithDeeplyNestedStructs
     {
@@ -168,14 +176,15 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_Nested_Classes_From_NullableExample1()
         {
-            AssertPublicApi(typeof(Foo),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(Foo), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class Foo
     {
@@ -189,14 +198,15 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_Nested_Classes_From_NullableExample2()
         {
-            AssertPublicApi(typeof(Foo<>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(Foo<>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class Foo<T>
     {
@@ -210,14 +220,15 @@ namespace PublicApiGeneratorTests
             }
         }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_Not_Output_Generic_Parameters_From_Declaring_Type()
         {
-            AssertPublicApi(typeof(Foo<,>),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(Foo<,>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class Foo<T1, T2>
     {
@@ -233,7 +244,8 @@ namespace PublicApiGeneratorTests
             public Bar() { }
         }
     }
-}");
+}
+""");
         }
     }
 

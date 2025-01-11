@@ -7,184 +7,199 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_default_constructor()
         {
-            AssertPublicApi<ClassWithDefaultConstructor>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithDefaultConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithDefaultConstructor
     {
         public ClassWithDefaultConstructor() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_default_constructor_in_abstract_class()
         {
-            AssertPublicApi<AbstractClass>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<AbstractClass>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class AbstractClass
     {
         protected AbstractClass() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_protected_default_constructor_in_abstract_class_with_other_constructors()
         {
-            AssertPublicApi<AbstractClassWithCtors>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<AbstractClassWithCtors>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class AbstractClassWithCtors
     {
         public AbstractClassWithCtors(int i) { }
         protected AbstractClassWithCtors(string j) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_constructor_from_abstract_class()
         {
-            AssertPublicApi<AbstractClassWithPrivateCtor>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<AbstractClassWithPrivateCtor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class AbstractClassWithPrivateCtor { }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_internal_constructor()
         {
-            AssertPublicApi<ClassWithInternalConstructor>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithInternalConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalConstructor { }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_constructor()
         {
-            AssertPublicApi<ClassWithPrivateConstructor>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateConstructor { }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_private_protected_constructor()
         {
-            AssertPublicApi<ClassWithPrivateProtectedConstructor>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPrivateProtectedConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPrivateProtectedConstructor { }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_public_constructor()
         {
-            AssertPublicApi<ClassWithPublicConstructor>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicConstructor
     {
         public ClassWithPublicConstructor() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_constructor()
         {
-            AssertPublicApi<ClassWithProtectedConstructor>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedConstructor
     {
         protected ClassWithProtectedConstructor() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_internal_constructor()
         {
-            AssertPublicApi<ClassWithProtectedInternalConstructor>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedInternalConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedInternalConstructor
     {
         protected ClassWithProtectedInternalConstructor() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_constructor_parameters()
         {
-            AssertPublicApi<ClassWithConstructorWithParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithConstructorWithParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithConstructorWithParameters
     {
         public ClassWithConstructorWithParameters(int intValue, string stringValue, PublicApiGeneratorTests.Examples.ComplexType complexType, PublicApiGeneratorTests.Examples.GenericType<int> genericType, ref int intValueByRef, in int intValueByIn) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_multiple_constructors()
         {
             // TODO: Not sure about ordering here
-            AssertPublicApi<ClassWithMultipleConstructors>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithMultipleConstructors>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithMultipleConstructors
     {
         public ClassWithMultipleConstructors() { }
         protected ClassWithMultipleConstructors(int value) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_constructor_default_parameter_values()
         {
-            AssertPublicApi<ClassWithConstructorWithDefaultValues>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithConstructorWithDefaultValues>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithConstructorWithDefaultValues
     {
-        public ClassWithConstructorWithDefaultValues(int intValue = 42, string stringValue = ""hello world"", System.Type typeValue = null) { }
+        public ClassWithConstructorWithDefaultValues(int intValue = 42, string stringValue = "hello world", System.Type typeValue = null) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_static_constructor_of_class()
         {
-            AssertPublicApi<ClassWithStaticConstructor>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStaticConstructor>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticConstructor
     {
         public ClassWithStaticConstructor() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_static_constructor_of_static_class()
         {
-            AssertPublicApi(typeof(StaticClassWithStaticConstructor),
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(StaticClassWithStaticConstructor), """
+namespace PublicApiGeneratorTests.Examples
 {
     public static class StaticClassWithStaticConstructor { }
-}");
+}
+""");
         }
     }
 

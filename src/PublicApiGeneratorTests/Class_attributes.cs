@@ -7,200 +7,215 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_add_attribute_with_no_parameters()
         {
-            AssertPublicApi<ClassWithSimpleAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithSimpleAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.Simple]
     public class ClassWithSimpleAttribute
     {
         public ClassWithSimpleAttribute() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_positional_parameters()
         {
-            AssertPublicApi<ClassWithAttributeWithStringPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithStringPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1("Hello")]
     public class ClassWithAttributeWithStringPositionalParameters
     {
         public ClassWithAttributeWithStringPositionalParameters() { }
     }
-}");
-            AssertPublicApi<ClassWithAttributeWithIntPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+}
+""");
+            AssertPublicApi<ClassWithAttributeWithIntPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
     public class ClassWithAttributeWithIntPositionalParameters
     {
         public ClassWithAttributeWithIntPositionalParameters() { }
     }
-}");
-            AssertPublicApi<ClassWithAttributeWithMultiplePositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+}
+""");
+            AssertPublicApi<ClassWithAttributeWithMultiplePositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, "Hello world")]
     public class ClassWithAttributeWithMultiplePositionalParameters
     {
         public ClassWithAttributeWithMultiplePositionalParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_named_parameters()
         {
-            AssertPublicApi<ClassWithIntNamedParameterAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithIntNamedParameterAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
     public class ClassWithIntNamedParameterAttribute
     {
         public ClassWithIntNamedParameterAttribute() { }
     }
-}");
+}
+""");
 
-            AssertPublicApi<ClassWithStringNamedParameterAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStringNamedParameterAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue="Hello")]
     public class ClassWithStringNamedParameterAttribute
     {
         public ClassWithStringNamedParameterAttribute() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
-            AssertPublicApi<ClassWithAttributeWithMultipleNamedParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithMultipleNamedParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue="Hello world")]
     public class ClassWithAttributeWithMultipleNamedParameters
     {
         public ClassWithAttributeWithMultipleNamedParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_named_fields()
         {
-            AssertPublicApi<ClassWithIntNamedFieldAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithIntNamedFieldAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithNamedField(IntValue=42)]
     public class ClassWithIntNamedFieldAttribute
     {
         public ClassWithIntNamedFieldAttribute() { }
     }
-}");
+}
+""");
 
-            AssertPublicApi<ClassWithStringNamedFieldAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStringNamedFieldAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(StringValue=""Hello"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(StringValue="Hello")]
     public class ClassWithStringNamedFieldAttribute
     {
         public ClassWithStringNamedFieldAttribute() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_multiple_named_fields_in_alphabetical_order()
         {
-            AssertPublicApi<ClassWithAttributeWithMultipleNamedFields>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithMultipleNamedFields>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(IntValue=42, StringValue=""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedField(IntValue=42, StringValue="Hello world")]
     public class ClassWithAttributeWithMultipleNamedFields
     {
         public ClassWithAttributeWithMultipleNamedFields() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
-            AssertPublicApi<ClassWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithBothNamedAndPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello"", IntValue=13, StringValue=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, "Hello", IntValue=13, StringValue="World")]
     public class ClassWithAttributeWithBothNamedAndPositionalParameters
     {
         public ClassWithAttributeWithBothNamedAndPositionalParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_both_named_fields_and_parameters()
         {
-            AssertPublicApi<ClassWithAttributeWithBothNamedParametersAndFields>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithBothNamedParametersAndFields>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAndField(IntField=42, StringField=""Hello"", IntProperty=13, StringProperty=""World"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAndField(IntField=42, StringField="Hello", IntProperty=13, StringProperty="World")]
     public class ClassWithAttributeWithBothNamedParametersAndFields
     {
         public ClassWithAttributeWithBothNamedParametersAndFields() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_enum_value()
         {
-            AssertPublicApi<ClassWithAttributeWithSimpleEnum>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithSimpleEnum>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithSimpleEnum(PublicApiGeneratorTests.Examples.SimpleEnum.Blue)]
     public class ClassWithAttributeWithSimpleEnum
     {
         public ClassWithAttributeWithSimpleEnum() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_expand_enum_flags()
         {
-            AssertPublicApi<ClassWithAttributeWithEnumFlags>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithEnumFlags>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
     public class ClassWithAttributeWithEnumFlags
     {
         public ClassWithAttributeWithEnumFlags() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_expand_enum_special_flags()
         {
-            AssertPublicApi<ClassWithAttributeWithEnumWithSomeSpecialFlags>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithEnumWithSomeSpecialFlags>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithEnumWithSomeSpecialFlags(PublicApiGeneratorTests.Examples.EnumWithSomeSpecialFlags.PublicConstructors)]
     public class ClassWithAttributeWithEnumWithSomeSpecialFlags
     {
         public ClassWithAttributeWithEnumWithSomeSpecialFlags() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
-            AssertPublicApi<ClassWithMultipleAttributes>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithMultipleAttributes>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.Attribute_AA]
     [PublicApiGeneratorTests.Examples.Attribute_MM]
@@ -209,141 +224,150 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithMultipleAttributes() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_attribute_with_multiple_usages_support()
         {
-            AssertPublicApi<ClassWithAttributeWithMultipleUsagesSupport>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithMultipleUsagesSupport>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=0, StringValue=""ZZZ"")]
-    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=1, StringValue=""MMM"")]
-    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=2, StringValue=""AAA"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=0, StringValue="ZZZ")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=1, StringValue="MMM")]
+    [PublicApiGeneratorTests.Examples.AttributeWithMultipleUsagesSupport(IntValue=2, StringValue="AAA")]
     public class ClassWithAttributeWithMultipleUsagesSupport
     {
         public ClassWithAttributeWithMultipleUsagesSupport() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_attribute_with_object_initialiser()
         {
-            AssertPublicApi<ClassWithAttributeWithObjectInitialiser>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithObjectInitialiser>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithObjectInitialiser(""Hello world"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithObjectInitialiser("Hello world")]
     public class ClassWithAttributeWithObjectInitialiser
     {
         public ClassWithAttributeWithObjectInitialiser() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_attribute_with_object_array_initialiser()
         {
-            AssertPublicApi<ClassWithAttributeWithObjectArrayInitialiser>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithObjectArrayInitialiser>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithObjectArrayInitialiser(new object[] {
             42,
-            ""Hello world""})]
+            "Hello world"})]
     public class ClassWithAttributeWithObjectArrayInitialiser
     {
         public ClassWithAttributeWithObjectArrayInitialiser() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_attribute_with_string_array_initialiser()
         {
-            AssertPublicApi<ClassWithAttributeWithStringArrayInitialiser>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithStringArrayInitialiser>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.AttributeWithStringArrayInitialiser(new string[] {
-            ""Hello"",
-            ""world""})]
+            "Hello",
+            "world"})]
     public class ClassWithAttributeWithStringArrayInitialiser
     {
         public ClassWithAttributeWithStringArrayInitialiser() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_attribute_with_long_string_initialiser()
         {
-            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.AttributeWithStringInitialiser(""This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
-        ""eeeeeeery long string that will be surrounded by parenthesis due to how it\'s han"" +
-        ""dled by Microsoft.CodeDom"")]
+    [PublicApiGeneratorTests.Examples.AttributeWithStringInitialiser("This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" +
+        "eeeeeeery long string that will be surrounded by parenthesis due to how it\'s han" +
+        "dled by Microsoft.CodeDom")]
     public class ClassWithAttributeWithLongStringInitialiser
     {
         public ClassWithAttributeWithLongStringInitialiser() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_attribute_with_long_string_initialiser2()
         {
-            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser2>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser2>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [System.Obsolete(""This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
-        ""eeeeeeery long string that will be surrounded by parenthesis due to how it\'s han"" +
-        ""dled by Microsoft.CodeDom"", false)]
+    [System.Obsolete("This is a veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" +
+        "eeeeeeery long string that will be surrounded by parenthesis due to how it\'s han" +
+        "dled by Microsoft.CodeDom", false)]
     public class ClassWithAttributeWithLongStringInitialiser2
     {
         public ClassWithAttributeWithLongStringInitialiser2() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_handle_attribute_with_long_string_initialiser3()
         {
-            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser3>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeWithLongStringInitialiser3>("""
+namespace PublicApiGeneratorTests.Examples
 {
-    [PublicApiGeneratorTests.Examples.SomeStringParams(""This is first veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
-        ""eeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'s"" +
-        "" handled by Microsoft.CodeDom"", 42, ""This is second veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
-        ""eeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'"" +
-        ""s handled by Microsoft.CodeDom"", true, ""This is third veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"" +
-        ""eeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'s"" +
-        "" handled by Microsoft.CodeDom"")]
+    [PublicApiGeneratorTests.Examples.SomeStringParams("This is first veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" +
+        "eeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'s" +
+        " handled by Microsoft.CodeDom", 42, "This is second veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" +
+        "eeeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'" +
+        "s handled by Microsoft.CodeDom", true, "This is third veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" +
+        "eeeeeeeeeeery long string that will be surrounded by parenthesis due to how it\'s" +
+        " handled by Microsoft.CodeDom")]
     public class ClassWithAttributeWithLongStringInitialiser3
     {
         public ClassWithAttributeWithLongStringInitialiser3() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_internal_attributes()
         {
-            AssertPublicApi<ClassWithInternalAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithInternalAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithInternalAttribute
     {
         public ClassWithInternalAttribute() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            AssertPublicApi<ClassWithMultipleAttributes>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithMultipleAttributes>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [PublicApiGeneratorTests.Examples.Attribute_AA]
     [PublicApiGeneratorTests.Examples.Attribute_ZZ]
@@ -351,35 +375,38 @@ namespace PublicApiGeneratorTests
     {
         public ClassWithMultipleAttributes() { }
     }
-}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM"]);
+}
+""", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.Attribute_MM"]);
         }
 
         [Fact]
         public void Should_include_Serializable_attribute()
         {
-            AssertPublicApi<ClassWithSerializableAttribute>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithSerializableAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [System.Serializable]
     public class ClassWithSerializableAttribute
     {
         public ClassWithSerializableAttribute() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_reproduce_AttributeTargets_value_correctly_on_AttributeUsage_attribute()
         {
-            AssertPublicApi<ClassWithAttributeUsageAttribute>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAttributeUsageAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     [System.AttributeUsage(System.AttributeTargets.Struct | System.AttributeTargets.Field)]
     public class ClassWithAttributeUsageAttribute : System.Attribute
     {
         public ClassWithAttributeUsageAttribute() { }
     }
-}");
+}
+""");
         }
     }
 

@@ -7,8 +7,8 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_be_alphabetical_order()
         {
-            AssertPublicApi<MethodOrdering>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodOrdering>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class MethodOrdering
     {
@@ -24,14 +24,15 @@ namespace PublicApiGeneratorTests
         public void Method_i() { }
         public static void Method_CC() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_be_alphabetical_order_with_block_bracing_style()
         {
-            AssertPublicApi<MethodOrdering>(
-@"namespace PublicApiGeneratorTests.Examples {
+            AssertPublicApi<MethodOrdering>("""
+namespace PublicApiGeneratorTests.Examples {
     public class MethodOrdering {
         public MethodOrdering() { }
         public void Method_AA() { }
@@ -45,14 +46,15 @@ namespace PublicApiGeneratorTests
         public void Method_i() { }
         public static void Method_CC() { }
     }
-}", opt => opt.BracingStyle = "C");
+}
+""", opt => opt.BracingStyle = "C");
         }
 
         [Fact]
         public void Should_be_alphabetical_order_with_custom_indent_string1()
         {
-            AssertPublicApi<MethodOrdering>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodOrdering>("""
+namespace PublicApiGeneratorTests.Examples
 {
  public class MethodOrdering
  {
@@ -68,14 +70,15 @@ namespace PublicApiGeneratorTests
   public void Method_i() { }
   public static void Method_CC() { }
  }
-}", opt => opt.IndentString = " ");
+}
+""", opt => opt.IndentString = " ");
         }
 
         [Fact]
         public void Should_be_alphabetical_order_with_custom_indent_string2()
         {
-            AssertPublicApi<MethodOrdering>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodOrdering>("""
+namespace PublicApiGeneratorTests.Examples
 {
 __public class MethodOrdering
 __{
@@ -91,7 +94,8 @@ ____public void Method_I(string arg) { }
 ____public void Method_i() { }
 ____public static void Method_CC() { }
 __}
-}", opt => opt.IndentString = "__");
+}
+""", opt => opt.IndentString = "__");
         }
     }
 

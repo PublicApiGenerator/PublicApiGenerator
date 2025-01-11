@@ -7,98 +7,104 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_add_attribute_with_no_parameters()
         {
-            AssertPublicApi<IMethodReturnValueWithSimpleAttribute>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValueWithSimpleAttribute>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValueWithSimpleAttribute
     {
         [return: PublicApiGeneratorTests.Examples.Simple]
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_positional_parameters()
         {
-            AssertPublicApi<IMethodReturnValuesWithAttributeWithPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValuesWithAttributeWithPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValuesWithAttributeWithPositionalParameters
     {
-        [return: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
+        [return: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1("Hello")]
         void Method1();
         [return: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
         void Method2();
-        [return: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello world"")]
+        [return: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, "Hello world")]
         void Method3();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_named_parameters()
         {
-            AssertPublicApi<IMethodReturnValuesWithAttributeWithNamedParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValuesWithAttributeWithNamedParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValuesWithAttributeWithNamedParameters
     {
-        [return: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue=""Hello"")]
+        [return: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(StringValue="Hello")]
         void Method1();
         [return: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42)]
         void Method2();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_multiple_named_parameters_in_alphabetical_order()
         {
-            AssertPublicApi<IMethodReturnValueWithAttributeWithMultipleNamedParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValueWithAttributeWithMultipleNamedParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValueWithAttributeWithMultipleNamedParameters
     {
-        [return: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello world"")]
+        [return: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue="Hello world")]
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_attribute_with_both_named_and_positional_parameters()
         {
-            AssertPublicApi<IMethodReturnValueWithAttributeWithBothNamedAndPositionalParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValueWithAttributeWithBothNamedAndPositionalParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValueWithAttributeWithBothNamedAndPositionalParameters
     {
-        [return: PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, ""Hello world"", IntValue=13, StringValue=""Thingy"")]
+        [return: PublicApiGeneratorTests.Examples.AttributeWithNamedAndPositionalParameter(42, "Hello world", IntValue=13, StringValue="Thingy")]
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_expand_enum_flags()
         {
-            AssertPublicApi<IMethodReturnValueWithAttributeWithEnumFlags>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValueWithAttributeWithEnumFlags>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValueWithAttributeWithEnumFlags
     {
         [return: PublicApiGeneratorTests.Examples.AttributeWithEnumFlags(PublicApiGeneratorTests.Examples.EnumWithFlags.One | PublicApiGeneratorTests.Examples.EnumWithFlags.Two | PublicApiGeneratorTests.Examples.EnumWithFlags.Three)]
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_add_multiple_attributes_in_alphabetical_order()
         {
-            AssertPublicApi<IMethodReturnValueWithMultipleAttributes>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValueWithMultipleAttributes>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValueWithMultipleAttributes
     {
@@ -107,14 +113,15 @@ namespace PublicApiGeneratorTests
         [return: PublicApiGeneratorTests.Examples.Attribute_ZZ]
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_order_return_and_method_attributes_correctly()
         {
-            AssertPublicApi<IMethodWithAttributesOnMethodAndReturnValue>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodWithAttributesOnMethodAndReturnValue>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodWithAttributesOnMethodAndReturnValue
     {
@@ -122,20 +129,22 @@ namespace PublicApiGeneratorTests
         [return: PublicApiGeneratorTests.Examples.Simple]
         void Method();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_skip_excluded_attribute()
         {
-            AssertPublicApi<IMethodReturnValueWithAttributeWithMultipleNamedParameters>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<IMethodReturnValueWithAttributeWithMultipleNamedParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public interface IMethodReturnValueWithAttributeWithMultipleNamedParameters
     {
         void Method();
     }
-}", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]);
+}
+""", opt => opt.ExcludeAttributes = ["PublicApiGeneratorTests.Examples.AttributeWithNamedParameterAttribute"]);
         }
     }
 

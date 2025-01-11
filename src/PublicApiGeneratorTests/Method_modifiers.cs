@@ -7,351 +7,376 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_abstract_modifier()
         {
-            AssertPublicApi<ClassWithAbstractMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAbstractMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractMethod
     {
         protected ClassWithAbstractMethod() { }
         public abstract void DoSomething();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_abstract_new_modifier()
         {
-            AssertPublicApi<ClassWithAbstractNewMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAbstractNewMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractNewMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         protected ClassWithAbstractNewMethod() { }
         public new abstract void DoSomething();
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_static_modifier()
         {
-            AssertPublicApi<ClassWithStaticMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStaticMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticMethod
     {
         public ClassWithStaticMethod() { }
         public static void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_static_modifier()
         {
-            AssertPublicApi<ClassWithProtectedStaticMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedStaticMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedStaticMethod
     {
         public ClassWithProtectedStaticMethod() { }
         protected static void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_static_new_modifier()
         {
-            AssertPublicApi<ClassWithStaticNewMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithStaticNewMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithStaticNewMethod : PublicApiGeneratorTests.Examples.ClassWithStaticMethod
     {
         public ClassWithStaticNewMethod() { }
         public new static void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_static_new_modifier()
         {
-            AssertPublicApi<ClassWithProtectedStaticNewMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedStaticNewMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedStaticNewMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticMethod
     {
         public ClassWithProtectedStaticNewMethod() { }
         protected new static void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_public_static_new_modifier()
         {
-            AssertPublicApi<ClassWithPublicStaticNewMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicStaticNewMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicStaticNewMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedStaticMethod
     {
         public ClassWithPublicStaticNewMethod() { }
         public new static void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_virtual_modifier()
         {
-            AssertPublicApi<ClassWithVirtualMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithVirtualMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithVirtualMethod
     {
         public ClassWithVirtualMethod() { }
         public virtual void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_virtual_modifier()
         {
-            AssertPublicApi<ClassWithProtectedVirtualMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedVirtualMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedVirtualMethod
     {
         public ClassWithProtectedVirtualMethod() { }
         protected virtual void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_virtual_modifier()
         {
-            AssertPublicApi<ClassWithNewVirtualMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithNewVirtualMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithNewVirtualMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         public ClassWithNewVirtualMethod() { }
         public new virtual void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_new_virtual_modifier()
         {
-            AssertPublicApi<ClassWithProtectedNewVirtualMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedNewVirtualMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedNewVirtualMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualMethod
     {
         public ClassWithProtectedNewVirtualMethod() { }
         protected new virtual void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_override_modifier()
         {
-            AssertPublicApi<ClassWithOverridingMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithOverridingMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         public ClassWithOverridingMethod() { }
         public override void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_override_modifier()
         {
-            AssertPublicApi<ClassWithProtectedOverridingMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedOverridingMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualMethod
     {
         public ClassWithProtectedOverridingMethod() { }
         protected override void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_abstract_override_modifier()
         {
-            AssertPublicApi<ClassWithAbstractOverridingMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAbstractOverridingMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class ClassWithAbstractOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         protected ClassWithAbstractOverridingMethod() { }
         public abstract override void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_sealed_modifier()
         {
-            AssertPublicApi<ClassWithSealedOverridingMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithSealedOverridingMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithSealedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithVirtualMethod
     {
         public ClassWithSealedOverridingMethod() { }
         public override sealed void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_sealed_modifier()
         {
-            AssertPublicApi<ClassWithProtectedSealedOverridingMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedSealedOverridingMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedSealedOverridingMethod : PublicApiGeneratorTests.Examples.ClassWithProtectedVirtualMethod
     {
         public ClassWithProtectedSealedOverridingMethod() { }
         protected override sealed void DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_allow_overriding_object_methods()
         {
-            AssertPublicApi<ClassWithMethodOverridingObjectMethod>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithMethodOverridingObjectMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithMethodOverridingObjectMethod
     {
         public ClassWithMethodOverridingObjectMethod() { }
         public override string ToString() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_modifier()
         {
-            AssertPublicApi<ClassWithMethodHiding>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithMethodHiding>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithMethodHiding : PublicApiGeneratorTests.Examples.ClassWithSimpleMethod
     {
         public ClassWithMethodHiding() { }
         public new void Method() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_modifier_for_generics()
         {
-            AssertPublicApi(typeof(ClassWithMethodExtensions<>),
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi(typeof(ClassWithMethodExtensions<>), """
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithMethodExtensions<T> : PublicApiGeneratorTests.Examples.ClassWithMethodExtensions
     {
         public ClassWithMethodExtensions() { }
         public new PublicApiGeneratorTests.Examples.ClassWithMethodExtensions<T> Extend(string parameter) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_protected_new_modifier()
         {
-            AssertPublicApi<ClassWithProtectedMethodHiding>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithProtectedMethodHiding>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithProtectedMethodHiding : PublicApiGeneratorTests.Examples.ClassWithSimpleProtectedMethod
     {
         public ClassWithProtectedMethodHiding() { }
         protected new void Method() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_public_new_modifier()
         {
-            AssertPublicApi<ClassWithPublicMethodHiding>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithPublicMethodHiding>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithPublicMethodHiding : PublicApiGeneratorTests.Examples.ClassWithSimpleProtectedMethod
     {
         public ClassWithPublicMethodHiding() { }
         public new void Method() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_not_output_new_when_base_differs_in_parameters()
         {
-            AssertPublicApi<ClassWithBaseMethodConstraint>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithBaseMethodConstraint>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithBaseMethodConstraint : PublicApiGeneratorTests.Examples.ClassWithBaseMethod
     {
         public ClassWithBaseMethodConstraint() { }
         public void SomeMethod(PublicApiGeneratorTests.Examples.ClassWithBaseMethodConstraint input1, PublicApiGeneratorTests.Examples.ClassWithBaseMethodConstraint input2) { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_unsafe_modifier()
         {
-            AssertPublicApi<ClassWithUnsafeMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithUnsafeMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithUnsafeMethod
     {
         public ClassWithUnsafeMethod() { }
         public unsafe void* DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_unsafe_virtual_modifier()
         {
-            AssertPublicApi<ClassWithUnsafeVirtualMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithUnsafeVirtualMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithUnsafeVirtualMethod
     {
         public ClassWithUnsafeVirtualMethod() { }
         public virtual unsafe void* DoSomething() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_new_modifier_even_under_evil_circumstances()
         {
-            AssertPublicApi<AbstractClassRedeclaringAbstractMethod>(
-                @"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<AbstractClassRedeclaringAbstractMethod>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public abstract class AbstractClassRedeclaringAbstractMethod : PublicApiGeneratorTests.Examples.ClassInheritingVirtualMethod
     {
         protected AbstractClassRedeclaringAbstractMethod() { }
         public new abstract void DoSomething();
     }
-}");
+}
+""");
         }
     }
 

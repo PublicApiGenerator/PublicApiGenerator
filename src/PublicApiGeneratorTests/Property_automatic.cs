@@ -7,29 +7,31 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_output_automatic_property()
         {
-            AssertPublicApi<ClassWithAutomaticProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithAutomaticProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithAutomaticProperty
     {
         public ClassWithAutomaticProperty() { }
         public string Value { get; set; }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_manually_implemented_property()
         {
-            AssertPublicApi<ClassWithManualProperty>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithManualProperty>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithManualProperty
     {
         public ClassWithManualProperty() { }
         public string Value { get; set; }
     }
-}");
+}
+""");
         }
     }
 

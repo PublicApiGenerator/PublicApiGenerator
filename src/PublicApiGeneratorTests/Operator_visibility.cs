@@ -7,15 +7,16 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_show_custom_operators()
         {
-            AssertPublicApi<ClassWithOperator>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<ClassWithOperator>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithOperator
     {
         public ClassWithOperator() { }
         public static PublicApiGeneratorTests.Examples.ClassWithOperator operator +(PublicApiGeneratorTests.Examples.ClassWithOperator first, PublicApiGeneratorTests.Examples.ClassWithOperator second) { }
     }
-}");
+}
+""");
         }
     }
 

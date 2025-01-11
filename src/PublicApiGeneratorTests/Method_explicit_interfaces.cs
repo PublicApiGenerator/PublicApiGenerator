@@ -10,14 +10,15 @@ namespace PublicApiGeneratorTests
             // TODO: Should explicitly implemented methods be output?
             // Possibly not. While they are a public API, the fact that an
             // implementation has changed is not as important as the interface changing
-            AssertPublicApi<MethodWithExplicitImplementation>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<MethodWithExplicitImplementation>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class MethodWithExplicitImplementation : System.IDisposable
     {
         public MethodWithExplicitImplementation() { }
     }
-}");
+}
+""");
         }
     }
 

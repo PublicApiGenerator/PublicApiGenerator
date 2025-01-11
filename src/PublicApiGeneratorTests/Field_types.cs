@@ -7,78 +7,83 @@ namespace PublicApiGeneratorTests
         [Fact]
         public void Should_use_fully_qualified_type_name()
         {
-            AssertPublicApi<FieldWithComplexType>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithComplexType>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithComplexType
     {
         public PublicApiGeneratorTests.Examples.ComplexType Field;
         public FieldWithComplexType() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_generic_parameters()
         {
-            AssertPublicApi<FieldWithGenericType>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithGenericType>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithGenericType
     {
         public PublicApiGeneratorTests.Examples.GenericType<int> Field;
         public FieldWithGenericType() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_use_fully_qualified_type_name_for_generic_parameters()
         {
-            AssertPublicApi<FieldWithGenericComplexType>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithGenericComplexType>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithGenericComplexType
     {
         public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType> Field;
         public FieldWithGenericComplexType() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_generic_parameters_with_generic_parameters()
         {
-            AssertPublicApi<FieldWithGenericTypeParametersOfGenericTypeParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithGenericTypeParametersOfGenericTypeParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithGenericTypeParametersOfGenericTypeParameters
     {
         public PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.GenericType<PublicApiGeneratorTests.Examples.ComplexType>> Field;
         public FieldWithGenericTypeParametersOfGenericTypeParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_multiple_generic_parameters()
         {
-            AssertPublicApi<FieldWithMultipleGenericTypeParameters>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithMultipleGenericTypeParameters>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithMultipleGenericTypeParameters
     {
         public PublicApiGeneratorTests.Examples.GenericTypeExtra<int, string, PublicApiGeneratorTests.Examples.ComplexType> Field;
         public FieldWithMultipleGenericTypeParameters() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_readonly_func_with_type_arguments()
         {
-            AssertPublicApi<FieldWithFunc>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithFunc>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithFunc
     {
@@ -86,14 +91,15 @@ namespace PublicApiGeneratorTests
         public readonly System.Func<string, string, string, string> FuncField2;
         public FieldWithFunc() { }
     }
-}");
+}
+""");
         }
 
         [Fact]
         public void Should_output_nullable_types()
         {
-            AssertPublicApi<FieldWithNullable>(
-@"namespace PublicApiGeneratorTests.Examples
+            AssertPublicApi<FieldWithNullable>("""
+namespace PublicApiGeneratorTests.Examples
 {
     public class FieldWithNullable
     {
@@ -101,7 +107,8 @@ namespace PublicApiGeneratorTests
         public readonly System.TimeSpan? NullableTimespan;
         public FieldWithNullable() { }
     }
-}");
+}
+""");
         }
     }
 
