@@ -253,7 +253,7 @@ public static class ApiGenerator
             IsStatic = @static,
             IsReadonly = @readonly,
             IsByRefLike = byRefLike,
-            IsRecord = publicType.IsRecord() && !options.TreatRecordsAsClasses,
+            IsRecord = !options.TreatRecordsAsClasses && publicType.IsRecord(),
         };
 
         if (declaration.IsInterface && publicType.BaseType != null)
