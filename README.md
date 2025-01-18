@@ -1,4 +1,4 @@
-# PublicApiGenerator1
+# PublicApiGenerator
 
 [![Run tests](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/ci.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/ci.yml)
 [![Publish preview](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-preview.yml/badge.svg)](https://github.com/PublicApiGenerator/PublicApiGenerator/actions/workflows/cd-preview.yml)

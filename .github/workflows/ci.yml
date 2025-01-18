@@ -23,14 +23,13 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        # TODO: change to ubuntu-latest back
+        # see https://github.com/actions/runner-images/issues/10989
+        # Process terminated. Couldn't find a valid ICU package installed on the system. Set the configuration flag System.Globalization.Invariant to true if you want to run with no globalization
+        os: [ubuntu-22.04, windows-latest]
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
-      # Process terminated. Couldn't find a valid ICU package installed on the system. Set the configuration flag System.Globalization.Invariant to true if you want to run with no globalization
-      - name: Add icu support
-        if: ${{ startsWith(matrix.os, 'ubuntu') }}
-        run: sudo apt-get install libicu-dev
       - uses: actions/checkout@v4
       - name: Setup .NET SDKs
         uses: actions/setup-dotnet@v4
