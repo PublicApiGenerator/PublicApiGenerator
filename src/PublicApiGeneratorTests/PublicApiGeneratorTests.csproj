@@ -17,13 +17,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);VSSpell001</WarningsNotAsErrors>
     <IsPackable>false</IsPackable>
-    <!--
-    System.CodeDom 8.0.0 doesn't support netcoreapp3.1 and has not been tested with it.
-    Consider upgrading your TargetFramework to net6.0 or later. You may also set
-    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings> in the project
-    file to ignore this warning and attempt to run in this unsupported configuration at your own risk.
-    -->
-    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
   <ItemGroup>
