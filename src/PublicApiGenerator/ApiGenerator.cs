@@ -149,7 +149,7 @@ public static class ApiGenerator
     private static bool ShouldIncludeMember(IMemberDefinition m, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods)
     {
         // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/245
-        if (m.DeclaringType.IsRecord() && m.Name == "EqualityContract")
+        if (m.Name == "EqualityContract" && m.DeclaringType.IsRecord())
             return false;
 
         if (m.IsCompilerGenerated())
