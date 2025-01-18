@@ -34,6 +34,9 @@ namespace PublicApiGeneratorTests
 #elif NET6_0
             const string TFM = ".NETCoreApp,Version=v6.0";
             const string TFMNAME = ".NET 6.0";
+#elif NET5_0
+            const string TFM = ".NETCoreApp,Version=v5.0";
+            const string TFMNAME = ".NET 5.0";
 #elif NETCOREAPP3_1
             const string TFM = ".NETCoreApp,Version=v3.1";
             const string TFMNAME = ".NET Core 3.1";
