@@ -2,6 +2,7 @@ using Microsoft.CSharp;
 using Mono.Cecil;
 using System.CodeDom;
 using Mono.Collections.Generic;
+using Mono.Cecil.Rocks;
 
 namespace PublicApiGenerator;
 
@@ -72,6 +73,11 @@ internal static partial class CecilEx
     public static bool IsDelegate(this TypeDefinition publicType)
     {
         return publicType.BaseType != null && publicType.BaseType.FullName == "System.MulticastDelegate";
+    }
+
+    public static bool IsRecord(this TypeDefinition publicType)
+    {
+        return publicType.GetMethods().Any(m => m.Name == "<Clone>$");
     }
 
     public static bool IsCompilerGenerated(this IMemberDefinition m)
