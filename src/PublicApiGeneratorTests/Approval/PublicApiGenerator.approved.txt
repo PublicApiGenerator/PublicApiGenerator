@@ -19,6 +19,7 @@ namespace PublicApiGenerator
         public string IndentString { get; set; }
         public PublicApiGenerator.OrderMode OrderBy { get; set; }
         public System.Func<int, bool>? SplitMethodParametersAcrossLines { get; set; }
+        public bool TreatRecordsAsClasses { get; set; }
         public bool UseDenyNamespacePrefixesForExtensionMethods { get; set; }
     }
     public enum OrderMode
