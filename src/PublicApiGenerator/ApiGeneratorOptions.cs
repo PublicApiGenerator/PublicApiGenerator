@@ -25,6 +25,12 @@ public class ApiGeneratorOptions
     public bool IncludeAssemblyAttributes { get; set; } = true;
 
     /// <summary>
+    /// When set to <see langword="true"/> outputs all record types as class types, otherwise as records.
+    /// </summary>
+    /// <remarks>Defaults to <see langword="true"/>.</remarks>
+    public bool TreatRecordsAsClasses { get; set; } = true;
+
+    /// <summary>
     /// Allows to print APIs in certain namespace prefixes.
     /// For example by default types found in Microsoft or System namespaces are not treated as part of the public API.
     /// This option has priority over <see cref="DenyNamespacePrefixes"/>.

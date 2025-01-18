@@ -2477,7 +2477,14 @@ namespace Microsoft.CSharp
                             Output.Write("static ");
                         }
 
-                        Output.Write("class ");
+                        if (e is CodeTypeDeclarationEx { IsRecord: true })
+                        {
+                            Output.Write("record ");
+                        }
+                        else
+                        {
+                            Output.Write("class ");
+                        }
 
                         break;
                     case TypeAttributes.Interface:

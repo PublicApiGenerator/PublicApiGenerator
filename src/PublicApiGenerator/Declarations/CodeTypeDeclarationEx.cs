@@ -1,4 +1,4 @@
-﻿using System.CodeDom;
+using System.CodeDom;
 
 namespace PublicApiGenerator;
 
@@ -13,4 +13,6 @@ internal class CodeTypeDeclarationEx : CodeTypeDeclaration
     public bool IsReadonly { get; set; }
 
     public bool IsByRefLike { get; set; }
+
+    public bool IsRecord { get; set; }
 }

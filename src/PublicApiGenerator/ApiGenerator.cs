@@ -106,7 +106,7 @@ public static class ApiGenerator
 
             using (NullableContext.Push(publicType))
             {
-                var typeDeclaration = CreateTypeDeclaration(publicType, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods, attributeFilter);
+                var typeDeclaration = CreateTypeDeclaration(publicType, options, attributeFilter);
                 @namespace.Types.Add(typeDeclaration);
             }
         }
@@ -149,8 +149,7 @@ public static class ApiGenerator
     private static bool ShouldIncludeMember(IMemberDefinition m, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods)
     {
         // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/245
-        bool isRecord = m.DeclaringType.GetMethods().Any(m => m.Name == "<Clone>$");
-        if (isRecord && m.Name == "EqualityContract")
+        if (m.Name == "EqualityContract" && m.DeclaringType.IsRecord())
             return false;
 
         if (m.IsCompilerGenerated())
@@ -208,7 +207,7 @@ public static class ApiGenerator
         }
     }
 
-    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods, AttributeFilter attributeFilter)
+    private static CodeTypeDeclaration CreateTypeDeclaration(TypeDefinition publicType, ApiGeneratorOptions options, AttributeFilter attributeFilter)
     {
         if (publicType.IsDelegate())
             return CreateDelegateDeclaration(publicType, attributeFilter);
@@ -254,6 +253,7 @@ public static class ApiGenerator
             IsStatic = @static,
             IsReadonly = @readonly,
             IsByRefLike = byRefLike,
+            IsRecord = !options.TreatRecordsAsClasses && publicType.IsRecord(),
         };
 
         if (declaration.IsInterface && publicType.BaseType != null)
@@ -295,7 +295,7 @@ public static class ApiGenerator
             declaration.BaseTypes.Add(@interface.InterfaceType.CreateCodeTypeReference(@interface));
         }
 
-        foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
+        foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
             AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
 
         // Fields should be in defined order for an enum
@@ -305,11 +305,11 @@ public static class ApiGenerator
         foreach (var field in fields)
             AddMemberToTypeDeclaration(declaration, publicType, field, attributeFilter);
 
-        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods)).OrderBy(t => t.FullName, StringComparer.Ordinal))
+        foreach (var nestedType in publicType.NestedTypes.Where(t => ShouldIncludeType(t, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods)).OrderBy(t => t.FullName, StringComparer.Ordinal))
         {
             using (NullableContext.Push(nestedType))
             {
-                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, denyNamespacePrefixes, allowNamespacePrefixes, useDenyNamespacePrefixesForExtensionMethods, attributeFilter);
+                var nestedTypeDeclaration = CreateTypeDeclaration(nestedType, options, attributeFilter);
                 declaration.Members.Add(nestedTypeDeclaration);
             }
         }
