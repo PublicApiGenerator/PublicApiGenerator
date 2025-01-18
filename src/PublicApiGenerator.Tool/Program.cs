@@ -6,7 +6,7 @@ using Process = System.Diagnostics.Process;
 namespace PublicApiGenerator.Tool;
 
 /// <summary>
-/// Program for dotnet tool1
+/// Program for dotnet tool
 /// </summary>
 public static class Program
 {
