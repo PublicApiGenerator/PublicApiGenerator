@@ -23,7 +23,10 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        # TODO: change to ubuntu-latest back
+        # see https://github.com/actions/runner-images/issues/10989
+        # Process terminated. Couldn't find a valid ICU package installed on the system. Set the configuration flag System.Globalization.Invariant to true if you want to run with no globalization
+        os: [ubuntu-22.04, windows-latest]
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -33,6 +36,7 @@ jobs:
         with:
           dotnet-version: |
             3.1.x
+            5.0.x
             6.0.x
             7.0.x
             8.0.x
