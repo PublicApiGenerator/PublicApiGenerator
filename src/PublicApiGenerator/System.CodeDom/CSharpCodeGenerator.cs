@@ -112,7 +112,7 @@ namespace Microsoft.CSharp
             {
                 switch (value[i])
                 {
-                     case '\r':
+                    case '\r':
                         b.Append("\\r");
                         break;
                     case '\t':
