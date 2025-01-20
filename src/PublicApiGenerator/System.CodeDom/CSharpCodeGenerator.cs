@@ -112,7 +112,7 @@ namespace Microsoft.CSharp
             {
                 switch (value[i])
                 {
-                    case '\r':
+                     case '\r':
                         b.Append("\\r");
                         break;
                     case '\t':
@@ -132,6 +132,18 @@ namespace Microsoft.CSharp
                         break;
                     case '\n':
                         b.Append("\\n");
+                        break;
+                    case '\a':
+                        b.Append("\\a");
+                        break;
+                    case '\b':
+                        b.Append("\\b");
+                        break;
+                    case '\f':
+                        b.Append("\\f");
+                        break;
+                    case '\v':
+                        b.Append("\\v");
                         break;
                     case '\u2028':
                     case '\u2029':
