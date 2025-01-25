@@ -2,7 +2,6 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Microsoft.CSharp;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
@@ -554,9 +553,6 @@ public static class ApiGenerator
             return new CodeTypeOfExpression(typeRef.CreateCodeTypeReference());
         }
 
-        if (value is string s)
-            value = NormalizeString(s);
-
         return new CodePrimitiveExpression(value);
     }
 
@@ -803,21 +799,9 @@ public static class ApiGenerator
 
         if (memberInfo.HasConstant)
         {
-            var value = memberInfo.Constant;
-            if (value is string s)
-                value = NormalizeString(s);
-            field.InitExpression = new CodePrimitiveExpression(value);
+            field.InitExpression = new CodePrimitiveExpression(memberInfo.Constant);
         }
 
         typeDeclaration.Members.Add(field);
-    }
-
-    private static string NormalizeString(string s)
-    {
-        // CodeDOM outputs a verbatim string. Any string with \n is treated as such, so normalize
-        // it to make it easier for comparisons
-        s = Regex.Replace(s, @"\n", "\\n");
-        s = Regex.Replace(s, @"\r\n|\r\\n", "\\r\\n");
-        return s;
     }
 }
