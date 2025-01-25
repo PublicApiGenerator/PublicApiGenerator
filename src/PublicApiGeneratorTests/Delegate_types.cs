@@ -5,6 +5,17 @@ namespace PublicApiGeneratorTests
     public class Delegate_types : ApiGeneratorTestsBase
     {
         [Fact]
+        public void Should_output_native_delegate()
+        {
+            AssertPublicApi<NativeDelegate>("""
+namespace PublicApiGeneratorTests.Examples
+{
+    public delegate nint NativeDelegate(nuint v);
+}
+""");
+        }
+
+        [Fact]
         public void Should_output_dynamic_delegate()
         {
             AssertPublicApi<DynamicDelegate>("""
@@ -73,6 +84,7 @@ namespace PublicApiGeneratorTests.Examples
 
     namespace Examples
     {
+        public delegate nint NativeDelegate(nuint v);
         public delegate dynamic DynamicDelegate(dynamic v);
         public delegate void VoidDelegate();
         public delegate int DelegateWithPrimitiveParameters(int v1, string v2);

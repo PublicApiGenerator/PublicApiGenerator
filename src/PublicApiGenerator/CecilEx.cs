@@ -1,8 +1,8 @@
+using System.CodeDom;
 using Microsoft.CSharp;
 using Mono.Cecil;
-using System.CodeDom;
-using Mono.Collections.Generic;
 using Mono.Cecil.Rocks;
+using Mono.Collections.Generic;
 
 namespace PublicApiGenerator;
 
@@ -78,6 +78,30 @@ internal static partial class CecilEx
     public static bool IsRecord(this TypeDefinition publicType)
     {
         return publicType.GetMethods().Any(m => m.Name == "<Clone>$");
+    }
+
+    static CecilEx()
+    {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.runtimefeature is available since netstandard2.1,
+        // but PublicApiGenerator targets netstandard2.0 for now. If/when PublicApiGenerator changes TFM to netstandard2.1, then this code
+        // can be rewritten without reflection.
+        Type _runtimeFeature = typeof(int).Assembly.GetType("System.Runtime.CompilerServices.RuntimeFeature", false);
+        _numericIntPtrSupported = _runtimeFeature != null && (bool)_runtimeFeature.GetMethod("IsSupported").Invoke(null, ["NumericIntPtr"]);
+    }
+
+    private static readonly bool _numericIntPtrSupported;
+
+    public static bool IsNativeInteger(this ICustomAttributeProvider provider, string typeName)
+    {
+        if (provider.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.NativeIntegerAttribute"))
+            return true;
+
+        // See https://github.com/dotnet/roslyn/issues/61525 and https://github.com/dotnet/csharplang/issues/6065.
+        // Since .NET 7 System.IntPtr and System.UIntPtr are becoming proper numeric types with nint and nuint aliases.
+        if (_numericIntPtrSupported && (typeName == "System.IntPtr" || typeName == "System.UIntPtr"))
+            return true;
+
+        return false;
     }
 
     public static bool IsCompilerGenerated(this IMemberDefinition m)
@@ -194,6 +218,12 @@ internal static partial class CecilEx
     public static CodeTypeReference MakeSet(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "set:");
 
     public static CodeTypeReference MakeIn(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "in");
+
+    public static CodeTypeReference MakeNativeInteger(this CodeTypeReference typeReference)
+    {
+        typeReference.UserData["System.Runtime.CompilerServices.NativeIntegerAttribute"] = true;
+        return typeReference;
+    }
 
     private static CodeTypeReference ModifyCodeTypeReference(CodeTypeReference typeReference, string modifier)
     {

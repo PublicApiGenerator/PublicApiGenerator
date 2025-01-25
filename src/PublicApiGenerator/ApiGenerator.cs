@@ -332,6 +332,8 @@ public static class ApiGenerator
                 ReturnType = invokeMethod.ReturnType.CreateCodeTypeReference(invokeMethod.MethodReturnType),
             };
 
+            if (invokeMethod.MethodReturnType.IsNativeInteger(invokeMethod.ReturnType.FullName))
+                declaration.ReturnType.MakeNativeInteger();
             // CodeDOM. No support. Return type attributes.
             PopulateCustomAttributes(invokeMethod.MethodReturnType, declaration.CustomAttributes, type => type.MakeReturn(), attributeFilter);
             PopulateGenericParameters(publicType, declaration.TypeParameters, attributeFilter, _ => true);
@@ -595,6 +597,9 @@ public static class ApiGenerator
             CustomAttributes = CreateCustomAttributes(member, attributeFilter),
             ReturnType = returnType,
         };
+
+        if (member.MethodReturnType.IsNativeInteger(member.ReturnType.FullName))
+            method.ReturnType.MakeNativeInteger();
         PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, attributeFilter);
         PopulateGenericParameters(member, method.TypeParameters, attributeFilter, _ => true);
         PopulateMethodParameters(member, method.Parameters, attributeFilter, member.IsExtensionMethod());
@@ -651,6 +656,9 @@ public static class ApiGenerator
                 Direction = direction,
                 CustomAttributes = CreateCustomAttributes(parameter, attributeFilter)
             };
+
+            if (parameter.IsNativeInteger(parameter.ParameterType.FullName))
+                expression.Type.MakeNativeInteger();
             parameters.Add(expression);
         }
     }

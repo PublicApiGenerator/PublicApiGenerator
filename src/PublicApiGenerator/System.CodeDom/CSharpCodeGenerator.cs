@@ -2714,6 +2714,11 @@ namespace Microsoft.CSharp
                     continue;
                 }
 
+                if (current.Name.Equals("System.Runtime.CompilerServices.NativeIntegerAttribute") || current.Name.Equals("return: System.Runtime.CompilerServices.NativeIntegerAttribute"))
+                {
+                    continue;
+                }
+
                 GenerateAttributeDeclarationsStart();
                 if (prefix != null)
                 {
@@ -2864,6 +2869,14 @@ namespace Microsoft.CSharp
                 }
 
                 string lowerCaseString = s.ToLowerInvariant().Trim();
+
+                if (typeRef.UserData.Contains("System.Runtime.CompilerServices.NativeIntegerAttribute"))
+                {
+                    if (lowerCaseString == "system.intptr")
+                        return "nint";
+                    else if (lowerCaseString == "system.uintptr")
+                        return "nuint";
+                }
 
                 switch (lowerCaseString)
                 {

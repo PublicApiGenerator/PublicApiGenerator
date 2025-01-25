@@ -24,6 +24,9 @@ internal partial class AttributeFilter
         "System.Runtime.CompilerServices.CallerFilePath",
         "System.Runtime.CompilerServices.CallerLineNumberAttribute",
         "System.Runtime.CompilerServices.CallerMemberName",
-        "System.Runtime.CompilerServices.ReferenceAssemblyAttribute"
+        "System.Runtime.CompilerServices.ReferenceAssemblyAttribute",
+        // Native sized integers
+        // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types#native-sized-integers
+        "System.Runtime.CompilerServices.NativeIntegerAttribute",
     };
 }
