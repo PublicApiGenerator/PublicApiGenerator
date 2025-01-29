@@ -201,7 +201,7 @@ internal static partial class CecilEx
             return false;
 
         if (a.IsGenericParameter)
-            return string.Equals(a.Name, b.Name);
+            return AreSame((GenericParameter)a, (GenericParameter)b);
 
         if (IsTypeSpecification(a))
             return AreSame((TypeSpecification)a, (TypeSpecification)b);
