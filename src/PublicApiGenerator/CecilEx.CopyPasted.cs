@@ -79,6 +79,116 @@ internal static partial class CecilEx
         return false;
     }
 
+    private static bool AreSame(Collection<ParameterDefinition> a, Collection<ParameterDefinition> b)
+    {
+        var count = a.Count;
+
+        if (count != b.Count)
+            return false;
+
+        if (count == 0)
+            return true;
+
+        for (int i = 0; i < count; i++)
+            if (!AreSame(a[i].ParameterType, b[i].ParameterType))
+                return false;
+
+        return true;
+    }
+
+    private static bool IsVarArgCallTo(MethodDefinition method, MethodReference reference)
+    {
+        if (method.Parameters.Count >= reference.Parameters.Count)
+            return false;
+
+        if (GetSentinelPosition(reference) != method.Parameters.Count)
+            return false;
+
+        for (int i = 0; i < method.Parameters.Count; i++)
+            if (!AreSame(method.Parameters[i].ParameterType, reference.Parameters[i].ParameterType))
+                return false;
+
+        return true;
+    }
+
+    private static bool AreSame(TypeSpecification a, TypeSpecification b)
+    {
+        if (!AreSame(a.ElementType, b.ElementType))
+            return false;
+
+        if (a.IsGenericInstance)
+            return AreSame((GenericInstanceType)a, (GenericInstanceType)b);
+
+        if (a.IsRequiredModifier || a.IsOptionalModifier)
+            return AreSame((IModifierType)a, (IModifierType)b);
+
+        if (a.IsArray)
+            return AreSame((ArrayType)a, (ArrayType)b);
+
+        if (a.IsFunctionPointer)
+            return AreSame((FunctionPointerType)a, (FunctionPointerType)b);
+
+        return true;
+    }
+
+    private static bool AreSame(FunctionPointerType a, FunctionPointerType b)
+    {
+        if (a.HasThis != b.HasThis)
+            return false;
+
+        if (a.CallingConvention != b.CallingConvention)
+            return false;
+
+        if (!AreSame(a.ReturnType, b.ReturnType))
+            return false;
+
+        if (a.ContainsGenericParameter != b.ContainsGenericParameter)
+            return false;
+
+        if (a.HasParameters != b.HasParameters)
+            return false;
+
+        if (!a.HasParameters)
+            return true;
+
+        if (!AreSame(a.Parameters, b.Parameters))
+            return false;
+
+        return true;
+    }
+
+    private static bool AreSame(ArrayType a, ArrayType b)
+    {
+        if (a.Rank != b.Rank)
+            return false;
+
+        // TODO: dimensions
+
+        return true;
+    }
+
+    private static bool AreSame(IModifierType a, IModifierType b)
+    {
+        return AreSame(a.ModifierType, b.ModifierType);
+    }
+
+    private static bool AreSame(GenericInstanceType a, GenericInstanceType b)
+    {
+        if (a.GenericArguments.Count != b.GenericArguments.Count)
+            return false;
+
+        for (int i = 0; i < a.GenericArguments.Count; i++)
+            if (!AreSame(a.GenericArguments[i], b.GenericArguments[i]))
+                return false;
+
+        return true;
+    }
+
+    private static bool AreSame(GenericParameter a, GenericParameter b)
+    {
+        return a.Position == b.Position;
+    }
+
     private static bool AreSame(TypeReference a, TypeReference b)
     {
         if (ReferenceEquals(a, b))
@@ -104,23 +214,6 @@ internal static partial class CecilEx
         return AreSame(a.DeclaringType, b.DeclaringType);
     }
 
-    private static bool AreSame(Collection<ParameterDefinition> a, Collection<ParameterDefinition> b)
-    {
-        var count = a.Count;
-
-        if (count != b.Count)
-            return false;
-
-        if (count == 0)
-            return true;
-
-        for (int i = 0; i < count; i++)
-            if (!AreSame(a[i].ParameterType, b[i].ParameterType))
-                return false;
-
-        return true;
-    }
-
     private static bool IsVarArg(IMethodSignature self) => self.CallingConvention == MethodCallingConvention.VarArg;
 
     private static int GetSentinelPosition(IMethodSignature self)
@@ -134,21 +227,6 @@ internal static partial class CecilEx
                 return i;
 
         return -1;
-    }
-
-    private static bool IsVarArgCallTo(MethodDefinition method, MethodReference reference)
-    {
-        if (method.Parameters.Count >= reference.Parameters.Count)
-            return false;
-
-        if (GetSentinelPosition(reference) != method.Parameters.Count)
-            return false;
-
-        for (int i = 0; i < method.Parameters.Count; i++)
-            if (!AreSame(method.Parameters[i].ParameterType, reference.Parameters[i].ParameterType))
-                return false;
-
-        return true;
     }
 
     public static MethodDefinition? GetMethodIgnoringReturnType(Collection<MethodDefinition> methods, MethodReference reference)
