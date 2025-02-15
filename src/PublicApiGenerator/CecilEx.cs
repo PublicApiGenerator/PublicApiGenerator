@@ -203,13 +203,9 @@ internal static partial class CecilEx
         }
     }
 
-    public static CodeTypeReference MakeReadonly(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "readonly");
-
     public static CodeTypeReference MakeUnsafe(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "unsafe");
 
     public static CodeTypeReference MakeVolatile(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "volatile");
-
-    public static CodeTypeReference MakeThis(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "this");
 
     public static CodeTypeReference MakeReturn(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "return:");
 

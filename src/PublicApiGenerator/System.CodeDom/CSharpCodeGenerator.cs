@@ -1295,6 +1295,10 @@ namespace Microsoft.CSharp
                 OutputMemberAccessModifier(e.Attributes);
                 OutputVTableModifier(e.Attributes);
                 OutputFieldScopeModifier(e.Attributes);
+                if (e is CodeMemberFieldEx { IsReadonly: true })
+                {
+                    Output.Write("readonly ");
+                }
                 OutputTypeNamePair(e.Type, e.Name);
                 if (e.InitExpression != null)
                 {
@@ -1317,6 +1321,10 @@ namespace Microsoft.CSharp
             }
 
             OutputDirection(e.Direction);
+            if (e is CodeParameterDeclarationExpressionEx { This: true })
+            {
+                Output.Write("this ");
+            }
             OutputTypeNamePair(e.Type, e.Name, new DynamicContext(e.CustomAttributes));
         }
 
@@ -2915,6 +2923,13 @@ namespace Microsoft.CSharp
                     case "system.decimal":
                         return "decimal";
                 }
+            }
+
+            // special handling for Nullable<T> to output T? instead
+            if (typeRef.BaseType == "System.Nullable`1" && typeRef.TypeArguments.Count == 1)
+            {
+                dynamicContext?.Move();
+                return GetTypeOutput(typeRef.TypeArguments[0], dynamicContext) + "?";
             }
 
             // replace + with . for nested classes.
