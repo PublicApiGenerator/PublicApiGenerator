@@ -1321,6 +1321,10 @@ namespace Microsoft.CSharp
             }
 
             OutputDirection(e.Direction);
+            if (e is CodeParameterDeclarationExpressionEx { This: true })
+            {
+                Output.Write("this ");
+            }
             OutputTypeNamePair(e.Type, e.Name, new DynamicContext(e.CustomAttributes));
         }
 

@@ -207,8 +207,6 @@ internal static partial class CecilEx
 
     public static CodeTypeReference MakeVolatile(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "volatile");
 
-    public static CodeTypeReference MakeThis(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "this");
-
     public static CodeTypeReference MakeReturn(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "return:");
 
     public static CodeTypeReference MakeGet(this CodeTypeReference typeReference) => ModifyCodeTypeReference(typeReference, "get:");

@@ -633,12 +633,6 @@ public static class ApiGenerator
 
             var type = parameterType.CreateCodeTypeReference(parameter);
 
-            if (isExtension)
-            {
-                type = type.MakeThis();
-                isExtension = false;
-            }
-
             // special case of ref is in
             // TODO: Move CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute") to extension method once other PR is merged
             if (parameter.CustomAttributes.Any(a =>
@@ -651,11 +645,14 @@ public static class ApiGenerator
             var name = parameter.HasConstant
                 ? string.Format(CultureInfo.InvariantCulture, "{0} = {1}", parameter.Name, FormatParameterConstant(parameter))
                 : parameter.Name;
-            var expression = new CodeParameterDeclarationExpression(type, name)
+            var expression = new CodeParameterDeclarationExpressionEx(type, name)
             {
                 Direction = direction,
-                CustomAttributes = CreateCustomAttributes(parameter, attributeFilter)
+                CustomAttributes = CreateCustomAttributes(parameter, attributeFilter),
+                This = isExtension,
             };
+
+            isExtension = false;
 
             if (parameter.IsNativeInteger(parameter.ParameterType.FullName))
                 expression.Type.MakeNativeInteger();
