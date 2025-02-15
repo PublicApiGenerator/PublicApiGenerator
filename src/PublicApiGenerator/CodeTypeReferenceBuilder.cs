@@ -79,12 +79,7 @@ internal static class CodeTypeReferenceBuilder
     private static bool HasAnyReferenceType(TypeReference type)
     {
         if (!type.IsValueType)
-        {
-            if (type is GenericParameter gp && gp.HasNotNullableValueTypeConstraint == true)
-                return false;
-
             return true;
-        }
 
         var genericArgs = type is IGenericInstance instance ? instance.GenericArguments : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : null;
         if (genericArgs == null)
@@ -101,7 +96,11 @@ internal static class CodeTypeReferenceBuilder
 
     private static string GetTypeName(TypeReference type, IEnumerator<bool?>? nullabilityMap, NullableMode mode, bool disableNested)
     {
-        bool nullable = mode != NullableMode.Disable && HasAnyReferenceType(type) && IsNullable();
+        bool nullable =
+            mode != NullableMode.Disable &&
+            !(type.Namespace == "System" && type.Name == "Nullable`1") &&
+            HasAnyReferenceType(type) &&
+            IsNullable();
 
         var typeName = GetTypeNameCore(type, nullabilityMap, nullable, disableNested);
 
