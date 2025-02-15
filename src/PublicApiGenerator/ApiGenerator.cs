@@ -792,17 +792,16 @@ public static class ApiGenerator
 
         // TODO: Values for readonly fields are set in the ctor
         var codeTypeReference = memberInfo.FieldType.CreateCodeTypeReference(memberInfo);
-        if (memberInfo.IsInitOnly)
-            codeTypeReference = codeTypeReference.MakeReadonly();
         if (memberInfo.FieldType.IsUnsafeSignatureType())
             codeTypeReference = codeTypeReference.MakeUnsafe();
         if (memberInfo.FieldType.IsVolatile())
             codeTypeReference = codeTypeReference.MakeVolatile();
 
-        var field = new CodeMemberField(codeTypeReference, memberInfo.Name)
+        var field = new CodeMemberFieldEx(codeTypeReference, memberInfo.Name)
         {
             Attributes = attributes,
-            CustomAttributes = CreateCustomAttributes(memberInfo, attributeFilter)
+            CustomAttributes = CreateCustomAttributes(memberInfo, attributeFilter),
+            IsReadonly = memberInfo.IsInitOnly
         };
 
         if (memberInfo.HasConstant)

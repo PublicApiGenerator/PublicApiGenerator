@@ -15,18 +15,7 @@ internal static class CodeTypeReferenceBuilder
     private static CodeTypeReference CreateCodeTypeReferenceWithNullabilityMap(TypeReference type, IEnumerator<bool?> nullabilityMap, NullableMode mode, bool disableNested)
     {
         var typeName = GetTypeName(type, nullabilityMap, mode, disableNested);
-        if (type.IsValueType && type.Name == "Nullable`1" && type.Namespace == "System")
-        {
-            // unwrap System.Nullable<Type> into Type? for readability
-            var genericArgs = type is IGenericInstance instance
-                ? instance.GenericArguments
-                : type.HasGenericParameters ? type.GenericParameters.Cast<TypeReference>() : throw new NotSupportedException(type.ToString());
-            return CreateCodeTypeReferenceWithNullabilityMap(genericArgs.Single(), nullabilityMap, NullableMode.Force, disableNested);
-        }
-        else
-        {
-            return new CodeTypeReference(typeName, CreateGenericArguments(type, nullabilityMap));
-        }
+        return new CodeTypeReference(typeName, CreateGenericArguments(type, nullabilityMap));
     }
 
     private static CodeTypeReference[] CreateGenericArguments(TypeReference type, IEnumerator<bool?> nullabilityMap)
@@ -86,7 +75,7 @@ internal static class CodeTypeReferenceBuilder
 
     // The compiler optimizes the size of metadata bypassing a sequence of bytes for value types.
     // Thus, it can even delete the entire NullableAttribute if the whole signature consists only of value types,
-    // for example KeyValuePair<int, int?>, thus we can call IsNullable() only by looking first deep into the signature
+    // for example KeyValuePair<int, int?>, thus we can call IsNullable() only by looking first deep into the signature.
     private static bool HasAnyReferenceType(TypeReference type)
     {
         if (!type.IsValueType)
