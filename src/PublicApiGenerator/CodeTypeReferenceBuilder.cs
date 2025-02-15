@@ -100,7 +100,7 @@ internal static class CodeTypeReferenceBuilder
             mode != NullableMode.Disable &&
             !(type.Namespace == "System" && type.Name == "Nullable`1") &&
             HasAnyReferenceType(type) &&
-            IsNullable();
+            IsNullable(); // we should not touch nullabilityMap enumerator in the above cases
 
         var typeName = GetTypeNameCore(type, nullabilityMap, nullable, disableNested);
 
