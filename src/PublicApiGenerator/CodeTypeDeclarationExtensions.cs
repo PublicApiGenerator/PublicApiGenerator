@@ -120,7 +120,7 @@ internal static class CodeTypeDeclarationExtensions
             string GetBaseType(CodeTypeReference r)
             {
                 return r.BaseType == "System.Nullable`1" && r.TypeArguments.Count == 1
-                    ? r.TypeArguments[0].BaseType + "?"
+                    ? MapToAlias(r.TypeArguments[0].BaseType) + "?"
                     : MapToAlias(r.BaseType);
             }
 
