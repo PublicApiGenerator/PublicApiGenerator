@@ -2,7 +2,7 @@ namespace PublicApiGenerator;
 
 internal static class CSharpOperatorKeyword
 {
-    private static readonly IDictionary<string, string> OperatorNameMap = new Dictionary<string, string>
+    private static readonly Dictionary<string, string> _operatorNameMap = new()
     {
         { "op_False", "false" },
         { "op_True", "true" },
@@ -32,6 +32,6 @@ internal static class CSharpOperatorKeyword
 
     public static string Get(string memberName)
     {
-        return OperatorNameMap.TryGetValue(memberName, out string mappedMemberName) ? "operator " + mappedMemberName : memberName;
+        return _operatorNameMap.TryGetValue(memberName, out string mappedMemberName) ? "operator " + mappedMemberName : memberName;
     }
 }
