@@ -13,8 +13,8 @@ namespace PublicApiGeneratorTests.Examples
 {
     public class ClassWithExpressions<TSourceType>
     {
-        public ClassWithExpressions(params System.Linq.Expressions.Expression<System.Func<int, object>>[] expr1) { }
         public ClassWithExpressions(params System.Linq.Expressions.Expression<System.Func<TSourceType, object?>>[] expr2) { }
+        public ClassWithExpressions(params System.Linq.Expressions.Expression<System.Func<int, object>>[] expr1) { }
         public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<TSourceType, object>?> expr3) { }
         public ClassWithExpressions(System.Linq.Expressions.Expression<System.Func<int, object>>? expr4) { }
     }

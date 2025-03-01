@@ -4,6 +4,27 @@ namespace PublicApiGenerator;
 
 internal static class CodeTypeDeclarationExtensions
 {
+    private static readonly Dictionary<string, string> _map = new()
+    {
+        { "System.Int16", "short" },
+        { "System.Int32", "int" },
+        { "System.Int64", "long" },
+        { "System.String", "string" },
+        { "System.Object", "object" },
+        { "System.Boolean", "bool" },
+        { "System.Char", "char" },
+        { "System.Byte", "byte" },
+        { "System.UInt16", "ushort" },
+        { "System.UInt32", "uint" },
+        { "System.UInt64", "ulong" },
+        { "System.SByte", "sbyte" },
+        { "System.Single", "float" },
+        { "System.Double", "double" },
+        { "System.Decimal", "decimal" },
+    };
+
+    private static string MapToAlias(string type) => _map.TryGetValue(type, out string alias) ? alias : type;
+
     public static CodeTypeDeclarationEx Sort(this CodeTypeDeclarationEx original)
     {
         if (original.IsEnum)
@@ -100,7 +121,7 @@ internal static class CodeTypeDeclarationExtensions
             {
                 return r.BaseType == "System.Nullable`1" && r.TypeArguments.Count == 1
                     ? r.TypeArguments[0].BaseType + "?"
-                    : r.BaseType;
+                    : MapToAlias(r.BaseType);
             }
 
             var baseType = string.CompareOrdinal(GetBaseType(x), GetBaseType(y));
