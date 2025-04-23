@@ -32,6 +32,17 @@ internal sealed partial class AttributeFilter
             should = false;
         }
 
+        // Do not print compiler-generated ObsoleteAttribute for constructors of classes with required properties, see https://github.com/PublicApiGenerator/PublicApiGenerator/issues/472
+        if (should
+            && parent is MethodDefinition def2
+            && def2.IsConstructor
+            && attributeTypeDefinition?.Name == "ObsoleteAttribute"
+            && attribute.ConstructorArguments.Count > 0
+            && (string)attribute.ConstructorArguments[0].Value == "Constructors of types with required members are not supported in this version of your compiler.")
+        {
+            should = false;
+        }
+
         return should;
     }
 }

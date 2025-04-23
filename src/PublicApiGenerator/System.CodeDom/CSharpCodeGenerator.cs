@@ -1496,6 +1496,10 @@ namespace Microsoft.CSharp
             {
                 OutputVTableModifier(e.Attributes);
             }
+            if (e.IsRequired())
+            {
+                Output.Write("required ");
+            }
             OutputType(e.Type);
             Output.Write(' ');
 
@@ -2723,6 +2727,11 @@ namespace Microsoft.CSharp
                 }
 
                 if (current.Name.Equals("System.Runtime.CompilerServices.NativeIntegerAttribute") || current.Name.Equals("return: System.Runtime.CompilerServices.NativeIntegerAttribute"))
+                {
+                    continue;
+                }
+
+                if (current.Name.Equals("System.Runtime.CompilerServices.RequiredMemberAttribute"))
                 {
                     continue;
                 }

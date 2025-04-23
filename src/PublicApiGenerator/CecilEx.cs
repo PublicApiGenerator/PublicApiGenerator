@@ -70,6 +70,11 @@ internal static partial class CecilEx
         return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute");
     }
 
+    public static bool IsRequired(this CodeMemberProperty property)
+    {
+        return property.CustomAttributes.Cast<CodeAttributeDeclaration>().Any(a => a.Name == "System.Runtime.CompilerServices.RequiredMemberAttribute");
+    }
+
     public static bool IsDelegate(this TypeDefinition publicType)
     {
         return publicType.BaseType != null && publicType.BaseType.FullName == "System.MulticastDelegate";
