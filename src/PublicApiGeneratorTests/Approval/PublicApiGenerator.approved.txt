@@ -15,6 +15,7 @@ namespace PublicApiGenerator
         public string[]? ExcludeAttributes { get; set; }
         public System.Type[]? ExcludeTypes { get; set; }
         public bool IncludeAssemblyAttributes { get; set; }
+        public bool IncludeForwardedTypes { get; set; }
         public System.Type[]? IncludeTypes { get; set; }
         public string IndentString { get; set; }
         public PublicApiGenerator.OrderMode OrderBy { get; set; }

@@ -20,6 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InitialAssembly\InitialAssembly.csproj" />
     <ProjectReference Include="..\PublicApiGenerator\PublicApiGenerator.csproj" />
   </ItemGroup>
 
