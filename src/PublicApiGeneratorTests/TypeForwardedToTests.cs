@@ -13,6 +13,7 @@ public class TypeForwardedToTests : ApiGeneratorTestsBase
         AssertPublicApi(typeof(InitialAssembly.SomeClass).Assembly, """
 namespace InitialAssembly
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class SomeClass
     {
         public SomeClass() { }
@@ -20,6 +21,7 @@ namespace InitialAssembly
 }
 namespace OtherAssembly
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class ForwardedClass
     {
         public ForwardedClass() { }
