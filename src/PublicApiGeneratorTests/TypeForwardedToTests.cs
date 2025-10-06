@@ -1,4 +1,6 @@
-using System.Reflection;
+#if !NETCOREAPP
+using Shouldly;
+#endif
 
 namespace PublicApiGeneratorTests;
 
@@ -26,15 +28,8 @@ namespace OtherAssembly
 }
 """, new() { IncludeForwardedTypes = true, IncludeAssemblyAttributes = false });
 #else
-        AssertPublicApi(typeof(InitialAssembly.SomeClass).Assembly, """
-namespace InitialAssembly
-{
-    public class SomeClass
-    {
-        public SomeClass() { }
-    }
-}
-""", new() { IncludeForwardedTypes = true, IncludeAssemblyAttributes = false });
+        var ex = Should.Throw<PlatformNotSupportedException>(() => AssertPublicApi(typeof(InitialAssembly.SomeClass).Assembly, "not_used", new() { IncludeForwardedTypes = true, IncludeAssemblyAttributes = false }));
+        ex.Message.ShouldBe("IncludeForwardedTypes option works only in .NET Core apps. Please either migrate your app or disable this option.");
 #endif
     }
 }

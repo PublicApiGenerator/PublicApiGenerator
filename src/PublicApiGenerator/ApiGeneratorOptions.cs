@@ -27,7 +27,7 @@ public class ApiGeneratorOptions
 
     /// <summary>
     /// Instructs the generator to include types that were forwarded to other assemblies by <see cref="TypeForwardedToAttribute"/>.
-    /// This option works only when executing code in .NET Core app.
+    /// This option works only when executing code in .NET Core apps. In case of .NET Framework when enabled it will throw PlatformNotSupportedException.
     /// </summary>
     /// <remarks>Defaults to <see langword="false"/>.</remarks>
     public bool IncludeForwardedTypes { get; set; }
