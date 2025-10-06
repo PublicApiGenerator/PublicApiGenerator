@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace OtherAssembly;
@@ -5,6 +6,7 @@ namespace OtherAssembly;
 /// <summary>
 /// Type to test <see cref="TypeForwardedToAttribute"/>.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ForwardedClass
 {
     /// <summary>

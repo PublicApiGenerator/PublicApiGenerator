@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using OtherAssembly;
 
@@ -8,6 +9,7 @@ namespace InitialAssembly;
 /// <summary>
 /// Just to have something in assembly.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class SomeClass
 {
 }
