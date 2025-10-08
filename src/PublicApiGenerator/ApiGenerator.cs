@@ -27,20 +27,20 @@ public static class ApiGenerator
 
         using (var assemblyResolver = new DefaultAssemblyResolver())
         {
-            var assemblyPath = assembly.Location;
-            assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assemblyPath));
+            assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(assembly.Location));
             assemblyResolver.AddSearchDirectory(AppDomain.CurrentDomain.BaseDirectory);
 
-            var readSymbols = File.Exists(Path.ChangeExtension(assemblyPath, ".pdb"));
-            using (var asm = AssemblyDefinition.ReadAssembly(assemblyPath, new ReaderParameters(ReadingMode.Deferred)
+            using (var asm = AssemblyDefinition.ReadAssembly(assembly.Location, new ReaderParameters(ReadingMode.Deferred)
             {
-                ReadSymbols = readSymbols,
+                ReadSymbols = File.Exists(Path.ChangeExtension(assembly.Location, ".pdb")),
                 AssemblyResolver = assemblyResolver
             }))
             {
+                using var forwardedTypesContext = new ForwardedTypesContext(assembly, assemblyResolver, options);
                 return CreatePublicApiForAssembly(
                     asm,
                     options,
+                    forwardedTypesContext,
                     typeDefinition => !typeDefinition.IsNested &&
                                       (options.ExcludeTypes == null || !options.ExcludeTypes.Any(type => type.FullName == typeDefinition.FullName && type.Assembly.FullName == typeDefinition.Module.Assembly.FullName)) &&
                                       ShouldIncludeType(typeDefinition, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods) &&
@@ -81,7 +81,7 @@ public static class ApiGenerator
 
     // TODO: Assembly references?
     // TODO: Better handle namespaces - using statements? - requires non-qualified type names
-    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, ApiGeneratorOptions options, Func<TypeDefinition, bool> shouldIncludeType)
+    private static string CreatePublicApiForAssembly(AssemblyDefinition assembly, ApiGeneratorOptions options, ForwardedTypesContext forwardedTypesContext, Func<TypeDefinition, bool> shouldIncludeType)
     {
         var attributeFilter = new AttributeFilter(options.ExcludeAttributes);
 
@@ -91,7 +91,7 @@ public static class ApiGenerator
             PopulateCustomAttributes(assembly, compileUnit.AssemblyCustomAttributes, attributeFilter);
         }
 
-        var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes())
+        var publicTypes = assembly.Modules.SelectMany(m => m.GetTypes()).Union(forwardedTypesContext.ForwardedTypes)
             .Where(shouldIncludeType)
             .OrderBy(t => t, options.TypeComparer);
         foreach (var publicType in publicTypes)
