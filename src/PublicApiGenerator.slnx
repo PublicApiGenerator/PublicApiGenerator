@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/.github/">
+    <File Path="../.github/codecov.yml" />
+    <File Path="../.github/dependabot.yml" />
+    <File Path="../.github/labeler.yml" />
+  </Folder>
+  <Folder Name="/.github/workflows/">
+    <File Path="../.github/workflows/cd-preview.yml" />
+    <File Path="../.github/workflows/cd-release.yml" />
+    <File Path="../.github/workflows/ci.yml" />
+    <File Path="../.github/workflows/codeql-analysis.yml" />
+    <File Path="../.github/workflows/dependency-review.yml" />
+    <File Path="../.github/workflows/label.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../.editorconfig" />
+    <File Path="../.gitignore" />
+    <File Path="../LICENSE.md" />
+    <File Path="../README.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="PublicApiGenerator.snk" />
+  </Folder>
+  <Project Path="InitialAssembly/InitialAssembly.csproj" />
+  <Project Path="OtherAssembly/OtherAssembly.csproj" />
+  <Project Path="PublicApiGenerator.Tool/PublicApiGenerator.Tool.csproj" />
+  <Project Path="PublicApiGenerator/PublicApiGenerator.csproj" />
+  <Project Path="PublicApiGeneratorTests/PublicApiGeneratorTests.csproj" />
+</Solution>
