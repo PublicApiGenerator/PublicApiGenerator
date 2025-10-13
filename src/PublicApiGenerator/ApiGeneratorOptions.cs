@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Mono.Cecil;
 
 namespace PublicApiGenerator;
@@ -23,6 +24,13 @@ public class ApiGeneratorOptions
     /// </summary>
     /// <remarks>Defaults to <see langword="true"/>.</remarks>
     public bool IncludeAssemblyAttributes { get; set; } = true;
+
+    /// <summary>
+    /// Instructs the generator to include types that were forwarded to other assemblies by <see cref="TypeForwardedToAttribute"/>.
+    /// This option works only when executing code in .NET Core apps. In case of .NET Framework when enabled it will throw PlatformNotSupportedException.
+    /// </summary>
+    /// <remarks>Defaults to <see langword="false"/>.</remarks>
+    public bool IncludeForwardedTypes { get; set; }
 
     /// <summary>
     /// When set to <see langword="true"/> outputs all record types as class types, otherwise as records.
