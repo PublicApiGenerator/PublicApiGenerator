@@ -44,7 +44,7 @@ public static class Program
 
         string workingArea = string.IsNullOrEmpty(workingDirectory)
             ? Path.Join(Path.GetTempPath(), Path.GetRandomFileName())
-            : Path.Combine(workingDirectory, Path.GetRandomFileName());
+            : Path.Join(workingDirectory, Path.GetRandomFileName());
 
         logVerbose.WriteLine($"Working area: {workingArea}");
 
@@ -109,7 +109,7 @@ public static class Program
 
         string? apiFilePath = outputDirectory == null
             ? null
-            : Path.Combine(workingArea, $"{Path.GetFileNameWithoutExtension(name)}.{framework}.received.txt");
+            : Path.Join(workingArea, $"{Path.GetFileNameWithoutExtension(name)}.{framework}.received.txt");
 
         try
         {
@@ -140,7 +140,7 @@ public static class Program
         logVerbose.WriteLine($"Public API temporary file: {apiFilePath}");
         logVerbose.WriteLine();
 
-        string destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(apiFilePath));
+        string destinationFilePath = Path.Join(outputDirectory, Path.GetFileName(apiFilePath));
 
         if (File.Exists(destinationFilePath))
             File.Delete(destinationFilePath);
@@ -217,7 +217,7 @@ public static class Program
     private static void SaveProject(string workingArea, XElement project, TextWriter logVerbose)
     {
         Directory.CreateDirectory(workingArea);
-        string fullPath = Path.Combine(workingArea, "project.csproj");
+        string fullPath = Path.Join(workingArea, "project.csproj");
         using (var output = File.CreateText(fullPath))
         {
             logVerbose.WriteLine($"Project output path: {fullPath}");
@@ -229,7 +229,7 @@ public static class Program
 
         string programMain = typeof(Program).GetManifestResourceText("SubProgram.cs");
 
-        fullPath = Path.Combine(workingArea, "Program.cs");
+        fullPath = Path.Join(workingArea, "Program.cs");
         using (var output = File.CreateText(fullPath))
         {
             logVerbose.WriteLine($"Program output path: {fullPath}");
