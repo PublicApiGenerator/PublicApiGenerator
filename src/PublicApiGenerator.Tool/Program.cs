@@ -105,7 +105,7 @@ public static class Program
         TextWriter logError)
     {
         string name = string.IsNullOrEmpty(assembly) ? $"{package}.dll" : $"{assembly}";
-        string assemblyPath = Path.GetFullPath(Path.Combine(workingArea, "bin", "Release", framework, name));
+        string assemblyPath = Path.GetFullPath(Path.Join(workingArea, "bin", "Release", framework, name));
 
         string? apiFilePath = outputDirectory == null
             ? null
