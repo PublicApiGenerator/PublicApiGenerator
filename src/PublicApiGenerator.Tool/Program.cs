@@ -43,7 +43,7 @@ public static class Program
         var logVerbose = verbose ? Console.Error : TextWriter.Null;
 
         string workingArea = string.IsNullOrEmpty(workingDirectory)
-            ? Path.Combine(Path.GetTempPath(), Path.GetRandomFileName())
+            ? Path.Join(Path.GetTempPath(), Path.GetRandomFileName())
             : Path.Combine(workingDirectory, Path.GetRandomFileName());
 
         logVerbose.WriteLine($"Working area: {workingArea}");
