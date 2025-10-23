@@ -262,7 +262,7 @@ It is not possible to use `netstandard2.0` because it is not a valid runtime fra
 If only a single target framework is given then the API is generated to the standard output unless the `--output-directory` option is also specified.
 
 ```
---package-name PackageName
+--package PackageName
 ```
 
 A valid nuget package name. For example
@@ -270,7 +270,7 @@ A valid nuget package name. For example
 - FluentAssertions
 - NServiceBus
 
-When the `--package-name` switch is used the `--package-version` switch is mandatory.
+When the `--package` switch is used the `--package-version` switch is mandatory.
 
 ```
 --package-version Version
@@ -329,7 +329,7 @@ By default latest stable release version of PubliApiGenerator will be used in th
 --verbose
 ```
 
-Detailed information about what's going on behind the scenes
+Prints to stderr detailed information about what's going on behind the scenes.
 
 ```
 leave-artifacts
