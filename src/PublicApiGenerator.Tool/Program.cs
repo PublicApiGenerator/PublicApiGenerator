@@ -1,3 +1,4 @@
+using System.CommandLine;
 using System.Diagnostics;
 using System.Xml.Linq;
 using Process = System.Diagnostics.Process;
@@ -5,39 +6,115 @@ using Process = System.Diagnostics.Process;
 namespace PublicApiGenerator.Tool;
 
 /// <summary>
-/// Program for dotnet tool.
+/// Program for generate-public-api tool.
 /// </summary>
 public static class Program
 {
-    /// <summary>
-    /// Public API generator tool that is useful for semantic versioning.
-    /// </summary>
-    /// <param name="targetFrameworks">Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461.</param>
-    /// <param name="assembly">The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case it differs from the package name.</param>
-    /// <param name="projectPath">The path to the csproj that should be used to build the public API.</param>
-    /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/>.</param>
-    /// <param name="packageVersion">The version of the package defined in <paramref name="package"/> to be used.</param>
-    /// <param name="packageSource">Package source or feed to use (multiple allowed).</param>
-    /// <param name="generatorVersion">The version of the PublicApiGenerator package to use.</param>
-    /// <param name="workingDirectory">The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.</param>
-    /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
-    /// <param name="verbose">Prints to stderr detailed information about what's going on behind the scenes.</param>
-    /// <param name="leaveArtifacts">Instructs to leave the temporary artifacts around for debugging and troubleshooting purposes.</param>
-    /// <param name="waitTimeInSeconds">The number of seconds to wait for the API generation process to end. If multiple target frameworks are used the wait time is applied per target framework.</param>
-    /// <returns></returns>
-    internal static int Main(
-        string targetFrameworks,
-        string? assembly = null,
-        string? projectPath = null,
-        string? package = null,
-        string? packageVersion = null,
-        ICollection<string>? packageSource = null,
-        string? generatorVersion = null,
-        string? workingDirectory = null,
-        string? outputDirectory = null,
-        bool verbose = false,
-        bool leaveArtifacts = false,
-        int waitTimeInSeconds = 60)
+    internal static int Main(string[] args)
+    {
+        RootCommand rootCommand = new("Public API generator tool that is useful for semantic versioning.");
+        var targetFrameworks = new Option<string[]>("--target-frameworks")
+        {
+            Description = "Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461.",
+            Required = true,
+            AllowMultipleArgumentsPerToken = true,
+        };
+        var assembly = new Option<string>("--assembly")
+        {
+            Description = "The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case it differs from the package name.",
+        };
+        var projectPath = new Option<string>("--project-path")
+        {
+            Description = "The path to the csproj that should be used to build the public API.",
+        };
+        var package = new Option<string>("--package")
+        {
+            Description = "The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify --assembly.",
+        };
+        var packageVersion = new Option<string>("--package-version")
+        {
+            Description = "The version of the package defined in --package to be used.",
+        };
+        var packageSource = new Option<string[]>("--package-source")
+        {
+            Description = "Package source or feed to use (multiple allowed).",
+            AllowMultipleArgumentsPerToken = true,
+        };
+        var generatorVersion = new Option<string>("--generator-version")
+        {
+            Description = "The version of the PublicApiGenerator package to use.",
+            DefaultValueFactory = _ => $"{typeof(Program).Assembly.GetName().Version?.Major}.*"
+        };
+        var workingDirectory = new Option<string>("--working-directory")
+        {
+            Description = "The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.",
+        };
+        var outputDirectory = new Option<string>("--output-directory")
+        {
+            Description = "The output directory where the generated public APIs should be moved.",
+        };
+        var verbose = new Option<bool>("--verbose")
+        {
+            Description = "Prints to stderr detailed information about what's going on behind the scenes.",
+        };
+        var leaveArtifacts = new Option<bool>("--leave-artifacts")
+        {
+            Description = "Instructs to leave the temporary artifacts around for debugging and troubleshooting purposes",
+        };
+        var waitTimeInSeconds = new Option<int>("--wait-time-in-seconds")
+        {
+            Description = "Instructs to leave the temporary artifacts around for debugging and troubleshooting purposes",
+            DefaultValueFactory = _ => 60,
+        };
+
+        rootCommand.Options.Add(targetFrameworks);
+        rootCommand.Options.Add(assembly);
+        rootCommand.Options.Add(projectPath);
+        rootCommand.Options.Add(package);
+        rootCommand.Options.Add(packageVersion);
+        rootCommand.Options.Add(packageSource);
+        rootCommand.Options.Add(generatorVersion);
+        rootCommand.Options.Add(workingDirectory);
+        rootCommand.Options.Add(outputDirectory);
+        rootCommand.Options.Add(verbose);
+        rootCommand.Options.Add(leaveArtifacts);
+        rootCommand.Options.Add(waitTimeInSeconds);
+
+        rootCommand.SetAction(parseResult =>
+        {
+            Execute(
+                parseResult.GetValue(targetFrameworks)!,
+                parseResult.GetValue(assembly),
+                parseResult.GetValue(projectPath),
+                parseResult.GetValue(package),
+                parseResult.GetValue(packageVersion),
+                parseResult.GetValue(packageSource)!,
+                parseResult.GetValue(generatorVersion),
+                parseResult.GetValue(workingDirectory),
+                parseResult.GetValue(outputDirectory),
+                parseResult.GetValue(verbose),
+                parseResult.GetValue(leaveArtifacts),
+                parseResult.GetValue(waitTimeInSeconds)
+                );
+        });
+
+        var parseResult = rootCommand.Parse(args);
+        return parseResult.Invoke();
+    }
+
+    private static int Execute(
+        string[] targetFrameworks,
+        string? assembly,
+        string? projectPath,
+        string? package,
+        string? packageVersion,
+        string[] packageSource,
+        string? generatorVersion,
+        string? workingDirectory,
+        string? outputDirectory,
+        bool verbose,
+        bool leaveArtifacts,
+        int waitTimeInSeconds)
     {
         var logError = Console.Error;
         var logVerbose = verbose ? Console.Error : TextWriter.Null;
@@ -52,23 +129,16 @@ public static class Program
         {
             AssertInputParameters(targetFrameworks, projectPath, package, packageVersion, workingArea, assembly);
 
-            string[] frameworks = targetFrameworks.Split(";");
-
-            if (string.IsNullOrEmpty(outputDirectory) && frameworks.Length > 1)
+            if (string.IsNullOrEmpty(outputDirectory) && targetFrameworks.Length > 1)
             {
                 outputDirectory = Environment.CurrentDirectory;
-            }
-
-            if (string.IsNullOrEmpty(generatorVersion))
-            {
-                generatorVersion = $"{typeof(Program).Assembly.GetName().Version?.Major}.*";
             }
 
             var project = CreateProject(targetFrameworks, projectPath, package, packageVersion, packageSource, generatorVersion!);
 
             SaveProject(workingArea, project, logVerbose);
 
-            foreach (string framework in frameworks)
+            foreach (string framework in targetFrameworks)
             {
                 GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, waitTimeInSeconds, logVerbose, logError);
             }
@@ -248,21 +318,21 @@ public static class Program
     }
 
     private static XElement CreateProject(
-        string targetFrameworks,
+        string[] targetFrameworks,
         string? projectPath,
         string? package,
         string? packageVersion,
-        ICollection<string>? packageSource,
+        string[] packageSource,
         string generatorVersion)
     {
         return
             new XElement("Project", new XAttribute("Sdk", "Microsoft.NET.Sdk"),
                 new XElement("PropertyGroup",
                     new XElement("OutputType", "Exe"),
-                    new XElement("TargetFrameworks", targetFrameworks),
+                    new XElement("TargetFrameworks", string.Join(';', targetFrameworks)),
                     new XElement("SuppressTfmSupportBuildWarnings", true),
                     new XElement("CopyLocalLockFileAssemblies", "true"),
-                packageSource?.Count > 0
+                packageSource.Length > 0
                     ? new XElement("RestoreAdditionalProjectSources", string.Join(";", packageSource))
                     : null),
                 new XElement("ItemGroup",
@@ -275,16 +345,16 @@ public static class Program
     }
 
     private static void AssertInputParameters(
-        string targetFrameworks,
+        string[] targetFrameworks,
         string? projectPath,
         string? package,
         string? packageVersion,
         string workingArea,
         string? assembly)
     {
-        if (string.IsNullOrEmpty(targetFrameworks))
+        if (targetFrameworks.Length == 0)
         {
-            throw new ArgumentException("Specify the target frameworks switch like --target-frameworks \"netcoreapp2.1;net461\" or --target-frameworks netcoreapp2.1.");
+            throw new ArgumentException("Specify the target frameworks switch like --target-frameworks netcoreapp2.1 net461 or --target-frameworks netcoreapp2.1.");
         }
 
         if (!string.IsNullOrEmpty(package) && string.IsNullOrEmpty(packageVersion))
