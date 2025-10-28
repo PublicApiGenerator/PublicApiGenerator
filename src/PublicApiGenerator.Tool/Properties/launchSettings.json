@@ -1,8 +1,20 @@
 {
   "profiles": {
+    "invalid": {
+      "commandName": "Project",
+      "commandLineArgs": "--aaa --target-frameworks net47 --bbb"
+    },
+    "help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    },
+    "version": {
+      "commandName": "Project",
+      "commandLineArgs": "--version"
+    },
     "example1": {
       "commandName": "Project",
-      "commandLineArgs": "--verbose --target-frameworks \"netcoreapp2.1;net461\" --package FluentAssertions --package-version 5.6.0"
+      "commandLineArgs": "--verbose --target-frameworks netcoreapp2.1 net461 --package FluentAssertions --package-version 5.6.0"
     },
     "example2": {
       "commandName": "Project",
@@ -18,11 +30,11 @@
     },
     "example5": {
       "commandName": "Project",
-      "commandLineArgs": "--target-frameworks \"netcoreapp2.2;net452\" --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll"
+      "commandLineArgs": "--target-frameworks netcoreapp2.2 net452 --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll"
     },
     "example6": {
       "commandName": "Project",
-      "commandLineArgs": "--target-frameworks \"netcoreapp2.2;net452\" --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll --package-source https://www.myget.org/F/particular/api/v3/index.json"
+      "commandLineArgs": "--target-frameworks netcoreapp2.2 net452 --package NServiceBus --package-version 7.1.4 --assembly NServiceBus.Core.dll --package-source https://www.myget.org/F/particular/api/v3/index.json"
     }
   }
 }
