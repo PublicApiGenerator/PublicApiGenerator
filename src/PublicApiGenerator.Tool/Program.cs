@@ -1,32 +1,32 @@
 using System.Diagnostics;
-using System.Text;
 using System.Xml.Linq;
 using Process = System.Diagnostics.Process;
 
 namespace PublicApiGenerator.Tool;
 
 /// <summary>
-/// Program for dotnet tool
+/// Program for dotnet tool.
 /// </summary>
 public static class Program
 {
     /// <summary>
-    /// Public API generator tool that is useful for semantic versioning
+    /// Public API generator tool that is useful for semantic versioning.
     /// </summary>
-    /// <param name="targetFrameworks">Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461</param>
-    /// <param name="assembly">The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case in differs from the package name.</param>
+    /// <param name="targetFrameworks">Target frameworks to use to restore packages in. Must be a suitable target framework for executables like netcoreapp2.1. It is possible to specify multiple target frameworks like netcoreapp2.1;net461.</param>
+    /// <param name="assembly">The assembly name including the extension (i.ex. PublicApiGenerator.dll) to generate a public API from in case it differs from the package name.</param>
     /// <param name="projectPath">The path to the csproj that should be used to build the public API.</param>
-    /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/></param>
+    /// <param name="package">The package name from which a public API should be created. The tool assumes the package name equals the assembly name. If the assembly name is different specify <paramref name="assembly"/>.</param>
     /// <param name="packageVersion">The version of the package defined in <paramref name="package"/> to be used.</param>
     /// <param name="packageSource">Package source or feed to use (multiple allowed).</param>
     /// <param name="generatorVersion">The version of the PublicApiGenerator package to use.</param>
     /// <param name="workingDirectory">The working directory to be used for temporary work artifacts. A temporary directory will be created inside the working directory and deleted once the process is done. If no working directory is specified the users temp directory is used.</param>
     /// <param name="outputDirectory">The output directory where the generated public APIs should be moved.</param>
-    /// <param name="verbose"></param>
+    /// <param name="verbose">Prints to stderr detailed information about what's going on behind the scenes.</param>
     /// <param name="leaveArtifacts">Instructs to leave the temporary artifacts around for debugging and troubleshooting purposes.</param>
     /// <param name="waitTimeInSeconds">The number of seconds to wait for the API generation process to end. If multiple target frameworks are used the wait time is applied per target framework.</param>
     /// <returns></returns>
-    internal static int Main(string targetFrameworks,
+    internal static int Main(
+        string targetFrameworks,
         string? assembly = null,
         string? projectPath = null,
         string? package = null,
@@ -42,9 +42,9 @@ public static class Program
         var logError = Console.Error;
         var logVerbose = verbose ? Console.Error : TextWriter.Null;
 
-        string workingArea = !string.IsNullOrEmpty(workingDirectory)
-            ? Path.Combine(workingDirectory, Path.GetRandomFileName())
-            : Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        string workingArea = string.IsNullOrEmpty(workingDirectory)
+            ? Path.Join(Path.GetTempPath(), Path.GetRandomFileName())
+            : Path.Join(workingDirectory, Path.GetRandomFileName());
 
         logVerbose.WriteLine($"Working area: {workingArea}");
 
@@ -75,7 +75,7 @@ public static class Program
 
             return 0;
         }
-        catch (InvalidOperationException e)
+        catch (ArgumentException e)
         {
             logError.WriteLine($"Configuration error: {e.Message}");
             return 1;
@@ -94,31 +94,41 @@ public static class Program
         }
     }
 
-    private static void GeneratePublicApi(string? assembly, string? package, string workingArea, string framework, string? outputDirectory, int waitTimeInSeconds, TextWriter logVerbose, TextWriter logError)
+    private static void GeneratePublicApi(
+        string? assembly,
+        string? package,
+        string workingArea,
+        string framework,
+        string? outputDirectory,
+        int waitTimeInSeconds,
+        TextWriter logVerbose,
+        TextWriter logError)
     {
-        string relativePath = Path.Combine(workingArea, "bin", "Release", framework);
-        string name = !string.IsNullOrEmpty(assembly) ? $"{assembly}" : $"{package}.dll";
-        relativePath = Path.Combine(relativePath, name);
-        string assemblyPath = Path.GetFullPath(relativePath);
+        string name = string.IsNullOrEmpty(assembly) ? $"{package}.dll" : $"{assembly}";
+        string assemblyPath = Path.GetFullPath(Path.Join(workingArea, "bin", "Release", framework, name));
 
-        string? apiFilePath = outputDirectory != null
-            ? Path.Combine(workingArea, $"{Path.GetFileNameWithoutExtension(name)}.{framework}.received.txt")
-            : null;
+        string? apiFilePath = outputDirectory == null
+            ? null
+            : Path.Join(workingArea, $"{Path.GetFileNameWithoutExtension(name)}.{framework}.received.txt");
 
         try
         {
             // Because we run in different appdomain we can always unload
-            RunDotnet(workingArea, waitTimeInSeconds, logVerbose,
-                      apiFilePath != null ? null : Console.Out,
-                      "run",
-                      "--configuration", "Release",
-                      "--framework", framework,
-                      "--",
-                      assemblyPath, apiFilePath ?? "-");
+            RunDotnet(
+                workingArea,
+                waitTimeInSeconds,
+                logVerbose,
+                apiFilePath == null ? Console.Out : null,
+                "run",
+                "--configuration", "Release",
+                "--framework", framework,
+                "--",
+                assemblyPath,
+                apiFilePath ?? "-");
         }
         catch (FileNotFoundException)
         {
-            logError.WriteLine($"Unable to find {assemblyPath}. Consider specifying --assembly");
+            logError.WriteLine($"Unable to find {assemblyPath}. Consider specifying --assembly switch.");
             throw;
         }
 
@@ -127,19 +137,24 @@ public static class Program
             return;
         }
 
-        logVerbose.WriteLine($"Public API file: {apiFilePath}");
+        logVerbose.WriteLine($"Public API temporary file: {apiFilePath}");
         logVerbose.WriteLine();
 
-        string destinationFilePath = Path.Combine(outputDirectory, Path.GetFileName(apiFilePath));
+        string destinationFilePath = Path.Join(outputDirectory, Path.GetFileName(apiFilePath));
 
         if (File.Exists(destinationFilePath))
             File.Delete(destinationFilePath);
         File.Move(apiFilePath, destinationFilePath);
 
-        Console.WriteLine(Path.GetFullPath(destinationFilePath));
+        logVerbose.WriteLine($"Public API output file: {Path.GetFullPath(destinationFilePath)}");
     }
 
-    private static void RunDotnet(string workingArea, int waitTimeInSeconds, TextWriter logVerbose, TextWriter? stdout, params string[] arguments)
+    private static void RunDotnet(
+        string workingArea,
+        int waitTimeInSeconds,
+        TextWriter logVerbose,
+        TextWriter? stdout,
+        params string[] arguments)
     {
         var psi = new ProcessStartInfo
         {
@@ -186,29 +201,23 @@ public static class Program
         {
             string pseudoCommandLine = string.Join(" ", from arg in arguments
                                                         select arg.IndexOf('"') >= 0
-                                                          ? $"\"{arg.Replace("\"", "\"\"")}\""
-                                                          : arg);
-            throw new Exception(
-                $"dotnet exit code {process.ExitCode}. Directory: {workingArea}. Args: {pseudoCommandLine}.");
+                                                            ? $"\"{arg.Replace("\"", "\"\"")}\""
+                                                            : arg);
+            throw new Exception($"dotnet exit code {process.ExitCode}. Directory: {workingArea}. Args: {pseudoCommandLine}.");
         }
 
-        static DataReceivedEventHandler
-            DataReceivedEventHandler(TextWriter writer, string? prefix = null) =>
+        static DataReceivedEventHandler DataReceivedEventHandler(TextWriter writer, string? prefix = null) =>
             (_, args) =>
             {
-                if (args.Data == null)
-                {
-                    return; // EOI
-                }
-
-                writer.WriteLine(prefix + args.Data);
+                if (args.Data != null)
+                    writer.WriteLine(prefix + args.Data);
             };
     }
 
     private static void SaveProject(string workingArea, XElement project, TextWriter logVerbose)
     {
         Directory.CreateDirectory(workingArea);
-        string fullPath = Path.Combine(workingArea, "project.csproj");
+        string fullPath = Path.Join(workingArea, "project.csproj");
         using (var output = File.CreateText(fullPath))
         {
             logVerbose.WriteLine($"Project output path: {fullPath}");
@@ -220,7 +229,7 @@ public static class Program
 
         string programMain = typeof(Program).GetManifestResourceText("SubProgram.cs");
 
-        fullPath = Path.Combine(workingArea, "Program.cs");
+        fullPath = Path.Join(workingArea, "Program.cs");
         using (var output = File.CreateText(fullPath))
         {
             logVerbose.WriteLine($"Program output path: {fullPath}");
@@ -231,68 +240,71 @@ public static class Program
         }
     }
 
-    private static string GetManifestResourceText(this Type type, string name, Encoding? encoding = null)
+    private static string GetManifestResourceText(this Type type, string name)
     {
         using var stream = type.Assembly.GetManifestResourceStream(type, name) ?? throw new Exception($"Resource named \"{type.Namespace}.{name}\" not found.");
-
-        using var reader = encoding == null ? new StreamReader(stream)
-                                            : new StreamReader(stream, encoding);
+        using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
     }
 
-    private static XElement CreateProject(string targetFrameworks,
-                                          string? project,
-                                          string? package,
-                                          string? packageVersion,
-                                          ICollection<string>? packageSource,
-                                          string generatorVersion)
+    private static XElement CreateProject(
+        string targetFrameworks,
+        string? projectPath,
+        string? package,
+        string? packageVersion,
+        ICollection<string>? packageSource,
+        string generatorVersion)
     {
         return
             new XElement("Project", new XAttribute("Sdk", "Microsoft.NET.Sdk"),
                 new XElement("PropertyGroup",
                     new XElement("OutputType", "Exe"),
                     new XElement("TargetFrameworks", targetFrameworks),
+                    new XElement("SuppressTfmSupportBuildWarnings", true),
                     new XElement("CopyLocalLockFileAssemblies", "true"),
                 packageSource?.Count > 0
                     ? new XElement("RestoreAdditionalProjectSources", string.Join(";", packageSource))
                     : null),
                 new XElement("ItemGroup",
                     PackageReference(nameof(PublicApiGenerator), generatorVersion),
-                    !string.IsNullOrEmpty(package) ? PackageReference(package!, packageVersion!) : null,
-                    !string.IsNullOrEmpty(project) ? new XElement("ProjectReference", new XAttribute("Include", project)) : null));
+                    string.IsNullOrEmpty(package) ? null : PackageReference(package, packageVersion!),
+                    string.IsNullOrEmpty(projectPath) ? null : new XElement("ProjectReference", new XAttribute("Include", projectPath))));
 
         static XElement PackageReference(string id, string version) =>
             new("PackageReference", new XAttribute("Include", id), new XAttribute("Version", version));
     }
 
-    private static void AssertInputParameters(string targetFrameworks, string? project, string? package,
-        string? packageVersion, string workingArea, string? assembly)
+    private static void AssertInputParameters(
+        string targetFrameworks,
+        string? projectPath,
+        string? package,
+        string? packageVersion,
+        string workingArea,
+        string? assembly)
     {
         if (string.IsNullOrEmpty(targetFrameworks))
         {
-            throw new InvalidOperationException("Specify the target frameworks like 'netcoreapp2.1;net461' or 'netcoreapp2.1'.");
+            throw new ArgumentException("Specify the target frameworks switch like --target-frameworks \"netcoreapp2.1;net461\" or --target-frameworks netcoreapp2.1.");
         }
 
         if (!string.IsNullOrEmpty(package) && string.IsNullOrEmpty(packageVersion))
         {
-            throw new InvalidOperationException("When using the package switch the package-version switch needs to be specified.");
+            throw new ArgumentException("When using the --package switch the --package-version switch needs to be specified.");
         }
 
-        if (!string.IsNullOrEmpty(package) && !string.IsNullOrEmpty(project))
+        if (!string.IsNullOrEmpty(package) && !string.IsNullOrEmpty(projectPath))
         {
-            throw new InvalidOperationException(
-                "When using the package name the project-path switch cannot be used or vice versa.");
+            throw new ArgumentException("When using the --package switch the --project-path switch cannot be used or vice versa.");
         }
 
-        if (!string.IsNullOrEmpty(project) && string.IsNullOrEmpty(assembly))
+        if (!string.IsNullOrEmpty(projectPath) && string.IsNullOrEmpty(assembly))
         {
-            throw new InvalidOperationException(
-                "When using the project-path switch the output assembly name has to be specified with --assembly.");
+            throw new ArgumentException("When using the --project-path switch the output assembly name has to be specified with --assembly switch.");
         }
 
         if (File.Exists(workingArea) || Directory.Exists(workingArea))
         {
-            throw new InvalidOperationException($"{workingArea} already exists");
+            throw new ArgumentException($"{workingArea} already exists, check --working-directory switch.");
         }
     }
 }

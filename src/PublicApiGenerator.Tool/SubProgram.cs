@@ -14,8 +14,12 @@ static class Program
             var options = new ApiGeneratorOptions();
             switch (args[1])
             {
-                case "-": Console.WriteLine(asm.GeneratePublicApi(options)); break;
-                case string apiFilePath: File.WriteAllText(apiFilePath, asm.GeneratePublicApi(options)); break;
+                case "-":
+                    Console.WriteLine(asm.GeneratePublicApi(options));
+                    break;
+                case string apiFilePath:
+                    File.WriteAllText(apiFilePath, asm.GeneratePublicApi(options));
+                    break;
             }
             return 0;
         }
