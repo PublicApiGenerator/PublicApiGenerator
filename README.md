@@ -248,7 +248,8 @@ generate-public-api --target-frameworks netcoreapp2.2 net452 --package NServiceB
 ### Command line arguments
 
 This CLI is driven by [System.CommandLine](https://github.com/dotnet/command-line-api) project.
-All documentation is available there. Use `generate-public-api --help` to display help page.
+All documentation is available [there](https://learn.microsoft.com/en-us/dotnet/standard/commandline/).
+Use `generate-public-api --help` to display help page.
 
 ```
 --target-frameworks framework1 framework2 framework3
