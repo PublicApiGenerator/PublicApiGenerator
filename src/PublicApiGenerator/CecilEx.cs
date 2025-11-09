@@ -70,6 +70,100 @@ internal static partial class CecilEx
         return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute");
     }
 
+    // [NullableContext(1)]
+    // public sealed class <>E__0
+    // {
+    //   [CompilerGenerated]
+    //   [SpecialName]
+    //   private static void <Extension>$([In] string obj0)
+    //   {
+    //   }
+    //
+    //   public static bool HasValue(string value)
+    //   {
+    //     throw null;
+    //   }
+    // }
+    public static bool IsStaticExtensionMethod(this MethodDefinition method)
+    {
+        if (!method.IsSpecialName || !method.IsStatic)
+            return false;
+
+        foreach (var nested in method.DeclaringType.NestedTypes.AsEnumerable())
+        {
+            if (!nested.Name.StartsWith("<>"))
+                continue;
+
+            var methods = nested.GetMethods();
+
+            if (!methods.Any(m => m.IsSpecialName && m.IsCompilerGenerated() && m.IsStatic && m.ReturnType.FullName == "System.Void" && m.Name == "<Extension>$" && m.Parameters.Count == 1))
+                continue;
+
+            if (!methods.Any(m => m.Name == method.Name && m.ReturnType == method.ReturnType && m.Parameters.SequenceEqual(method.Parameters, ParameterDefinitionComparer.Instance)))
+                continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    // [NullableContext(1)]
+    // public sealed class <>E__0
+    // {
+    //   [CompilerGenerated]
+    //   [SpecialName]
+    //   private static void <Extension>$(string str)
+    //   {
+    //   }
+    //
+    //   public int LineCount
+    //   {
+    //     get
+    //     {
+    //       throw null;
+    //     }
+    //   }
+    // }
+    public static bool IsExtensionProperty(this MethodDefinition method)
+    {
+        if (!method.IsSpecialName || !method.Name.StartsWith("get_"))
+            return false;
+
+        var propertyName = method.Name.Substring(4);
+
+
+        foreach (var nested in method.DeclaringType.NestedTypes.AsEnumerable())
+        {
+            if (!nested.Name.StartsWith("<>"))
+                continue;
+
+            var methods = nested.GetMethods();
+
+            if (!methods.Any(m => m.IsSpecialName && m.IsCompilerGenerated() && m.IsStatic && m.ReturnType.FullName == "System.Void" && m.Name == "<Extension>$" && m.Parameters.Count == 1))
+                continue;
+
+            if (!nested.Properties.Any(p => p.Name == propertyName && p.PropertyType == method.ReturnType))
+                continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private sealed class ParameterDefinitionComparer : IEqualityComparer<ParameterDefinition>
+    {
+        public static readonly ParameterDefinitionComparer Instance = new();
+
+        public bool Equals(ParameterDefinition x, ParameterDefinition y)
+        {
+            return x.Name == y.Name && x.ParameterType == y.ParameterType;
+        }
+
+        public int GetHashCode(ParameterDefinition obj) => obj.GetHashCode();
+    }
+
     public static bool IsRequired(this CodeMemberProperty property)
     {
         return property.CustomAttributes.Cast<CodeAttributeDeclaration>().Any(a => a.Name == "System.Runtime.CompilerServices.RequiredMemberAttribute");

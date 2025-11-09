@@ -127,7 +127,7 @@ public static class ApiGenerator
 
     private static bool ShouldIncludeType(TypeDefinition t, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods)
     {
-        if (t.IsCompilerGenerated())
+        if (t.IsCompilerGenerated() || t.Name.StartsWith("<>"))
             return false;
 
         if (!t.IsPublic && !t.IsNestedPublic && !t.IsNestedFamily && !t.IsNestedFamilyOrAssembly)
@@ -160,7 +160,7 @@ public static class ApiGenerator
         if (m.DeclaringType?.FullName == null)
             return false;
 
-        if (!useDenyNamespacePrefixesForExtensionMethods && m is MethodDefinition md && md.IsExtensionMethod())
+        if (!useDenyNamespacePrefixesForExtensionMethods && m is MethodDefinition md && (md.IsExtensionMethod() || md.IsStaticExtensionMethod() || md.IsExtensionProperty()))
             return true;
 
         if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith) && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
@@ -581,7 +581,7 @@ public static class ApiGenerator
         if (!ShouldIncludeMember(attributes))
             return;
 
-        if (member.IsSpecialName && !member.Name.StartsWith("op_"))
+        if (member.IsSpecialName && !member.Name.StartsWith("op_") && !member.IsExtensionMethod() && !member.IsStaticExtensionMethod() && !member.IsExtensionProperty())
             return;
 
         var returnType = member.ReturnType.CreateCodeTypeReference(member.MethodReturnType);
@@ -602,7 +602,7 @@ public static class ApiGenerator
             method.ReturnType.MakeNativeInteger();
         PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, attributeFilter);
         PopulateGenericParameters(member, method.TypeParameters, attributeFilter, _ => true);
-        PopulateMethodParameters(member, method.Parameters, attributeFilter, member.IsExtensionMethod());
+        PopulateMethodParameters(member, method.Parameters, attributeFilter, member.IsExtensionMethod() || member.IsStaticExtensionMethod() || member.IsExtensionProperty());
 
         typeDeclaration.Members.Add(method);
     }
