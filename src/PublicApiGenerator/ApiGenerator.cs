@@ -160,7 +160,7 @@ public static class ApiGenerator
         if (m.DeclaringType?.FullName == null)
             return false;
 
-        if (!useDenyNamespacePrefixesForExtensionMethods && m is MethodDefinition md && (md.IsExtensionMethod() || md.IsStaticExtensionMethod() || md.IsExtensionProperty()))
+        if (!useDenyNamespacePrefixesForExtensionMethods && m is MethodDefinition md && md.IsExtensionMethod())
             return true;
 
         if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith) && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
@@ -296,6 +296,17 @@ public static class ApiGenerator
 
         foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
             AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
+
+        foreach (var nested in publicType.NestedTypes)
+        {
+            if (nested.IsExtensionBlock())
+            {
+                var extensionBlock = new ExtensionBlockDeclaration(nested);
+                foreach (var memberInfo in nested.GetMembers())
+                    AddMemberToTypeDeclaration(extensionBlock, nested, memberInfo, attributeFilter);
+                declaration.Members.Add(extensionBlock);
+            }
+        }
 
         // Fields should be in defined order for an enum
         var fields = !publicType.IsEnum
@@ -581,7 +592,7 @@ public static class ApiGenerator
         if (!ShouldIncludeMember(attributes))
             return;
 
-        if (member.IsSpecialName && !member.Name.StartsWith("op_") && !member.IsExtensionMethod() && !member.IsStaticExtensionMethod() && !member.IsExtensionProperty())
+        if (member.IsSpecialName && !member.Name.StartsWith("op_"))
             return;
 
         var returnType = member.ReturnType.CreateCodeTypeReference(member.MethodReturnType);
@@ -602,7 +613,7 @@ public static class ApiGenerator
             method.ReturnType.MakeNativeInteger();
         PopulateCustomAttributes(member.MethodReturnType, method.ReturnTypeCustomAttributes, attributeFilter);
         PopulateGenericParameters(member, method.TypeParameters, attributeFilter, _ => true);
-        PopulateMethodParameters(member, method.Parameters, attributeFilter, member.IsExtensionMethod() || member.IsStaticExtensionMethod() || member.IsExtensionProperty());
+        PopulateMethodParameters(member, method.Parameters, attributeFilter, member.IsExtensionMethod());
 
         typeDeclaration.Members.Add(method);
     }

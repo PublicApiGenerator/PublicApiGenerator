@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Mono.Cecil.Rocks;
 using PublicApiGenerator;
 
 namespace Microsoft.CSharp
@@ -2229,8 +2230,29 @@ namespace Microsoft.CSharp
                     {
                         Output.WriteLine();
                     }
-                    CodeTypeDeclaration currentClass = (CodeTypeDeclaration)current;
-                    ((ICodeGenerator)this).GenerateCodeFromType(currentClass, _output.InnerWriter, _options);
+                    if (current is ExtensionBlockDeclaration block)
+                    {
+                        Output.Write("extension(");
+                        //OutputType(e.ReturnType, new DynamicContext(e.ReturnTypeCustomAttributes));
+                        Output.Write(block.AnchorType);
+                        if (!string.IsNullOrEmpty(block.Name))
+                        {
+                            Output.Write(" ");
+                            Output.Write(block.Name);
+                        }
+                        Output.WriteLine(")");
+                        Output.WriteLine("{");
+                        Indent++;
+                        GenerateProperties(block);
+                        GenerateMethods(block);
+                        Indent--;
+                        Output.WriteLine("}");
+                    }
+                    else
+                    {
+                        CodeTypeDeclaration currentClass = (CodeTypeDeclaration)current;
+                        ((ICodeGenerator)this).GenerateCodeFromType(currentClass, _output.InnerWriter, _options);
+                    }
                 }
             }
         }

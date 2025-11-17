@@ -13,12 +13,24 @@ namespace PublicApiGeneratorTests.Examples
 {
     public static class MyExtensions
     {
-        public static bool IsEmpty<T>(this System.Collections.Generic.IEnumerable<T> target)
-            where T :  notnull { }
-        public static bool StaticExtensionMethod(this string value) { }
-        public static int WordCount(this string str) { }
-        public static int get_LineCount(this string str) { }
-        public static string get_StaticExtensionProperty() { }
+        extension(System.Int32)
+        {
+            public static string StaticExtensionProperty { get; }
+            public static bool StaticExtensionMethod(int value1, float value2) { }
+        }
+        extension(System.Collections.Generic.IEnumerable`1<T> genericAnchor)
+        {
+            public bool IsEmpty() { }
+        }
+        extension(System.DateTime thisDateTimeAnchor)
+        {
+            public bool DoSomething2(float first, float second) { }
+        }
+        extension(System.String thisStringAnchor)
+        {
+            public int LineCount { get; }
+            public double DoSomething(bool arg) { }
+        }
     }
 }
 """);
@@ -29,23 +41,29 @@ namespace PublicApiGeneratorTests.Examples
     {
         public static class MyExtensions
         {
-            extension(string str)
+            extension(string thisStringAnchor)
             {
                 // instance extension property
-                public int LineCount => str.Count(c => c == '\n');
+                public int LineCount => 0;
                 // instance extension method
-                public int WordCount() => str.Split([' ', '.', '?'], StringSplitOptions.RemoveEmptyEntries).Length;
+                public double DoSomething(bool arg) => throw null;
             }
 
-            extension<T>(IEnumerable<T> target)
+            extension(DateTime thisDateTimeAnchor)
             {
-                public bool IsEmpty() => !target.Any();
+                // instance extension method
+                public bool DoSomething2(float first, float second) => throw null;
             }
 
-            extension(string)
+            extension<T>(IEnumerable<T> genericAnchor)
+            {
+                public bool IsEmpty() => throw null;
+            }
+
+            extension(int)
             {
                 public static string StaticExtensionProperty => "prop";
-                public static bool StaticExtensionMethod(string value) => true;
+                public static bool StaticExtensionMethod(int value1, float value2) => true;
             }
         }
     }
