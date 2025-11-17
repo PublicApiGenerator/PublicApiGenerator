@@ -127,7 +127,11 @@ public static class ApiGenerator
 
     private static bool ShouldIncludeType(TypeDefinition t, string[] denyNamespacePrefixes, string[] allowNamespacePrefixes, bool useDenyNamespacePrefixesForExtensionMethods)
     {
-        if (t.IsCompilerGenerated() || t.Name.StartsWith("<>"))
+        if (t.IsCompilerGenerated())
+            return false;
+
+        // extension blocks
+        if (t.IsSpecialName && t.Name.StartsWith("<") && t.HasCustomAttributes && t.CustomAttributes.Any(a => a.AttributeType.Name == "ExtensionAttribute") && t.GetMembers().All(m => m.HasCustomAttributes && m.CustomAttributes.Any(a => a.AttributeType.Name == "ExtensionMarkerAttribute")))
             return false;
 
         if (!t.IsPublic && !t.IsNestedPublic && !t.IsNestedFamily && !t.IsNestedFamilyOrAssembly)
@@ -165,6 +169,8 @@ public static class ApiGenerator
 
         if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith) && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
             return false;
+
+        --
 
         return true;
     }

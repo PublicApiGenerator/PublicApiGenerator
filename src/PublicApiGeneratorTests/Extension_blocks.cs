@@ -13,6 +13,13 @@ namespace PublicApiGeneratorTests.Examples
 {
     public static class MyExtensions
     {
+        public static double DoSomething(this string thisStringAnchor, bool arg) { }
+        public static bool DoSomething2(this System.DateTime thisDateTimeAnchor, float first, float second) { }
+        public static bool IsEmpty<T>(this System.Collections.Generic.IEnumerable<T> genericAnchor)
+            where T :  notnull { }
+        public static bool StaticExtensionMethod(int value1, float value2) { }
+        public static int get_LineCount(string thisStringAnchor) { }
+        public static string get_StaticExtensionProperty() { }
         extension(System.Int32)
         {
             public static string StaticExtensionProperty { get; }

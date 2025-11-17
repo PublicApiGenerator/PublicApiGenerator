@@ -4,7 +4,7 @@
     <Authors>Jake Ginnivan</Authors>
     <Copyright>Copyright Jake Ginnivan 2010-$([System.DateTime]::UtcNow.ToString(yyyy)). All rights reserved.</Copyright>
     <PackageTags>semanticversioning versioning api</PackageTags>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

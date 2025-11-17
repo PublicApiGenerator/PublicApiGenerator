@@ -72,34 +72,41 @@ internal static partial class CecilEx
 
     // NOTE: call this method only on nested types
     //
-    // [NullableContext(1)]
-    // public sealed class <>E__0
-    // {
-    //   [CompilerGenerated]
-    //   [SpecialName]
-    //   private static void <Extension>$(string str)
-    //   {
-    //   }
+    //[Extension]
+    //[SpecialName]
+    //public sealed class <G>$E09FCB5EB13C1AE2FC524F6744DE5322<T0>
+    //{
+    //  [ExtensionMarker("<M>$4F283A41C317289FB778392365B88FC7")]
+    //  public bool IsEmpty()
+    //  {
+    //    throw null;
+    //  }
     //
-    //   public int LineCount
-    //   {
-    //     get
-    //     {
-    //       throw null;
-    //     }
-    //   }
-    // }
+    //  [SpecialName]
+    //  public static class <M>$4F283A41C317289FB778392365B88FC7
+    //  {
+    //    [CompilerGenerated]
+    //    [SpecialName]
+    //    public static void <Extension>$(IEnumerable<T> genericAnchor)
+    //    {
+    //    }
+    //  }
+    //}
     public static bool IsExtensionBlock(this TypeDefinition definition)
     {
-        if (!definition.Name.StartsWith("<>"))
+        if (!definition.Name.StartsWith("<") || !definition.Name.Contains("$") || definition.NestedTypes.Count != 1)
             return false;
 
-        var methods = definition.GetMethods();
+        var marker = definition.NestedTypes[0];
 
-        if (!methods.Any(m => m.IsSpecialName && m.IsCompilerGenerated() && m.IsStatic && m.ReturnType.FullName == "System.Void" && m.Name == "<Extension>$" && m.Parameters.Count == 1))
+        if (!marker.IsSpecialName || !marker.IsAbstract || !marker.IsSealed)
             return false;
 
-        return true;
+        var methods = marker.GetMethods().ToArray();
+        if (methods.Length != 1)
+            return false;
+
+        return methods[0].IsSpecialName && methods[0].IsCompilerGenerated() && methods[0].IsStatic && methods[0].ReturnType.FullName == "System.Void" && methods[0].Name == "<Extension>$" && methods[0].Parameters.Count == 1;
     }
 
     public static bool IsRequired(this CodeMemberProperty property)

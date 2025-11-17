@@ -10,7 +10,7 @@ internal class ExtensionBlockDeclaration : CodeTypeDeclaration
     {
         TypeDefinition = definition;
 
-        var m = definition.GetMethods().First(m => m.IsSpecialName && m.IsCompilerGenerated() && m.IsStatic && m.ReturnType.FullName == "System.Void" && m.Name == "<Extension>$" && m.Parameters.Count == 1);
+        var m = definition.NestedTypes[0].GetMethods().Single();
         if (m.Parameters[0].Name != string.Empty)
             Name = m.Parameters[0].Name;
         AnchorType = m.Parameters[0].ParameterType;
