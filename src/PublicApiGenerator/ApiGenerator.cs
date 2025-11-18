@@ -130,10 +130,6 @@ public static class ApiGenerator
         if (t.IsCompilerGenerated())
             return false;
 
-        // extension blocks
-        if (t.IsSpecialName && t.Name.StartsWith("<") && t.HasCustomAttributes && t.CustomAttributes.Any(a => a.AttributeType.Name == "ExtensionAttribute") && t.GetMembers().All(m => m.HasCustomAttributes && m.CustomAttributes.Any(a => a.AttributeType.Name == "ExtensionMarkerAttribute")))
-            return false;
-
         if (!t.IsPublic && !t.IsNestedPublic && !t.IsNestedFamily && !t.IsNestedFamilyOrAssembly)
             return false;
 
@@ -144,6 +140,9 @@ public static class ApiGenerator
         }
 
         if (denyNamespacePrefixes.Any(t.FullName.StartsWith) && !allowNamespacePrefixes.Any(t.FullName.StartsWith))
+            return false;
+
+        if (t.IsExtensionBlock())
             return false;
 
         return true;
