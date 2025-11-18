@@ -70,8 +70,6 @@ internal static partial class CecilEx
         return method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.ExtensionAttribute");
     }
 
-    // NOTE: call this method only on nested types
-    //
     //[Extension]
     //[SpecialName]
     //public sealed class <G>$E09FCB5EB13C1AE2FC524F6744DE5322<T0>
@@ -94,7 +92,7 @@ internal static partial class CecilEx
     //}
     public static bool IsExtensionBlock(this TypeDefinition definition)
     {
-        if (!definition.Name.StartsWith("<") || !definition.Name.Contains("$") || definition.NestedTypes.Count != 1)
+        if (definition.DeclaringType == null || !definition.Name.StartsWith("<") || !definition.Name.Contains("$") || definition.NestedTypes.Count != 1)
             return false;
 
         var marker = definition.NestedTypes[0];
