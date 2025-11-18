@@ -2232,21 +2232,28 @@ namespace Microsoft.CSharp
                     }
                     if (current is ExtensionBlockDeclaration block)
                     {
-                        Output.Write("extension(");
-                        //OutputType(e.ReturnType, new DynamicContext(e.ReturnTypeCustomAttributes));
-                        Output.Write(block.AnchorType);
+                        TypeOutputRewriter = block.Rewrite;
+
+                        Output.Write("extension");
+                        OutputTypeParameters(block.TypeParameters);
+                        Output.Write("(");
+                        OutputType(block.AnchorType);
                         if (!string.IsNullOrEmpty(block.Name))
                         {
                             Output.Write(" ");
                             Output.Write(block.Name);
                         }
-                        Output.WriteLine(")");
+                        Output.Write(")");
+                        OutputTypeParameterConstraints(block.TypeParameters);
+                        Output.WriteLine();
                         Output.WriteLine("{");
                         Indent++;
                         GenerateProperties(block);
                         GenerateMethods(block);
                         Indent--;
                         Output.WriteLine("}");
+
+                        TypeOutputRewriter = null;
                     }
                     else
                     {
@@ -2389,7 +2396,7 @@ namespace Microsoft.CSharp
                     Output.Write(' ');
                 }
 
-                Output.Write(typeParameters[i].Name);
+                Output.Write(TypeOutputRewriter == null ? typeParameters[i].Name : TypeOutputRewriter(typeParameters[i].Name));
             }
 
             Output.Write('>');
@@ -2416,7 +2423,7 @@ namespace Microsoft.CSharp
                         {
                             Output.WriteLine();
                             Output.Write("where ");
-                            Output.Write(typeParameters[i].Name);
+                            Output.Write(TypeOutputRewriter == null ? typeParameters[i].Name : TypeOutputRewriter(typeParameters[i].Name));
                             Output.Write(" : ");
                             first = false;
                         }
@@ -3054,6 +3061,8 @@ namespace Microsoft.CSharp
 
         public string GetTypeOutput(CodeTypeReference typeRef) => GetTypeOutput(typeRef, null);
 
+        public Func<string, string>? TypeOutputRewriter { get; set; }
+
         public string GetTypeOutput(CodeTypeReference typeRef, DynamicContext dynamicContext)
         {
             string s = string.Empty;
@@ -3077,6 +3086,9 @@ namespace Microsoft.CSharp
                 s += new string(results);
                 typeRef = typeRef.ArrayElementType;
             }
+
+            if (TypeOutputRewriter != null)
+                s = TypeOutputRewriter(s);
 
             return s;
         }

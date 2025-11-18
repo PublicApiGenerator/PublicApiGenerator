@@ -109,6 +109,75 @@ internal static partial class CecilEx
         return methods[0].IsSpecialName && methods[0].IsCompilerGenerated() && methods[0].IsStatic && methods[0].ReturnType.FullName == "System.Void" && methods[0].Name == "<Extension>$" && methods[0].Parameters.Count == 1;
     }
 
+    public static bool HasExtensionBlockSyntax(this MethodDefinition m)
+    {
+        if (!m.IsStatic)
+            return false;
+
+        foreach (var nested in m.DeclaringType.NestedTypes)
+        {
+            if (nested.IsExtensionBlock())
+            {
+                var thisAnchor = nested.NestedTypes[0].GetMethods().Single().Parameters[0];
+                var comparer1 = new TypeReferenceComparer(thisAnchor);
+                var comparer2 = new ParameterTypeAndNameComparer(thisAnchor);
+                foreach (var member in nested.GetMembers())
+                {
+                    if (member is PropertyDefinition prop)
+                    {
+                        if ("get_" + prop.Name != m.Name)
+                            continue;
+
+                        if (!comparer1.Equals(prop.PropertyType, m.ReturnType))
+                            continue;
+
+                        if (m.Parameters.Count == 1)
+                        {
+                            if (m.Parameters[0].ParameterType != thisAnchor.ParameterType)
+                                continue;
+                            if (m.Parameters[0].Name != thisAnchor.Name)
+                                continue;
+                        }
+
+                        return true;
+                    }
+                    else if (member is MethodDefinition method)
+                    {
+                        if (method.Name != m.Name)
+                            continue;
+
+                        if (!comparer1.Equals(method.ReturnType, m.ReturnType))
+                            continue;
+
+                        if (nested.Properties.Any(p => p.GetMethod == method || p.SetMethod == method))
+                            continue;
+
+                        if (m.IsExtensionMethod())
+                        {
+                            // Skip 'this' first parameter in case of instance extension method.
+                            var params1 = m.Parameters.Skip(1);
+                            var params2 = method.Parameters;
+                            if (!params1.SequenceEqual(params2, comparer2))
+                                continue;
+                        }
+                        else
+                        {
+                            // Nothing to skip in case of static extension method.
+                            var params1 = m.Parameters;
+                            var params2 = method.Parameters;
+                            if (!params1.SequenceEqual(params2, comparer2))
+                                continue;
+                        }
+
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static bool IsRequired(this CodeMemberProperty property)
     {
         return property.CustomAttributes.Cast<CodeAttributeDeclaration>().Any(a => a.Name == "System.Runtime.CompilerServices.RequiredMemberAttribute");
@@ -303,5 +372,35 @@ internal static partial class CecilEx
         public bool Equals(ParameterDefinition x, ParameterDefinition y) => x?.ParameterType == y?.ParameterType;
 
         public int GetHashCode(ParameterDefinition obj) => obj.GetHashCode();
+    }
+
+    internal sealed class ParameterTypeAndNameComparer : IEqualityComparer<ParameterDefinition>
+    {
+        private readonly Func<string, string> _rewrite;
+
+        public ParameterTypeAndNameComparer(ParameterDefinition thisAnchor)
+        {
+            // rename $T0 $T1 in extension blocks to TKey TValue taking generic parameter names from this anchor
+            _rewrite = x => x.StartsWith("$T") ? ((GenericInstanceType)thisAnchor.ParameterType).GenericArguments[int.Parse(x.Substring(2))].Name : x;
+        }
+
+        public bool Equals(ParameterDefinition x, ParameterDefinition y) => _rewrite(x.ParameterType.Name) == _rewrite(y.ParameterType.Name) && x?.Name == y?.Name;
+
+        public int GetHashCode(ParameterDefinition obj) => obj.GetHashCode();
+    }
+
+    internal sealed class TypeReferenceComparer : IEqualityComparer<TypeReference>
+    {
+        private readonly Func<string, string> _rewrite;
+
+        public TypeReferenceComparer(ParameterDefinition thisAnchor)
+        {
+            // rename $T0 $T1 in extension blocks to TKey TValue taking generic parameter names from this anchor
+            _rewrite = x => x.StartsWith("$T") ? ((GenericInstanceType)thisAnchor.ParameterType).GenericArguments[int.Parse(x.Substring(2))].Name : x;
+        }
+
+        public bool Equals(TypeReference x, TypeReference y) => _rewrite(x.Name) == _rewrite(y.Name);
+
+        public int GetHashCode(TypeReference obj) => obj.GetHashCode();
     }
 }

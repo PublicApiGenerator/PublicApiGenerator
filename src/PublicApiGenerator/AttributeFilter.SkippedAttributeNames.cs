@@ -10,6 +10,7 @@ internal partial class AttributeFilter
         "System.Runtime.CompilerServices.CompilerGeneratedAttribute",
         "System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
         "System.Runtime.CompilerServices.ExtensionAttribute",
+        "System.Runtime.CompilerServices.ExtensionMarkerAttribute",
         "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
         "System.Runtime.CompilerServices.IteratorStateMachineAttribute",
         "System.Runtime.CompilerServices.IsReadOnlyAttribute",

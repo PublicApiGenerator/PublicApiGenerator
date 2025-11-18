@@ -8,17 +8,17 @@ internal class ExtensionBlockDeclaration : CodeTypeDeclaration
 {
     public ExtensionBlockDeclaration(TypeDefinition definition)
     {
-        TypeDefinition = definition;
-
-        var m = definition.NestedTypes[0].GetMethods().Single();
-        if (m.Parameters[0].Name != string.Empty)
-            Name = m.Parameters[0].Name;
-        AnchorType = m.Parameters[0].ParameterType;
+        AnchorMethod = definition.NestedTypes[0].GetMethods().Single();
+        if (AnchorMethod.Parameters[0].Name != string.Empty)
+            Name = AnchorMethod.Parameters[0].Name;
+        AnchorType = AnchorMethod.Parameters[0].ParameterType.CreateCodeTypeReference();
+        // rename $T0 $T1 in extension blocks to TKey TValue taking generic parameter names from this anchor
+        Rewrite = x => x.StartsWith("$T") ? ((GenericInstanceType)AnchorMethod.Parameters[0].ParameterType).GenericArguments[int.Parse(x.Substring(2))].Name : x;
     }
 
-    public TypeReference AnchorType { get; set; }
+    public MethodDefinition AnchorMethod { get; }
 
-    public TypeDefinition TypeDefinition { get; set; }
+    public CodeTypeReference AnchorType { get; }
 
-    public List<MethodDefinition> Methods { get; set; } = [];
+    public Func<string, string> Rewrite { get; }
 }

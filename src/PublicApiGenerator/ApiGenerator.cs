@@ -170,7 +170,8 @@ public static class ApiGenerator
         if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith) && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
             return false;
 
-        --
+        if (m is MethodDefinition method)
+            return !method.HasExtensionBlockSyntax();
 
         return true;
     }
@@ -308,6 +309,7 @@ public static class ApiGenerator
             if (nested.IsExtensionBlock())
             {
                 var extensionBlock = new ExtensionBlockDeclaration(nested);
+                PopulateGenericParameters(nested, extensionBlock.TypeParameters, attributeFilter, _ => true);
                 foreach (var memberInfo in nested.GetMembers())
                     AddMemberToTypeDeclaration(extensionBlock, nested, memberInfo, attributeFilter);
                 declaration.Members.Add(extensionBlock);

@@ -22,6 +22,9 @@ namespace PublicApiGeneratorTests
 #elif NET472
             const string TFM = ".NETFramework,Version=v4.7.2";
             const string TFMNAME = ".NET Framework 4.7.2";
+#elif NET10_0
+            const string TFM = ".NETCoreApp,Version=v10.0";
+            const string TFMNAME = ".NET 10.0";
 #elif NET9_0
             const string TFM = ".NETCoreApp,Version=v9.0";
             const string TFMNAME = ".NET 9.0";
