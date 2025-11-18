@@ -12,7 +12,6 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Mono.Cecil.Rocks;
 using PublicApiGenerator;
 
 namespace Microsoft.CSharp
