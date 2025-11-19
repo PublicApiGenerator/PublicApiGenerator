@@ -142,6 +142,9 @@ public static class ApiGenerator
         if (denyNamespacePrefixes.Any(t.FullName.StartsWith) && !allowNamespacePrefixes.Any(t.FullName.StartsWith))
             return false;
 
+        if (t.IsExtensionBlock())
+            return false;
+
         return true;
     }
 
@@ -165,6 +168,9 @@ public static class ApiGenerator
 
         if (denyNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith) && !allowNamespacePrefixes.Any(m.DeclaringType.FullName.StartsWith))
             return false;
+
+        if (m is MethodDefinition method)
+            return !method.HasExtensionBlockSyntax();
 
         return true;
     }
@@ -296,6 +302,18 @@ public static class ApiGenerator
 
         foreach (var memberInfo in publicType.GetMembers().Where(memberDefinition => ShouldIncludeMember(memberDefinition, options.DenyNamespacePrefixes, options.AllowNamespacePrefixes, options.UseDenyNamespacePrefixesForExtensionMethods)).OrderBy(m => m.Name, StringComparer.Ordinal))
             AddMemberToTypeDeclaration(declaration, publicType, memberInfo, attributeFilter);
+
+        foreach (var nested in publicType.NestedTypes)
+        {
+            if (nested.IsExtensionBlock())
+            {
+                var extensionBlock = new ExtensionBlockDeclaration(nested);
+                PopulateGenericParameters(nested, extensionBlock.TypeParameters, attributeFilter, _ => true);
+                foreach (var memberInfo in nested.GetMembers())
+                    AddMemberToTypeDeclaration(extensionBlock, nested, memberInfo, attributeFilter);
+                declaration.Members.Add(extensionBlock);
+            }
+        }
 
         // Fields should be in defined order for an enum
         var fields = !publicType.IsEnum

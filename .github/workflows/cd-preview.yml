@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET SDKs
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
           source-url: https://nuget.pkg.github.com/PublicApiGenerator/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
