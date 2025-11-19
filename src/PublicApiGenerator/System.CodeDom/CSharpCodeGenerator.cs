@@ -2231,6 +2231,7 @@ namespace Microsoft.CSharp
                     }
                     if (current is ExtensionBlockDeclaration block)
                     {
+                        var writer = TypeOutputRewriter;
                         TypeOutputRewriter = block.Rewrite;
 
                         Output.Write("extension");
@@ -2252,7 +2253,7 @@ namespace Microsoft.CSharp
                         Indent--;
                         Output.WriteLine("}");
 
-                        TypeOutputRewriter = null;
+                        TypeOutputRewriter = writer;
                     }
                     else
                     {
@@ -2395,7 +2396,7 @@ namespace Microsoft.CSharp
                     Output.Write(' ');
                 }
 
-                Output.Write(TypeOutputRewriter == null ? typeParameters[i].Name : TypeOutputRewriter(typeParameters[i].Name));
+                Output.Write(TypeOutputRewriter(typeParameters[i].Name));
             }
 
             Output.Write('>');
@@ -2422,7 +2423,7 @@ namespace Microsoft.CSharp
                         {
                             Output.WriteLine();
                             Output.Write("where ");
-                            Output.Write(TypeOutputRewriter == null ? typeParameters[i].Name : TypeOutputRewriter(typeParameters[i].Name));
+                            Output.Write(TypeOutputRewriter(typeParameters[i].Name));
                             Output.Write(" : ");
                             first = false;
                         }
@@ -3060,7 +3061,7 @@ namespace Microsoft.CSharp
 
         public string GetTypeOutput(CodeTypeReference typeRef) => GetTypeOutput(typeRef, null);
 
-        public Func<string, string>? TypeOutputRewriter { get; set; }
+        public Func<string, string> TypeOutputRewriter { get; set; } = static s => s;
 
         public string GetTypeOutput(CodeTypeReference typeRef, DynamicContext dynamicContext)
         {
@@ -3086,9 +3087,7 @@ namespace Microsoft.CSharp
                 typeRef = typeRef.ArrayElementType;
             }
 
-            if (TypeOutputRewriter != null)
-                s = TypeOutputRewriter(s);
-
+            s = TypeOutputRewriter(s);
             return s;
         }
 
