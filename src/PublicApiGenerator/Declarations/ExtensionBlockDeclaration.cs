@@ -17,9 +17,9 @@ internal class ExtensionBlockDeclaration : CodeTypeDeclaration
             ? AnchorMethod.Parameters[0].ParameterType switch
             {
                 GenericInstanceType genericInstanceType => genericInstanceType
-                    .GenericArguments[int.Parse(x.Substring(2))].Name ?? x,
-                GenericParameter genericParameter => genericParameter.Name ?? x,
-                _ => x
+                    .GenericArguments[int.Parse(x.Substring(2))].Name,
+                GenericParameter genericParameter => genericParameter.Name,
+                object unknown => throw new NotSupportedException($"Unknown parameter type {unknown}.")
             }
             : x;
     }
