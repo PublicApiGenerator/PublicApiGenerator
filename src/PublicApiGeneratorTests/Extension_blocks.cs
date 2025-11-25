@@ -22,6 +22,11 @@ namespace PublicApiGeneratorTests.Examples
         {
             public bool IsEmpty() { }
         }
+        extension<T>(T genericAnchor)
+        where T :  notnull
+        {
+            public bool DoSomething3() { }
+        }
         extension<TKey, TValue>(System.Collections.Generic.Dictionary<TKey, TValue> genericAnchor2)
             where TKey :  notnull
             where TValue :  class, System.IComparable
@@ -87,6 +92,11 @@ namespace PublicApiGeneratorTests.Examples
             {
                 public static string StaticExtensionProperty => "prop";
                 public static bool StaticExtensionMethod(int value1, float value2) => true;
+            }
+
+            extension<T>(T genericAnchor)
+            {
+                public bool DoSomething3() => true;
             }
         }
     }
