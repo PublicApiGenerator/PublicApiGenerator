@@ -379,7 +379,15 @@ internal static partial class CecilEx
         public ParameterTypeAndNameComparer(ParameterDefinition thisAnchor)
         {
             // rename $T0 $T1 in extension blocks to TKey TValue taking generic parameter names from this anchor
-            _rewrite = x => x.StartsWith("$T") ? ((GenericInstanceType)thisAnchor.ParameterType).GenericArguments[int.Parse(x.Substring(2))].Name : x;
+            _rewrite = x => x.StartsWith("$T")
+                ? thisAnchor.ParameterType switch
+                {
+                    GenericInstanceType genericInstanceType => genericInstanceType
+                        .GenericArguments[int.Parse(x.Substring(2))].Name,
+                    GenericParameter genericParameter => genericParameter.Name,
+                    object unknown => throw new NotSupportedException($"Unknown parameter type {unknown}.")
+                }
+                : x;
         }
 
         public bool Equals(ParameterDefinition x, ParameterDefinition y) => _rewrite(x.ParameterType.Name) == _rewrite(y.ParameterType.Name) && x?.Name == y?.Name;
@@ -394,7 +402,15 @@ internal static partial class CecilEx
         public TypeReferenceComparer(ParameterDefinition thisAnchor)
         {
             // rename $T0 $T1 in extension blocks to TKey TValue taking generic parameter names from this anchor
-            _rewrite = x => x.StartsWith("$T") ? ((GenericInstanceType)thisAnchor.ParameterType).GenericArguments[int.Parse(x.Substring(2))].Name : x;
+            _rewrite = x => x.StartsWith("$T")
+                ? thisAnchor.ParameterType switch
+                {
+                    GenericInstanceType genericInstanceType => genericInstanceType
+                        .GenericArguments[int.Parse(x.Substring(2))].Name,
+                    GenericParameter genericParameter => genericParameter.Name,
+                    object unknown => throw new NotSupportedException($"Unknown parameter type {unknown}.")
+                }
+                : x;
         }
 
         public bool Equals(TypeReference x, TypeReference y) => _rewrite(x.Name) == _rewrite(y.Name);
