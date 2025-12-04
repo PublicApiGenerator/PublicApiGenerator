@@ -66,6 +66,10 @@ public static class Program
             Description = "Instructs to leave the temporary artifacts around for debugging and troubleshooting purposes",
             DefaultValueFactory = _ => 60,
         };
+        var settingsFile = new Option<string>("--settings-file")
+        {
+            Description = "Json file with options in form of ApiGeneratorOptions class",
+        };
 
         rootCommand.Options.Add(targetFrameworks);
         rootCommand.Options.Add(assembly);
@@ -79,6 +83,7 @@ public static class Program
         rootCommand.Options.Add(verbose);
         rootCommand.Options.Add(leaveArtifacts);
         rootCommand.Options.Add(waitTimeInSeconds);
+        rootCommand.Options.Add(settingsFile);
 
         rootCommand.SetAction(parseResult =>
         {
@@ -94,7 +99,8 @@ public static class Program
                 parseResult.GetValue(outputDirectory),
                 parseResult.GetValue(verbose),
                 parseResult.GetValue(leaveArtifacts),
-                parseResult.GetValue(waitTimeInSeconds)
+                parseResult.GetValue(waitTimeInSeconds),
+                parseResult.GetValue(settingsFile)
                 );
         });
 
@@ -114,7 +120,8 @@ public static class Program
         string? outputDirectory,
         bool verbose,
         bool leaveArtifacts,
-        int waitTimeInSeconds)
+        int waitTimeInSeconds,
+        string? settingsFile)
     {
         var logError = Console.Error;
         var logVerbose = verbose ? Console.Error : TextWriter.Null;
@@ -140,7 +147,7 @@ public static class Program
 
             foreach (string framework in targetFrameworks)
             {
-                GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, waitTimeInSeconds, logVerbose, logError);
+                GeneratePublicApi(assembly, package, workingArea, framework, outputDirectory, waitTimeInSeconds, settingsFile, logVerbose, logError);
             }
 
             return 0;
@@ -171,6 +178,7 @@ public static class Program
         string framework,
         string? outputDirectory,
         int waitTimeInSeconds,
+        string? settingsFile,
         TextWriter logVerbose,
         TextWriter logError)
     {
@@ -194,7 +202,8 @@ public static class Program
                 "--framework", framework,
                 "--",
                 assemblyPath,
-                apiFilePath ?? "-");
+                apiFilePath ?? "-",
+                settingsFile ?? "-");
         }
         catch (FileNotFoundException)
         {
@@ -336,6 +345,7 @@ public static class Program
                     ? new XElement("RestoreAdditionalProjectSources", string.Join(";", packageSource))
                     : null),
                 new XElement("ItemGroup",
+                    PackageReference("System.Text.Json", "8.0.5"),
                     PackageReference(nameof(PublicApiGenerator), generatorVersion),
                     string.IsNullOrEmpty(package) ? null : PackageReference(package, packageVersion!),
                     string.IsNullOrEmpty(projectPath) ? null : new XElement("ProjectReference", new XAttribute("Include", projectPath))));
