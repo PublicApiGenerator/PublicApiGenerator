@@ -338,12 +338,17 @@ By default latest stable release version of PubliApiGenerator will be used in th
 Prints to stderr detailed information about what's going on behind the scenes.
 
 ```
-leave-artifacts
+--leave-artifacts
 ```
 
 For troubleshooting purposes it might be necessary to look into the temporary work artifacts. By specifying this switch the temporary csproj files and all the temp folders are not deleted after a run. Be aware this might significantly decrease the available disk space because all artifacts including the compile time artifacts are not deleted.
 
 ```
-wait-time-in-seconds
+--wait-time-in-seconds
 ```
 The number of seconds to wait for the API generation process to end (default 60 seconds). If multiple target frameworks are used the wait time is applied per target framework. If the process did not end in the allotted time a `TimeoutException` is thrown.
+
+```
+--settings-file
+```
+Json file with options in form of `ApiGeneratorOptions` class.
