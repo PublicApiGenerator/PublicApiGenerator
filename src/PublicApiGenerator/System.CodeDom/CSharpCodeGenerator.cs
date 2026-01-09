@@ -360,9 +360,11 @@ namespace Microsoft.CSharp
                     }
                     GenerateCommentStatements(_currentMember.Comments);
                     CodeMemberEvent imp = (CodeMemberEvent)current;
-                    if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaStart(imp.LinePragma);
                     GenerateEvent(imp);
-                    if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaEnd();
                     if (_currentMember.EndDirectives.Count > 0)
                     {
                         GenerateDirectives(_currentMember.EndDirectives);
@@ -389,9 +391,11 @@ namespace Microsoft.CSharp
                     }
                     GenerateCommentStatements(_currentMember.Comments);
                     CodeMemberField imp = (CodeMemberField)current;
-                    if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaStart(imp.LinePragma);
                     GenerateField(imp);
-                    if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaEnd();
                     if (_currentMember.EndDirectives.Count > 0)
                     {
                         GenerateDirectives(_currentMember.EndDirectives);
@@ -460,9 +464,11 @@ namespace Microsoft.CSharp
         {
             GenerateDirectives(e.StartDirectives);
 
-            if (e.LinePragma != null) GenerateLinePragmaStart(e.LinePragma);
+            if (e.LinePragma != null)
+                GenerateLinePragmaStart(e.LinePragma);
             Output.WriteLine(e.Value);
-            if (e.LinePragma != null) GenerateLinePragmaEnd();
+            if (e.LinePragma != null)
+                GenerateLinePragmaEnd();
 
             if (e.EndDirectives.Count > 0)
             {
@@ -644,9 +650,11 @@ namespace Microsoft.CSharp
         {
             foreach (CodeNamespaceImport imp in e.Imports)
             {
-                if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                if (imp.LinePragma != null)
+                    GenerateLinePragmaStart(imp.LinePragma);
                 GenerateNamespaceImport(imp);
-                if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                if (imp.LinePragma != null)
+                    GenerateLinePragmaEnd();
             }
         }
 
@@ -1114,7 +1122,8 @@ namespace Microsoft.CSharp
 
         private void GenerateEvent(CodeMemberEvent e)
         {
-            if (IsCurrentDelegate || IsCurrentEnum) return;
+            if (IsCurrentDelegate || IsCurrentEnum)
+                return;
 
             if (e.CustomAttributes.Count > 0)
             {
@@ -1269,7 +1278,8 @@ namespace Microsoft.CSharp
 
         private void GenerateField(CodeMemberField e)
         {
-            if (IsCurrentDelegate || IsCurrentInterface) return;
+            if (IsCurrentDelegate || IsCurrentInterface)
+                return;
 
             if (IsCurrentEnum)
             {
@@ -1364,7 +1374,8 @@ namespace Microsoft.CSharp
                     }
                     GenerateCommentStatements(_currentMember.Comments);
                     CodeMemberMethod imp = (CodeMemberMethod)current;
-                    if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaStart(imp.LinePragma);
                     if (current is CodeEntryPointMethod)
                     {
                         GenerateEntryPointMethod((CodeEntryPointMethod)current);
@@ -1373,7 +1384,8 @@ namespace Microsoft.CSharp
                     {
                         GenerateMethod(imp);
                     }
-                    if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaEnd();
                     if (_currentMember.EndDirectives.Count > 0)
                     {
                         GenerateDirectives(_currentMember.EndDirectives);
@@ -1384,7 +1396,8 @@ namespace Microsoft.CSharp
 
         private void GenerateMethod(CodeMemberMethod e)
         {
-            if (!(IsCurrentClass || IsCurrentStruct || IsCurrentInterface)) return;
+            if (!(IsCurrentClass || IsCurrentStruct || IsCurrentInterface))
+                return;
 
             if (e.CustomAttributes.Count > 0)
             {
@@ -1462,9 +1475,11 @@ namespace Microsoft.CSharp
                     }
                     GenerateCommentStatements(_currentMember.Comments);
                     CodeMemberProperty imp = (CodeMemberProperty)current;
-                    if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaStart(imp.LinePragma);
                     GenerateProperty(imp);
-                    if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaEnd();
                     if (_currentMember.EndDirectives.Count > 0)
                     {
                         GenerateDirectives(_currentMember.EndDirectives);
@@ -1475,7 +1490,8 @@ namespace Microsoft.CSharp
 
         private void GenerateProperty(CodeMemberProperty e)
         {
-            if (!(IsCurrentClass || IsCurrentStruct || IsCurrentInterface)) return;
+            if (!(IsCurrentClass || IsCurrentStruct || IsCurrentInterface))
+                return;
 
             if (e.CustomAttributes.Count > 0)
             {
@@ -1840,9 +1856,11 @@ namespace Microsoft.CSharp
                     }
                     GenerateCommentStatements(_currentMember.Comments);
                     CodeConstructor imp = (CodeConstructor)current;
-                    if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaStart(imp.LinePragma);
                     GenerateConstructor(imp);
-                    if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaEnd();
                     if (_currentMember.EndDirectives.Count > 0)
                     {
                         GenerateDirectives(_currentMember.EndDirectives);
@@ -1853,7 +1871,8 @@ namespace Microsoft.CSharp
 
         private void GenerateConstructor(CodeConstructor e)
         {
-            if (!(IsCurrentClass || IsCurrentStruct)) return;
+            if (!(IsCurrentClass || IsCurrentStruct))
+                return;
 
             if (e.CustomAttributes.Count > 0)
             {
@@ -1902,7 +1921,8 @@ namespace Microsoft.CSharp
 
         private void GenerateTypeConstructor(CodeTypeConstructor e)
         {
-            if (!(IsCurrentClass || IsCurrentStruct)) return;
+            if (!(IsCurrentClass || IsCurrentStruct))
+                return;
 
             if (e.CustomAttributes.Count > 0)
             {
@@ -1939,7 +1959,8 @@ namespace Microsoft.CSharp
 
             GenerateCommentStatements(e.Comments);
 
-            if (e.LinePragma != null) GenerateLinePragmaStart(e.LinePragma);
+            if (e.LinePragma != null)
+                GenerateLinePragmaStart(e.LinePragma);
 
             GenerateTypeStart(e);
 
@@ -1972,7 +1993,8 @@ namespace Microsoft.CSharp
             _currentClass = e;
 
             GenerateTypeEnd();
-            if (e.LinePragma != null) GenerateLinePragmaEnd();
+            if (e.LinePragma != null)
+                GenerateLinePragmaEnd();
 
             if (e.EndDirectives.Count > 0)
             {
@@ -2159,9 +2181,11 @@ namespace Microsoft.CSharp
                     }
                     GenerateCommentStatements(_currentMember.Comments);
                     CodeTypeConstructor imp = (CodeTypeConstructor)current;
-                    if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaStart(imp.LinePragma);
                     GenerateTypeConstructor(imp);
-                    if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaEnd();
                     if (_currentMember.EndDirectives.Count > 0)
                     {
                         GenerateDirectives(_currentMember.EndDirectives);
@@ -2190,7 +2214,8 @@ namespace Microsoft.CSharp
                     }
                     GenerateCommentStatements(_currentMember.Comments);
                     CodeSnippetTypeMember imp = (CodeSnippetTypeMember)current;
-                    if (imp.LinePragma != null) GenerateLinePragmaStart(imp.LinePragma);
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaStart(imp.LinePragma);
 
                     // Don't indent snippets, in order to preserve the column
                     // information from the original code.  This improves the debugging
@@ -2203,7 +2228,8 @@ namespace Microsoft.CSharp
                     // Restore the indent
                     Indent = savedIndent;
 
-                    if (imp.LinePragma != null) GenerateLinePragmaEnd();
+                    if (imp.LinePragma != null)
+                        GenerateLinePragmaEnd();
                     if (_currentMember.EndDirectives.Count > 0)
                     {
                         GenerateDirectives(_currentMember.EndDirectives);
@@ -2525,7 +2551,7 @@ namespace Microsoft.CSharp
                             Output.Write("partial ");
                         }
 
-                        if (e is CodeTypeDeclarationEx { IsStatic: true})
+                        if (e is CodeTypeDeclarationEx { IsStatic: true })
                         {
                             Output.Write("static ");
                         }
