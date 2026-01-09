@@ -5,15 +5,13 @@ namespace PublicApiGenerator;
 // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md#nullablecontextattribute
 internal class NullableContext
 {
-    [ThreadStatic]
-    private static Stack<ICustomAttributeProvider>? _nullableContextProviders;
-
+    [field: ThreadStatic]
     private static Stack<ICustomAttributeProvider> NullableContextProviders
     {
         get
         {
-            _nullableContextProviders ??= new Stack<ICustomAttributeProvider>();
-            return _nullableContextProviders;
+            field ??= new Stack<ICustomAttributeProvider>();
+            return field;
         }
     }
 

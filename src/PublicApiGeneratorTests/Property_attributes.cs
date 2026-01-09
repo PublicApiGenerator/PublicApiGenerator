@@ -276,8 +276,11 @@ namespace PublicApiGeneratorTests.Examples
         {
             public string Value
             {
-                [Simple] get;
-                [Simple] set;
+                [Simple]
+                get;
+
+                [Simple]
+                set;
             }
         }
     }

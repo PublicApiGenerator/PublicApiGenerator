@@ -1,5 +1,5 @@
-using Microsoft.Whitelisted;
 using System.Whitelisted;
+using Microsoft.Whitelisted;
 
 namespace PublicApiGeneratorTests
 {
