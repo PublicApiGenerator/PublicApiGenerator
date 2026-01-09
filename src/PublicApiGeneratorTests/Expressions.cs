@@ -1,5 +1,5 @@
-using PublicApiGeneratorTests.Examples;
 using System.Linq.Expressions;
+using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {

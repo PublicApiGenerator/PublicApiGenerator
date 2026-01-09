@@ -1,5 +1,5 @@
-using Mono.Cecil;
 using System.CodeDom;
+using Mono.Cecil;
 
 namespace PublicApiGenerator;
 
