@@ -9,7 +9,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Embedded">
     <Compile Remove="SubProgram.cs" />
   </ItemGroup>
 

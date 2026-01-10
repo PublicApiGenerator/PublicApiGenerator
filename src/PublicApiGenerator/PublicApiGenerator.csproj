@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,12 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="System.CodeDom\SR.Designer.cs">
+    <Compile Update="System.CodeDom/SR.Designer.cs">
       <DesignTime>True</DesignTime>
-      <AutoGen>False</AutoGen>
+      <AutoGen>True</AutoGen>
       <DependentUpon>SR.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Update="System.CodeDom\SR.resx">
+    <EmbeddedResource Update="System.CodeDom/SR.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SR.Designer.cs</LastGenOutput>
     </EmbeddedResource>
