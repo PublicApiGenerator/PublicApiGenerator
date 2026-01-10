@@ -13,7 +13,7 @@
   <ItemGroup>
     <Compile Update="System.CodeDom/SR.Designer.cs">
       <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
+      <AutoGen>False</AutoGen>
       <DependentUpon>SR.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Update="System.CodeDom/SR.resx">
