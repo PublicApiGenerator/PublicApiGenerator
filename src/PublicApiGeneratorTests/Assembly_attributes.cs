@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using PublicApiGeneratorTests.Examples;
 
 [assembly: Guid("3B8D506A-5247-47FF-B053-D29A51A97C33")]
@@ -7,6 +8,9 @@ using PublicApiGeneratorTests.Examples;
 [assembly: AttributeWithPositionalParameters2(42)]
 [assembly: AttributeWithMultiplePositionalParameters(42, "Hello")]
 [assembly: AttributeWithNamedParameter(StringValue = "Hello", IntValue = 42)]
+[assembly: SupportedOSPlatform("linux")]
+[assembly: SupportedOSPlatform("macos")]
+[assembly: SupportedOSPlatform("windows")]
 [assembly: ComVisible(false)]
 
 namespace PublicApiGeneratorTests
@@ -58,6 +62,9 @@ namespace PublicApiGeneratorTests
 [assembly: System.Reflection.AssemblyMetadata(""RepositoryUrl"", ""https://github.com/PublicApiGenerator/PublicApiGenerator{suffix}"")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.Runtime.InteropServices.Guid(""3B8D506A-5247-47FF-B053-D29A51A97C33"")]
+[assembly: System.Runtime.Versioning.SupportedOSPlatform(""linux"")]
+[assembly: System.Runtime.Versioning.SupportedOSPlatform(""macos"")]
+[assembly: System.Runtime.Versioning.SupportedOSPlatform(""windows"")]
 [assembly: System.Runtime.Versioning.TargetFramework(""{TFM}"", FrameworkDisplayName=""{TFMNAME}"")]
 namespace PublicApiGeneratorTests.Examples
 {{
