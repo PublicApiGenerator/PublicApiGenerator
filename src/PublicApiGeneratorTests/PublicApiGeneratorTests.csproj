@@ -16,6 +16,7 @@
     <NoWarn>$(NoWarn);CS0618;CS0067;CS8597;CS8603;CS8618;IDE0051;IDE0060;IDE1006</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);VSSpell001</WarningsNotAsErrors>
+    <SuppressTfmSupportBuildErrors>true</SuppressTfmSupportBuildErrors>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
