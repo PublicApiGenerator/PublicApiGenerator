@@ -17,6 +17,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);VSSpell001</WarningsNotAsErrors>
     <IsPackable>false</IsPackable>
+    <DefineConstants>$(DefineConstants);MULTI_TARGETING_SUPPORT_ATTRIBUTES</DefineConstants>
+    <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
   </PropertyGroup>
 
   <ItemGroup>

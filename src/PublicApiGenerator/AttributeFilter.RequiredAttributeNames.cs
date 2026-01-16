@@ -32,5 +32,11 @@ internal partial class AttributeFilter
         // Note that RequiredMemberAttribute class is public only since NET7, so we have to add it here,
         // otherwise ShouldIncludeAttribute method will filter it out.
         "System.Runtime.CompilerServices.RequiredMemberAttribute",
+        // Platform attributes
+        "System.Runtime.Versioning.SupportedOSPlatformAttribute",
+        "System.Runtime.Versioning.UnsupportedOSPlatformAttribute",
+        "System.Runtime.Versioning.SupportedOSPlatformGuardAttribute",
+        "System.Runtime.Versioning.UnsupportedOSPlatformGuardAttribute",
+        "System.Runtime.Versioning.ObsoletedOSPlatformAttribute",
     };
 }
