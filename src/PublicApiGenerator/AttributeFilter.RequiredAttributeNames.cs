@@ -3,10 +3,15 @@ namespace PublicApiGenerator;
 internal partial class AttributeFilter
 {
     /// <summary>
-    /// Contains attributes that are internal that influence the compiler or runtime behavior.
+    /// Contains attributes that influence the compiler or runtime behavior.
+    /// Note that such attributes may be public or internal depending on .NET version.
+    /// Also they may be polyfilled by packages like PolySharp/Polyfill and so also
+    /// have public or internal access modifier depending on applied settings. Placing
+    /// an attribute in this list indicates that it should be visible in the public API
+    /// despite its access modifier.
     /// </summary>
-    private static readonly HashSet<string> _internalAttributesThatAffectCompilerOrRuntimeBehavior = new()
-    {
+    private static readonly HashSet<string> _attributesThatAffectCompilerOrRuntimeBehavior =
+    [
         // Nullability
         "System.Diagnostics.CodeAnalysis.AllowNullAttribute",
         "System.Diagnostics.CodeAnalysis.DisallowNullAttribute",
@@ -38,5 +43,5 @@ internal partial class AttributeFilter
         "System.Runtime.Versioning.SupportedOSPlatformGuardAttribute",
         "System.Runtime.Versioning.UnsupportedOSPlatformGuardAttribute",
         "System.Runtime.Versioning.ObsoletedOSPlatformAttribute",
-    };
+    ];
 }

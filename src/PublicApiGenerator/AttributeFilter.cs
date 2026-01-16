@@ -9,17 +9,17 @@ internal sealed partial class AttributeFilter
     public AttributeFilter(IEnumerable<string>? excludedAttributes)
     {
         _excludedAttributes = excludedAttributes is null
-            ? _attributesNotRelevantForThePublicApi
-            : new HashSet<string>(_attributesNotRelevantForThePublicApi.Concat(excludedAttributes));
+            ? _attributesThatNotRelevantForThePublicApi
+            : new HashSet<string>(_attributesThatNotRelevantForThePublicApi.Concat(excludedAttributes));
     }
 
     public bool ShouldIncludeAttribute(CustomAttribute attribute, ICustomAttributeProvider parent)
     {
         var attributeTypeDefinition = attribute.AttributeType.Resolve();
 
-        var should = attributeTypeDefinition != null
+        bool should = attributeTypeDefinition != null
                && !_excludedAttributes.Contains(attribute.AttributeType.FullName)
-               && (attributeTypeDefinition.IsPublic || _internalAttributesThatAffectCompilerOrRuntimeBehavior.Contains(attribute.AttributeType.FullName));
+               && (attributeTypeDefinition.IsPublic || _attributesThatAffectCompilerOrRuntimeBehavior.Contains(attribute.AttributeType.FullName));
 
         // Do not print compiler-generated ObsoleteAttribute for readonly ref struct, see https://github.com/PublicApiGenerator/PublicApiGenerator/issues/104
         if (should
