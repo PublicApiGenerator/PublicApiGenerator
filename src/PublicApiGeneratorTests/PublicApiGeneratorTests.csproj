@@ -31,7 +31,8 @@
     <PackageReference Include="Shouldly" Version="4.3.0" />
     <PackageReference Include="xunit" Version="2.9.3" PrivateAssets="all" />
     <PackageReference Include="xunit.analyzers" Version="1.27.0" PrivateAssets="all" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" NoWarn="NU1701" />
+    <!-- Version 2.4.5 is the last version that supports netcoreapp3.1 -->
+    <PackageReference Include="xunit.runner.visualstudio" Version="[2.4.5]" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
