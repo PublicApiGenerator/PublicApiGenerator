@@ -2,8 +2,8 @@ namespace PublicApiGenerator;
 
 internal partial class AttributeFilter
 {
-    private static readonly HashSet<string> _attributesNotRelevantForThePublicApi = new()
-    {
+    private static readonly HashSet<string> _attributesThatNotRelevantForThePublicApi =
+    [
         "System.CodeDom.Compiler.GeneratedCodeAttribute",
         "System.ComponentModel.EditorBrowsableAttribute",
         "System.Runtime.CompilerServices.AsyncStateMachineAttribute",
@@ -33,5 +33,5 @@ internal partial class AttributeFilter
         "System.Reflection.AssemblyProductAttribute",
         "System.Reflection.AssemblyTitleAttribute",
         "System.Reflection.AssemblyTrademarkAttribute"
-    };
+    ];
 }

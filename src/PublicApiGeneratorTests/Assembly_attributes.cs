@@ -54,7 +54,7 @@ namespace PublicApiGeneratorTests
                 ? ""
                 : ".git";
 
-            var api = @$"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")]
+            string api = @$"[assembly: PublicApiGeneratorTests.Examples.AttributeWithMultiplePositionalParameters(42, ""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithNamedParameter(IntValue=42, StringValue=""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters1(""Hello"")]
 [assembly: PublicApiGeneratorTests.Examples.AttributeWithPositionalParameters2(42)]
@@ -80,6 +80,6 @@ namespace PublicApiGeneratorTests.Examples
 
     namespace Examples
     {
-        public class NotImportant { }
+        public class NotImportant;
     }
 }
