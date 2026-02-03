@@ -16,9 +16,6 @@ dotnet_diagnostic.Proj0048.severity = suggestion
 dotnet_diagnostic.Proj0049.severity = suggestion
 # https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj0206.md
 dotnet_diagnostic.Proj0206.severity = suggestion
-# https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj0219.md
-# TODO: https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/issues/631
-dotnet_diagnostic.Proj0219.severity = suggestion
 # https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj0240.md
 dotnet_diagnostic.Proj0240.severity = suggestion
 # https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj0243.md
