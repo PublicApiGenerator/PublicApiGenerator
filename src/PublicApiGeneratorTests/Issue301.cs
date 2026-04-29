@@ -2,6 +2,7 @@ using PublicApiGeneratorTests.Examples;
 
 namespace PublicApiGeneratorTests
 {
+    // https://github.com/PublicApiGenerator/PublicApiGenerator/issues/301
     public class Issue301 : ApiGeneratorTestsBase
     {
         [Fact]
