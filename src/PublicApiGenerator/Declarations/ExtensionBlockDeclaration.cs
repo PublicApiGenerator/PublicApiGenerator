@@ -16,8 +16,9 @@ internal class ExtensionBlockDeclaration : CodeTypeDeclaration
         Rewrite = x => x.StartsWith("$T")
             ? AnchorMethod.Parameters[0].ParameterType switch
             {
-                GenericInstanceType genericInstanceType => genericInstanceType
-                    .GenericArguments[int.Parse(x.Substring(2))].Name,
+                GenericInstanceType genericInstanceType => int.Parse(x.Substring(2)) < genericInstanceType.GenericArguments.Count ?
+                    genericInstanceType.GenericArguments[int.Parse(x.Substring(2))].Name
+                    : "UNKNOWN",
                 GenericParameter genericParameter => genericParameter.Name,
                 object unknown => throw new NotSupportedException($"Unknown parameter type {unknown}.")
             }
