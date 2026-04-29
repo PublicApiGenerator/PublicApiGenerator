@@ -19,6 +19,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <IsPackable>true</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <MinVerDefaultPreReleaseIdentifiers>preview</MinVerDefaultPreReleaseIdentifiers>
