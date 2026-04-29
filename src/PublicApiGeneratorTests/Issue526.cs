@@ -26,7 +26,6 @@ namespace PublicApiGeneratorTests.Examples
 
     }
 
-
     namespace Examples
     {
         public static class X
