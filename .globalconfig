@@ -26,6 +26,9 @@ dotnet_diagnostic.Proj0300.severity = suggestion
 dotnet_diagnostic.Proj0400.severity = suggestion
 # https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj0453.md
 dotnet_diagnostic.Proj0453.severity = suggestion
+# https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj0501.md
+# TODO: The xunit.abstractions (2.0.3) transitive package in xunit only contains a deprecated 'https://raw.githubusercontent.com/xunit/xunit/master/license.txt' license URL (https://dotnet-project-file-analyzers.github.io/rules/Proj0501.html)
+dotnet_diagnostic.Proj0501.severity = suggestion
 # https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj0800.md
 dotnet_diagnostic.Proj0800.severity = suggestion
 # https://github.com/dotnet-project-file-analyzers/dotnet-project-file-analyzers/blob/main/docs/rules/Proj1003.md

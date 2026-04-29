@@ -19,13 +19,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <IsPackable>true</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <MinVerDefaultPreReleaseIdentifiers>preview</MinVerDefaultPreReleaseIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetProjectFile.Analyzers" Version="1.9.0" PrivateAssets="all" />
+    <PackageReference Include="DotNetProjectFile.Analyzers" Version="1.12.2" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" PrivateAssets="all" />
   </ItemGroup>
