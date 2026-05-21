@@ -40,7 +40,7 @@ Public API of multiple types
 
 ```csharp
 var myTypes = new[] { typeof(MyType), typeof(YetAnotherType) };
-var publicApi = typeof(myTypes).GeneratePublicApi();
+var publicApi = myTypes.GeneratePublicApi();
 ```
 
 Public API of a type
