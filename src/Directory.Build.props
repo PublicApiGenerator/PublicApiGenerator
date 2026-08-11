@@ -28,7 +28,7 @@
   <ItemGroup>
     <PackageReference Include="DotNetProjectFile.Analyzers" Version="1.12.2" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.16.0" PrivateAssets="all" />
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" PrivateAssets="all" />
+    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.16.0" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
