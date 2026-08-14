@@ -1,5 +1,6 @@
 namespace PublicApiGeneratorTests;
 
+// https://github.com/PublicApiGenerator/PublicApiGenerator/issues/459
 public sealed class Issue459 : ApiGeneratorTestsBase
 {
     [Fact]
